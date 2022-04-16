@@ -13,7 +13,7 @@ Spaceship class >> assertValid: aPerson [
 	(aPerson size > 0) ifFalse: [ Error signal: 'Spaceship has to be assigned to a valid player' ]
 ]
 
-{ #category : #initialization }
+{ #category : #'instance creation' }
 Spaceship class >> assignedTo: aPlayer with: aDice [ 
 	self assertValid: aPlayer.
 	^self new initializeWith: aPlayer and: aDice

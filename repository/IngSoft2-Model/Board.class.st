@@ -27,3 +27,8 @@ Board >> initializeWith: aNumberOfboxes [
 Board >> lastPosition [
 	^boxes 
 ]
+
+{ #category : #movement }
+Board >> moveForward: nBoxes the: aSpaceship [
+	^nBoxes.
+]
