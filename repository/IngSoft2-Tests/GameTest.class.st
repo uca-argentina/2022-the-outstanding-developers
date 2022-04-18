@@ -14,7 +14,7 @@ GameTest >> testGameWithOneSpaceshipABoardWithFiveBoxesAndALoadedDieWithFourDoes
 	
 	game := Game withABoard: aBoard withDice: aDice.
 	resultOfTheRoll := aDice roll.
-	game play: resultOfTheRoll.
+	spaceship move: resultOfTheRoll.
 	
 	self deny: (game thereIsAWinner).
 ]
