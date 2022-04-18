@@ -63,10 +63,30 @@ SpaceshipTest >> testSpaceshipCreatedWithPlayerNameIsValid [
 ]
 
 { #category : #tests }
+SpaceshipTest >> testSpaceshipIsCreatedWithInitialPositionInZero [
+
+	| aSpaceship |
+	aSpaceship := Spaceship assignedTo: 'aPlayerName'.
+	self assert: aSpaceship position equals: 0.
+]
+
+{ #category : #tests }
 SpaceshipTest >> testSpaceshipPlayIsResultOfLoadedDieRoll [
 	
 	| spaceship loadedDie |
 	loadedDie := LoadedDie with: 5.
 	spaceship := Spaceship assignedTo: 'aPlayer' with: loadedDie.
 	self assert: spaceship play identicalTo: loadedDie roll.
+]
+
+{ #category : #tests }
+SpaceshipTest >> testSpaceshipVariesItsPositionTheNumberOfBoxesOfTheLoadedDieRollResult [
+
+	| aSpaceship aLoadedDie positionsToMove|
+	aSpaceship := Spaceship assignedTo: 'aPlayerName'.
+	aLoadedDie := LoadedDie with: 5.
+	positionsToMove:= aLoadedDie roll.
+	aSpaceship move: positionsToMove.
+	
+	self assert: aSpaceship position equals: positionsToMove.
 ]

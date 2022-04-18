@@ -2,7 +2,8 @@ Class {
 	#name : #Board,
 	#superclass : #Object,
 	#instVars : [
-		'boxes'
+		'boxes',
+		'spaceshipsInTheBoard'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -18,9 +19,31 @@ Board class >> with: aNumberOfBoxes [
 	^self new initializeWith: aNumberOfBoxes
 ]
 
+{ #category : #'instance creation' }
+Board class >> withBoxes: aNumberOfBoxes andSpaceships: someSpaceships [ 
+	self assertValid: aNumberOfBoxes.
+	^self new initializeWithBoxes: aNumberOfBoxes initializeWithSpaceships: someSpaceships.
+]
+
 { #category : #initialization }
 Board >> initializeWith: aNumberOfboxes [ 
 	boxes := aNumberOfboxes 
+]
+
+{ #category : #initialization }
+Board >> initializeWithBoxes: aNumberOfBoxes initializeWithSpaceships: someSpaceships [ 
+	boxes := aNumberOfBoxes.
+	spaceshipsInTheBoard := someSpaceships.
+]
+
+{ #category : #properties }
+Board >> isThereAWinner [
+	| positionOfTheSpaceships |
+	positionOfTheSpaceships := spaceshipsInTheBoard position.
+	(positionOfTheSpaceships >= boxes)
+	ifTrue: [ ^true ]
+	ifFalse: [ ^false ]
+	
 ]
 
 { #category : #properties }

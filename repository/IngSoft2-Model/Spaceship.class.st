@@ -3,7 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'player',
-		'diceCup'
+		'diceCup',
+		'selfPositionInTheBoard'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -11,6 +12,12 @@ Class {
 { #category : #asserting }
 Spaceship class >> assertValid: aPerson [
 	(aPerson size > 0) ifFalse: [ Error signal: 'Spaceship has to be assigned to a valid player' ]
+]
+
+{ #category : #'instance creation' }
+Spaceship class >> assignedTo: aPlayerName [ 
+	self assertValid: aPlayerName.
+	^ self new initializeWith: aPlayerName.
 ]
 
 { #category : #'instance creation' }
@@ -25,9 +32,20 @@ Spaceship >> addDie: aDie [
 ]
 
 { #category : #initialization }
+Spaceship >> initializeWith: aPlayerName [ 
+	player := aPlayerName.
+	selfPositionInTheBoard := 0.
+]
+
+{ #category : #initialization }
 Spaceship >> initializeWith: aPlayer and: aDice [
 	player := aPlayer.
 	diceCup := aDice.
+]
+
+{ #category : #playing }
+Spaceship >> move: positions [ 
+	selfPositionInTheBoard := selfPositionInTheBoard + positions.
 ]
 
 { #category : #playing }
@@ -38,4 +56,9 @@ Spaceship >> play [
 { #category : #properties }
 Spaceship >> player [
 	^ player
+]
+
+{ #category : #positioning }
+Spaceship >> position [
+	^selfPositionInTheBoard.
 ]
