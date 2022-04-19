@@ -47,6 +47,14 @@ Game >> play: resultOfTheRoll [
 	^resultOfTheRoll.
 ]
 
+{ #category : #playing }
+Game >> start [
+	| resultOfTheRoll |
+	[ self thereIsAWinner ] whileFalse: 
+		[ resultOfTheRoll := dice roll.
+		board moveSpaceship: resultOfTheRoll].
+]
+
 { #category : #results }
 Game >> thereIsAWinner [
 	

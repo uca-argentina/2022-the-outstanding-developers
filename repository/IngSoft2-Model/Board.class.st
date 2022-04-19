@@ -20,6 +20,12 @@ Board class >> with: aNumberOfBoxes [
 ]
 
 { #category : #'instance creation' }
+Board class >> withBoxes: aNumberOfBoxes andSpaceship: aSpaceship [ 
+	self assertValid: aNumberOfBoxes.
+	^self new initializeWithBoxes: aNumberOfBoxes initializeWithSpaceship: aSpaceship.
+]
+
+{ #category : #'instance creation' }
 Board class >> withBoxes: aNumberOfBoxes andSpaceships: someSpaceships [ 
 	self assertValid: aNumberOfBoxes.
 	^self new initializeWithBoxes: aNumberOfBoxes initializeWithSpaceships: someSpaceships.
@@ -31,6 +37,11 @@ Board >> initializeWith: aNumberOfboxes [
 ]
 
 { #category : #initialization }
+Board >> initializeWithBoxes: aNumberOfBoxes initializeWithSpaceship: aSpaceship [ 
+	self initializeWithBoxes: aNumberOfBoxes initializeWithSpaceships: { aSpaceship }.
+]
+
+{ #category : #initialization }
 Board >> initializeWithBoxes: aNumberOfBoxes initializeWithSpaceships: someSpaceships [ 
 	boxes := aNumberOfBoxes.
 	spaceshipsInTheBoard := someSpaceships.
@@ -38,12 +49,7 @@ Board >> initializeWithBoxes: aNumberOfBoxes initializeWithSpaceships: someSpace
 
 { #category : #properties }
 Board >> isThereAWinner [
-	| positionOfTheSpaceships |
-	positionOfTheSpaceships := spaceshipsInTheBoard position.
-	(positionOfTheSpaceships >= boxes)
-	ifTrue: [ ^true ]
-	ifFalse: [ ^false ]
-	
+	^spaceshipsInTheBoard anySatisfy: [:spaceshipInTheBoard | spaceshipInTheBoard position >= boxes ]
 ]
 
 { #category : #properties }
