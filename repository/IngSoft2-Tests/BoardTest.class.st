@@ -31,16 +31,32 @@ BoardTest >> testASpaceshipsPositionVariesInFiveWithBoardOfTenBoxesAfterOneThrow
 { #category : #tests }
 BoardTest >> testBoardCannotBeCreatedWithANumberOfBoxesMinorThanOne [
 
+	| spaceship |
+	spaceship := Spaceship assignedTo: 'player'.
 	self
-		should: [ Board with: -5 ]
+		should: [ Board withBoxes: -5 andSpaceship: spaceship ]
 		raise: Error
 		withMessage: 'Number of boxes should be greater than zero'
 ]
 
 { #category : #tests }
+BoardTest >> testBoardCannotBeCreatedWithMoreThanOneSpaceshipAssignedToTheSamePlayer [
+
+	| aSpaceship anotherSpaceship otherSpaceship |
+	aSpaceship := Spaceship assignedTo: 'player1'.
+	anotherSpaceship := Spaceship assignedTo: 'player1'.
+	otherSpaceship := Spaceship assignedTo: 'player3'.
+	self
+		should: [ Board withBoxes: 15 andSpaceships: {aSpaceship. anotherSpaceship. otherSpaceship}. ]
+		raise: Error
+		withMessage: 'Spaceships must be assigned to different players'
+]
+
+{ #category : #tests }
 BoardTest >> testLastPositionOfABoardWithNBoxesIsN [
-	| board n |
+	| board n spaceship |
 	n := 10.
-	board := Board with: n.
+	spaceship := Spaceship assignedTo: 'player'.
+	board := Board withBoxes: n andSpaceship: spaceship.
 	self assert: board lastPosition equals: n
 ]

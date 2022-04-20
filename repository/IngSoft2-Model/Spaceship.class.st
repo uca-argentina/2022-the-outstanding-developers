@@ -2,9 +2,7 @@ Class {
 	#name : #Spaceship,
 	#superclass : #Object,
 	#instVars : [
-		'player',
-		'diceCup',
-		'selfPositionInTheBoard'
+		'player'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -20,45 +18,22 @@ Spaceship class >> assignedTo: aPlayerName [
 	^ self new initializeWith: aPlayerName.
 ]
 
-{ #category : #'instance creation' }
-Spaceship class >> assignedTo: aPlayer with: aDice [ 
-	self assertValid: aPlayer.
-	^self new initializeWith: aPlayer and: aDice
+{ #category : #comparing }
+Spaceship >> = anObject [
+	^self class = anObject class and: [ player = anObject player ]
 ]
 
-{ #category : #initialization }
-Spaceship >> addDie: aDie [ 
-	diceCup := DiceCup withAll: { diceCup. aDie }.
+{ #category : #comparing }
+Spaceship >> hash [
+	^player hash
 ]
 
 { #category : #initialization }
 Spaceship >> initializeWith: aPlayerName [ 
 	player := aPlayerName.
-	selfPositionInTheBoard := 0.
-]
-
-{ #category : #initialization }
-Spaceship >> initializeWith: aPlayer and: aDice [
-	player := aPlayer.
-	diceCup := aDice.
-]
-
-{ #category : #playing }
-Spaceship >> move: positions [ 
-	selfPositionInTheBoard := selfPositionInTheBoard + positions.
-]
-
-{ #category : #playing }
-Spaceship >> play [
-	^diceCup roll.
 ]
 
 { #category : #properties }
 Spaceship >> player [
 	^ player
-]
-
-{ #category : #positioning }
-Spaceship >> position [
-	^selfPositionInTheBoard.
 ]

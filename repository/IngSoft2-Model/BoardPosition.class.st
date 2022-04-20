@@ -3,8 +3,7 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'player',
-		'position',
-		'numberOfBoxesOfTheBoard'
+		'position'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -12,11 +11,6 @@ Class {
 { #category : #'instance creation' }
 BoardPosition class >> with: player [ 
 	^self new initializeWith: player
-]
-
-{ #category : #'intance creation' }
-BoardPosition class >> with: aPlayer andBoardLimit: aNumberOfboxes [ 
-	^self new initializeWith: aPlayer and: aNumberOfboxes
 ]
 
 { #category : #assertions }
@@ -28,12 +22,6 @@ BoardPosition >> assertValid: aNumberOfBoxes [
 BoardPosition >> initializeWith: aPlayer [ 
 	player := aPlayer.
 	position := 0.
-]
-
-{ #category : #initialization }
-BoardPosition >> initializeWith: aPlayer and: aNumberOfBoxes [ 
-	self initializeWith: aPlayer.
-	numberOfBoxesOfTheBoard := aNumberOfBoxes
 ]
 
 { #category : #actions }
