@@ -24,7 +24,7 @@ BoardTest >> testASpaceshipsPositionVariesInFiveWithBoardOfTenBoxesAfterOneThrow
 	board := Board withBoxes: n andSpaceship: spaceship.
 	loadedDie := LoadedDie with: 5.
 	resultOfTheRoll := loadedDie roll.
-	board moveSpaceshipOf: player boxes: resultOfTheRoll. 
+	board moveSpaceshipOf: player boxes: resultOfTheRoll.
 	self assert: (board positionOf: player) equals: resultOfTheRoll.
 ]
 

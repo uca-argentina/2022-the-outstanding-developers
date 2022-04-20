@@ -45,7 +45,8 @@ GameTest >> testGamePlaysByItselfWithTwoSpaceshipsABoardWithFifteenBoxesWithALoa
 	
 	game start.
 	
-	self assert: ((aSpaceship position = 16) and: (anotherSpaceship position = 12)).
+	self assert: (aBoard positionOf: 'Player1') equals: 16.
+	self assert: (aBoard positionOf: 'Player2') equals: 12.
 ]
 
 { #category : #tests }
@@ -82,6 +83,20 @@ GameTest >> testGamePlaysByItselfWithTwoSpaceshipsEnds [
 ]
 
 { #category : #tests }
+GameTest >> testGameWithABoardWithFifteenBoxesAndASpaceshipWinsAndItsFinalPositionIsSixteen [
+	
+	| aSpaceship aBoard aDie game |
+	aSpaceship := Spaceship assignedTo: 'Player1'.
+	aBoard := Board withBoxes: 15 andSpaceship: aSpaceship.
+	aDie := LoadedDie with: 5.
+	game := Game withABoard: aBoard withDice: aDie.
+	
+	game start.
+	
+	self assert: (aBoard positionOf: 'Player1') equals: 16.
+]
+
+{ #category : #tests }
 GameTest >> testGameWithOneSpaceshipABoardWithFiveBoxesAndALoadedDieWithFourDoesNotEndAfterOneRoll [
 	
 	| aBoard aDice spaceship game resultOfTheRoll |
@@ -106,7 +121,7 @@ GameTest >> testGameWithOneSpaceshipABoardWithFiveBoxesAndALoadedDieWithSixEndsA
 	
 	game := Game withABoard: aBoard withDice: aDice.
 	resultOfTheRoll := aDice roll.
-	spaceship move: resultOfTheRoll.
+	aBoard moveSpaceship: resultOfTheRoll.
 	
 	self assert: (game thereIsAWinner).
 	
@@ -123,9 +138,9 @@ GameTest >> testGameWithTwoSpaceshipsABoardWithFiveBoxesAndALoadedDieWithThreeEn
 	game := Game withABoard: aBoard withDice: aLoadedDie.
 	
 	resultOfTheRoll := aLoadedDie roll.
-	aSpaceship move: resultOfTheRoll.
-	anotherSpaceship move: resultOfTheRoll.
-	aSpaceship move: resultOfTheRoll.
+	aBoard moveSpaceship: resultOfTheRoll.
+	aBoard moveSpaceship: resultOfTheRoll.
+	aBoard moveSpaceship: resultOfTheRoll.
 	
 	self assert: (game thereIsAWinner).
 ]

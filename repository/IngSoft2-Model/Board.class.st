@@ -46,13 +46,13 @@ Board >> initializeWithBoxes: aNumberOfBoxes initializeWithSpaceship: aSpaceship
 { #category : #initialization }
 Board >> initializeWithBoxes: aNumberOfBoxes initializeWithSpaceships: someSpaceships [ 
 	boxes := aNumberOfBoxes.
-	positions := someSpaceships collect: [ :spaceship | BoardPosition with: spaceship player].
+	positions := someSpaceships collect: [ :spaceship | BoardPosition with: spaceship player andBoardLimit: aNumberOfBoxes].
 	turnHandler := TurnHandler with: (someSpaceships size).
 ]
 
 { #category : #properties }
 Board >> isThereAWinner [
-	^spaceshipsInTheBoard anySatisfy: [:spaceshipInTheBoard | spaceshipInTheBoard position > boxes ]
+	^positions anySatisfy: [:player | player position > boxes ]
 ]
 
 { #category : #properties }
@@ -61,15 +61,10 @@ Board >> lastPosition [
 ]
 
 { #category : #movement }
-Board >> moveForward: nBoxes the: aSpaceship [
-	^nBoxes.
-]
-
-{ #category : #movement }
 Board >> moveSpaceship: spacesToMove [ 
 	| currentPlayer |
 	currentPlayer := turnHandler spaceshipToMove.
-	(spaceshipsInTheBoard at: currentPlayer) move: spacesToMove.
+	(positions at: currentPlayer) move: spacesToMove.
 ]
 
 { #category : #playing }
@@ -89,6 +84,6 @@ Board >> positionOf: aPlayer [
 { #category : #properties }
 Board >> whoIsTheWinner [
 	| winnerSpaceship |
-	winnerSpaceship := (spaceshipsInTheBoard select: [:spaceship | spaceship position > boxes]) at: 1.
+	winnerSpaceship := (positions select: [:spaceship | spaceship position > boxes]) at: 1.
 	^winnerSpaceship player.
 ]
