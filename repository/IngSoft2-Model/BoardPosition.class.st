@@ -15,27 +15,33 @@ BoardPosition class >> with: player [
 
 { #category : #assertions }
 BoardPosition >> assertValid: aNumberOfBoxes [
-	(aNumberOfBoxes > 0) ifFalse: [ Error signal: 'Spaceship cant move backwards in the board'].
+
+	aNumberOfBoxes > 0 ifFalse: [ 
+		Error signal: 'Spaceship cant move backwards in the board' ]
 ]
 
 { #category : #initialization }
-BoardPosition >> initializeWith: aPlayer [ 
+BoardPosition >> initializeWith: aPlayer [
+
 	player := aPlayer.
-	position := 0.
+	position := 0
 ]
 
 { #category : #actions }
 BoardPosition >> move: aNumberOfBoxesToMove [
+
 	self assertValid: aNumberOfBoxesToMove.
 	position := position + aNumberOfBoxesToMove
 ]
 
 { #category : #accessing }
 BoardPosition >> player [
+
 	^ player
 ]
 
 { #category : #accessing }
 BoardPosition >> position [
+
 	^ position
 ]

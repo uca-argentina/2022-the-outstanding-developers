@@ -1,17 +1,25 @@
 Class {
-	#name : #GameTest,
+	#name : #OutstandingSpaceshipsGameTest,
 	#superclass : #TestCase,
 	#category : #'IngSoft2-Tests'
 }
 
 { #category : #tests }
-GameTest >> testGamePlaysByItselfWithOneSpaceshipEnds [
-	
-	| aSpaceship aBoard aDie game |
-	aSpaceship := Spaceship assignedTo: 'Player1'.
-	aBoard := Board withBoxes: 15 andSpaceship: aSpaceship.
+OutstandingSpaceshipsGameTest >> testBIGGamePlaysByItselfWithFiveSpaceshipsADiceCupWithFourRandomDiceAndABoardWithFiveHundredBoxesEnds [
+
+	| aBoard aDie game anotherDie otherDie aDiceCup firstSpaceship secondSpaceship thirdSpaceship fourthSpaceship fifthSpaceship oneLastDie |
+	firstSpaceship := Spaceship assignedTo: 'Player1'.
+	secondSpaceship := Spaceship assignedTo: 'Player2'.
+	thirdSpaceship := Spaceship assignedTo: 'Player3'.
+	fourthSpaceship := Spaceship assignedTo: 'Player4'.
+	fifthSpaceship := Spaceship assignedTo: 'Player5'.
+	aBoard := Board withBoxes: 500 andSpaceships: { firstSpaceship. secondSpaceship. thirdSpaceship. fourthSpaceship. fifthSpaceship }.
 	aDie := RandomDie with: 4.
-	game := Game withABoard: aBoard andDice: aDie.
+	anotherDie := RandomDie with: 5.
+	otherDie := RandomDie with: 6.
+	oneLastDie := RandomDie with: 7.
+	aDiceCup := DiceCup withAll: { aDie. anotherDie. otherDie. oneLastDie }.
+	game := OutstandingSpaceshipsGame withABoard: aBoard andDice: aDiceCup.
 	
 	game start.
 	
@@ -19,14 +27,28 @@ GameTest >> testGamePlaysByItselfWithOneSpaceshipEnds [
 ]
 
 { #category : #tests }
-GameTest >> testGamePlaysByItselfWithTwoSpaceshipsABoardWithFifteenBoxesWithALoadedDieWithASequenceOfOneAndThreeAndTheWinnerIsSecondSpaceshipIsValid [
+OutstandingSpaceshipsGameTest >> testGamePlaysByItselfWithOneSpaceshipEnds [
+	
+	| aSpaceship aBoard aDie game |
+	aSpaceship := Spaceship assignedTo: 'Player1'.
+	aBoard := Board withBoxes: 15 andSpaceship: aSpaceship.
+	aDie := RandomDie with: 4.
+	game := OutstandingSpaceshipsGame withABoard: aBoard andDice: aDie.
+	
+	game start.
+	
+	self assert: (game thereIsAWinner).
+]
+
+{ #category : #tests }
+OutstandingSpaceshipsGameTest >> testGamePlaysByItselfWithTwoSpaceshipsABoardWithFifteenBoxesWithALoadedDieWithASequenceOfOneAndThreeAndTheWinnerIsSecondSpaceshipIsValid [
 
 	| aSpaceship anotherSpaceship aBoard aDie game |
 	aSpaceship := Spaceship assignedTo: 'Player1'.
 	anotherSpaceship := Spaceship assignedTo: 'Player2'.
 	aBoard := Board withBoxes: 15 andSpaceships: {aSpaceship. anotherSpaceship}.
 	aDie := LoadedDie withSequence: {1. 3}.
-	game := Game withABoard: aBoard andDice: aDie.
+	game := OutstandingSpaceshipsGame withABoard: aBoard andDice: aDie.
 	
 	game start.
 	
@@ -34,14 +56,14 @@ GameTest >> testGamePlaysByItselfWithTwoSpaceshipsABoardWithFifteenBoxesWithALoa
 ]
 
 { #category : #tests }
-GameTest >> testGamePlaysByItselfWithTwoSpaceshipsABoardWithFifteenBoxesWithALoadedDieWithFourAndBothSpaceshipsPlayAndMoveUntilGameEnds [
+OutstandingSpaceshipsGameTest >> testGamePlaysByItselfWithTwoSpaceshipsABoardWithFifteenBoxesWithALoadedDieWithFourAndBothSpaceshipsPlayAndMoveUntilGameEnds [
 
 	| aSpaceship anotherSpaceship aBoard aDie game |
 	aSpaceship := Spaceship assignedTo: 'Player1'.
 	anotherSpaceship := Spaceship assignedTo: 'Player2'.
 	aBoard := Board withBoxes: 15 andSpaceships: {aSpaceship. anotherSpaceship}.
 	aDie := LoadedDie with: 4.
-	game := Game withABoard: aBoard andDice: aDie.
+	game := OutstandingSpaceshipsGame withABoard: aBoard andDice: aDie.
 	
 	game start.
 	
@@ -50,7 +72,7 @@ GameTest >> testGamePlaysByItselfWithTwoSpaceshipsABoardWithFifteenBoxesWithALoa
 ]
 
 { #category : #tests }
-GameTest >> testGamePlaysByItselfWithTwoSpaceshipsAndADiceCupWithThreeDiceEnds [
+OutstandingSpaceshipsGameTest >> testGamePlaysByItselfWithTwoSpaceshipsAndADiceCupWithThreeDiceEnds [
 
 	| aSpaceship anotherSpaceship aBoard aDie game anotherDie otherDie aDiceCup |
 	aSpaceship := Spaceship assignedTo: 'Player1'.
@@ -60,7 +82,7 @@ GameTest >> testGamePlaysByItselfWithTwoSpaceshipsAndADiceCupWithThreeDiceEnds [
 	anotherDie := RandomDie with: 5.
 	otherDie := RandomDie with: 6.
 	aDiceCup := DiceCup withAll: { aDie. anotherDie. otherDie }.
-	game := Game withABoard: aBoard andDice: aDiceCup.
+	game := OutstandingSpaceshipsGame withABoard: aBoard andDice: aDiceCup.
 	
 	game start.
 	
@@ -68,14 +90,14 @@ GameTest >> testGamePlaysByItselfWithTwoSpaceshipsAndADiceCupWithThreeDiceEnds [
 ]
 
 { #category : #tests }
-GameTest >> testGamePlaysByItselfWithTwoSpaceshipsEnds [
+OutstandingSpaceshipsGameTest >> testGamePlaysByItselfWithTwoSpaceshipsEnds [
 
 	| aSpaceship anotherSpaceship aBoard aDie game |
 	aSpaceship := Spaceship assignedTo: 'Player1'.
 	anotherSpaceship := Spaceship assignedTo: 'Player2'.
 	aBoard := Board withBoxes: 15 andSpaceships: {aSpaceship. anotherSpaceship}.
 	aDie := RandomDie with: 4.
-	game := Game withABoard: aBoard andDice: aDie.
+	game := OutstandingSpaceshipsGame withABoard: aBoard andDice: aDie.
 	
 	game start.
 	
@@ -83,7 +105,7 @@ GameTest >> testGamePlaysByItselfWithTwoSpaceshipsEnds [
 ]
 
 { #category : #tests }
-GameTest >> testGameWithABoardOfTenBoxesThreeSpaceshipsAndALoadedDieWithASequenceOfOneFourThreeFinalPositionsAreThreeForTheFirstSpaceshipElevenForTheSecondOneAndSixForTheThirdOne [
+OutstandingSpaceshipsGameTest >> testGameWithABoardOfTenBoxesThreeSpaceshipsAndALoadedDieWithASequenceOfOneFourThreeFinalPositionsAreThreeForTheFirstSpaceshipElevenForTheSecondOneAndSixForTheThirdOne [
 
 	| aSpaceship anotherSpaceship aBoard aDie game otherSpaceship |
 	aSpaceship := Spaceship assignedTo: 'Player1'.
@@ -91,7 +113,7 @@ GameTest >> testGameWithABoardOfTenBoxesThreeSpaceshipsAndALoadedDieWithASequenc
 	otherSpaceship := Spaceship assignedTo: 'Player3'.
 	aBoard := Board withBoxes: 10 andSpaceships: {aSpaceship. anotherSpaceship. otherSpaceship}.
 	aDie := LoadedDie withSequence: {1. 4. 3}.
-	game := Game withABoard: aBoard andDice: aDie.
+	game := OutstandingSpaceshipsGame withABoard: aBoard andDice: aDie.
 	
 	game start.
 	
@@ -101,13 +123,13 @@ GameTest >> testGameWithABoardOfTenBoxesThreeSpaceshipsAndALoadedDieWithASequenc
 ]
 
 { #category : #tests }
-GameTest >> testGameWithABoardWithFifteenBoxesAndASpaceshipWinsAndItsFinalPositionIsSixteen [
+OutstandingSpaceshipsGameTest >> testGameWithABoardWithFifteenBoxesAndASpaceshipWinsAndItsFinalPositionIsSixteen [
 	
 	| aSpaceship aBoard aDie game |
 	aSpaceship := Spaceship assignedTo: 'Player1'.
 	aBoard := Board withBoxes: 15 andSpaceship: aSpaceship.
 	aDie := LoadedDie with: 5.
-	game := Game withABoard: aBoard andDice: aDie.
+	game := OutstandingSpaceshipsGame withABoard: aBoard andDice: aDie.
 	
 	game start.
 	
@@ -115,14 +137,14 @@ GameTest >> testGameWithABoardWithFifteenBoxesAndASpaceshipWinsAndItsFinalPositi
 ]
 
 { #category : #tests }
-GameTest >> testGameWithOneSpaceshipABoardWithFiveBoxesAndALoadedDieWithFourDoesNotEndAfterOneRoll [
+OutstandingSpaceshipsGameTest >> testGameWithOneSpaceshipABoardWithFiveBoxesAndALoadedDieWithFourDoesNotEndAfterOneRoll [
 	
 	| aBoard aDice spaceship game resultOfTheRoll |
 	spaceship := Spaceship assignedTo: 'APlayerName'.
 	aBoard := Board withBoxes: 5 andSpaceship: spaceship.
 	aDice := LoadedDie with: 4.
 	
-	game := Game withABoard: aBoard andDice: aDice.
+	game := OutstandingSpaceshipsGame withABoard: aBoard andDice: aDice.
 	resultOfTheRoll := aDice roll.
 	aBoard moveSpaceship: resultOfTheRoll.
 	
@@ -130,14 +152,14 @@ GameTest >> testGameWithOneSpaceshipABoardWithFiveBoxesAndALoadedDieWithFourDoes
 ]
 
 { #category : #tests }
-GameTest >> testGameWithOneSpaceshipABoardWithFiveBoxesAndALoadedDieWithSixEndsAfterOneRoll [
+OutstandingSpaceshipsGameTest >> testGameWithOneSpaceshipABoardWithFiveBoxesAndALoadedDieWithSixEndsAfterOneRoll [
 
 	| aBoard aDice spaceship game resultOfTheRoll |
 	spaceship := Spaceship assignedTo: 'APlayerName'.
 	aBoard := Board withBoxes: 5 andSpaceship: spaceship.
 	aDice := LoadedDie with: 6.
 	
-	game := Game withABoard: aBoard andDice: aDice.
+	game := OutstandingSpaceshipsGame withABoard: aBoard andDice: aDice.
 	resultOfTheRoll := aDice roll.
 	aBoard moveSpaceship: resultOfTheRoll.
 	
@@ -146,14 +168,14 @@ GameTest >> testGameWithOneSpaceshipABoardWithFiveBoxesAndALoadedDieWithSixEndsA
 ]
 
 { #category : #tests }
-GameTest >> testGameWithTwoSpaceshipsABoardWithFiveBoxesAndALoadedDieWithThreeEnds [
+OutstandingSpaceshipsGameTest >> testGameWithTwoSpaceshipsABoardWithFiveBoxesAndALoadedDieWithThreeEnds [
 	
 	| aSpaceship anotherSpaceship aBoard aLoadedDie game resultOfTheRoll |
 	aSpaceship := Spaceship assignedTo: 'Player1'.
 	anotherSpaceship := Spaceship assignedTo: 'Player2'.
 	aBoard := Board withBoxes: 5 andSpaceships: { aSpaceship. anotherSpaceship }.
 	aLoadedDie := LoadedDie with: 3.
-	game := Game withABoard: aBoard andDice: aLoadedDie.
+	game := OutstandingSpaceshipsGame withABoard: aBoard andDice: aLoadedDie.
 	
 	resultOfTheRoll := aLoadedDie roll.
 	aBoard moveSpaceship: resultOfTheRoll.

@@ -53,6 +53,15 @@ BoardTest >> testBoardCannotBeCreatedWithMoreThanOneSpaceshipAssignedToTheSamePl
 ]
 
 { #category : #tests }
+BoardTest >> testBoardCannotBeCreatedWithoutSpaceships [
+
+	self
+		should: [ Board withBoxes: 1 andSpaceships: { } ]
+		raise: Error
+		withMessage: 'Must use at least one spaceship'
+]
+
+{ #category : #tests }
 BoardTest >> testLastPositionOfABoardWithNBoxesIsN [
 	| board n spaceship |
 	n := 10.

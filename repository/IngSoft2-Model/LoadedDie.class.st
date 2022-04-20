@@ -28,15 +28,16 @@ LoadedDie class >> withSequence: aSequence [
 
 { #category : #initialization }
 LoadedDie >> initializeWithASequence: aSequence [
+
 	sequence := aSequence.
-	currentPosition := 1.
+	currentPosition := 1
 ]
 
 { #category : #rolling }
 LoadedDie >> roll [
 	
-	| currentNumberBANANA |
-	currentNumberBANANA := sequence at: currentPosition.
+	| currentSequenceValue |
+	currentSequenceValue := sequence at: currentPosition.
 	currentPosition := (currentPosition rem: sequence size) + 1.
-	^currentNumberBANANA.
+	^currentSequenceValue.
 ]
