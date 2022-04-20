@@ -3,7 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'boxes',
-		'spaceshipsInTheBoard'
+		'spaceshipsInTheBoard',
+		'turnHandler'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -45,11 +46,12 @@ Board >> initializeWithBoxes: aNumberOfBoxes initializeWithSpaceship: aSpaceship
 Board >> initializeWithBoxes: aNumberOfBoxes initializeWithSpaceships: someSpaceships [ 
 	boxes := aNumberOfBoxes.
 	spaceshipsInTheBoard := someSpaceships.
+	turnHandler := TurnHandler with: (someSpaceships size).
 ]
 
 { #category : #properties }
 Board >> isThereAWinner [
-	^spaceshipsInTheBoard anySatisfy: [:spaceshipInTheBoard | spaceshipInTheBoard position >= boxes ]
+	^spaceshipsInTheBoard anySatisfy: [:spaceshipInTheBoard | spaceshipInTheBoard position > boxes ]
 ]
 
 { #category : #properties }
@@ -60,4 +62,18 @@ Board >> lastPosition [
 { #category : #movement }
 Board >> moveForward: nBoxes the: aSpaceship [
 	^nBoxes.
+]
+
+{ #category : #movement }
+Board >> moveSpaceship: spacesToMove [ 
+	| currentPlayer |
+	currentPlayer := turnHandler spaceshipToMove.
+	(spaceshipsInTheBoard at: currentPlayer) move: spacesToMove.
+]
+
+{ #category : #properties }
+Board >> whoIsTheWinner [
+	| winnerSpaceship |
+	winnerSpaceship := (spaceshipsInTheBoard select: [:spaceship | spaceship position > boxes]) at: 1.
+	^winnerSpaceship player.
 ]

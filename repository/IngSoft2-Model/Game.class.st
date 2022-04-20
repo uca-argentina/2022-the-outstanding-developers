@@ -63,3 +63,8 @@ Game >> thereIsAWinner [
 	
 	^isThereAWinner
 ]
+
+{ #category : #results }
+Game >> winner [
+	^board whoIsTheWinner.
+]
