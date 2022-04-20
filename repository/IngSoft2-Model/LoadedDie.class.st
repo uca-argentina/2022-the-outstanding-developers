@@ -2,32 +2,41 @@ Class {
 	#name : #LoadedDie,
 	#superclass : #Object,
 	#instVars : [
-		'result'
+		'result',
+		'sequence',
+		'currentPosition'
 	],
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'instance creation' }
-LoadedDie class >> assertValid: result [
-
-	result > 0 ifFalse: [ Error signal: 'Die should be loaded with result greater than zero' ] 
+LoadedDie class >> assertValid: aSequence [
+	
+	(aSequence allSatisfy: [ :number | number > 0 ]) ifFalse: [ Error signal: 'Die should be loaded with numbers greater than zero' ]
 ]
 
 { #category : #'instance creation' }
 LoadedDie class >> with: result [
+	^self withSequence: {result}.
+]
 
-	self assertValid: result.
-	^self new initializeWith: result
+{ #category : #'instance creation' }
+LoadedDie class >> withSequence: aSequence [
+	self assertValid: aSequence.
+	^self new initializeWithASequence: aSequence.
 ]
 
 { #category : #initialization }
-LoadedDie >> initializeWith: loadedResult [
- 
-	result := loadedResult
+LoadedDie >> initializeWithASequence: aSequence [
+	sequence := aSequence.
+	currentPosition := 1.
 ]
 
 { #category : #rolling }
 LoadedDie >> roll [
-
-	^result
+	
+	| currentNumberBANANA |
+	currentNumberBANANA := sequence at: currentPosition.
+	currentPosition := (currentPosition rem: sequence size) + 1.
+	^currentNumberBANANA.
 ]

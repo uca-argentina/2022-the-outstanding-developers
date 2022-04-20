@@ -72,7 +72,7 @@ DieTest >> testLoadedDieCannotBeLoadedWithResultLowerThanOne [
 	self
 		should: [ LoadedDie with: -1 ]
 		raise: Error
-		withMessage: 'Die should be loaded with result greater than zero'
+		withMessage: 'Die should be loaded with numbers greater than zero'
 ]
 
 { #category : #'tests  - loaded' }
@@ -84,4 +84,25 @@ DieTest >> testLoadedDieRollsFiveWhenLoadedWithFive [
 	rollResult := die roll.
 	
 	self assert: rollResult equals: 5
+]
+
+{ #category : #'tests  - loaded' }
+DieTest >> testLoadedDieWithASequenceCannotBeLoadedWithResultsLowerThanOne [
+
+	self
+		should: [ LoadedDie withSequence: {-1. 4} ]
+		raise: Error
+		withMessage: 'Die should be loaded with numbers greater than zero'
+]
+
+{ #category : #'tests  - loaded' }
+DieTest >> testLoadedDieWithASequenceOFTwoNumbersRollsFiveThenSevenWhenLoadedWithFiveAndSeven [
+
+	| die firstRollResult secondRollResult |
+	die := LoadedDie withSequence: { 5. 7 }.
+
+	firstRollResult := die roll.
+	secondRollResult := die roll.
+	
+	self assert: ((firstRollResult = 5) and: (secondRollResult = 7))
 ]
