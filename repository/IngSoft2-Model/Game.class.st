@@ -43,11 +43,6 @@ Game >> initializeWithABoard: aBoard initializeWithSpaceships: someSpaceships in
 ]
 
 { #category : #playing }
-Game >> play: resultOfTheRoll [ 
-	^resultOfTheRoll.
-]
-
-{ #category : #playing }
 Game >> start [
 	| resultOfTheRoll |
 	[ self thereIsAWinner ] whileFalse: 

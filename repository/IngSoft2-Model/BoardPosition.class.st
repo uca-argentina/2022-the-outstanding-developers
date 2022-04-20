@@ -19,11 +19,6 @@ BoardPosition class >> with: aPlayer andBoardLimit: aNumberOfboxes [
 	^self new initializeWith: aPlayer and: aNumberOfboxes
 ]
 
-{ #category : #asserting }
-BoardPosition >> assertLimitOfTheBoard: boxesToMove [ 
-	(position + boxesToMove) <= (numberOfBoxesOfTheBoard + 1)
-]
-
 { #category : #assertions }
 BoardPosition >> assertValid: aNumberOfBoxes [
 	(aNumberOfBoxes > 0) ifFalse: [ Error signal: 'Spaceship cant move backwards in the board'].
@@ -44,7 +39,6 @@ BoardPosition >> initializeWith: aPlayer and: aNumberOfBoxes [
 { #category : #actions }
 BoardPosition >> move: aNumberOfBoxesToMove [
 	self assertValid: aNumberOfBoxesToMove.
-	self assertLimitOfTheBoard: aNumberOfBoxesToMove.
 	position := position + aNumberOfBoxesToMove
 ]
 

@@ -33,6 +33,11 @@ Board class >> withBoxes: aNumberOfBoxes andSpaceships: someSpaceships [
 	^self new initializeWithBoxes: aNumberOfBoxes initializeWithSpaceships: someSpaceships.
 ]
 
+{ #category : #assertions }
+Board >> assertLimitOfTheBoard: aPosition with: aNumberOfBoxes [ 
+	(aPosition + aNumberOfBoxes) <= (boxes + 1) ifFalse: [ ^(boxes - aPosition + 1) ] ifTrue: [ ^aNumberOfBoxes ]
+]
+
 { #category : #initialization }
 Board >> initializeWith: aNumberOfboxes [ 
 	boxes := aNumberOfboxes 
@@ -61,17 +66,19 @@ Board >> lastPosition [
 ]
 
 { #category : #movement }
-Board >> moveSpaceship: spacesToMove [ 
-	| currentPlayer |
-	currentPlayer := turnHandler spaceshipToMove.
-	(positions at: currentPlayer) move: spacesToMove.
+Board >> moveSpaceship: boxesToMove [ 
+	| currentPlayer currentTurn |
+	currentTurn := turnHandler spaceshipToMove.
+	currentPlayer := (positions at: currentTurn) player.
+	self moveSpaceshipOf: currentPlayer boxes: boxesToMove 
 ]
 
 { #category : #playing }
 Board >> moveSpaceshipOf: aPlayer boxes: aNumberOfBoxes [
-	| positionToChange |
+	| positionToChange numberOfBoxes |
 	positionToChange := (positions select: [ :position | position player = aPlayer ]) at: 1.
-	positionToChange move: aNumberOfBoxes.
+	numberOfBoxes := self assertLimitOfTheBoard: positionToChange position with: aNumberOfBoxes.
+	positionToChange move: numberOfBoxes.
 ]
 
 { #category : #accessing }
