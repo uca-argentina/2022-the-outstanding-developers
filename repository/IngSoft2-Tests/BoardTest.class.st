@@ -15,16 +15,17 @@ BoardTest >> should: block raise: expectedErrorClass withMessage: expectedErrorM
 ]
 
 { #category : #tests }
-BoardTest >> testASpaceshipMovesNBoxesInTheBoardInTheFirstThrow [
+BoardTest >> testASpaceshipsPositionVariesInFiveWithBoardOfTenBoxesAfterOneThrowOfALoadedDieWithFive [
 
-	| board n loadedDie spaceship boxesToMove resultOfTheRoll|
+	| n player spaceship board loadedDie resultOfTheRoll |
 	n := 10.
-	board := Board with: n.
+	player := 'aPlayer'.
+	spaceship := Spaceship assignedTo: player.
+	board := Board withBoxes: n andSpaceship: spaceship.
 	loadedDie := LoadedDie with: 5.
-	spaceship := Spaceship assignedTo: 'aPlayer' with: loadedDie.
-	boxesToMove := spaceship play.
 	resultOfTheRoll := loadedDie roll.
-	self assert: (board moveForward: resultOfTheRoll the: spaceship) equals: boxesToMove.
+	board moveSpaceshipOf: player boxes: resultOfTheRoll. 
+	self assert: (board positionOf: player) equals: resultOfTheRoll.
 ]
 
 { #category : #tests }

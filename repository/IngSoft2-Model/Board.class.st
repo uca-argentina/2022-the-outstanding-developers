@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'boxes',
 		'spaceshipsInTheBoard',
-		'turnHandler'
+		'turnHandler',
+		'positions'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -45,7 +46,7 @@ Board >> initializeWithBoxes: aNumberOfBoxes initializeWithSpaceship: aSpaceship
 { #category : #initialization }
 Board >> initializeWithBoxes: aNumberOfBoxes initializeWithSpaceships: someSpaceships [ 
 	boxes := aNumberOfBoxes.
-	spaceshipsInTheBoard := someSpaceships.
+	positions := someSpaceships collect: [ :spaceship | BoardPosition with: spaceship player].
 	turnHandler := TurnHandler with: (someSpaceships size).
 ]
 
@@ -69,6 +70,20 @@ Board >> moveSpaceship: spacesToMove [
 	| currentPlayer |
 	currentPlayer := turnHandler spaceshipToMove.
 	(spaceshipsInTheBoard at: currentPlayer) move: spacesToMove.
+]
+
+{ #category : #playing }
+Board >> moveSpaceshipOf: aPlayer boxes: aNumberOfBoxes [
+	| positionToChange |
+	positionToChange := (positions select: [ :position | position player = aPlayer ]) at: 1.
+	positionToChange move: aNumberOfBoxes.
+]
+
+{ #category : #accessing }
+Board >> positionOf: aPlayer [ 
+	| positionOfPlayer |
+	positionOfPlayer := (positions select: [ :position | position player = aPlayer ]) at: 1.
+	^positionOfPlayer position
 ]
 
 { #category : #properties }
