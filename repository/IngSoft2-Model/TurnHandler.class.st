@@ -9,21 +9,23 @@ Class {
 }
 
 { #category : #'instance creation' }
-TurnHandler class >> with: numberOfSpaceships [ 
-	^self new initializeWith: numberOfSpaceships.
+TurnHandler class >> with: numberOfSpaceships [
+
+	^ self new initializeWith: numberOfSpaceships
 ]
 
 { #category : #initialization }
-TurnHandler >> initializeWith: aNumberOfSpaceships [ 
+TurnHandler >> initializeWith: aNumberOfSpaceships [
+
 	numberOfSpaceships := aNumberOfSpaceships.
-	currentSpaceshipToMove := 1.
+	currentSpaceshipToMove := 1
 ]
 
 { #category : #turns }
 TurnHandler >> spaceshipToMove [
-	
-	| spaceshipTurnBANANA |
-	spaceshipTurnBANANA := currentSpaceshipToMove.
+
+	| currentTurn |
+	currentTurn := currentSpaceshipToMove.
 	currentSpaceshipToMove := (currentSpaceshipToMove rem: numberOfSpaceships) + 1.
-	^spaceshipTurnBANANA.
+	^ currentTurn
 ]
