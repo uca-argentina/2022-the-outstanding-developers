@@ -15,26 +15,19 @@ SpaceshipTest >> should: block raise: expectedErrorClass withMessage: expectedEr
 ]
 
 { #category : #tests }
-SpaceshipTest >> testHashOfSpaceshipOfPlayerOneIsDifferentFromHashOfSpaceshipOfPlayerTwo [
-	| spaceshipOne spaceshipTwo |
-	spaceshipOne := Spaceship assignedTo: 'playerOne'.
-	spaceshipTwo := Spaceship assignedTo: 'playerTwo'.
-	self assert: spaceshipOne hash ~= spaceshipTwo hash
-]
-
-{ #category : #tests }
 SpaceshipTest >> testHashOfSpaceshipOfPlayerOneIsEqualToHashOfSpaceshipOfPlayerOne [
+
 	| spaceshipOne spaceshipTwo |
-	spaceshipOne := Spaceship assignedTo: 'playerOne'.
-	spaceshipTwo := Spaceship assignedTo: 'playerOne'.
-	self assert: spaceshipOne hash = spaceshipTwo hash
+	spaceshipOne := Spaceship called: 'playerOne'.
+	spaceshipTwo := Spaceship called: 'playerOne'.
+	self assert: spaceshipOne hash equals: spaceshipTwo hash
 ]
 
 { #category : #tests }
 SpaceshipTest >> testSpaceshipCannotBeCreatedWithEmptyPlayer [
 
 	self
-		should: [ Spaceship assignedTo: '' ]
+		should: [ Spaceship called: '' ]
 		raise: Error
 		withMessage: 'Spaceship has to be assigned to a valid player'
 ]
@@ -44,29 +37,41 @@ SpaceshipTest >> testSpaceshipCreatedWithPlayerNameIsValid [
 
 	| spaceship playerName |
 	playerName := 'SomePlayer'.
-	spaceship := Spaceship assignedTo: playerName.
+	spaceship := Spaceship called: playerName.
 	self assert: spaceship player identicalTo: playerName
 ]
 
 { #category : #tests }
 SpaceshipTest >> testSpaceshipOfPlayerOneIsDifferentFromOne [
+
 	| spaceshipOne |
-	spaceshipOne := Spaceship assignedTo: 'playerOne'.
+	spaceshipOne := Spaceship called: 'playerOne'.
 	self assert: spaceshipOne ~= 1
 ]
 
 { #category : #tests }
 SpaceshipTest >> testSpaceshipOfPlayerOneIsDifferentFromSpaceshipOfPlayerTwo [
+
 	| spaceshipOne spaceshipTwo |
-	spaceshipOne := Spaceship assignedTo: 'playerOne'.
-	spaceshipTwo := Spaceship assignedTo: 'playerTwo'.
+	spaceshipOne := Spaceship called: 'playerOne'.
+	spaceshipTwo := Spaceship called: 'playerTwo'.
 	self assert: spaceshipOne ~= spaceshipTwo
 ]
 
 { #category : #tests }
 SpaceshipTest >> testSpaceshipOfPlayerOneIsEqualToSpaceshipOfPlayerOne [
+
 	| spaceshipOne spaceshipTwo |
-	spaceshipOne := Spaceship assignedTo: 'playerOne'.
-	spaceshipTwo := Spaceship assignedTo: 'playerOne'.
+	spaceshipOne := Spaceship called: 'playerOne'.
+	spaceshipTwo := Spaceship called: 'playerOne'.
 	self assert: spaceshipOne equals: spaceshipTwo
+]
+
+{ #category : #tests }
+SpaceshipTest >> testSpaceshipsHashOfPlayerOneIsDifferentFromSpaceshipsHashOfPlayerTwo [
+
+	| spaceshipOne spaceshipTwo |
+	spaceshipOne := Spaceship called: 'playerOne'.
+	spaceshipTwo := Spaceship called: 'playerTwo'.
+	self assert: spaceshipOne hash ~= spaceshipTwo hash
 ]

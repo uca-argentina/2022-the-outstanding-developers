@@ -15,26 +15,26 @@ BoardTest >> should: block raise: expectedErrorClass withMessage: expectedErrorM
 ]
 
 { #category : #tests }
-BoardTest >> testASpaceshipsPositionVariesInFiveWithBoardOfTenBoxesAfterOneThrowOfALoadedDieWithFive [
+BoardTest >> testASpaceshipsPositionVariesInFiveWithAFiniteBoardAfterOneRollOfALoadedDieWithFive [
 
-	| n player spaceship board loadedDie resultOfTheRoll |
+	| n spaceshipName spaceship board loadedDie resultOfTheRoll |
 	n := 10.
-	player := 'aPlayer'.
-	spaceship := Spaceship assignedTo: player.
-	board := Board withBoxes: n andSpaceship: spaceship.
+	spaceshipName := 'aPlayer'.
+	spaceship := Spaceship called: spaceshipName.
+	board := Board of: n playedBy: spaceship.
 	loadedDie := LoadedDie with: 5.
 	resultOfTheRoll := loadedDie roll.
-	board moveSpaceshipOf: player boxes: resultOfTheRoll.
-	self assert: (board positionOf: player) equals: resultOfTheRoll.
+	board moveSpaceshipOf: spaceshipName by: resultOfTheRoll.
+	self assert: (board positionOf: spaceshipName) equals: resultOfTheRoll
 ]
 
 { #category : #tests }
 BoardTest >> testBoardCannotBeCreatedWithANumberOfBoxesMinorThanOne [
 
 	| spaceship |
-	spaceship := Spaceship assignedTo: 'player'.
+	spaceship := Spaceship called: 'player'.
 	self
-		should: [ Board withBoxes: -5 andSpaceship: spaceship ]
+		should: [ Board of: -5 playedBy: spaceship ]
 		raise: Error
 		withMessage: 'Number of boxes should be greater than zero'
 ]
@@ -43,11 +43,15 @@ BoardTest >> testBoardCannotBeCreatedWithANumberOfBoxesMinorThanOne [
 BoardTest >> testBoardCannotBeCreatedWithMoreThanOneSpaceshipAssignedToTheSamePlayer [
 
 	| aSpaceship anotherSpaceship otherSpaceship |
-	aSpaceship := Spaceship assignedTo: 'player1'.
-	anotherSpaceship := Spaceship assignedTo: 'player1'.
-	otherSpaceship := Spaceship assignedTo: 'player3'.
+	aSpaceship := Spaceship called: 'player1'.
+	anotherSpaceship := Spaceship called: 'player1'.
+	otherSpaceship := Spaceship called: 'player3'.
 	self
-		should: [ Board withBoxes: 15 andSpaceships: {aSpaceship. anotherSpaceship. otherSpaceship}. ]
+		should: [ 
+			Board of: 15 playedByMany: { 
+					aSpaceship.
+					anotherSpaceship.
+					otherSpaceship } ]
 		raise: Error
 		withMessage: 'Spaceships must be assigned to different players'
 ]
@@ -56,16 +60,7 @@ BoardTest >> testBoardCannotBeCreatedWithMoreThanOneSpaceshipAssignedToTheSamePl
 BoardTest >> testBoardCannotBeCreatedWithoutSpaceships [
 
 	self
-		should: [ Board withBoxes: 1 andSpaceships: { } ]
+		should: [ Board of: 1 playedByMany: {  } ]
 		raise: Error
 		withMessage: 'Must use at least one spaceship'
-]
-
-{ #category : #tests }
-BoardTest >> testLastPositionOfABoardWithNBoxesIsN [
-	| board n spaceship |
-	n := 10.
-	spaceship := Spaceship assignedTo: 'player'.
-	board := Board withBoxes: n andSpaceship: spaceship.
-	self assert: board lastPosition equals: n
 ]

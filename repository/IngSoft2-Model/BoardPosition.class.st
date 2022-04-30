@@ -2,46 +2,45 @@ Class {
 	#name : #BoardPosition,
 	#superclass : #Object,
 	#instVars : [
-		'player',
-		'position'
+		'position',
+		'spaceship'
 	],
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'instance creation' }
-BoardPosition class >> with: player [ 
-	^self new initializeWith: player
+BoardPosition class >> following: aSpaceship [ 
+	^self new initializeFollowing: aSpaceship
 ]
 
-{ #category : #assertions }
-BoardPosition >> assertValid: aNumberOfBoxes [
+{ #category : #'instance creation' }
+BoardPosition class >> following: aSpaceship at: aPosition [ 
 
-	aNumberOfBoxes > 0 ifFalse: [ 
-		Error signal: 'Spaceship cant move backwards in the board' ]
+	^self new initializeFollowing: aSpaceship at: aPosition. 
 ]
 
 { #category : #initialization }
-BoardPosition >> initializeWith: aPlayer [
+BoardPosition >> initializeFollowing: aSpaceshipName [
 
-	player := aPlayer.
+	spaceship := aSpaceshipName.
 	position := 0
 ]
 
-{ #category : #actions }
-BoardPosition >> move: aNumberOfBoxesToMove [
-
-	self assertValid: aNumberOfBoxesToMove.
-	position := position + aNumberOfBoxesToMove
-]
-
-{ #category : #accessing }
-BoardPosition >> player [
-
-	^ player
+{ #category : #initialization }
+BoardPosition >> initializeFollowing: aSpaceship at: aPosition [
+	
+	spaceship := aSpaceship.
+	position := aPosition.
 ]
 
 { #category : #accessing }
 BoardPosition >> position [
 
 	^ position
+]
+
+{ #category : #accessing }
+BoardPosition >> spaceship [
+
+	^ spaceship
 ]

@@ -33,11 +33,11 @@ OutstandingSpaceshipsGame >> start [
 { #category : #results }
 OutstandingSpaceshipsGame >> thereIsAWinner [
 
-	^ board isThereAWinner
+	^ board thereIsAWinner
 ]
 
 { #category : #results }
 OutstandingSpaceshipsGame >> winner [
 
-	^ board whoIsTheWinner
+	^ board winner
 ]

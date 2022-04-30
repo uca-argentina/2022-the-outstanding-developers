@@ -15,10 +15,10 @@ Spaceship class >> assertValid: aPerson [
 ]
 
 { #category : #'instance creation' }
-Spaceship class >> assignedTo: aPlayerName [
+Spaceship class >> called: aName [
 
-	self assertValid: aPlayerName.
-	^ self new initializeWith: aPlayerName
+	self assertValid: aName.
+	^ self new initializeCalling: aName
 ]
 
 { #category : #comparing }
@@ -34,9 +34,9 @@ Spaceship >> hash [
 ]
 
 { #category : #initialization }
-Spaceship >> initializeWith: aPlayerName [
+Spaceship >> initializeCalling: aSpaceshipName [
 
-	player := aPlayerName
+	player := aSpaceshipName
 ]
 
 { #category : #properties }
