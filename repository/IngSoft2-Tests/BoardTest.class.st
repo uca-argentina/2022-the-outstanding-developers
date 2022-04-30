@@ -15,6 +15,24 @@ BoardTest >> should: block raise: expectedErrorClass withMessage: expectedErrorM
 ]
 
 { #category : #tests }
+BoardTest >> testASpaceshipCannotPlayWhenItIsNotItsTurn [
+
+	| spaceship1 spaceship2 spaceship3 board |
+	spaceship1 := Spaceship called: 'SP1'.
+	spaceship2 := Spaceship called: 'SP2'.
+	spaceship3 := Spaceship called: 'SP3'.
+	board := Board of: 15 playedByMany: { 
+			         spaceship1.
+			         spaceship2.
+			         spaceship3 }.
+	board moveSpaceship: 1.
+	self
+		should: [ board moveSpaceshipOf: spaceship3 name by: 15 ]
+		raise: Error
+		withMessage: 'This is not the players turn'
+]
+
+{ #category : #tests }
 BoardTest >> testASpaceshipsPositionVariesInFiveWithAFiniteBoardAfterOneRollOfALoadedDieWithFive [
 
 	| n spaceshipName spaceship board loadedDie resultOfTheRoll |

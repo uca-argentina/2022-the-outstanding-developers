@@ -53,6 +53,13 @@ Board class >> of: aNumberOfBoxes playedByMany: spaceships [
 	^self new of: aNumberOfBoxes playedBy: spaceships.
 ]
 
+{ #category : #asserting }
+Board >> assertThisIsPlayersTurn: index [
+
+	(turnHandler assertSequenceIndexIs: index) ifFalse: [ 
+		Error signal: 'This is not the players turn' ]
+]
+
 { #category : #playing }
 Board >> indexOfBoardPositionOf: aSpaceship [
 
@@ -65,9 +72,8 @@ Board >> indexOfBoardPositionOf: aSpaceship [
 { #category : #movement }
 Board >> moveSpaceship: aNumberOfBoxes [
 
-	| currentSpaceship currentTurn |
-	currentTurn := turnHandler spaceshipToMove.
-	currentSpaceship := (positions at: currentTurn) spaceship.
+	| currentSpaceship |
+	currentSpaceship := (positions at: turnHandler index) spaceship.
 	self moveSpaceshipOf: currentSpaceship by: aNumberOfBoxes
 ]
 
@@ -76,6 +82,7 @@ Board >> moveSpaceshipOf: aSpaceship by: aNumberOfBoxes [
 
 	| numberOfBoxes newPosition index currentBoardPosition |
 	index := self indexOfBoardPositionOf: aSpaceship.
+	self assertThisIsPlayersTurn: index.
 	currentBoardPosition := (positions at: index) position.
 	numberOfBoxes := self
 		                 nextPositionStartingAt: currentBoardPosition
@@ -103,8 +110,8 @@ Board >> of: aNumberOfBoxes playedBy: spaceships [
 
 	boxes := aNumberOfBoxes.
 	positions := spaceships collect: [ :spaceship | 
-		             BoardPosition following: spaceship player ].
-	turnHandler := TurnHandler with: spaceships size
+		             BoardPosition following: spaceship name ].
+	turnHandler := SequenceHandler for: spaceships size
 ]
 
 { #category : #accessing }

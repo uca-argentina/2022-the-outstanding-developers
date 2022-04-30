@@ -2,7 +2,7 @@ Class {
 	#name : #Spaceship,
 	#superclass : #Object,
 	#instVars : [
-		'player'
+		'name'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -24,23 +24,23 @@ Spaceship class >> called: aName [
 { #category : #comparing }
 Spaceship >> = anObject [
 
-	^ self class = anObject class and: [ player = anObject player ]
+	^ self class = anObject class and: [ name = anObject name ]
 ]
 
 { #category : #comparing }
 Spaceship >> hash [
 
-	^ player hash
+	^ name hash
 ]
 
 { #category : #initialization }
 Spaceship >> initializeCalling: aSpaceshipName [
 
-	player := aSpaceshipName
+	name := aSpaceshipName
 ]
 
 { #category : #properties }
-Spaceship >> player [
+Spaceship >> name [
 
-	^ player
+	^ name
 ]

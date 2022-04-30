@@ -55,7 +55,7 @@ DieTest >> testDiceCupRollResultIsTheSumOfTheRollOfEachIndividualDie [
 DieTest >> testDieCannotBeCreatedWithNumberOfSidesMinorThanThree [
 
 	self
-		should: [ RandomDie with: 2 ]
+		should: [ Die with: 2 ]
 		raise: Error
 		withMessage: 'Number of faces should be greater than 2'
 ]
@@ -65,7 +65,7 @@ DieTest >> testDieRollResultIsBetweenOneAndTheNumberOfFaces [
 
 	| numberOfSides die rollResult |
 	numberOfSides := 6.
-	die := RandomDie with: numberOfSides.
+	die := Die with: numberOfSides.
 
 	rollResult := die roll.
 

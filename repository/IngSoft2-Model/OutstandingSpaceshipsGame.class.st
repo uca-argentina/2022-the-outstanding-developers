@@ -9,20 +9,29 @@ Class {
 }
 
 { #category : #'instance creation' }
-OutstandingSpaceshipsGame class >> withABoard: aBoard andDice: dice [
+OutstandingSpaceshipsGame class >> playedOn: aBoard throwing: dice [
 
-	^ self new initializeWithABoard: aBoard andDice: dice
+	^ self new initializeWith: aBoard and: dice
 ]
 
 { #category : #initialization }
-OutstandingSpaceshipsGame >> initializeWithABoard: aBoard andDice: someDice [
+OutstandingSpaceshipsGame >> initializeWith: aBoard and: someDice [
 
 	board := aBoard.
 	dice := someDice
 ]
 
 { #category : #playing }
-OutstandingSpaceshipsGame >> start [
+OutstandingSpaceshipsGame >> play [
+
+	| resultOfTheRoll |
+	self thereIsAWinner ifFalse: [ 
+		resultOfTheRoll := dice roll.
+		board moveSpaceship: resultOfTheRoll ] ifTrue: [ Error signal: 'The game has already been finished' ]
+]
+
+{ #category : #playing }
+OutstandingSpaceshipsGame >> startSimulation [
 
 	| resultOfTheRoll |
 	[ self thereIsAWinner ] whileFalse: [ 

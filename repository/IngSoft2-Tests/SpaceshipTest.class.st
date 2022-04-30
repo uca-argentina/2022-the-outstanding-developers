@@ -38,7 +38,7 @@ SpaceshipTest >> testSpaceshipCreatedWithPlayerNameIsValid [
 	| spaceship playerName |
 	playerName := 'SomePlayer'.
 	spaceship := Spaceship called: playerName.
-	self assert: spaceship player identicalTo: playerName
+	self assert: spaceship name identicalTo: playerName
 ]
 
 { #category : #tests }

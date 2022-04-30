@@ -4,6 +4,57 @@ Class {
 	#category : #'IngSoft2-Tests'
 }
 
+{ #category : #asserting }
+OutstandingSpaceshipsGameTest >> should: block raise: expectedErrorClass withMessage: expectedErrorMessage [
+
+	self
+		should: block
+		raise: expectedErrorClass
+		whoseDescriptionIncludes: expectedErrorMessage
+		description: 'Test did not fail as expected'
+]
+
+{ #category : #tests }
+OutstandingSpaceshipsGameTest >> testANonSimulatedGameCannotBePlayedAfterItFinished [
+
+	| aSpaceship anotherSpaceship board aDie game |
+	aSpaceship := Spaceship called: 'SP1'.
+	anotherSpaceship := Spaceship called: 'SP2'.
+	board := Board of: 7 playedByMany: { 
+			         aSpaceship.
+			         anotherSpaceship }.
+	aDie := LoadedDie withSequence: { 4. 3 }.
+	game := OutstandingSpaceshipsGame playedOn: board throwing: aDie.
+
+	game play.
+	game play.
+	game play.
+
+	self
+		should: [ game play ]
+		raise: Error
+		withMessage: 'The game has already been finished'
+]
+
+{ #category : #tests }
+OutstandingSpaceshipsGameTest >> testARoundOfANonSimulatedGameChangesSpaceshipsPosition [
+
+	| aSpaceship anotherSpaceship board aDie game |
+	aSpaceship := Spaceship called: 'SP1'.
+	anotherSpaceship := Spaceship called: 'SP2'.
+	board := Board of: 15 playedByMany: { 
+			          aSpaceship.
+			          anotherSpaceship }.
+	aDie := LoadedDie withSequence: {4. 3}.
+	game := OutstandingSpaceshipsGame playedOn: board throwing: aDie.
+
+	game play.
+	game play.
+
+	self assert: (board positionOf: aSpaceship name) equals: 4.
+	self assert: (board positionOf: anotherSpaceship name) equals: 3.
+]
+
 { #category : #tests }
 OutstandingSpaceshipsGameTest >> testGameWithABoardOfFifteenBoxesALoadedDieAndASpaceshipEndsWithFinalPositionOfSixteen [
 
@@ -11,9 +62,9 @@ OutstandingSpaceshipsGameTest >> testGameWithABoardOfFifteenBoxesALoadedDieAndAS
 	aSpaceship := Spaceship called: 'Player1'.
 	aBoard := Board of: 15 playedBy: aSpaceship.
 	aDie := LoadedDie with: 5.
-	game := OutstandingSpaceshipsGame withABoard: aBoard andDice: aDie.
+	game := OutstandingSpaceshipsGame playedOn: aBoard throwing: aDie.
 
-	game start.
+	game startSimulation.
 
 	self assert: (aBoard positionOf: 'Player1') equals: 16
 ]
@@ -30,9 +81,9 @@ OutstandingSpaceshipsGameTest >> testGameWithAFiniteBoardASequenceLoadedDieAndTh
 			          anotherSpaceship.
 			          otherSpaceship }.
 	aDie := LoadedDie withSequence: { 1. 4. 3 }.
-	game := OutstandingSpaceshipsGame withABoard: aBoard andDice: aDie.
+	game := OutstandingSpaceshipsGame playedOn: aBoard throwing: aDie.
 
-	game start.
+	game startSimulation.
 
 	self assert: (aBoard positionOf: 'Player1') equals: 3.
 	self assert: (aBoard positionOf: 'Player2') equals: 11.
@@ -47,7 +98,7 @@ OutstandingSpaceshipsGameTest >> testGameWithASpaceshipABoardWithFiveBoxesAndALo
 	aBoard := Board of: 5 playedBy: spaceship.
 	aDice := LoadedDie with: 4.
 
-	game := OutstandingSpaceshipsGame withABoard: aBoard andDice: aDice.
+	game := OutstandingSpaceshipsGame playedOn: aBoard throwing: aDice.
 	resultOfTheRoll := aDice roll.
 	aBoard moveSpaceship: resultOfTheRoll.
 
@@ -63,18 +114,18 @@ OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndADiceCupEn
 	aBoard := Board of: 50 playedByMany: { 
 			          aSpaceship.
 			          anotherSpaceship }.
-	aDie := RandomDie with: 4.
-	anotherDie := RandomDie with: 5.
-	otherDie := RandomDie with: 6.
+	aDie := Die with: 4.
+	anotherDie := Die with: 5.
+	otherDie := Die with: 6.
 	aDiceCup := DiceCup withAll: { 
 			            aDie.
 			            anotherDie.
 			            otherDie }.
 	game := OutstandingSpaceshipsGame
-		        withABoard: aBoard
-		        andDice: aDiceCup.
+		        playedOn: aBoard
+		        throwing: aDiceCup.
 
-	game start.
+	game startSimulation.
 
 	self assert: game thereIsAWinner
 ]
@@ -88,10 +139,10 @@ OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndADieEnds [
 	aBoard := Board of: 15 playedByMany: { 
 			          aSpaceship.
 			          anotherSpaceship }.
-	aDie := RandomDie with: 4.
-	game := OutstandingSpaceshipsGame withABoard: aBoard andDice: aDie.
+	aDie := Die with: 4.
+	game := OutstandingSpaceshipsGame playedOn: aBoard throwing: aDie.
 
-	game start.
+	game startSimulation.
 
 	self assert: game thereIsAWinner
 ]
@@ -107,8 +158,8 @@ OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndALoadedDie
 			          anotherSpaceship }.
 	aLoadedDie := LoadedDie with: 3.
 	game := OutstandingSpaceshipsGame
-		        withABoard: aBoard
-		        andDice: aLoadedDie.
+		        playedOn: aBoard
+		        throwing: aLoadedDie.
 
 	resultOfTheRoll := aLoadedDie roll.
 	aBoard moveSpaceship: resultOfTheRoll.
@@ -128,9 +179,9 @@ OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndASequenced
 			          aSpaceship.
 			          anotherSpaceship }.
 	aDie := LoadedDie withSequence: { 1. 3 }.
-	game := OutstandingSpaceshipsGame withABoard: aBoard andDice: aDie.
+	game := OutstandingSpaceshipsGame playedOn: aBoard throwing: aDie.
 
-	game start.
+	game startSimulation.
 
 	self assert: game winner equals: 'Player2'
 ]
@@ -145,9 +196,9 @@ OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndLoadedDieH
 			          aSpaceship.
 			          anotherSpaceship }.
 	aDie := LoadedDie with: 4.
-	game := OutstandingSpaceshipsGame withABoard: aBoard andDice: aDie.
+	game := OutstandingSpaceshipsGame playedOn: aBoard throwing: aDie.
 
-	game start.
+	game startSimulation.
 
 	self assert: (aBoard positionOf: 'Player1') equals: 16.
 	self assert: (aBoard positionOf: 'Player2') equals: 12
