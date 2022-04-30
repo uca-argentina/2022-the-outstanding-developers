@@ -4,9 +4,10 @@ Class {
 	#instVars : [
 		'result',
 		'sequence',
-		'currentPosition'
+		'currentPosition',
+		'sequenceHandler'
 	],
-	#category : #'IngSoft2-Model'
+	#category : #'IngSoft2-Tests'
 }
 
 { #category : #'instance creation' }
@@ -30,14 +31,11 @@ LoadedDie class >> withSequence: aSequence [
 LoadedDie >> initializeWithASequence: aSequence [
 
 	sequence := aSequence.
-	currentPosition := 1
+	sequenceHandler := SequenceHandler for: aSequence size
 ]
 
 { #category : #rolling }
 LoadedDie >> roll [
-	
-	| currentSequenceValue |
-	currentSequenceValue := sequence at: currentPosition.
-	currentPosition := (currentPosition rem: sequence size) + 1.
-	^currentSequenceValue.
+
+	^ sequence at: sequenceHandler index
 ]

@@ -1,5 +1,5 @@
 Class {
-	#name : #RandomDie,
+	#name : #Die,
 	#superclass : #Object,
 	#instVars : [
 		'numberOfSides'
@@ -8,27 +8,27 @@ Class {
 }
 
 { #category : #'instance creation' }
-RandomDie class >> assertValid: numberOfSides [
+Die class >> assertValid: numberOfSides [
 
 	numberOfSides < 3 ifTrue: [ 
 		Error signal: 'Number of faces should be greater than 2' ]
 ]
 
 { #category : #'instance creation' }
-RandomDie class >> with: numberOfSides [
+Die class >> with: numberOfSides [
 
 	self assertValid: numberOfSides.
 	^self new initializeWith: numberOfSides
 ]
 
 { #category : #initialization }
-RandomDie >> initializeWith: aNumberOfSides [
+Die >> initializeWith: aNumberOfSides [
 
  	numberOfSides := aNumberOfSides
 ]
 
 { #category : #rolling }
-RandomDie >> roll [
+Die >> roll [
 
 	^numberOfSides atRandom
 ]

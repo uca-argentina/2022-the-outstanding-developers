@@ -2,7 +2,7 @@ Class {
 	#name : #Spaceship,
 	#superclass : #Object,
 	#instVars : [
-		'player'
+		'name'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -15,32 +15,32 @@ Spaceship class >> assertValid: aPerson [
 ]
 
 { #category : #'instance creation' }
-Spaceship class >> assignedTo: aPlayerName [
+Spaceship class >> called: aName [
 
-	self assertValid: aPlayerName.
-	^ self new initializeWith: aPlayerName
+	self assertValid: aName.
+	^ self new initializeCalling: aName
 ]
 
 { #category : #comparing }
 Spaceship >> = anObject [
 
-	^ self class = anObject class and: [ player = anObject player ]
+	^ self class = anObject class and: [ name = anObject name ]
 ]
 
 { #category : #comparing }
 Spaceship >> hash [
 
-	^ player hash
+	^ name hash
 ]
 
 { #category : #initialization }
-Spaceship >> initializeWith: aPlayerName [
+Spaceship >> initializeCalling: aSpaceshipName [
 
-	player := aPlayerName
+	name := aSpaceshipName
 ]
 
 { #category : #properties }
-Spaceship >> player [
+Spaceship >> name [
 
-	^ player
+	^ name
 ]

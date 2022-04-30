@@ -42,86 +42,99 @@ Board class >> assertValidSpaceshipsAsigneesAreNotRepeated: spaceships [
 ]
 
 { #category : #'instance creation' }
-Board class >> withBoxes: aNumberOfBoxes andSpaceship: aSpaceship [ 
-	^self withBoxes: aNumberOfBoxes andSpaceships: { aSpaceship }.
+Board class >> of: aNumberOfBoxes playedBy: aSpaceship [ 
+	^self of: aNumberOfBoxes playedByMany: { aSpaceship }.
 ]
 
 { #category : #'instance creation' }
-Board class >> withBoxes: aNumberOfBoxes andSpaceships: someSpaceships [ 
+Board class >> of: aNumberOfBoxes playedByMany: spaceships [ 
 	self assertValidNumberOfBoxes: aNumberOfBoxes.
-	self assertValidSpaceships: someSpaceships.
-	^self new initializeWithBoxes: aNumberOfBoxes andSpaceships: someSpaceships.
+	self assertValidSpaceships: spaceships.
+	^self new of: aNumberOfBoxes playedBy: spaceships.
+]
+
+{ #category : #asserting }
+Board >> assertThisIsPlayersTurn: index [
+
+	(turnHandler assertSequenceIndexIs: index) ifFalse: [ 
+		Error signal: 'This is not the players turn' ]
+]
+
+{ #category : #playing }
+Board >> indexOfBoardPositionOf: aSpaceship [
+
+	| currentPosition |
+	currentPosition := (positions select: [ :position | 
+		                    position spaceship = aSpaceship ]) at: 1.
+	^ positions indexOf: currentPosition
+]
+
+{ #category : #movement }
+Board >> moveSpaceship: aNumberOfBoxes [
+
+	| currentSpaceship |
+	currentSpaceship := (positions at: turnHandler index) spaceship.
+	self moveSpaceshipOf: currentSpaceship by: aNumberOfBoxes
+]
+
+{ #category : #playing }
+Board >> moveSpaceshipOf: aSpaceship by: aNumberOfBoxes [
+
+	| numberOfBoxes newPosition index currentBoardPosition |
+	index := self indexOfBoardPositionOf: aSpaceship.
+	self assertThisIsPlayersTurn: index.
+	currentBoardPosition := (positions at: index) position.
+	numberOfBoxes := self
+		                 nextPositionStartingAt: currentBoardPosition
+		                 afterMoving: aNumberOfBoxes.
+	newPosition := BoardPosition
+		               following: aSpaceship
+		               at: currentBoardPosition + numberOfBoxes.
+	positions replaceFrom: index to: index with: { newPosition }
 ]
 
 { #category : #assertions }
-Board >> assertLimitOfTheBoard: currentPosition with: aNumberOfBoxesToMove [
+Board >> nextPositionStartingAt: position afterMoving: aNumberOfBoxes [
 
 	| positionToMove winningPosition |
-	positionToMove := currentPosition + aNumberOfBoxesToMove.
+	positionToMove := position + aNumberOfBoxes.
 	winningPosition := boxes + 1.
 
 	positionToMove <= winningPosition
-		ifFalse: [ ^ winningPosition - currentPosition ]
-		ifTrue: [ ^ aNumberOfBoxesToMove ]
+		ifFalse: [ ^ winningPosition - position ]
+		ifTrue: [ ^ aNumberOfBoxes ]
 ]
 
 { #category : #initialization }
-Board >> initializeWithBoxes: aNumberOfBoxes andSpaceships: someSpaceships [
+Board >> of: aNumberOfBoxes playedBy: spaceships [
 
 	boxes := aNumberOfBoxes.
-	positions := someSpaceships collect: [ :spaceship | 
-		             BoardPosition with: spaceship player ].
-	turnHandler := TurnHandler with: someSpaceships size
+	positions := spaceships collect: [ :spaceship | 
+		             BoardPosition following: spaceship name ].
+	turnHandler := SequenceHandler for: spaceships size
+]
+
+{ #category : #accessing }
+Board >> positionOf: aSpaceship [
+
+	| positionOfSpaceship |
+	positionOfSpaceship := (positions select: [ :position | 
+		                        position spaceship = aSpaceship ]) at: 1.
+	^ positionOfSpaceship position
 ]
 
 { #category : #properties }
-Board >> isThereAWinner [
+Board >> thereIsAWinner [
 
 	^ positions anySatisfy: [ :boardPosition | 
 		  boardPosition position > boxes ]
 ]
 
-{ #category : #private }
-Board >> lastPosition [
-
-	^ boxes
-]
-
-{ #category : #movement }
-Board >> moveSpaceship: boxesToMove [
-
-	| currentPlayer currentTurn |
-	currentTurn := turnHandler spaceshipToMove.
-	currentPlayer := (positions at: currentTurn) player.
-	self moveSpaceshipOf: currentPlayer boxes: boxesToMove
-]
-
-{ #category : #playing }
-Board >> moveSpaceshipOf: aPlayer boxes: aNumberOfBoxes [
-
-	| positionToChange numberOfBoxes |
-	positionToChange := (positions select: [ :position | 
-		                     position player = aPlayer ]) at: 1.
-	numberOfBoxes := self
-		                 assertLimitOfTheBoard: positionToChange position
-		                 with: aNumberOfBoxes.
-	positionToChange move: numberOfBoxes
-]
-
-{ #category : #accessing }
-Board >> positionOf: aPlayer [
-
-	| positionOfPlayer |
-	positionOfPlayer := (positions select: [ :position | 
-		                     position player = aPlayer ]) at: 1.
-	^ positionOfPlayer position
-]
-
 { #category : #properties }
-Board >> whoIsTheWinner [
+Board >> winner [
 
 	| winnerSpaceship |
 	winnerSpaceship := (positions select: [ :spaceship | 
 		                    spaceship position > boxes ]) at: 1.
-	^ winnerSpaceship player
+	^ winnerSpaceship spaceship 
 ]
