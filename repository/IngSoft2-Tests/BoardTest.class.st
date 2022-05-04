@@ -33,6 +33,38 @@ BoardTest >> testASpaceshipCannotPlayWhenItIsNotItsTurn [
 ]
 
 { #category : #tests }
+BoardTest >> testASpaceshipThatLandsOnANormalBoxDoesntMove [
+
+	| spaceship board |
+	spaceship := Spaceship called: 'SP1'.
+	board := Board of: 10 playedBy: spaceship.
+	board moveSpaceshipOf: spaceship name by: 1.
+
+	self assert: (board positionOf: spaceship name) equals: 1
+]
+
+{ #category : #tests }
+BoardTest >> testASpaceshipThatLandsOnASpeedUpBoxEndsUpFourBoxesAfter [
+	
+	| spaceship board normalBox speedUpBox boxSequence box1 box2 box3 box4 box5 |
+	spaceship := Spaceship called: 'SP1'.
+	normalBox := NormalBox new.
+	speedUpBox := SpeedUpBox new.
+
+	box1 := Box withEffect: speedUpBox.
+	box2 := Box withEffect: normalBox.
+	box3 := Box withEffect: normalBox.
+	box4 := Box withEffect: normalBox.
+	box5 := Box withEffect: normalBox.
+	
+	boxSequence := { box1. box2. box3. box4. box5 }.
+	board := Board of: 10 playedBy: spaceship andA: boxSequence .
+	board moveSpaceshipOf: spaceship name by: 1.
+
+	self assert: (board positionOf: spaceship name) equals: 5
+]
+
+{ #category : #tests }
 BoardTest >> testASpaceshipsPositionVariesInFiveWithAFiniteBoardAfterOneRollOfALoadedDieWithFive [
 
 	| n spaceshipName spaceship board loadedDie resultOfTheRoll |
@@ -81,4 +113,14 @@ BoardTest >> testBoardCannotBeCreatedWithoutSpaceships [
 		should: [ Board of: 1 playedByMany: {  } ]
 		raise: Error
 		withMessage: 'Must use at least one spaceship'
+]
+
+{ #category : #tests }
+BoardTest >> testBoardWithAHundredBoxesHasFourtyNormalBoxes [
+	
+	| spaceship board |
+	spaceship := Spaceship called: 'SP1'.
+	board := Board of: 100 playedBy: spaceship.
+	
+	self assert: board amountOfNormalBoxes equals: 40
 ]

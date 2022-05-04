@@ -42,8 +42,14 @@ Board class >> assertValidSpaceshipsAsigneesAreNotRepeated: spaceships [
 ]
 
 { #category : #'instance creation' }
-Board class >> of: aNumberOfBoxes playedBy: aSpaceship [ 
+Board class >> of: aNumberOfBoxes playedBy: aSpaceship [
 	^self of: aNumberOfBoxes playedByMany: { aSpaceship }.
+]
+
+{ #category : #'instance creation' }
+Board class >> of: aNumberOfBoxes playedBy: aSpaceship andA: sequenceBox [
+
+	^ self new of: aNumberOfBoxes playedBy: {aSpaceship} andA: sequenceBox
 ]
 
 { #category : #'instance creation' }
@@ -51,6 +57,17 @@ Board class >> of: aNumberOfBoxes playedByMany: spaceships [
 	self assertValidNumberOfBoxes: aNumberOfBoxes.
 	self assertValidSpaceships: spaceships.
 	^self new of: aNumberOfBoxes playedBy: spaceships.
+]
+
+{ #category : #properties }
+Board >> amountOfBoxes [
+
+	^ boxes size
+]
+
+{ #category : #properties }
+Board >> amountOfNormalBoxes [
+	^boxes size *0.4.
 ]
 
 { #category : #asserting }
@@ -80,7 +97,7 @@ Board >> moveSpaceship: aNumberOfBoxes [
 { #category : #playing }
 Board >> moveSpaceshipOf: aSpaceship by: aNumberOfBoxes [
 
-	| numberOfBoxes newPosition index currentBoardPosition |
+	| numberOfBoxes newPosition index currentBoardPosition currentBox finalPosition |
 	index := self indexOfBoardPositionOf: aSpaceship.
 	self assertThisIsPlayersTurn: index.
 	currentBoardPosition := (positions at: index) position.
@@ -90,7 +107,12 @@ Board >> moveSpaceshipOf: aSpaceship by: aNumberOfBoxes [
 	newPosition := BoardPosition
 		               following: aSpaceship
 		               at: currentBoardPosition + numberOfBoxes.
-	positions replaceFrom: index to: index with: { newPosition }
+	currentBox := boxes at: newPosition position.
+	finalPosition := BoardPosition
+		                 following: aSpaceship
+		                 at:
+		                 newPosition position + currentBox effectOnPosition.
+	positions replaceFrom: index to: index with: { finalPosition }
 ]
 
 { #category : #assertions }
@@ -98,7 +120,7 @@ Board >> nextPositionStartingAt: position afterMoving: aNumberOfBoxes [
 
 	| positionToMove winningPosition |
 	positionToMove := position + aNumberOfBoxes.
-	winningPosition := boxes + 1.
+	winningPosition := self amountOfBoxes + 1.
 
 	positionToMove <= winningPosition
 		ifFalse: [ ^ winningPosition - position ]
@@ -108,7 +130,20 @@ Board >> nextPositionStartingAt: position afterMoving: aNumberOfBoxes [
 { #category : #initialization }
 Board >> of: aNumberOfBoxes playedBy: spaceships [
 
-	boxes := aNumberOfBoxes.
+	boxes := OrderedCollection new.
+	aNumberOfBoxes timesRepeat: [ boxes add: Box new ].
+	positions := spaceships collect: [ :spaceship | 
+		             BoardPosition following: spaceship name ].
+	turnHandler := SequenceHandler for: spaceships size
+]
+
+{ #category : #initialization }
+Board >> of: aNumberOfBoxes playedBy: spaceships andA: sequenceBox [
+
+	| sequenceHandler |
+	boxes := OrderedCollection new.
+	sequenceHandler := SequenceHandler for: sequenceBox size.
+	aNumberOfBoxes timesRepeat: [ boxes add: ( sequenceBox at: sequenceHandler index ) ].
 	positions := spaceships collect: [ :spaceship | 
 		             BoardPosition following: spaceship name ].
 	turnHandler := SequenceHandler for: spaceships size
@@ -127,7 +162,7 @@ Board >> positionOf: aSpaceship [
 Board >> thereIsAWinner [
 
 	^ positions anySatisfy: [ :boardPosition | 
-		  boardPosition position > boxes ]
+		  boardPosition position > self amountOfBoxes  ]
 ]
 
 { #category : #properties }
@@ -135,6 +170,6 @@ Board >> winner [
 
 	| winnerSpaceship |
 	winnerSpaceship := (positions select: [ :spaceship | 
-		                    spaceship position > boxes ]) at: 1.
+		                    spaceship position > self amountOfBoxes  ]) at: 1.
 	^ winnerSpaceship spaceship 
 ]
