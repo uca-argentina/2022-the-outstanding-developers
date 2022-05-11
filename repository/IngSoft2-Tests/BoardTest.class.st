@@ -26,8 +26,9 @@ BoardTest >> testASpaceshipCannotPlayWhenItIsNotItsTurn [
 			         spaceship2.
 			         spaceship3 }.
 	board moveSpaceship: 1.
+	board moveSpaceship: 1.
 	self
-		should: [ board moveSpaceshipOf: spaceship3 name by: 15 ]
+		should: [ board moveSpaceshipOf: spaceship1 name by: 15 ]
 		raise: Error
 		withMessage: 'This is not the players turn'
 ]
@@ -123,4 +124,31 @@ BoardTest >> testBoardWithAHundredBoxesHasFourtyNormalBoxes [
 	board := Board of: 100 playedBy: spaceship.
 	
 	self assert: board amountOfNormalBoxes equals: 40
+]
+
+{ #category : #tests }
+BoardTest >> testSpaceshipLandsOnMoonWalkBoxSetsBackOtherSpaceshipsExceptItself [
+	
+	| spaceship anotherSpaceship board normalBox moonWalkBox boxSequence box1 box2 box3 box4 box5 |
+	spaceship := Spaceship called: 'SP1'.
+	anotherSpaceship := Spaceship called: 'SP2'.
+	normalBox := NormalBox new.
+	moonWalkBox := MoonWalkBox displacing: 1.
+
+	box1 := Box withEffect: normalBox.
+	box2 := Box withEffect: moonWalkBox.
+	box3 := Box withEffect: normalBox.
+	box4 := Box withEffect: normalBox.
+	box5 := Box withEffect: normalBox.
+	
+	boxSequence := { box1. box2. box3. box4. box5 }.
+	board := Board of: 10 playedByMany: {spaceship. anotherSpaceship} andA: boxSequence.
+	board moveSpaceshipOf: spaceship name by: 3.
+	board moveSpaceshipOf: anotherSpaceship name by: 2.
+	
+	self assert: (board positionOf: spaceship name) equals: 2.
+	self assert: (board positionOf: anotherSpaceship name) equals: 2.
+	
+
+
 ]

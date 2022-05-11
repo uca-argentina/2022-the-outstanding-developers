@@ -59,6 +59,13 @@ Board class >> of: aNumberOfBoxes playedByMany: spaceships [
 	^self new of: aNumberOfBoxes playedBy: spaceships.
 ]
 
+{ #category : #'instance creation' }
+Board class >> of: aNumberOfBoxes playedByMany: spaceships andA: sequenceBox [
+	self assertValidNumberOfBoxes: aNumberOfBoxes.
+	self assertValidSpaceships: spaceships.
+	^ self new of: aNumberOfBoxes playedBy: spaceships andA: sequenceBox
+]
+
 { #category : #properties }
 Board >> amountOfBoxes [
 
@@ -107,11 +114,13 @@ Board >> moveSpaceshipOf: aSpaceship by: aNumberOfBoxes [
 	newPosition := BoardPosition
 		               following: aSpaceship
 		               at: currentBoardPosition + numberOfBoxes.
-	currentBox := boxes at: newPosition position.
+	(newPosition position > boxes size) ifFalse:
+	[currentBox := boxes at: newPosition position.
 	finalPosition := BoardPosition
 		                 following: aSpaceship
 		                 at:
-		                 newPosition position + currentBox effectOnPosition.
+		                 newPosition position + currentBox effectOnPosition]
+	ifTrue: [ finalPosition := BoardPosition following: aSpaceship at: newPosition position ].
 	positions replaceFrom: index to: index with: { finalPosition }
 ]
 
@@ -131,7 +140,7 @@ Board >> nextPositionStartingAt: position afterMoving: aNumberOfBoxes [
 Board >> of: aNumberOfBoxes playedBy: spaceships [
 
 	boxes := OrderedCollection new.
-	aNumberOfBoxes timesRepeat: [ boxes add: Box new ].
+	aNumberOfBoxes timesRepeat: [ boxes add: (Box withEffect: NormalBox new)].
 	positions := spaceships collect: [ :spaceship | 
 		             BoardPosition following: spaceship name ].
 	turnHandler := SequenceHandler for: spaceships size
