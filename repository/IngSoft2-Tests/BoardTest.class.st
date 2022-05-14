@@ -129,7 +129,7 @@ BoardTest >> testBoardWithAHundredBoxesHasFourtyNormalBoxes [
 { #category : #tests }
 BoardTest >> testSpaceshipLandsOnAtomicBombBoxSetsBackEveryoneToFirstBox [
 	
-	| spaceship anotherSpaceship board normalBox moonWalkBox boxSequence box1 box2 box3 box4 box5 atomicBombBox |
+	| spaceship anotherSpaceship board normalBox boxSequence box1 box2 box3 box4 box5 atomicBombBox |
 	spaceship := Spaceship called: 'SP1'.
 	anotherSpaceship := Spaceship called: 'SP2'.
 	normalBox := NormalBox new.
@@ -176,8 +176,6 @@ BoardTest >> testSpaceshipLandsOnMoonWalkBoxSetsBackOtherSpaceshipsExceptItself 
 	
 	self assert: (board positionOf: spaceship name) equals: 2.
 	self assert: (board positionOf: anotherSpaceship name) equals: 2.
-	board moveSpaceship: 7.
-	self assert: (board positionOf: anotherSpaceship name) equals: 9.
 
 
 
@@ -186,7 +184,7 @@ BoardTest >> testSpaceshipLandsOnMoonWalkBoxSetsBackOtherSpaceshipsExceptItself 
 { #category : #tests }
 BoardTest >> testSpaceshipLandsOnWormHoleBoxSetsBackItselfFourBoxes [
 	
-	| spaceship  board normalBox wormHoleBox boxSequence box1 box2 box3 box4 box5 |
+	| spaceship board normalBox wormHoleBox boxSequence box1 box2 box3 box4 box5 |
 	spaceship := Spaceship called: 'SP1'.
 	normalBox := NormalBox new.
 	wormHoleBox := WormHoleBox new.
@@ -198,12 +196,10 @@ BoardTest >> testSpaceshipLandsOnWormHoleBoxSetsBackItselfFourBoxes [
 	box5 := Box withEffect: wormHoleBox.
 	
 	boxSequence := { box1. box2. box3. box4. box5 }.
-	board := Board of: 10 playedBy: spaceship andA: boxSequence.
+	board := Board of: 10 playedBy: spaceship andA: boxSequence .
 	board moveSpaceship: 3.
 	board moveSpaceship: 2.
-	
-	self assert: (board positionOf: spaceship name) equals: 1.
-	
 
+	self assert: (board positionOf: spaceship name) equals: 1
 
 ]

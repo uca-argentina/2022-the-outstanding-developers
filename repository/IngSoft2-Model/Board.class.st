@@ -96,17 +96,19 @@ Board >> indexOfBoardPositionOf: aSpaceship [
 { #category : #movement }
 Board >> moveAfterEffect: anAmount [
 
-	| spaceshipToMove currentBoardPosition spaceshipIndex numberOfBoxes newPosition |
-	spaceshipToMove := (positions at: turnHandler index) spaceship.
-	spaceshipIndex := self indexOfBoardPositionOf: spaceshipToMove.
-	currentBoardPosition := (positions at: spaceshipIndex) position.
-	numberOfBoxes := self
-		                 nextPositionStartingAt: currentBoardPosition
-		                 afterMoving: anAmount.
-	newPosition := BoardPosition
-		               following: spaceshipToMove
-		               at: currentBoardPosition + numberOfBoxes.
-	positions replaceFrom: spaceshipIndex  to: spaceshipIndex  with: { newPosition }
+	| currentSpaceship numberOfBoxes |
+	currentSpaceship := positions at: turnHandler currentIndex.
+	positions := positions collect: [ :position | 
+		             currentSpaceship spaceship = position spaceship
+			             ifFalse: [ 
+				             numberOfBoxes := self
+					                              nextPositionStartingAt:
+					                              position position
+					                              afterMoving: anAmount.
+				             BoardPosition
+					             following: position spaceship
+					             at: position position + numberOfBoxes ]
+			             ifTrue: [ position ] ]
 ]
 
 { #category : #movement }
@@ -165,9 +167,10 @@ Board >> moveSpaceshipOf: aSpaceship by: aNumberOfBoxes [
 	newPosition := BoardPosition
 		               following: aSpaceship
 		               at: currentBoardPosition + numberOfBoxes.
-	currentBox := boxes at: newPosition position.
 	positions replaceFrom: index to: index with: { newPosition }.
-	currentBox effectOnPosition: self
+	newPosition position > boxes size ifFalse: [ 
+		currentBox := boxes at: newPosition position.
+		currentBox effectOnPosition: self ]
 ]
 
 { #category : #assertions }
