@@ -9,3 +9,8 @@ NormalBox >> effectOnPosition [
 
 	^ 0
 ]
+
+{ #category : #effects }
+NormalBox >> effectOnPosition: aBoard [ 
+	
+]

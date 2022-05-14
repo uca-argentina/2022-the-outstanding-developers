@@ -21,6 +21,12 @@ SequenceHandler >> assertSequenceIndexIs: anIndex [
 	^ anIndex = beingUsedNow
 ]
 
+{ #category : #accessing }
+SequenceHandler >> currentIndex [
+
+	^ beingUsedNow
+]
+
 { #category : #turns }
 SequenceHandler >> index [
 

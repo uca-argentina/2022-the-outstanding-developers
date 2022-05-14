@@ -32,3 +32,14 @@ SequenceHandlerTest >> testFirstTurnIsOne [
 	turnHandler := SequenceHandler for: 3.
 	self assert: turnHandler index equals: 1.
 ]
+
+{ #category : #tests }
+SequenceHandlerTest >> testSequenceHandlerReturnsCurrentIndexWithoutIncrementingIndex [
+
+	| turnHandler |
+	turnHandler := SequenceHandler for: 3.
+	turnHandler index.
+	self assert: turnHandler currentIndex equals: 1.
+	turnHandler index.
+	self assert: turnHandler currentIndex equals: 2.
+]

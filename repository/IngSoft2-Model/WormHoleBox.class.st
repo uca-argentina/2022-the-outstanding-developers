@@ -9,3 +9,8 @@ WormHoleBox >> effectOnPosition [
 
 	^ -4
 ]
+
+{ #category : #effects }
+WormHoleBox >> effectOnPosition: aBoard [ 
+	aBoard moveCurrentBy: self effectOnPosition .
+]

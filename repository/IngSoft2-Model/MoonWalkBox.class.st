@@ -24,3 +24,9 @@ MoonWalkBox >> effectOnPosition [
 
 	^ displacement * -1
 ]
+
+{ #category : #effects }
+MoonWalkBox >> effectOnPosition: aBoard [
+
+	aBoard moveAllExceptCurrentBy: (self effectOnPosition )
+]
