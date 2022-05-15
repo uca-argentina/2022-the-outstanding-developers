@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'boxes',
 		'turnHandler',
-		'positions'
+		'positions',
+		'laps'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -14,6 +15,13 @@ Board class >> assertValidNumberOfBoxes: boxes [
 
 	boxes > 0 ifFalse: [ 
 		Error signal: 'Number of boxes should be greater than zero' ]
+]
+
+{ #category : #'instance creation' }
+Board class >> assertValidNumberOfLaps: laps [
+
+	laps > 0 ifFalse: [ 
+		Error signal: 'Number of laps should be greater than zero' ]
 ]
 
 { #category : #'instance creation' }
@@ -63,7 +71,34 @@ Board class >> of: aNumberOfBoxes playedByMany: spaceships [
 Board class >> of: aNumberOfBoxes playedByMany: spaceships andA: sequenceBox [
 	self assertValidNumberOfBoxes: aNumberOfBoxes.
 	self assertValidSpaceships: spaceships.
-	^ self new of: aNumberOfBoxes playedBy: spaceships andA: sequenceBox
+	^self new of: aNumberOfBoxes playedBy: spaceships andA: sequenceBox
+]
+
+{ #category : #'instance creation' }
+Board class >> of: aNumberOfBoxes withNumberOfLaps: someLaps playedBy: aSpaceship [ 
+	^self of: aNumberOfBoxes withNumberOfLaps: someLaps playedByMany: { aSpaceship }.
+]
+
+{ #category : #'instance creation' }
+Board class >> of: aNumberOfBoxes withNumberOfLaps: someLaps playedBy: aSpaceship andA: sequenceBox [
+
+	^ self new of: aNumberOfBoxes withNumberOfLaps: someLaps playedBy: {aSpaceship} andA: sequenceBox
+]
+
+{ #category : #'instance creation' }
+Board class >> of: aNumberOfBoxes withNumberOfLaps: someLaps playedByMany: spaceships [ 
+	self assertValidNumberOfBoxes: aNumberOfBoxes.
+	self assertValidSpaceships: spaceships.
+	self assertValidNumberOfLaps: someLaps.
+	^self new of: aNumberOfBoxes withNumberOflaps: someLaps playedBy: spaceships.
+]
+
+{ #category : #'instance creation' }
+Board class >> of: aNumberOfBoxes withNumberOfLaps: someLaps playedByMany: spaceships andA: sequenceBox [
+	self assertValidNumberOfBoxes: aNumberOfBoxes.
+	self assertValidSpaceships: spaceships.
+	self assertValidNumberOfLaps: someLaps.
+	^self new of: aNumberOfBoxes withNumberOfLaps: someLaps playedBy: spaceships andA: sequenceBox
 ]
 
 { #category : #properties }
@@ -91,6 +126,15 @@ Board >> indexOfBoardPositionOf: aSpaceship [
 	currentPosition := (positions select: [ :position | 
 		                    position spaceship = aSpaceship ]) at: 1.
 	^ positions indexOf: currentPosition
+]
+
+{ #category : #accessing }
+Board >> lapOf: aSpaceship [
+
+	| spaceshipLap |
+	spaceshipLap := (positions select: [ :position | 
+		                        position spaceship = aSpaceship ]) at: 1.
+	^ spaceshipLap lap
 ]
 
 { #category : #movement }
@@ -157,16 +201,21 @@ Board >> moveSpaceship: aNumberOfBoxes [
 { #category : #playing }
 Board >> moveSpaceshipOf: aSpaceship by: aNumberOfBoxes [
 
-	| numberOfBoxes newPosition index currentBoardPosition currentBox finalPosition |
+	| numberOfBoxes newPosition index currentBoardPosition currentBox finalPosition currentLap|
 	index := self indexOfBoardPositionOf: aSpaceship.
 	self assertThisIsPlayersTurn: index.
 	currentBoardPosition := (positions at: index) position.
+	currentLap := (positions at: index) lap.
 	numberOfBoxes := self
-		                 nextPositionStartingAt: currentBoardPosition
+		                 nextPositionStartingAt: currentBoardPosition in: currentLap
 		                 afterMoving: aNumberOfBoxes.
-	newPosition := BoardPosition
+	numberOfBoxes = 0 
+	ifFalse: [ newPosition := BoardPosition
 		               following: aSpaceship
-		               at: currentBoardPosition + numberOfBoxes.
+		               at: (currentBoardPosition + numberOfBoxes) in: currentLap]
+	ifTrue: [ newPosition := BoardPosition
+		               following: aSpaceship
+		               at: 1 in: currentLap + 1].
 	positions replaceFrom: index to: index with: { newPosition }.
 	newPosition position > boxes size ifFalse: [ 
 		currentBox := boxes at: newPosition position.
@@ -183,6 +232,22 @@ Board >> nextPositionStartingAt: position afterMoving: aNumberOfBoxes [
 	positionToMove <= winningPosition
 		ifFalse: [ ^ winningPosition - position ]
 		ifTrue: [ ^ aNumberOfBoxes ]
+]
+
+{ #category : #assertions }
+Board >> nextPositionStartingAt: position in: lap afterMoving: aNumberOfBoxes [
+
+	| positionToMove winningPosition |
+	positionToMove := position + aNumberOfBoxes.
+	winningPosition := self amountOfBoxes + 1.
+	
+	lap < laps
+	ifTrue: [(positionToMove <= winningPosition)
+		ifFalse: [ ^ 0 ]
+		ifTrue: [ ^ aNumberOfBoxes ] ]
+	ifFalse: [ (positionToMove <= winningPosition)
+		ifFalse: [ ^ winningPosition - position ]
+		ifTrue: [ ^ aNumberOfBoxes ] ]
 ]
 
 { #category : #initialization }
@@ -207,6 +272,30 @@ Board >> of: aNumberOfBoxes playedBy: spaceships andA: sequenceBox [
 	turnHandler := SequenceHandler for: spaceships size
 ]
 
+{ #category : #initialization }
+Board >> of: aNumberOfBoxes withNumberOfLaps: someLaps playedBy: spaceships andA: sequenceBox [
+
+	| sequenceHandler |
+	boxes := OrderedCollection new.
+	sequenceHandler := SequenceHandler for: sequenceBox size.
+	aNumberOfBoxes timesRepeat: [ boxes add: ( sequenceBox at: sequenceHandler index ) ].
+	laps := someLaps.
+	positions := spaceships collect: [ :spaceship | 
+		             BoardPosition following: spaceship name ].
+	turnHandler := SequenceHandler for: spaceships size
+]
+
+{ #category : #initialization }
+Board >> of: aNumberOfBoxes withNumberOflaps: someLaps playedBy: spaceships [
+
+	boxes := OrderedCollection new.
+	aNumberOfBoxes timesRepeat: [ boxes add: (Box withEffect: NormalBox new)].
+	laps := someLaps.
+	positions := spaceships collect: [ :spaceship | 
+		             BoardPosition following: spaceship name ].
+	turnHandler := SequenceHandler for: spaceships size
+]
+
 { #category : #accessing }
 Board >> positionOf: aSpaceship [
 
@@ -218,9 +307,8 @@ Board >> positionOf: aSpaceship [
 
 { #category : #properties }
 Board >> thereIsAWinner [
-
 	^ positions anySatisfy: [ :boardPosition | 
-		  boardPosition position > self amountOfBoxes  ]
+		  boardPosition position > self amountOfBoxes & (boardPosition lap = laps)]
 ]
 
 { #category : #properties }

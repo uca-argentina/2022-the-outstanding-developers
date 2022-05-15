@@ -3,13 +3,15 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'position',
-		'spaceship'
+		'spaceship',
+		'lap'
 	],
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'instance creation' }
-BoardPosition class >> following: aSpaceship [ 
+BoardPosition class >> following: aSpaceship [
+
 	^self new initializeFollowing: aSpaceship
 ]
 
@@ -19,11 +21,18 @@ BoardPosition class >> following: aSpaceship at: aPosition [
 	^self new initializeFollowing: aSpaceship at: aPosition. 
 ]
 
+{ #category : #'instance creation' }
+BoardPosition class >> following: aSpaceship at: aPosition in: aLap [
+
+	^self new initializeFollowing: aSpaceship at: aPosition in: aLap. 
+]
+
 { #category : #initialization }
 BoardPosition >> initializeFollowing: aSpaceshipName [
 
 	spaceship := aSpaceshipName.
-	position := 0
+	lap := 1.
+	position := 0.
 ]
 
 { #category : #initialization }
@@ -31,6 +40,20 @@ BoardPosition >> initializeFollowing: aSpaceship at: aPosition [
 	
 	spaceship := aSpaceship.
 	position := aPosition.
+	lap := 1.
+]
+
+{ #category : #initialization }
+BoardPosition >> initializeFollowing: aSpaceship at: aPosition in: aLap [
+	
+	spaceship := aSpaceship.
+	position := aPosition.
+	lap := aLap.
+]
+
+{ #category : #accessing }
+BoardPosition >> lap [
+	^ lap
 ]
 
 { #category : #accessing }

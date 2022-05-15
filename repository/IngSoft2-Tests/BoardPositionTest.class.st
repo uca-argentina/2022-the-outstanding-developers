@@ -31,3 +31,12 @@ BoardPositionTest >> testInitialBoardPositionIsZero [
 	boardPosition := BoardPosition following: spaceship.
 	self assert: boardPosition position equals: 0
 ]
+
+{ #category : #tests }
+BoardPositionTest >> testInitialBoardPositionLapIsOne [
+
+	| boardPosition spaceship |
+	spaceship := Spaceship called: 'aPlayer'.
+	boardPosition := BoardPosition following: spaceship.
+	self assert: boardPosition lap equals: 1
+]
