@@ -21,12 +21,18 @@ SequenceHandler >> assertSequenceIndexIs: anIndex [
 	^ anIndex = beingUsedNow
 ]
 
+{ #category : #accessing }
+SequenceHandler >> currentIndex [
+
+	^ beingUsedNow
+]
+
 { #category : #turns }
 SequenceHandler >> index [
 
 	beingUsedNow := currentSequenceIndex.
 	currentSequenceIndex := (currentSequenceIndex rem: sequenceSize) + 1.
-	^ beingUsedNow 
+	^ beingUsedNow
 ]
 
 { #category : #initialization }
@@ -34,5 +40,5 @@ SequenceHandler >> initializeFor: aSequenceSize [
 
 	sequenceSize := aSequenceSize.
 	currentSequenceIndex := 1.
-	beingUsedNow := 1.
+	beingUsedNow := 1
 ]

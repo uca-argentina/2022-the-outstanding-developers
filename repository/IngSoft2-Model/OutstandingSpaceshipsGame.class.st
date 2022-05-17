@@ -25,9 +25,11 @@ OutstandingSpaceshipsGame >> initializeWith: aBoard and: someDice [
 OutstandingSpaceshipsGame >> play [
 
 	| resultOfTheRoll |
-	self thereIsAWinner ifFalse: [ 
-		resultOfTheRoll := dice roll.
-		board moveSpaceship: resultOfTheRoll ] ifTrue: [ Error signal: 'The game has already been finished' ]
+	self thereIsAWinner
+		ifFalse: [ 
+			resultOfTheRoll := dice roll.
+			board moveSpaceship: resultOfTheRoll ]
+		ifTrue: [ Error signal: 'The game has already been finished' ]
 ]
 
 { #category : #playing }
