@@ -212,9 +212,10 @@ BoardTest >> testBoardWithAHundredBoxesHasFourtyNormalBoxes [
 { #category : #tests }
 BoardTest >> testSpaceshipLandsOnAtomicBombBoxSetsBackEveryoneToFirstBox [
 
-	| spaceship anotherSpaceship board normalBox boxSequence box1 box2 box3 box4 box5 atomicBombBox |
+	| spaceship anotherSpaceship board normalBox boxSequence box1 box2 box3 box4 box5 atomicBombBox otherSpaceship |
 	spaceship := Spaceship called: 'SP1'.
 	anotherSpaceship := Spaceship called: 'SP2'.
+	otherSpaceship := Spaceship called: 'SP3'.
 	normalBox := NormalBox new.
 	atomicBombBox := AtomicBombBox new.
 
@@ -235,14 +236,17 @@ BoardTest >> testSpaceshipLandsOnAtomicBombBoxSetsBackEveryoneToFirstBox [
 		         withNumberOfLaps: 1
 		         playedByMany: { 
 				         spaceship.
-				         anotherSpaceship }
+				         anotherSpaceship.
+				         otherSpaceship }
 		         andA: boxSequence.
 	board moveSpaceship: 3.
 	board moveSpaceship: 2.
+	board moveSpaceship: 1.
 	board moveSpaceship: 2.
 
 	self assert: (board positionOf: spaceship name) equals: 1.
-	self assert: (board positionOf: anotherSpaceship name) equals: 1
+	self assert: (board positionOf: anotherSpaceship name) equals: 1.
+	self assert: (board positionOf: otherSpaceship name) equals: 1
 ]
 
 { #category : #tests }
@@ -307,6 +311,71 @@ BoardTest >> testSpaceshipLandsOnWormHoleBoxSetsBackItselfFourBoxes [
 		         andA: boxSequence.
 	board moveSpaceship: 3.
 	board moveSpaceship: 2.
+
+	self assert: (board positionOf: spaceship name) equals: 1
+]
+
+{ #category : #tests }
+BoardTest >> testSpaceshipThatLandsOnMoonWalkBoxCantMakeOthersGoToNegativePositions [
+
+	| spaceship board normalBox moonWalkBox boxSequence box1 box2 box3 box4 box5 anotherSpaceship |
+	spaceship := Spaceship called: 'SP1'.
+	anotherSpaceship := Spaceship called: 'SP2'.
+	normalBox := NormalBox new.
+	moonWalkBox := MoonWalkBox displacing: 10.
+
+	box1 := Box withEffect: moonWalkBox.
+	box2 := Box withEffect: normalBox.
+	box3 := Box withEffect: normalBox.
+	box4 := Box withEffect: normalBox.
+	box5 := Box withEffect: normalBox.
+
+	boxSequence := { 
+		               box1.
+		               box2.
+		               box3.
+		               box4.
+		               box5 }.
+	board := Board
+		         of: 10
+		         withNumberOfLaps: 2
+		         playedByMany: { 
+				         spaceship.
+				         anotherSpaceship }
+		         andA: boxSequence.
+	board moveSpaceship: 5.
+	board moveSpaceship: 1.
+
+	self assert: (board positionOf: spaceship name) equals: 1.
+	self assert: (board positionOf: anotherSpaceship name) equals: 1
+]
+
+{ #category : #tests }
+BoardTest >> testSpaceshipThatLandsOnWormHoleBoxCantGoToNegativePositions [
+
+	| spaceship board normalBox wormHoleBox boxSequence box1 box2 box3 box4 box5 |
+	spaceship := Spaceship called: 'SP1'.
+	normalBox := NormalBox new.
+	wormHoleBox := WormHoleBox new.
+
+	box1 := Box withEffect: wormHoleBox.
+	box2 := Box withEffect: normalBox.
+	box3 := Box withEffect: normalBox.
+	box4 := Box withEffect: normalBox.
+	box5 := Box withEffect: normalBox.
+
+	boxSequence := { 
+		               box1.
+		               box2.
+		               box3.
+		               box4.
+		               box5 }.
+	board := Board
+		         of: 10
+		         withNumberOfLaps: 2
+		         playedBy: spaceship
+		         andA: boxSequence.
+	board moveSpaceship: 1.
 
 	self assert: (board positionOf: spaceship name) equals: 1
 ]

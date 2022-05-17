@@ -16,12 +16,6 @@ BoardPosition class >> following: aSpaceship [
 ]
 
 { #category : #'instance creation' }
-BoardPosition class >> following: aSpaceship at: aPosition [ 
-
-	^self new initializeFollowing: aSpaceship at: aPosition. 
-]
-
-{ #category : #'instance creation' }
 BoardPosition class >> following: aSpaceship at: aPosition in: aLap [
 
 	^self new initializeFollowing: aSpaceship at: aPosition in: aLap. 
@@ -36,18 +30,12 @@ BoardPosition >> initializeFollowing: aSpaceshipName [
 ]
 
 { #category : #initialization }
-BoardPosition >> initializeFollowing: aSpaceship at: aPosition [
-
-	spaceship := aSpaceship.
-	position := aPosition.
-	lap := 1
-]
-
-{ #category : #initialization }
 BoardPosition >> initializeFollowing: aSpaceship at: aPosition in: aLap [
 
 	spaceship := aSpaceship.
-	position := aPosition.
+	position := aPosition > 0
+		            ifFalse: [ 1 ]
+		            ifTrue: [ aPosition ].
 	lap := aLap
 ]
 

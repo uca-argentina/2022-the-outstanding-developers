@@ -203,18 +203,20 @@ Board >> moveAfterEffect: anAmount [
 					                              afterMoving: anAmount.
 				             BoardPosition
 					             following: position spaceship
-					             at: position position + numberOfBoxes ]
+					             at: position position + numberOfBoxes
+					             in: position lap ]
 			             ifTrue: [ position ] ]
 ]
 
 { #category : #movement }
 Board >> moveAllBackToBeginning [
 
-	| spaceshipToMove spaceshipIndex newPosition |
+	| spaceshipToMove spaceshipIndex newPosition spaceshipCurrentLap |
 	positions size timesRepeat: [ 
 		spaceshipToMove := (positions at: turnHandler index) spaceship.
+		spaceshipCurrentLap := (positions at: turnHandler index) lap.
 		spaceshipIndex := self indexOfBoardPositionOf: spaceshipToMove.
-		newPosition := BoardPosition following: spaceshipToMove at: 1.
+		newPosition := BoardPosition following: spaceshipToMove at: 1 in: spaceshipCurrentLap.
 		positions
 			replaceFrom: spaceshipIndex
 			to: spaceshipIndex
@@ -230,16 +232,18 @@ Board >> moveAllExceptCurrentBy: anAmount [
 { #category : #movement }
 Board >> moveCurrentBy: anAmount [
 
-	| spaceshipToMove spaceshipIndex currentBoardPosition numberOfBoxes newPosition |
+	| spaceshipToMove spaceshipIndex currentBoardPosition numberOfBoxes newPosition currentBoardLap |
 	spaceshipToMove := (positions at: turnHandler currentIndex) spaceship.
 	spaceshipIndex := self indexOfBoardPositionOf: spaceshipToMove.
 	currentBoardPosition := (positions at: spaceshipIndex) position.
+	currentBoardLap := (positions at: spaceshipIndex) lap.
 	numberOfBoxes := self
 		                 nextPositionStartingAt: currentBoardPosition
 		                 afterMoving: anAmount.
 	newPosition := BoardPosition
 		               following: spaceshipToMove
-		               at: currentBoardPosition + numberOfBoxes.
+		               at: currentBoardPosition + numberOfBoxes
+		               in: currentBoardLap.
 	positions
 		replaceFrom: spaceshipIndex
 		to: spaceshipIndex
