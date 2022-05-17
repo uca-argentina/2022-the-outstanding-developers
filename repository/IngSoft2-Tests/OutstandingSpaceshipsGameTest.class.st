@@ -241,19 +241,23 @@ OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndLoadedDieH
 { #category : #tests }
 OutstandingSpaceshipsGameTest >> testGameWithTwoSpaceshipsAndABoardEndsWhenOneCompletesThreeLaps [
 
-	| aSpaceship anotherSpaceship aBoard aDie game |
+	| aSpaceship anotherSpaceship aBoard aDie game otherSpaceship |
 	aSpaceship := Spaceship called: 'Player1'.
 	anotherSpaceship := Spaceship called: 'Player2'.
-	aBoard := Board of: 15 withNumberOfLaps: 3 playedByMany: { 
-			          aSpaceship.
-			          anotherSpaceship } andA: {Box withEffect: NormalBox new}.
-	aDie := LoadedDie with: 5.
+	otherSpaceship := Spaceship called: 'Player3'.
+	aBoard := Board
+		          of: 15
+		          withNumberOfLaps: 3
+		          playedByMany: { 
+				          aSpaceship.
+				          anotherSpaceship. otherSpaceship }
+		          andA: { (Box withEffect: NormalBox new) }.
+	aDie := LoadedDie withSequence: {5. 6. 1}.
 	game := OutstandingSpaceshipsGame playedOn: aBoard throwing: aDie.
 
 	game startSimulation.
 
-	self assert: (aBoard positionOf: 'Player2') equals: 11.
-	self assert: (aBoard lapOf: 'Player2') equals: 3.
-	self assert: (aBoard positionOf: 'Player1') equals: 16.
-	self assert: (aBoard lapOf: 'Player1') equals: 3
+	self assert: (aBoard rankingPositionOf: 'Player2') equals: 1.
+	self assert: (aBoard rankingPositionOf: 'Player1') equals: 2.
+	self assert: (aBoard rankingPositionOf: 'Player3') equals: 3.
 ]
