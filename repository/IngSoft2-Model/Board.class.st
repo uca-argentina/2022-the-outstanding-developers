@@ -449,6 +449,24 @@ Board >> positionOf: aSpaceship [
 	^ positionOfSpaceship position
 ]
 
+{ #category : #accessing }
+Board >> rankingPositionOf: aSpaceshipName [
+
+	| rankingValues sortedRankingValues index notFound |
+	rankingValues := positions collect: [ :position | 
+		                 RankingValue of: position withSize: boxes size ].
+	sortedRankingValues := rankingValues sort: [ :rankingA :rankingB | 
+		                       rankingA absolutePosition
+		                       > rankingB absolutePosition ].
+	index := 1.
+	notFound := true.
+	[ index <= sortedRankingValues size and: [ notFound ] ] whileTrue: [ 
+		(sortedRankingValues at: index) spaceship = aSpaceshipName
+			ifTrue: [ notFound := false ]
+			ifFalse: [ index := index + 1 ] ].
+	^ index
+]
+
 { #category : #properties }
 Board >> thereIsAWinner [
 
