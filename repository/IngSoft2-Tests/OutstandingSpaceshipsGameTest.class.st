@@ -20,7 +20,7 @@ OutstandingSpaceshipsGameTest >> testANonSimulatedGameCannotBePlayedAfterItFinis
 	| aSpaceship anotherSpaceship board aDie game |
 	aSpaceship := Spaceship called: 'SP1'.
 	anotherSpaceship := Spaceship called: 'SP2'.
-	board := Board of: 7 withNumberOfLaps: 1 playedByMany: { 
+	board := Board of: 7 for: 1 playedByMany: { 
 			         aSpaceship.
 			         anotherSpaceship } andA: {Box withEffect: NormalBox new}.
 	aDie := LoadedDie withSequence: { 4. 3 }.
@@ -42,7 +42,7 @@ OutstandingSpaceshipsGameTest >> testARoundOfANonSimulatedGameChangesSpaceshipsP
 	| aSpaceship anotherSpaceship board aDie game |
 	aSpaceship := Spaceship called: 'SP1'.
 	anotherSpaceship := Spaceship called: 'SP2'.
-	board := Board of: 15 withNumberOfLaps: 1 playedByMany: { 
+	board := Board of: 15 for: 1 playedByMany: { 
 			         aSpaceship.
 			         anotherSpaceship } andA: {Box withEffect: NormalBox new}.
 	aDie := LoadedDie withSequence: { 4. 3 }.
@@ -60,7 +60,7 @@ OutstandingSpaceshipsGameTest >> testGameWithABoardOfFifteenBoxesALoadedDieAndAS
 
 	| aSpaceship aBoard aDie game |
 	aSpaceship := Spaceship called: 'Player1'.
-	aBoard := Board of: 15 withNumberOfLaps: 1 playedBy: aSpaceship andA: {Box withEffect: NormalBox new}.
+	aBoard := Board of: 15 for: 1 playedBy: aSpaceship andA: {Box withEffect: NormalBox new}.
 	aDie := LoadedDie with: 5.
 	game := OutstandingSpaceshipsGame playedOn: aBoard throwing: aDie.
 
@@ -76,7 +76,7 @@ OutstandingSpaceshipsGameTest >> testGameWithAFiniteBoardASequenceLoadedDieAndTh
 	aSpaceship := Spaceship called: 'Player1'.
 	anotherSpaceship := Spaceship called: 'Player2'.
 	otherSpaceship := Spaceship called: 'Player3'.
-	aBoard := Board of: 10 withNumberOfLaps: 3 playedByMany: { 
+	aBoard := Board of: 10 for: 3 playedByMany: { 
 			          aSpaceship.
 			          anotherSpaceship.
 			          otherSpaceship } andA: {Box withEffect: NormalBox new}.
@@ -97,7 +97,7 @@ OutstandingSpaceshipsGameTest >> testGameWithAFiniteBoardASequenceLoadedDieAndTh
 	aSpaceship := Spaceship called: 'Player1'.
 	anotherSpaceship := Spaceship called: 'Player2'.
 	otherSpaceship := Spaceship called: 'Player3'.
-	aBoard := Board of: 10 withNumberOfLaps: 1 playedByMany: { 
+	aBoard := Board of: 10 for: 1 playedByMany: { 
 			          aSpaceship.
 			          anotherSpaceship.
 			          otherSpaceship } andA: {Box withEffect: NormalBox new}.
@@ -116,7 +116,7 @@ OutstandingSpaceshipsGameTest >> testGameWithASpaceshipABoardWithFiveBoxesAndALo
 
 	| aBoard aDice spaceship game resultOfTheRoll |
 	spaceship := Spaceship called: 'APlayerName'.
-	aBoard := Board of: 5 withNumberOfLaps: 1 playedBy: spaceship andA: {Box withEffect: NormalBox new}.
+	aBoard := Board of: 5 for: 1 playedBy: spaceship andA: {Box withEffect: NormalBox new}.
 	aDice := LoadedDie with: 4.
 
 	game := OutstandingSpaceshipsGame playedOn: aBoard throwing: aDice.
@@ -131,7 +131,7 @@ OutstandingSpaceshipsGameTest >> testGameWithASpaceshipAndABoardEndsWhenItComple
 
 	| aSpaceship aBoard aDie game |
 	aSpaceship := Spaceship called: 'Player1'.
-	aBoard := Board of: 15 withNumberOfLaps: 3 playedBy: aSpaceship andA: {Box withEffect: NormalBox new}.
+	aBoard := Board of: 15 for: 3 playedBy: aSpaceship andA: {Box withEffect: NormalBox new}.
 	aDie := LoadedDie with: 5.
 	game := OutstandingSpaceshipsGame playedOn: aBoard throwing: aDie.
 
@@ -147,7 +147,7 @@ OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndADiceCupEn
 	| aSpaceship anotherSpaceship aBoard aDie game anotherDie otherDie aDiceCup |
 	aSpaceship := Spaceship called: 'Player1'.
 	anotherSpaceship := Spaceship called: 'Player2'.
-	aBoard := Board of: 50 withNumberOfLaps: 3 playedByMany: { 
+	aBoard := Board of: 50 for: 3 playedByMany: { 
 			          aSpaceship.
 			          anotherSpaceship } andA: {Box withEffect: NormalBox new}.
 	aDie := Die with: 4.
@@ -170,7 +170,7 @@ OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndADieEnds [
 	| aSpaceship anotherSpaceship aBoard aDie game |
 	aSpaceship := Spaceship called: 'Player1'.
 	anotherSpaceship := Spaceship called: 'Player2'.
-	aBoard := Board of: 15 withNumberOfLaps: 2 playedByMany: { 
+	aBoard := Board of: 15 for: 2 playedByMany: { 
 			          aSpaceship.
 			          anotherSpaceship } andA: {Box withEffect: NormalBox new}.
 	aDie := Die with: 4.
@@ -187,7 +187,7 @@ OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndALoadedDie
 	| aSpaceship anotherSpaceship aBoard aLoadedDie game resultOfTheRoll |
 	aSpaceship := Spaceship called: 'Player1'.
 	anotherSpaceship := Spaceship called: 'Player2'.
-	aBoard := Board of: 5 withNumberOfLaps: 1 playedByMany: { 
+	aBoard := Board of: 5 for: 1 playedByMany: { 
 			          aSpaceship.
 			          anotherSpaceship } andA: {Box withEffect: NormalBox new}.
 	aLoadedDie := LoadedDie with: 3.
@@ -209,7 +209,7 @@ OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndASequenced
 	| aSpaceship anotherSpaceship aBoard aDie game |
 	aSpaceship := Spaceship called: 'Player1'.
 	anotherSpaceship := Spaceship called: 'Player2'.
-	aBoard := Board of: 15 withNumberOfLaps: 2 playedByMany: { 
+	aBoard := Board of: 15 for: 2 playedByMany: { 
 			          aSpaceship.
 			          anotherSpaceship } andA: {Box withEffect: NormalBox new}.
 	aDie := LoadedDie withSequence: { 1. 3 }.
@@ -226,7 +226,7 @@ OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndLoadedDieH
 	| aSpaceship anotherSpaceship aBoard aDie game |
 	aSpaceship := Spaceship called: 'Player1'.
 	anotherSpaceship := Spaceship called: 'Player2'.
-	aBoard := Board of: 15 withNumberOfLaps: 1 playedByMany: { 
+	aBoard := Board of: 15 for: 1 playedByMany: { 
 			          aSpaceship.
 			          anotherSpaceship } andA: {Box withEffect: NormalBox new}.
 	aDie := LoadedDie with: 4.
@@ -247,7 +247,7 @@ OutstandingSpaceshipsGameTest >> testGameWithTwoSpaceshipsAndABoardEndsWhenOneCo
 	otherSpaceship := Spaceship called: 'Player3'.
 	aBoard := Board
 		          of: 15
-		          withNumberOfLaps: 3
+		          for: 3
 		          playedByMany: { 
 				          aSpaceship.
 				          anotherSpaceship. otherSpaceship }
