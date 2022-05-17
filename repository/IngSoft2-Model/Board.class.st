@@ -120,12 +120,6 @@ Board class >> of: aNumberOfBoxes for: someLaps playedByMany: spaceships andA: s
 	^self new of: aNumberOfBoxes for: someLaps playedBy: spaceships andA: sequenceBox
 ]
 
-{ #category : #'instance creation' }
-Board class >> of: aNumberOfBoxes playedBy: aSpaceship andA: sequenceBox [
-
-	^ self new of: aNumberOfBoxes playedBy: {aSpaceship} andA: sequenceBox
-]
-
 { #category : #properties }
 Board >> amountOfAtomicBombBoxes [
 	^ self amountOfBoxes: 'atomicbomb'
@@ -376,19 +370,6 @@ Board >> of: aNumberOfBoxes for: someLaps playedBy: spaceships andA: boxSequence
 	aNumberOfBoxes timesRepeat: [ 
 		boxes add: (boxSequence at: sequenceHandler index) ].
 	laps := someLaps.
-	positions := spaceships collect: [ :spaceship | 
-		             BoardPosition following: spaceship name ].
-	turnHandler := SequenceHandler for: spaceships size
-]
-
-{ #category : #initialization }
-Board >> of: aNumberOfBoxes playedBy: spaceships andA: boxSequence [
-
-	| sequenceHandler |
-	boxes := OrderedCollection new.
-	sequenceHandler := SequenceHandler for: boxSequence size.
-	aNumberOfBoxes timesRepeat: [ 
-		boxes add: (boxSequence at: sequenceHandler index) ].
 	positions := spaceships collect: [ :spaceship | 
 		             BoardPosition following: spaceship name ].
 	turnHandler := SequenceHandler for: spaceships size
