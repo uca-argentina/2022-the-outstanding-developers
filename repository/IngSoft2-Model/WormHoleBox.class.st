@@ -15,3 +15,8 @@ WormHoleBox >> effectOnPosition: aBoard [
 
 	aBoard moveCurrentBy: self effectOnPosition
 ]
+
+{ #category : #accesing }
+WormHoleBox >> typeOfEffect [
+	^'wormhole'
+]

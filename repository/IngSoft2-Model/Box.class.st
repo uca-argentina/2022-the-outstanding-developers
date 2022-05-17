@@ -25,6 +25,11 @@ Box >> effectOnPosition: aBoard [
 	effect effectOnPosition: aBoard
 ]
 
+{ #category : #accessing }
+Box >> effectType [
+	^effect typeOfEffect
+]
+
 { #category : #initialization }
 Box >> withEffect: anEffect [
 

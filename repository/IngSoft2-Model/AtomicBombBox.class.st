@@ -9,3 +9,8 @@ AtomicBombBox >> effectOnPosition: aBoard [
 
 	aBoard moveAllBackToBeginning
 ]
+
+{ #category : #accessing }
+AtomicBombBox >> typeOfEffect [
+	^'atomicbomb'
+]

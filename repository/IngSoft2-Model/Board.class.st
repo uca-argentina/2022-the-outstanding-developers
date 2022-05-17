@@ -131,6 +131,11 @@ Board class >> of: aNumberOfBoxes withNumberOfLaps: someLaps playedBy: aSpaceshi
 ]
 
 { #category : #'instance creation' }
+Board class >> of: aNumberOfBoxes withNumberOfLaps: someLaps playedBy: aSpaceship andA: sequenceBox [ 
+	^self of: aNumberOfBoxes withNumberOfLaps: someLaps playedByMany: { aSpaceship } andA: sequenceBox.
+]
+
+{ #category : #'instance creation' }
 Board class >> of: aNumberOfBoxes withNumberOfLaps: someLaps playedByMany: spaceships [ 
 	self assertValidNumberOfBoxes: aNumberOfBoxes.
 	self assertValidSpaceships: spaceships.
@@ -147,15 +152,55 @@ Board class >> of: aNumberOfBoxes withNumberOfLaps: someLaps playedByMany: space
 ]
 
 { #category : #properties }
+Board >> amountOfAtomicBombBoxes [
+	^ self amountOfBoxes: 'atomicbomb'
+]
+
+{ #category : #properties }
 Board >> amountOfBoxes [
 
 	^ boxes size
 ]
 
 { #category : #properties }
+Board >> amountOfBoxes: type [
+
+	| normalBoxes |
+	normalBoxes := 0.
+	1 to: boxes size do: [ :i | 
+		| box |
+		box := boxes at: i.
+		box effectType = type ifTrue: [ normalBoxes := normalBoxes + 1 ] ].
+	^ normalBoxes
+]
+
+{ #category : #properties }
+Board >> amountOfHyperJumpBoxes [
+	^ self amountOfBoxes: 'hyperjump'
+]
+
+{ #category : #properties }
+Board >> amountOfMoonWalkBoxes [
+
+	^ self amountOfBoxes: 'moonwalk'
+]
+
+{ #category : #properties }
 Board >> amountOfNormalBoxes [
 
-	^ boxes size * 0.4
+	^ self amountOfBoxes: 'normal'
+]
+
+{ #category : #properties }
+Board >> amountOfSpeedUpBoxes [
+
+	^ self amountOfBoxes: 'speedup'
+]
+
+{ #category : #properties }
+Board >> amountOfWormHoleBoxes [
+
+	^ self amountOfBoxes: 'wormhole'
 ]
 
 { #category : #asserting }
@@ -348,13 +393,13 @@ Board >> of: aNumberOfBoxes andLength: parsecsAmount for: someLaps playedByMany:
 { #category : #initialization }
 Board >> of: aNumberOfBoxes for: someLaps playedBy: spaceships [
 
-	boxes := OrderedCollection new.
-	aNumberOfBoxes timesRepeat: [ 
-		boxes add: (Box withEffect: NormalBox new) ].
+	| randomBoxGenerator |
+	randomBoxGenerator := RandomBoxGenerator with: aNumberOfBoxes.
+	boxes := randomBoxGenerator generate.
 	laps := someLaps.
 	positions := spaceships collect: [ :spaceship | 
 		             BoardPosition following: spaceship name ].
-	turnHandler := SequenceHandler for: spaceships size
+	turnHandler := SequenceHandler for: spaceships size.
 ]
 
 { #category : #initialization }

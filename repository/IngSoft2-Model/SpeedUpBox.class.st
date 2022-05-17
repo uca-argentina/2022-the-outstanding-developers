@@ -15,3 +15,8 @@ SpeedUpBox >> effectOnPosition: aBoard [
 
 	aBoard moveCurrentBy: self effectOnPosition
 ]
+
+{ #category : #accessing }
+SpeedUpBox >> typeOfEffect [
+	^'speedup'
+]

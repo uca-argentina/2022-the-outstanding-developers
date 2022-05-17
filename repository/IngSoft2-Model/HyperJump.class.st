@@ -27,6 +27,11 @@ HyperJump >> effectOnPosition: aBoard [
 	aBoard moveCurrentBy: aNumberOfBoxes
 ]
 
+{ #category : #accessing }
+HyperJump >> typeOfEffect [
+	^'hyperjump'
+]
+
 { #category : #initialization }
 HyperJump >> with: parsecsValues [
 

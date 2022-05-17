@@ -15,3 +15,8 @@ NormalBox >> effectOnPosition: aBoard [
 
 	
 ]
+
+{ #category : #'as yet unclassified' }
+NormalBox >> typeOfEffect [
+	^'normal'
+]

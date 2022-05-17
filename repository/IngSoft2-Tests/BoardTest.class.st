@@ -15,13 +15,43 @@ BoardTest >> should: block raise: expectedErrorClass withMessage: expectedErrorM
 ]
 
 { #category : #tests }
+BoardTest >> testABoardOfOneHundredBoxesHasFourtyNormalBoxesTwentyWormHoleBoxes [
+
+	| n spaceshipName spaceship board |
+	n := 10.
+	spaceshipName := 'aPlayer'.
+	spaceship := Spaceship called: spaceshipName.
+	board := Board of: 100 withNumberOfLaps: 1 playedBy: spaceship.
+	self assert: board amountOfNormalBoxes equals: 40.
+	self assert: board amountOfWormHoleBoxes equals: 20.
+	self assert: board amountOfSpeedUpBoxes equals: 20.
+	self assert: board amountOfMoonWalkBoxes equals: 10.
+	self assert: board amountOfHyperJumpBoxes equals: 8.
+	self assert: board amountOfAtomicBombBoxes equals: 2
+]
+
+{ #category : #tests }
+BoardTest >> testABoardOfTenBoxesHasTenBoxesAtLeastFourNormalBoxesAtLeastTwoSpeedUpAtLeastTwoWormHoleAndAtLeastOneMoonwalk [
+
+	| spaceshipName spaceship board |
+	spaceshipName := 'aPlayer'.
+	spaceship := Spaceship called: spaceshipName.
+	board := Board of: 10 withNumberOfLaps: 1 playedBy: spaceship.
+	self assert: board amountOfBoxes equals: 10.
+	self assert: board amountOfNormalBoxes >= 4.
+	self assert: board amountOfWormHoleBoxes >= 2.
+	self assert: board amountOfSpeedUpBoxes >= 2.
+	self assert: board amountOfMoonWalkBoxes >= 1
+]
+
+{ #category : #tests }
 BoardTest >> testASpaceshipCannotPlayWhenItIsNotItsTurn [
 
 	| spaceship1 spaceship2 spaceship3 board |
 	spaceship1 := Spaceship called: 'SP1'.
 	spaceship2 := Spaceship called: 'SP2'.
 	spaceship3 := Spaceship called: 'SP3'.
-	board := Board of: 15 withNumberOfLaps: 1 playedByMany: { 
+	board := Board of: 15 andLength: 20 for: 1 playedByMany: { 
 			         spaceship1.
 			         spaceship2.
 			         spaceship3 }.
@@ -38,7 +68,7 @@ BoardTest >> testASpaceshipThatLandsOnANormalBoxDoesntMove [
 
 	| spaceship board |
 	spaceship := Spaceship called: 'SP1'.
-	board := Board of: 10 withNumberOfLaps: 1 playedBy: spaceship.
+	board := Board of: 10 withNumberOfLaps: 1 playedBy: spaceship andA: {Box withEffect: NormalBox new}.
 	board moveSpaceshipOf: spaceship name by: 1.
 
 	self assert: (board positionOf: spaceship name) equals: 1
@@ -80,7 +110,7 @@ BoardTest >> testASpaceshipsLapPositionVariesToTwoAfterCompletingFirstLap [
 	| spaceshipName spaceship board loadedDie resultOfTheRoll |
 	spaceshipName := 'Player1'.
 	spaceship := Spaceship called: spaceshipName.
-	board := Board of: 10 withNumberOfLaps: 2 playedBy: spaceship.
+	board := Board of: 10 withNumberOfLaps: 2 playedBy: spaceship andA: {Box withEffect: NormalBox new}.
 	loadedDie := LoadedDie with: 5.
 	resultOfTheRoll := loadedDie roll.
 	board moveSpaceshipOf: spaceshipName by: resultOfTheRoll.
@@ -96,7 +126,7 @@ BoardTest >> testASpaceshipsPositionVariesInFiveWithAFiniteBoardAfterOneRollOfAL
 	n := 10.
 	spaceshipName := 'aPlayer'.
 	spaceship := Spaceship called: spaceshipName.
-	board := Board of: n withNumberOfLaps: 1 playedBy: spaceship.
+	board := Board of: n withNumberOfLaps: 1 playedBy: spaceship andA: {Box withEffect: NormalBox new}.
 	loadedDie := LoadedDie with: 5.
 	resultOfTheRoll := loadedDie roll.
 	board moveSpaceshipOf: spaceshipName by: resultOfTheRoll.
@@ -197,16 +227,6 @@ BoardTest >> testBoardCreatedWithTenBoxesAndALengthOfTwoHundredParsecsHasBoxesLe
 		         withNumberOfLaps: 1
 		         playedBy: spaceship.
 	self assert: board boxLength equals: 20
-]
-
-{ #category : #tests }
-BoardTest >> testBoardWithAHundredBoxesHasFourtyNormalBoxes [
-
-	| spaceship board |
-	spaceship := Spaceship called: 'SP1'.
-	board := Board of: 100 withNumberOfLaps: 1 playedBy: spaceship.
-
-	self assert: board amountOfNormalBoxes equals: 40
 ]
 
 { #category : #tests }
@@ -455,4 +475,24 @@ BoardTest >> testSpaceshipsThatLandsOnAHyperJumpBoxEndUpFiveBoxesAfterThenFourBo
 
 	self assert: (board positionOf: aSpaceship name) equals: 3.
 	self assert: (board positionOf: anotherSpaceship name) equals: 2
+]
+
+{ #category : #tests }
+BoardTest >> testSpeedUpDoesntTriggerAnotherSpeedUp [
+
+	| spaceship board normalBox speedUpBox box |
+	spaceship := Spaceship called: 'SP1'.
+	normalBox := NormalBox new.
+	speedUpBox := SpeedUpBox new.
+
+	box := Box withEffect: speedUpBox.
+
+	board := Board
+		         of: 10
+		         for: 1
+		         playedBy: spaceship
+		         andA: { box }.
+	board moveSpaceshipOf: spaceship name by: 1.
+
+	self assert: (board positionOf: spaceship name) equals: 5
 ]

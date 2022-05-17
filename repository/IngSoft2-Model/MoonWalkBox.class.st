@@ -37,3 +37,8 @@ MoonWalkBox >> effectOnPosition: aBoard [
 
 	aBoard moveAllExceptCurrentBy: self effectOnPosition
 ]
+
+{ #category : #accessing }
+MoonWalkBox >> typeOfEffect [
+	^'moonwalk'
+]
