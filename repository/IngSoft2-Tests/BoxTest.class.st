@@ -5,6 +5,16 @@ Class {
 }
 
 { #category : #tests }
+BoxTest >> should: block raise: expectedErrorClass withMessage: expectedErrorMessage [
+
+	self
+		should: block
+		raise: expectedErrorClass
+		whoseDescriptionIncludes: expectedErrorMessage
+		description: 'Test did not failed as expected'
+]
+
+{ #category : #tests }
 BoxTest >> testHyperJumpBoxEffectDisplacesAListOfParsecsValuesRepeatedly [
 
 	| box aHyperJump parsecsList |
@@ -26,6 +36,15 @@ BoxTest >> testHyperJumpBoxEffectDisplacesFourParsecsForward [
 	aHyperJump := HyperJump with: parsecsList.
 	box := Box withEffect: aHyperJump.
 	self assert: box effectOnPosition equals: 4
+]
+
+{ #category : #tests }
+BoxTest >> testMoonWalkBoxCantBeCreatedWithNegativeDisplacement [
+
+	self
+		should: [ MoonWalkBox displacing: -8 ]
+		raise: Error
+		withMessage: 'MoonWalkBox displacement should be greater than zero'
 ]
 
 { #category : #tests }

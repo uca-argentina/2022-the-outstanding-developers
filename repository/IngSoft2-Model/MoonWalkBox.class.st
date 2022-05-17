@@ -7,9 +7,16 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #assertion }
+MoonWalkBox class >> assertValidDisplacement: anAmount [
+
+	anAmount > 0 ifFalse: [ 
+		Error signal: 'MoonWalkBox displacement should be greater than zero' ]
+]
+
 { #category : #'instance creation' }
 MoonWalkBox class >> displacing: aNumberOfBoxes [
-
+	self assertValidDisplacement: aNumberOfBoxes.
 	^ self new displacing: aNumberOfBoxes
 ]
 

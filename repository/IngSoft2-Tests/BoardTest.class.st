@@ -66,7 +66,7 @@ BoardTest >> testASpaceshipThatLandsOnASpeedUpBoxEndsUpFourBoxesAfter [
 		               box5 }.
 	board := Board
 		         of: 10
-		         withNumberOfLaps: 1
+		         for: 1
 		         playedBy: spaceship
 		         andA: boxSequence.
 	board moveSpaceshipOf: spaceship name by: 1.
@@ -306,7 +306,7 @@ BoardTest >> testSpaceshipLandsOnWormHoleBoxSetsBackItselfFourBoxes [
 		               box5 }.
 	board := Board
 		         of: 10
-		         withNumberOfLaps: 2
+		         for: 2
 		         playedBy: spaceship
 		         andA: boxSequence.
 	board moveSpaceship: 3.
@@ -372,7 +372,7 @@ BoardTest >> testSpaceshipThatLandsOnWormHoleBoxCantGoToNegativePositions [
 		               box5 }.
 	board := Board
 		         of: 10
-		         withNumberOfLaps: 2
+		         for: 2
 		         playedBy: spaceship
 		         andA: boxSequence.
 	board moveSpaceship: 1.

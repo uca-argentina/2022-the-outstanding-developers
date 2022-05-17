@@ -66,13 +66,7 @@ Board class >> assertValidSpaceshipsAsigneesAreNotRepeated: spaceships [
 ]
 
 { #category : #'instance creation' }
-Board class >> of: aNumberOfBoxes andLength: parsecsAmount withNumberOfLaps: someLaps playedBy: aSpaceship [  
-	
-	^self of: aNumberOfBoxes andLength: parsecsAmount withNumberOfLaps: someLaps playedByMany: { aSpaceship }.
-]
-
-{ #category : #'instance creation' }
-Board class >> of: aNumberOfBoxes andLength: parsecsAmount withNumberOfLaps: someLaps playedByMany: spaceships [
+Board class >> of: aNumberOfBoxes andLength: parsecsAmount for: someLaps playedByMany: spaceships [
 
 	self assertValidNumberOfBoxes: aNumberOfBoxes.
 	self assertValidSpaceships: spaceships.
@@ -82,8 +76,14 @@ Board class >> of: aNumberOfBoxes andLength: parsecsAmount withNumberOfLaps: som
 	^ self new
 		  of: aNumberOfBoxes
 		  andLength: parsecsAmount
-		  withNumberOfLaps: someLaps
+		  for: someLaps
 		  playedByMany: spaceships
+]
+
+{ #category : #'instance creation' }
+Board class >> of: aNumberOfBoxes andLength: parsecsAmount withNumberOfLaps: someLaps playedBy: aSpaceship [  
+	
+	^self of: aNumberOfBoxes andLength: parsecsAmount for: someLaps playedByMany: { aSpaceship }.
 ]
 
 { #category : #'instance creation' }
@@ -91,7 +91,13 @@ Board class >> of: aNumberOfBoxes andLength: someParsecs withNumberOfLaps: someL
 	self assertValidNumberOfBoxes: aNumberOfBoxes.
 	self assertValidSpaceships: spaceships.
 	self assertValidNumberOfLaps: someLaps.
-	^self new of: aNumberOfBoxes andLength: someParsecs withNumberOfLaps: someLaps playedBy: spaceships andA: boxSequence 
+	^self new of: aNumberOfBoxes andLength: someParsecs for: someLaps playedBy: spaceships andA: boxSequence 
+]
+
+{ #category : #'instance creation' }
+Board class >> of: aNumberOfBoxes for: someLaps playedBy: aSpaceship andA: sequenceBox [
+
+	^ self new of: aNumberOfBoxes for: someLaps playedBy: {aSpaceship} andA: sequenceBox
 ]
 
 { #category : #'instance creation' }
@@ -125,17 +131,11 @@ Board class >> of: aNumberOfBoxes withNumberOfLaps: someLaps playedBy: aSpaceshi
 ]
 
 { #category : #'instance creation' }
-Board class >> of: aNumberOfBoxes withNumberOfLaps: someLaps playedBy: aSpaceship andA: sequenceBox [
-
-	^ self new of: aNumberOfBoxes withNumberOfLaps: someLaps playedBy: {aSpaceship} andA: sequenceBox
-]
-
-{ #category : #'instance creation' }
 Board class >> of: aNumberOfBoxes withNumberOfLaps: someLaps playedByMany: spaceships [ 
 	self assertValidNumberOfBoxes: aNumberOfBoxes.
 	self assertValidSpaceships: spaceships.
 	self assertValidNumberOfLaps: someLaps.
-	^self new of: aNumberOfBoxes withNumberOflaps: someLaps playedBy: spaceships.
+	^self new of: aNumberOfBoxes for: someLaps playedBy: spaceships.
 ]
 
 { #category : #'instance creation' }
@@ -143,7 +143,7 @@ Board class >> of: aNumberOfBoxes withNumberOfLaps: someLaps playedByMany: space
 	self assertValidNumberOfBoxes: aNumberOfBoxes.
 	self assertValidSpaceships: spaceships.
 	self assertValidNumberOfLaps: someLaps.
-	^self new of: aNumberOfBoxes withNumberOfLaps: someLaps playedBy: spaceships andA: sequenceBox
+	^self new of: aNumberOfBoxes for: someLaps playedBy: spaceships andA: sequenceBox
 ]
 
 { #category : #properties }
@@ -318,13 +318,13 @@ Board >> nextPositionStartingAt: position in: lap afterMoving: aNumberOfBoxes [
 ]
 
 { #category : #initialization }
-Board >> of: aNumberOfBoxes andLength: someParsecs withNumberOfLaps: someLaps playedBy: spaceships andA: sequenceBox [
+Board >> of: aNumberOfBoxes andLength: someParsecs for: someLaps playedBy: spaceships andA: boxSequence [
 
 	| sequenceHandler |
 	boxes := OrderedCollection new.
-	sequenceHandler := SequenceHandler for: sequenceBox size.
+	sequenceHandler := SequenceHandler for: boxSequence size.
 	aNumberOfBoxes timesRepeat: [ 
-		boxes add: (sequenceBox at: sequenceHandler index) ].
+		boxes add: (boxSequence at: sequenceHandler index) ].
 	laps := someLaps.
 	positions := spaceships collect: [ :spaceship | 
 		             BoardPosition following: spaceship name ].
@@ -333,7 +333,7 @@ Board >> of: aNumberOfBoxes andLength: someParsecs withNumberOfLaps: someLaps pl
 ]
 
 { #category : #initialization }
-Board >> of: aNumberOfBoxes andLength: parsecsAmount withNumberOfLaps: someLaps playedByMany: spaceships [
+Board >> of: aNumberOfBoxes andLength: parsecsAmount for: someLaps playedByMany: spaceships [
 
 	boxes := OrderedCollection new.
 	aNumberOfBoxes timesRepeat: [ 
@@ -343,6 +343,32 @@ Board >> of: aNumberOfBoxes andLength: parsecsAmount withNumberOfLaps: someLaps 
 		             BoardPosition following: spaceship name ].
 	turnHandler := SequenceHandler for: spaceships size.
 	boxLength := parsecsAmount / aNumberOfBoxes
+]
+
+{ #category : #initialization }
+Board >> of: aNumberOfBoxes for: someLaps playedBy: spaceships [
+
+	boxes := OrderedCollection new.
+	aNumberOfBoxes timesRepeat: [ 
+		boxes add: (Box withEffect: NormalBox new) ].
+	laps := someLaps.
+	positions := spaceships collect: [ :spaceship | 
+		             BoardPosition following: spaceship name ].
+	turnHandler := SequenceHandler for: spaceships size
+]
+
+{ #category : #initialization }
+Board >> of: aNumberOfBoxes for: someLaps playedBy: spaceships andA: boxSequence [
+
+	| sequenceHandler |
+	boxes := OrderedCollection new.
+	sequenceHandler := SequenceHandler for: boxSequence size.
+	aNumberOfBoxes timesRepeat: [ 
+		boxes add: (boxSequence at: sequenceHandler index) ].
+	laps := someLaps.
+	positions := spaceships collect: [ :spaceship | 
+		             BoardPosition following: spaceship name ].
+	turnHandler := SequenceHandler for: spaceships size
 ]
 
 { #category : #initialization }
@@ -357,39 +383,13 @@ Board >> of: aNumberOfBoxes playedBy: spaceships [
 ]
 
 { #category : #initialization }
-Board >> of: aNumberOfBoxes playedBy: spaceships andA: sequenceBox [
+Board >> of: aNumberOfBoxes playedBy: spaceships andA: boxSequence [
 
 	| sequenceHandler |
 	boxes := OrderedCollection new.
-	sequenceHandler := SequenceHandler for: sequenceBox size.
+	sequenceHandler := SequenceHandler for: boxSequence size.
 	aNumberOfBoxes timesRepeat: [ 
-		boxes add: (sequenceBox at: sequenceHandler index) ].
-	positions := spaceships collect: [ :spaceship | 
-		             BoardPosition following: spaceship name ].
-	turnHandler := SequenceHandler for: spaceships size
-]
-
-{ #category : #initialization }
-Board >> of: aNumberOfBoxes withNumberOfLaps: someLaps playedBy: spaceships andA: sequenceBox [
-
-	| sequenceHandler |
-	boxes := OrderedCollection new.
-	sequenceHandler := SequenceHandler for: sequenceBox size.
-	aNumberOfBoxes timesRepeat: [ 
-		boxes add: (sequenceBox at: sequenceHandler index) ].
-	laps := someLaps.
-	positions := spaceships collect: [ :spaceship | 
-		             BoardPosition following: spaceship name ].
-	turnHandler := SequenceHandler for: spaceships size
-]
-
-{ #category : #initialization }
-Board >> of: aNumberOfBoxes withNumberOflaps: someLaps playedBy: spaceships [
-
-	boxes := OrderedCollection new.
-	aNumberOfBoxes timesRepeat: [ 
-		boxes add: (Box withEffect: NormalBox new) ].
-	laps := someLaps.
+		boxes add: (boxSequence at: sequenceHandler index) ].
 	positions := spaceships collect: [ :spaceship | 
 		             BoardPosition following: spaceship name ].
 	turnHandler := SequenceHandler for: spaceships size
