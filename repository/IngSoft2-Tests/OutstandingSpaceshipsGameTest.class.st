@@ -43,16 +43,16 @@ OutstandingSpaceshipsGameTest >> testARoundOfANonSimulatedGameChangesSpaceshipsP
 	aSpaceship := Spaceship called: 'SP1'.
 	anotherSpaceship := Spaceship called: 'SP2'.
 	board := Board of: 15 withNumberOfLaps: 1 playedByMany: { 
-			          aSpaceship.
-			          anotherSpaceship }.
-	aDie := LoadedDie withSequence: {4. 3}.
+			         aSpaceship.
+			         anotherSpaceship }.
+	aDie := LoadedDie withSequence: { 4. 3 }.
 	game := OutstandingSpaceshipsGame playedOn: board throwing: aDie.
 
 	game play.
 	game play.
 
 	self assert: (board positionOf: aSpaceship name) equals: 4.
-	self assert: (board positionOf: anotherSpaceship name) equals: 3.
+	self assert: (board positionOf: anotherSpaceship name) equals: 3
 ]
 
 { #category : #tests }
@@ -138,7 +138,7 @@ OutstandingSpaceshipsGameTest >> testGameWithASpaceshipAndABoardEndsWhenItComple
 	game startSimulation.
 
 	self assert: (aBoard positionOf: 'Player1') equals: 16.
-	self assert: (aBoard lapOf: 'Player1') equals: 3.
+	self assert: (aBoard lapOf: 'Player1') equals: 3
 ]
 
 { #category : #tests }
@@ -157,9 +157,7 @@ OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndADiceCupEn
 			            aDie.
 			            anotherDie.
 			            otherDie }.
-	game := OutstandingSpaceshipsGame
-		        playedOn: aBoard
-		        throwing: aDiceCup.
+	game := OutstandingSpaceshipsGame playedOn: aBoard throwing: aDiceCup.
 
 	game startSimulation.
 
@@ -246,7 +244,9 @@ OutstandingSpaceshipsGameTest >> testGameWithTwoSpaceshipsAndABoardEndsWhenOneCo
 	| aSpaceship anotherSpaceship aBoard aDie game |
 	aSpaceship := Spaceship called: 'Player1'.
 	anotherSpaceship := Spaceship called: 'Player2'.
-	aBoard := Board of: 15 withNumberOfLaps: 3 playedByMany: {aSpaceship. anotherSpaceship}.
+	aBoard := Board of: 15 withNumberOfLaps: 3 playedByMany: { 
+			          aSpaceship.
+			          anotherSpaceship }.
 	aDie := LoadedDie with: 5.
 	game := OutstandingSpaceshipsGame playedOn: aBoard throwing: aDie.
 
@@ -255,5 +255,5 @@ OutstandingSpaceshipsGameTest >> testGameWithTwoSpaceshipsAndABoardEndsWhenOneCo
 	self assert: (aBoard positionOf: 'Player2') equals: 11.
 	self assert: (aBoard lapOf: 'Player2') equals: 3.
 	self assert: (aBoard positionOf: 'Player1') equals: 16.
-	self assert: (aBoard lapOf: 'Player1') equals: 3.
+	self assert: (aBoard lapOf: 'Player1') equals: 3
 ]

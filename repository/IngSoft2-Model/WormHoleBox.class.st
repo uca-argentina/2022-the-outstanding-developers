@@ -11,6 +11,7 @@ WormHoleBox >> effectOnPosition [
 ]
 
 { #category : #effects }
-WormHoleBox >> effectOnPosition: aBoard [ 
-	aBoard moveCurrentBy: self effectOnPosition .
+WormHoleBox >> effectOnPosition: aBoard [
+
+	aBoard moveCurrentBy: self effectOnPosition
 ]

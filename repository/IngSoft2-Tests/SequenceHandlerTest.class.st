@@ -12,7 +12,7 @@ SequenceHandlerTest >> testATurnHandlerInitializedWithThreeFourthTurnIsOne [
 	turnHandler index.
 	turnHandler index.
 	turnHandler index.
-	self assert: turnHandler index equals: 1.
+	self assert: turnHandler index equals: 1
 ]
 
 { #category : #tests }
@@ -22,7 +22,7 @@ SequenceHandlerTest >> testATurnHandlerInitializedWithThreeThirdTurnIsThree [
 	turnHandler := SequenceHandler for: 3.
 	turnHandler index.
 	turnHandler index.
-	self assert: turnHandler index equals: 3.
+	self assert: turnHandler index equals: 3
 ]
 
 { #category : #tests }
@@ -30,7 +30,7 @@ SequenceHandlerTest >> testFirstTurnIsOne [
 
 	| turnHandler |
 	turnHandler := SequenceHandler for: 3.
-	self assert: turnHandler index equals: 1.
+	self assert: turnHandler index equals: 1
 ]
 
 { #category : #tests }
@@ -41,5 +41,5 @@ SequenceHandlerTest >> testSequenceHandlerReturnsCurrentIndexWithoutIncrementing
 	turnHandler index.
 	self assert: turnHandler currentIndex equals: 1.
 	turnHandler index.
-	self assert: turnHandler currentIndex equals: 2.
+	self assert: turnHandler currentIndex equals: 2
 ]

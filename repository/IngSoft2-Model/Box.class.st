@@ -20,8 +20,9 @@ Box >> effectOnPosition [
 ]
 
 { #category : #effects }
-Box >> effectOnPosition: aBoard [ 
-	effect effectOnPosition: aBoard.
+Box >> effectOnPosition: aBoard [
+
+	effect effectOnPosition: aBoard
 ]
 
 { #category : #initialization }

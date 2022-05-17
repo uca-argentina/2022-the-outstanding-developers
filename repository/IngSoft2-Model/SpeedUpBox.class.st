@@ -11,6 +11,7 @@ SpeedUpBox >> effectOnPosition [
 ]
 
 { #category : #effects }
-SpeedUpBox >> effectOnPosition: aBoard [ 
-	aBoard moveCurrentBy: self effectOnPosition .
+SpeedUpBox >> effectOnPosition: aBoard [
+
+	aBoard moveCurrentBy: self effectOnPosition
 ]

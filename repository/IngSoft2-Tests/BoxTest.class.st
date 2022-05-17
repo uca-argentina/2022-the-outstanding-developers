@@ -5,6 +5,30 @@ Class {
 }
 
 { #category : #tests }
+BoxTest >> testHyperJumpBoxEffectDisplacesAListOfParsecsValuesRepeatedly [
+
+	| box aHyperJump parsecsList |
+	parsecsList := { 4. 3. 1. 5 }.
+	aHyperJump := HyperJump with: parsecsList.
+	box := Box withEffect: aHyperJump.
+	self assert: box effectOnPosition equals: 4.
+	self assert: box effectOnPosition equals: 3.
+	self assert: box effectOnPosition equals: 1.
+	self assert: box effectOnPosition equals: 5.
+	self assert: box effectOnPosition equals: 4
+]
+
+{ #category : #tests }
+BoxTest >> testHyperJumpBoxEffectDisplacesFourParsecsForward [
+
+	| box aHyperJump parsecsList |
+	parsecsList := { 4 }.
+	aHyperJump := HyperJump with: parsecsList.
+	box := Box withEffect: aHyperJump.
+	self assert: box effectOnPosition equals: 4
+]
+
+{ #category : #tests }
 BoxTest >> testMoonWalkBoxEffectDisplacesEightPlacesBackwards [
 
 	| box aMoonWalk |
@@ -34,8 +58,8 @@ BoxTest >> testSpeedUpBoxEffectDisplacesFourPlacesForwards [
 { #category : #tests }
 BoxTest >> testWormHoleBoxEffectDisplacesFourPlacesBackwards [
 
-	| box aWormHole |
-	aWormHole := WormHoleBox new.
-	box := Box withEffect: aWormHole.
+	| box aHyperJump |
+	aHyperJump := WormHoleBox new.
+	box := Box withEffect: aHyperJump.
 	self assert: box effectOnPosition equals: -4
 ]

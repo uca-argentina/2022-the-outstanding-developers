@@ -32,27 +32,28 @@ BoardPosition >> initializeFollowing: aSpaceshipName [
 
 	spaceship := aSpaceshipName.
 	lap := 1.
-	position := 0.
+	position := 0
 ]
 
 { #category : #initialization }
 BoardPosition >> initializeFollowing: aSpaceship at: aPosition [
-	
+
 	spaceship := aSpaceship.
 	position := aPosition.
-	lap := 1.
+	lap := 1
 ]
 
 { #category : #initialization }
 BoardPosition >> initializeFollowing: aSpaceship at: aPosition in: aLap [
-	
+
 	spaceship := aSpaceship.
 	position := aPosition.
-	lap := aLap.
+	lap := aLap
 ]
 
 { #category : #accessing }
 BoardPosition >> lap [
+
 	^ lap
 ]
 

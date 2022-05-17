@@ -5,6 +5,7 @@ Class {
 }
 
 { #category : #effects }
-AtomicBombBox >> effectOnPosition: aBoard [ 
-	aBoard moveAllBackToBeginning.
+AtomicBombBox >> effectOnPosition: aBoard [
+
+	aBoard moveAllBackToBeginning
 ]

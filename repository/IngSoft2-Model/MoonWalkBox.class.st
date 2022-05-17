@@ -28,5 +28,5 @@ MoonWalkBox >> effectOnPosition [
 { #category : #effects }
 MoonWalkBox >> effectOnPosition: aBoard [
 
-	aBoard moveAllExceptCurrentBy: (self effectOnPosition )
+	aBoard moveAllExceptCurrentBy: self effectOnPosition
 ]

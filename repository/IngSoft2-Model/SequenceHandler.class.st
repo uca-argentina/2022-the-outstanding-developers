@@ -32,7 +32,7 @@ SequenceHandler >> index [
 
 	beingUsedNow := currentSequenceIndex.
 	currentSequenceIndex := (currentSequenceIndex rem: sequenceSize) + 1.
-	^ beingUsedNow 
+	^ beingUsedNow
 ]
 
 { #category : #initialization }
@@ -40,5 +40,5 @@ SequenceHandler >> initializeFor: aSequenceSize [
 
 	sequenceSize := aSequenceSize.
 	currentSequenceIndex := 1.
-	beingUsedNow := 1.
+	beingUsedNow := 1
 ]
