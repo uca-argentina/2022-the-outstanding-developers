@@ -252,12 +252,12 @@ OutstandingSpaceshipsGameTest >> testGameWithTwoSpaceshipsAndABoardEndsWhenOneCo
 				          aSpaceship.
 				          anotherSpaceship. otherSpaceship }
 		          andA: { (Box withEffect: NormalBox new) }.
-	aDie := LoadedDie withSequence: {5. 6. 1}.
+	aDie := LoadedDie withSequence: {5. 1. 2}.
 	game := OutstandingSpaceshipsGame playedOn: aBoard throwing: aDie.
 
 	game startSimulation.
 
-	self assert: (aBoard rankingPositionOf: 'Player2') equals: 1.
-	self assert: (aBoard rankingPositionOf: 'Player1') equals: 2.
-	self assert: (aBoard rankingPositionOf: 'Player3') equals: 3.
+	self assert: (aBoard rankingPositionOf: 'Player2') equals: 3.
+	self assert: (aBoard rankingPositionOf: 'Player1') equals: 1.
+	self assert: (aBoard rankingPositionOf: 'Player3') equals: 2.
 ]

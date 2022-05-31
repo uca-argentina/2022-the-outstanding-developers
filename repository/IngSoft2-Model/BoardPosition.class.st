@@ -12,30 +12,38 @@ Class {
 { #category : #'instance creation' }
 BoardPosition class >> following: aSpaceship [
 
-	^self new initializeFollowing: aSpaceship
+	^self new initializeFollowing: aSpaceship at: 0 in: 1
 ]
 
 { #category : #'instance creation' }
 BoardPosition class >> following: aSpaceship at: aPosition in: aLap [
 
-	^self new initializeFollowing: aSpaceship at: aPosition in: aLap. 
+	| validatedPosition |
+	validatedPosition := ((aPosition = 0 and: [ aLap > 1 ]) or:
+		                      aPosition < 0)
+		                     ifTrue: [ 1 ]
+		                     ifFalse: [ aPosition ].
+	^ self new
+		  initializeFollowing: aSpaceship
+		  at: validatedPosition
+		  in: aLap
 ]
 
-{ #category : #initialization }
-BoardPosition >> initializeFollowing: aSpaceshipName [
+{ #category : #comparing }
+BoardPosition >> > aBoardPosition [
 
-	spaceship := aSpaceshipName.
-	lap := 1.
-	position := 0
+	self lap > aBoardPosition lap
+		ifFalse: [ 
+			^ self lap = aBoardPosition lap and: [ 
+				  self position > aBoardPosition position ] ].
+	^true
 ]
 
 { #category : #initialization }
 BoardPosition >> initializeFollowing: aSpaceship at: aPosition in: aLap [
 
 	spaceship := aSpaceship.
-	position := aPosition > 0
-		            ifFalse: [ 1 ]
-		            ifTrue: [ aPosition ].
+	position := aPosition.
 	lap := aLap
 ]
 

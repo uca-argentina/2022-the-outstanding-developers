@@ -387,18 +387,16 @@ Board >> positionOf: aSpaceship [
 { #category : #accessing }
 Board >> rankingPositionOf: aSpaceshipName [
 
-	| rankingValues sortedRankingValues index notFound |
-	rankingValues := positions collect: [ :position | 
-		                 RankingValue of: position withSize: boxes size ].
-	sortedRankingValues := rankingValues sort: [ :rankingA :rankingB | 
-		                       rankingA absolutePosition
-		                       > rankingB absolutePosition ].
+	| index notFound sortedPositionsForRanking |
+	sortedPositionsForRanking := positions sort: [ :positionA :positionB | 
+		                             positionA > positionB ].
 	index := 1.
 	notFound := true.
-	[ index <= sortedRankingValues size and: [ notFound ] ] whileTrue: [ 
-		(sortedRankingValues at: index) spaceship = aSpaceshipName
-			ifTrue: [ notFound := false ]
-			ifFalse: [ index := index + 1 ] ].
+	[ index <= sortedPositionsForRanking size and: [ notFound ] ] 
+		whileTrue: [ 
+			(sortedPositionsForRanking at: index) spaceship = aSpaceshipName
+				ifTrue: [ notFound := false ]
+				ifFalse: [ index := index + 1 ] ].
 	^ index
 ]
 
