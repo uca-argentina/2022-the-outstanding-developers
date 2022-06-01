@@ -15,6 +15,24 @@ BoxTest >> should: block raise: expectedErrorClass withMessage: expectedErrorMes
 ]
 
 { #category : #tests }
+BoxTest >> testHyperJumpBoxAutogeneratesAParsecSequence [
+
+	| box aHyperJump |
+	aHyperJump := HyperJump randomlyOf: 4 upTo: 10.
+	box := Box withEffect: aHyperJump.
+	self assert: box effectOnPosition > 0
+]
+
+{ #category : #tests }
+BoxTest >> testHyperJumpBoxAutogenerationParsecSequenceMustBeGreaterThanZero [
+
+	self
+		should: [ HyperJump randomlyOf: 0 upTo: 10 ]
+		raise: Error
+		withMessage: 'Parsec sequence size must be greater than zero'
+]
+
+{ #category : #tests }
 BoxTest >> testHyperJumpBoxEffectDisplacesAListOfParsecsValuesRepeatedly [
 
 	| box aHyperJump parsecsList |
