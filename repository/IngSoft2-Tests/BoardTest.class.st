@@ -15,33 +15,57 @@ BoardTest >> should: block raise: expectedErrorClass withMessage: expectedErrorM
 ]
 
 { #category : #tests }
-BoardTest >> testABoardOfOneHundredBoxesHasFourtyNormalBoxesTwentyWormHoleBoxes [
+BoardTest >> testABoardOfFifteenBoxesCreatedWithAShorterSequenceHasTheHardcodedAmountOfRepeatedBoxes [
 
-	| n spaceshipName spaceship board |
-	n := 10.
-	spaceshipName := 'aPlayer'.
-	spaceship := Spaceship called: spaceshipName.
-	board := Board of: 100 andLength: 100 for: 1 playedBy: spaceship with: { 10. 8 } .
-	self assert: board amountOfNormalBoxes equals: 40.
-	self assert: board amountOfWormHoleBoxes equals: 20.
-	self assert: board amountOfSpeedUpBoxes equals: 20.
-	self assert: board amountOfMoonWalkBoxes equals: 10.
-	self assert: board amountOfHyperJumpBoxes equals: 8.
-	self assert: board amountOfAtomicBombBoxes equals: 2
+	| enterprise board boxSequence aNormalBox aSpeedUpBox aWormHoleBox aMoonWalkBox aHyperJumpBox anAtomicBombBox |
+	enterprise := Spaceship called: 'enterprise'.
+	aNormalBox := Box withEffect: NormalBox new.
+	aSpeedUpBox := Box withEffect: SpeedUpBox new.
+	aWormHoleBox := Box withEffect: WormHoleBox new.
+	aMoonWalkBox := Box withEffect: (MoonWalkBox displacing: 1).
+	aHyperJumpBox := Box withEffect: (HyperJump with: { 1 }).
+	anAtomicBombBox := Box withEffect: AtomicBombBox new.
+	boxSequence := { aNormalBox. aSpeedUpBox. aWormHoleBox. aMoonWalkBox. aHyperJumpBox. anAtomicBombBox  }.
+	board := Board of: 15 andLength: 15 for: 1 playedBy: enterprise andA: boxSequence .
+	self assert: board amountOfBoxes equals: 15.
+	self assert: board amountOfNormalBoxes equals: 3.
+	self assert: board amountOfSpeedUpBoxes equals: 3.
+	self assert: board amountOfWormHoleBoxes equals: 3.
+	self assert: board amountOfMoonWalkBoxes equals: 2.
+	self assert: board amountOfHyperJumpBoxes equals: 2.
+	self assert: board amountOfAtomicBombBoxes equals: 2.
 ]
 
 { #category : #tests }
-BoardTest >> testABoardOfTenBoxesHasTenBoxesAtLeastFourNormalBoxesAtLeastTwoSpeedUpAtLeastTwoWormHoleAndAtLeastOneMoonwalk [
+BoardTest >> testABoardOfOneHundredRandomGeneratedBoxesHasOneHundredBoxes [
 
-	| spaceshipName spaceship board |
-	spaceshipName := 'aPlayer'.
-	spaceship := Spaceship called: spaceshipName.
-	board := Board of: 10 andLength: 10 for: 1 playedBy: spaceship with: { 5. 2 }.
+	| n enterprise board |
+	n := 100.
+	enterprise := Spaceship called: 'enterprise'.
+	board := Board of: 100 andLength: 100 for: 1 playedBy: enterprise withA: { 10. 8 } .
+	self assert: board amountOfBoxes equals: 100.
+]
+
+{ #category : #tests }
+BoardTest >> testABoardOfTenBoxesCreatedWithASequenceHasTheHardcodedAmountOfBoxes [
+
+	| enterprise board boxSequence aNormalBox aSpeedUpBox aWormHoleBox aMoonWalkBox aHyperJumpBox anAtomicBombBox |
+	enterprise := Spaceship called: 'enterprise'.
+	aNormalBox := Box withEffect: NormalBox new.
+	aSpeedUpBox := Box withEffect: SpeedUpBox new.
+	aWormHoleBox := Box withEffect: WormHoleBox new.
+	aMoonWalkBox := Box withEffect: (MoonWalkBox displacing: 1).
+	aHyperJumpBox := Box withEffect: (HyperJump with: { 1 }).
+	anAtomicBombBox := Box withEffect: AtomicBombBox new.
+	boxSequence := { aNormalBox. aNormalBox. aSpeedUpBox. aWormHoleBox. aMoonWalkBox. aSpeedUpBox. aHyperJumpBox. anAtomicBombBox. anAtomicBombBox. anAtomicBombBox  }.
+	board := Board of: 10 andLength: 10 for: 1 playedBy: enterprise andA: boxSequence .
 	self assert: board amountOfBoxes equals: 10.
-	self assert: board amountOfNormalBoxes >= 4.
-	self assert: board amountOfWormHoleBoxes >= 2.
-	self assert: board amountOfSpeedUpBoxes >= 2.
-	self assert: board amountOfMoonWalkBoxes >= 1
+	self assert: board amountOfNormalBoxes equals: 2.
+	self assert: board amountOfSpeedUpBoxes equals: 2.
+	self assert: board amountOfWormHoleBoxes equals: 1.
+	self assert: board amountOfMoonWalkBoxes equals: 1.
+	self assert: board amountOfHyperJumpBoxes equals: 1.
+	self assert: board amountOfAtomicBombBoxes equals: 3.
 ]
 
 { #category : #tests }
@@ -54,7 +78,7 @@ BoardTest >> testASpaceshipCannotPlayWhenItIsNotItsTurn [
 	board := Board of: 100 andLength: 100 for: 1 playedByMany: { 
 			         spaceship1.
 			         spaceship2.
-			         spaceship3 } with: { 10. 8 }.
+			         spaceship3 } withA: { 10. 8 }.
 	board moveSpaceship: 1.
 	board moveSpaceship: 1.
 	self
@@ -148,7 +172,7 @@ BoardTest >> testBoardCannotBeCreatedWithALegthMinorThanTheNumberOfBoxes [
 				andLength: 8
 				for: 1
 				playedBy: spaceship
-				with: { 5. 2 } ]
+				withA: { 5. 2 } ]
 		raise: Error
 		withMessage:
 		'Board length should be greater or equal to number of boxes'
@@ -167,7 +191,7 @@ BoardTest >> testBoardCannotBeCreatedWithANegativeLegth [
 				andLength: -10
 				for: 1
 				playedBy: spaceship
-				with: { 5. 2 } ]
+				withA: { 5. 2 } ]
 		raise: Error
 		withMessage: 'Board length should be greater than zero'
 ]
@@ -185,7 +209,7 @@ BoardTest >> testBoardCannotBeCreatedWithANumberOfBoxesMinorThanOne [
 				andLength: 10
 				for: 1
 				playedBy: spaceship
-				with: { 5. 2 } ]
+				withA: { 5. 2 } ]
 		raise: Error
 		withMessage: 'Number of boxes should be greater than zero'
 ]
@@ -203,7 +227,7 @@ BoardTest >> testBoardCannotBeCreatedWithANumberOfLapsMinorThanOne [
 				andLength: 10
 				for: -1
 				playedBy: spaceship
-				with: { 5. 2 } ]
+				withA: { 5. 2 } ]
 		raise: Error
 		withMessage: 'Number of laps should be greater than zero'
 ]
@@ -226,7 +250,7 @@ BoardTest >> testBoardCannotBeCreatedWithMoreThanOneSpaceshipAssignedToTheSamePl
 						aSpaceship.
 						anotherSpaceship.
 						otherSpaceship }
-				with: { 5. 2 } ]
+				withA: { 5. 2 } ]
 		raise: Error
 		withMessage: 'Spaceships must be assigned to different players'
 ]
@@ -235,7 +259,7 @@ BoardTest >> testBoardCannotBeCreatedWithMoreThanOneSpaceshipAssignedToTheSamePl
 BoardTest >> testBoardCannotBeCreatedWithoutSpaceships [
 	
 	self
-		should: [ Board of: 10 andLength: 10 for: 1 playedByMany: {  } with: { 5. 2 } ]
+		should: [ Board of: 10 andLength: 10 for: 1 playedByMany: {  } withA: { 5. 2 } ]
 		raise: Error
 		withMessage: 'Must use at least one spaceship'
 ]
@@ -245,7 +269,7 @@ BoardTest >> testBoardCreatedWithTenBoxesAndALengthOfTwoHundredParsecsHasBoxesLe
 
 	| spaceship board |
 	spaceship := Spaceship called: 'player'.
-	board := Board of: 10 andLength: 200 for: 1 playedBy: spaceship with: { 5. 2 }.
+	board := Board of: 10 andLength: 200 for: 1 playedBy: spaceship withA: { 5. 2 }.
 	self assert: board boxLength equals: 20
 ]
 

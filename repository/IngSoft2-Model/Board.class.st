@@ -66,40 +66,61 @@ Board class >> assertValidSpaceshipsAsigneesAreNotRepeated: spaceships [
 ]
 
 { #category : #'instance creation' }
-Board class >> of: aNumberOfBoxes andLength: parsecAmount for: someLaps playedBy: aSpaceship with: aParsecSequence [ 
-	^self of: aNumberOfBoxes andLength: parsecAmount for: someLaps playedByMany: {aSpaceship} with: aParsecSequence 
-]
+Board class >> of: aNumberOfBoxes andLength: someParsecs for: someLaps playedBy: aSpaceship andA: boxSequence [
 
-{ #category : #'instance creation' }
-Board class >> of: aNumberOfBoxes andLength: parsecsAmount for: someLaps playedByMany: spaceships andA: boxSequence [
-
-	self assertValidNumberOfBoxes: aNumberOfBoxes.
-	self assertValidSpaceships: spaceships.
-	self assertValidNumberOfLaps: someLaps.
-	self assertValidNumberOfLength: parsecsAmount.
-	self assertLength: parsecsAmount greaterThan: aNumberOfBoxes.
-	^ self new
+	^ self
 		  of: aNumberOfBoxes
-		  andLength: parsecsAmount
+		  andLength: someParsecs
 		  for: someLaps
-		  playedBy: spaceships
+		  playedByMany: { aSpaceship }
 		  andA: boxSequence
 ]
 
 { #category : #'instance creation' }
-Board class >> of: aNumberOfBoxes andLength: parsecsAmount for: someLaps playedByMany: spaceships with: aParsecSequence [
+Board class >> of: aNumberOfBoxes andLength: someParsecs for: someLaps playedBy: aSpaceship withA: parsecSequence [
+
+	^ self
+		  of: aNumberOfBoxes
+		  andLength: someParsecs
+		  for: someLaps
+		  playedByMany: { aSpaceship }
+		  withA: parsecSequence
+]
+
+{ #category : #'instance creation' }
+Board class >> of: aNumberOfBoxes andLength: someParsecs for: someLaps playedByMany: spaceships andA: boxSequence [
 
 	self assertValidNumberOfBoxes: aNumberOfBoxes.
 	self assertValidSpaceships: spaceships.
 	self assertValidNumberOfLaps: someLaps.
-	self assertValidNumberOfLength: parsecsAmount.
-	self assertLength: parsecsAmount greaterThan: aNumberOfBoxes.
+	self assertValidNumberOfLength: someParsecs.
+	self assertLength: someParsecs greaterThan: aNumberOfBoxes.
 	^ self new
 		  of: aNumberOfBoxes
-		  andLength: parsecsAmount
+		  andLength: someParsecs
 		  for: someLaps
 		  playedByMany: spaceships
-		  with: aParsecSequence
+		  withA: boxSequence
+]
+
+{ #category : #'instance creation' }
+Board class >> of: aNumberOfBoxes andLength: someParsecs for: someLaps playedByMany: spaceships withA: parsecSequence [
+
+	| randomBoxGenerator |
+	self assertValidNumberOfBoxes: aNumberOfBoxes.
+	self assertValidSpaceships: spaceships.
+	self assertValidNumberOfLaps: someLaps.
+	self assertValidNumberOfLength: someParsecs.
+	self assertLength: someParsecs greaterThan: aNumberOfBoxes.
+	randomBoxGenerator := RandomBoxGenerator
+		                      with: aNumberOfBoxes
+		                      and: parsecSequence.
+	^ self new
+		  of: aNumberOfBoxes
+		  andLength: someParsecs
+		  for: someLaps
+		  playedByMany: spaceships
+		  withA: randomBoxGenerator generate
 ]
 
 { #category : #'instance creation' }
@@ -332,33 +353,17 @@ Board >> nextPositionStartingAt: position in: lap afterMoving: aNumberOfBoxes [
 ]
 
 { #category : #initialization }
-Board >> of: aNumberOfBoxes andLength: someParsecs for: someLaps playedBy: spaceships andA: boxSequence [
+Board >> of: aNumberOfBoxes andLength: someParsecs for: someLaps playedByMany: spaceships withA: boxSequence [
 
 	| sequenceHandler |
 	boxes := OrderedCollection new.
 	sequenceHandler := SequenceHandler for: boxSequence size.
-	aNumberOfBoxes timesRepeat: [ 
-		boxes add: (boxSequence at: sequenceHandler index) ].
+	aNumberOfBoxes timesRepeat: [ boxes add: (boxSequence at: sequenceHandler index) ].
 	laps := someLaps.
 	positions := spaceships collect: [ :spaceship | 
 		             BoardPosition following: spaceship name ].
 	turnHandler := SequenceHandler for: spaceships size.
 	boxLength := someParsecs / aNumberOfBoxes
-]
-
-{ #category : #initialization }
-Board >> of: aNumberOfBoxes andLength: parsecsAmount for: someLaps playedByMany: spaceships with: aParsecSequence [
-
-	| randomBoxGenerator |
-	randomBoxGenerator := RandomBoxGenerator
-		                      with: aNumberOfBoxes
-		                      and: aParsecSequence.
-	boxes := randomBoxGenerator generate.
-	laps := someLaps.
-	positions := spaceships collect: [ :spaceship | 
-		             BoardPosition following: spaceship name ].
-	turnHandler := SequenceHandler for: spaceships size.
-	boxLength := parsecsAmount / aNumberOfBoxes
 ]
 
 { #category : #initialization }
