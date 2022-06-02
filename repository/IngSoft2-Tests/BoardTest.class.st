@@ -39,11 +39,25 @@ BoardTest >> testABoardOfFifteenBoxesCreatedWithAShorterSequenceHasTheHardcodedA
 { #category : #tests }
 BoardTest >> testABoardOfOneHundredRandomGeneratedBoxesHasOneHundredBoxes [
 
-	| n enterprise board |
+	| n parsecs enterprise board distributions |
 	n := 100.
+	parsecs := 100.
 	enterprise := Spaceship called: 'enterprise'.
-	board := Board of: 100 andLength: 100 for: 1 playedBy: enterprise withA: { 10. 8 } .
-	self assert: board amountOfBoxes equals: 100.
+	distributions := OrderedCollection new.
+	distributions add: (Distribution withProbabilityOf: 0.4 for: NormalBox).
+	distributions add: (Distribution withProbabilityOf: 0.2 for: SpeedUpBox).
+	distributions add: (Distribution withProbabilityOf: 0.2 for: WormHoleBox).
+	distributions add: (Distribution withProbabilityOf: 0.1 for: (MoonWalkBox for: n)).
+	distributions add: (Distribution withProbabilityOf: 0.08 for: (HyperJump for: n upTo: parsecs)).
+	distributions add: (Distribution withProbabilityOf: 0.02 for: (AtomicBombBox)).
+		
+	board := Board
+		         of: n
+		         andLength: parsecs
+		         for: 1
+		         playedBy: enterprise
+		         distributed: distributions.
+	self assert: board amountOfBoxes equals: 100
 ]
 
 { #category : #tests }
@@ -57,28 +71,47 @@ BoardTest >> testABoardOfTenBoxesCreatedWithASequenceHasTheHardcodedAmountOfBoxe
 	aMoonWalkBox := Box withEffect: (MoonWalkBox displacing: 1).
 	aHyperJumpBox := Box withEffect: (HyperJump with: { 1 }).
 	anAtomicBombBox := Box withEffect: AtomicBombBox new.
-	boxSequence := { aNormalBox. aNormalBox. aSpeedUpBox. aWormHoleBox. aMoonWalkBox. aSpeedUpBox. aHyperJumpBox. anAtomicBombBox. anAtomicBombBox. anAtomicBombBox  }.
-	board := Board of: 10 andLength: 10 for: 1 playedBy: enterprise andA: boxSequence .
+	boxSequence := { 
+		               aNormalBox.
+		               aNormalBox.
+		               aSpeedUpBox.
+		               aWormHoleBox.
+		               aMoonWalkBox.
+		               aSpeedUpBox.
+		               aHyperJumpBox.
+		               anAtomicBombBox.
+		               anAtomicBombBox.
+		               anAtomicBombBox }.
+	board := Board
+		         of: 10
+		         andLength: 10
+		         for: 1
+		         playedBy: enterprise
+		         andA: boxSequence.
 	self assert: board amountOfBoxes equals: 10.
 	self assert: board amountOfNormalBoxes equals: 2.
 	self assert: board amountOfSpeedUpBoxes equals: 2.
 	self assert: board amountOfWormHoleBoxes equals: 1.
 	self assert: board amountOfMoonWalkBoxes equals: 1.
 	self assert: board amountOfHyperJumpBoxes equals: 1.
-	self assert: board amountOfAtomicBombBoxes equals: 3.
+	self assert: board amountOfAtomicBombBoxes equals: 3
 ]
 
 { #category : #tests }
 BoardTest >> testASpaceshipCannotPlayWhenItIsNotItsTurn [
 
-	| spaceship1 spaceship2 spaceship3 board |
+	| distributions spaceship1 spaceship2 spaceship3 board n parsecs |
+	n := 100.
+	parsecs := 100.
 	spaceship1 := Spaceship called: 'SP1'.
 	spaceship2 := Spaceship called: 'SP2'.
 	spaceship3 := Spaceship called: 'SP3'.
-	board := Board of: 100 andLength: 100 for: 1 playedByMany: { 
+	distributions := OrderedCollection new.
+	distributions add: (Distribution withProbabilityOf: 1 for: NormalBox).
+	board := Board of: n andLength: parsecs for: 1 playedByMany: { 
 			         spaceship1.
 			         spaceship2.
-			         spaceship3 } withA: { 10. 8 }.
+			         spaceship3 } distributed: distributions.
 	board moveSpaceship: 1.
 	board moveSpaceship: 1.
 	self
@@ -134,7 +167,11 @@ BoardTest >> testASpaceshipsLapPositionVariesToTwoAfterCompletingFirstLap [
 	| spaceshipName spaceship board loadedDie resultOfTheRoll |
 	spaceshipName := 'Player1'.
 	spaceship := Spaceship called: spaceshipName.
-	board := Board of: 10 for: 2 playedBy: spaceship andA: {Box withEffect: NormalBox new}.
+	board := Board
+		         of: 10
+		         for: 2
+		         playedBy: spaceship
+		         andA: { (Box withEffect: NormalBox new) }.
 	loadedDie := LoadedDie with: 5.
 	resultOfTheRoll := loadedDie roll.
 	board moveSpaceshipOf: spaceshipName by: resultOfTheRoll.
@@ -162,9 +199,11 @@ BoardTest >> testASpaceshipsPositionVariesInFiveWithAFiniteBoardAfterOneRollOfAL
 { #category : #tests }
 BoardTest >> testBoardCannotBeCreatedWithALegthMinorThanTheNumberOfBoxes [
 
-	| spaceship |
+	| spaceship distributions |
 	spaceship := Spaceship called: 'player'.
-
+	distributions := OrderedCollection new.
+	distributions add: (Distribution withProbabilityOf: 1 for: NormalBox).
+	
 	self
 		should: [ 
 			Board
@@ -172,7 +211,7 @@ BoardTest >> testBoardCannotBeCreatedWithALegthMinorThanTheNumberOfBoxes [
 				andLength: 8
 				for: 1
 				playedBy: spaceship
-				withA: { 5. 2 } ]
+				distributed: distributions ]
 		raise: Error
 		withMessage:
 		'Board length should be greater or equal to number of boxes'
@@ -181,8 +220,10 @@ BoardTest >> testBoardCannotBeCreatedWithALegthMinorThanTheNumberOfBoxes [
 { #category : #tests }
 BoardTest >> testBoardCannotBeCreatedWithANegativeLegth [
 
-	| spaceship |
+	| spaceship distributions |
 	spaceship := Spaceship called: 'player'.
+	distributions := OrderedCollection new.
+	distributions add: (Distribution withProbabilityOf: 1 for: NormalBox).
 
 	self
 		should: [ 
@@ -191,7 +232,7 @@ BoardTest >> testBoardCannotBeCreatedWithANegativeLegth [
 				andLength: -10
 				for: 1
 				playedBy: spaceship
-				withA: { 5. 2 } ]
+				distributed: distributions ]
 		raise: Error
 		withMessage: 'Board length should be greater than zero'
 ]
@@ -199,9 +240,11 @@ BoardTest >> testBoardCannotBeCreatedWithANegativeLegth [
 { #category : #tests }
 BoardTest >> testBoardCannotBeCreatedWithANumberOfBoxesMinorThanOne [
 
-	| spaceship |
+	| spaceship distributions |
 	spaceship := Spaceship called: 'player'.
-
+	distributions := OrderedCollection new.
+	distributions add: (Distribution withProbabilityOf: 1 for: NormalBox).
+	
 	self
 		should: [ 
 			Board
@@ -209,7 +252,7 @@ BoardTest >> testBoardCannotBeCreatedWithANumberOfBoxesMinorThanOne [
 				andLength: 10
 				for: 1
 				playedBy: spaceship
-				withA: { 5. 2 } ]
+				distributed: distributions ]
 		raise: Error
 		withMessage: 'Number of boxes should be greater than zero'
 ]
@@ -217,8 +260,10 @@ BoardTest >> testBoardCannotBeCreatedWithANumberOfBoxesMinorThanOne [
 { #category : #tests }
 BoardTest >> testBoardCannotBeCreatedWithANumberOfLapsMinorThanOne [
 
-	| spaceship |
+	| spaceship distributions |
 	spaceship := Spaceship called: 'player'.
+	distributions := OrderedCollection new.
+	distributions add: (Distribution withProbabilityOf: 1 for: NormalBox).
 
 	self
 		should: [ 
@@ -227,7 +272,7 @@ BoardTest >> testBoardCannotBeCreatedWithANumberOfLapsMinorThanOne [
 				andLength: 10
 				for: -1
 				playedBy: spaceship
-				withA: { 5. 2 } ]
+				distributed: distributions ]
 		raise: Error
 		withMessage: 'Number of laps should be greater than zero'
 ]
@@ -235,10 +280,12 @@ BoardTest >> testBoardCannotBeCreatedWithANumberOfLapsMinorThanOne [
 { #category : #tests }
 BoardTest >> testBoardCannotBeCreatedWithMoreThanOneSpaceshipAssignedToTheSamePlayer [
 
-	| aSpaceship anotherSpaceship otherSpaceship |
+	| aSpaceship anotherSpaceship otherSpaceship distributions |
 	aSpaceship := Spaceship called: 'player1'.
 	anotherSpaceship := Spaceship called: 'player1'.
 	otherSpaceship := Spaceship called: 'player3'.
+	distributions := OrderedCollection new.
+	distributions add: (Distribution withProbabilityOf: 1 for: NormalBox).
 
 	self
 		should: [ 
@@ -250,16 +297,26 @@ BoardTest >> testBoardCannotBeCreatedWithMoreThanOneSpaceshipAssignedToTheSamePl
 						aSpaceship.
 						anotherSpaceship.
 						otherSpaceship }
-				withA: { 5. 2 } ]
+				distributed: distributions ]
 		raise: Error
 		withMessage: 'Spaceships must be assigned to different players'
 ]
 
 { #category : #tests }
 BoardTest >> testBoardCannotBeCreatedWithoutSpaceships [
-	
+
+	| distributions |
+	distributions := OrderedCollection new.
+	distributions add: (Distribution withProbabilityOf: 1 for: NormalBox).
+
 	self
-		should: [ Board of: 10 andLength: 10 for: 1 playedByMany: {  } withA: { 5. 2 } ]
+		should: [ 
+			Board
+				of: 10
+				andLength: 10
+				for: 1
+				playedByMany: {  }
+				distributed: distributions ]
 		raise: Error
 		withMessage: 'Must use at least one spaceship'
 ]
@@ -267,9 +324,16 @@ BoardTest >> testBoardCannotBeCreatedWithoutSpaceships [
 { #category : #tests }
 BoardTest >> testBoardCreatedWithTenBoxesAndALengthOfTwoHundredParsecsHasBoxesLengthOfTen [
 
-	| spaceship board |
+	| distributions spaceship board |
+	distributions := OrderedCollection new.
+	distributions add: (Distribution withProbabilityOf: 1 for: NormalBox).
 	spaceship := Spaceship called: 'player'.
-	board := Board of: 10 andLength: 200 for: 1 playedBy: spaceship withA: { 5. 2 }.
+	board := Board
+		         of: 10
+		         andLength: 200
+		         for: 1
+		         playedBy: spaceship
+		         distributed: distributions.
 	self assert: board boxLength equals: 20
 ]
 

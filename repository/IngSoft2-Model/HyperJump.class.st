@@ -5,8 +5,27 @@ Class {
 		'parsecs',
 		'parsecsValuesHandler'
 	],
+	#classInstVars : [
+		'numberOfBoxes',
+		'limit'
+	],
 	#category : #'IngSoft2-Model'
 }
+
+{ #category : #'instance creation' }
+HyperJump class >> create [
+
+	| r |
+	r := Random new.
+	^ self randomlyOf: (r next * (numberOfBoxes - 1) + 1) floor upTo: limit
+]
+
+{ #category : #'class initialization' }
+HyperJump class >> for: aNumberOfBoxes upTo: aLimit [
+
+	numberOfBoxes := aNumberOfBoxes.
+	limit := aLimit
+]
 
 { #category : #'instance creation' }
 HyperJump class >> randomlyOf: aParsecSequenceSize upTo: aBoxAmount [

@@ -4,6 +4,11 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #'instance creation' }
+SpeedUpBox class >> create [
+	^self new
+]
+
 { #category : #effect }
 SpeedUpBox >> effectOnPosition [
 

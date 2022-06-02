@@ -77,14 +77,14 @@ Board class >> of: aNumberOfBoxes andLength: someParsecs for: someLaps playedBy:
 ]
 
 { #category : #'instance creation' }
-Board class >> of: aNumberOfBoxes andLength: someParsecs for: someLaps playedBy: aSpaceship withA: parsecSequence [
+Board class >> of: aNumberOfBoxes andLength: someParsecs for: someLaps playedBy: aSpaceship distributed: aDistribution [
 
 	^ self
 		  of: aNumberOfBoxes
 		  andLength: someParsecs
 		  for: someLaps
 		  playedByMany: { aSpaceship }
-		  withA: parsecSequence
+		  distributed: aDistribution
 ]
 
 { #category : #'instance creation' }
@@ -104,23 +104,25 @@ Board class >> of: aNumberOfBoxes andLength: someParsecs for: someLaps playedByM
 ]
 
 { #category : #'instance creation' }
-Board class >> of: aNumberOfBoxes andLength: someParsecs for: someLaps playedByMany: spaceships withA: parsecSequence [
+Board class >> of: aNumberOfBoxes andLength: someParsecs for: someLaps playedByMany: spaceships distributed: aDistribution [
 
-	| randomBoxGenerator |
+	| randomBoxGenerator boxSequnce |
 	self assertValidNumberOfBoxes: aNumberOfBoxes.
 	self assertValidSpaceships: spaceships.
 	self assertValidNumberOfLaps: someLaps.
 	self assertValidNumberOfLength: someParsecs.
 	self assertLength: someParsecs greaterThan: aNumberOfBoxes.
-	randomBoxGenerator := RandomBoxGenerator
+	randomBoxGenerator := RandomEventGenerator
 		                      with: aNumberOfBoxes
-		                      and: parsecSequence.
+		                      distributedWith: aDistribution.
+	boxSequnce := randomBoxGenerator generate collect: [ :effect | 
+		              Box withEffect: effect ].
 	^ self new
 		  of: aNumberOfBoxes
 		  andLength: someParsecs
 		  for: someLaps
 		  playedByMany: spaceships
-		  withA: randomBoxGenerator generate
+		  withA: boxSequnce
 ]
 
 { #category : #'instance creation' }

@@ -4,6 +4,9 @@ Class {
 	#instVars : [
 		'displacement'
 	],
+	#classInstVars : [
+		'numberOfBoxes'
+	],
 	#category : #'IngSoft2-Model'
 }
 
@@ -15,9 +18,20 @@ MoonWalkBox class >> assertValidDisplacement: anAmount [
 ]
 
 { #category : #'instance creation' }
+MoonWalkBox class >> create [
+
+	^ self new displacing: numberOfBoxes atRandom
+]
+
+{ #category : #'instance creation' }
 MoonWalkBox class >> displacing: aNumberOfBoxes [
 	self assertValidDisplacement: aNumberOfBoxes.
 	^ self new displacing: aNumberOfBoxes
+]
+
+{ #category : #'class initialization' }
+MoonWalkBox class >> for: aNumberOfBoxes [ 
+	 numberOfBoxes := aNumberOfBoxes 
 ]
 
 { #category : #initialization }

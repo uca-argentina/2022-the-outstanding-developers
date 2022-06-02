@@ -4,6 +4,11 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #'instance creation' }
+AtomicBombBox class >> create [
+	^self new
+]
+
 { #category : #effects }
 AtomicBombBox >> effectOnPosition: aBoard [
 

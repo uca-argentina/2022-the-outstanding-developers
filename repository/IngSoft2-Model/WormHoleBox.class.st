@@ -4,6 +4,12 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #'instance creation' }
+WormHoleBox class >> create [
+
+	^ self new
+]
+
 { #category : #effect }
 WormHoleBox >> effectOnPosition [
 
