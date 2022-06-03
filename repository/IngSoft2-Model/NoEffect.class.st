@@ -1,27 +1,27 @@
 Class {
-	#name : #NormalBox,
+	#name : #NoEffect,
 	#superclass : #Object,
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'instance creation' }
-NormalBox class >> create [
+NoEffect class >> create [
 	^self new
 ]
 
 { #category : #effect }
-NormalBox >> effectOnPosition [
+NoEffect >> effectOnPosition [
 
 	^ 0
 ]
 
 { #category : #effects }
-NormalBox >> effectOnPosition: aBoard [
+NoEffect >> effectOnPosition: aBoard [
 
 	
 ]
 
 { #category : #'as yet unclassified' }
-NormalBox >> typeOfEffect [
+NoEffect >> typeOfEffect [
 	^'normal'
 ]

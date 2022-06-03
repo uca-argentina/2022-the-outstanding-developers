@@ -19,12 +19,12 @@ BoardTest >> testABoardOfFifteenBoxesCreatedWithAShorterSequenceHasTheHardcodedA
 
 	| enterprise board boxSequence aNormalBox aSpeedUpBox aWormHoleBox aMoonWalkBox aHyperJumpBox anAtomicBombBox |
 	enterprise := Spaceship called: 'enterprise'.
-	aNormalBox := Box withEffect: NormalBox new.
-	aSpeedUpBox := Box withEffect: SpeedUpBox new.
-	aWormHoleBox := Box withEffect: WormHoleBox new.
-	aMoonWalkBox := Box withEffect: (MoonWalkBox displacing: 1).
-	aHyperJumpBox := Box withEffect: (HyperJump with: { 1 }).
-	anAtomicBombBox := Box withEffect: AtomicBombBox new.
+	aNormalBox := Box with: NoEffect new.
+	aSpeedUpBox := Box with: SpeedUpEffect new.
+	aWormHoleBox := Box with: WormHoleEffect new.
+	aMoonWalkBox := Box with: (MoonWalkEffect displacing: 1).
+	aHyperJumpBox := Box with: (HyperJumpEffect with: { 1 }).
+	anAtomicBombBox := Box with: AtomicBombEffect new.
 	boxSequence := { aNormalBox. aSpeedUpBox. aWormHoleBox. aMoonWalkBox. aHyperJumpBox. anAtomicBombBox  }.
 	board := Board of: 15 andLength: 15 for: 1 playedBy: enterprise andA: boxSequence .
 	self assert: board amountOfBoxes equals: 15.
@@ -44,13 +44,20 @@ BoardTest >> testABoardOfOneHundredRandomGeneratedBoxesHasOneHundredBoxes [
 	parsecs := 100.
 	enterprise := Spaceship called: 'enterprise'.
 	distributions := OrderedCollection new.
-	distributions add: (Distribution withProbabilityOf: 0.4 for: NormalBox).
-	distributions add: (Distribution withProbabilityOf: 0.2 for: SpeedUpBox).
-	distributions add: (Distribution withProbabilityOf: 0.2 for: WormHoleBox).
-	distributions add: (Distribution withProbabilityOf: 0.1 for: (MoonWalkBox for: n)).
-	distributions add: (Distribution withProbabilityOf: 0.08 for: (HyperJump for: n upTo: parsecs)).
-	distributions add: (Distribution withProbabilityOf: 0.02 for: (AtomicBombBox)).
-		
+	distributions add:
+		(Distribution withProbabilityOf: 0.4 for: NoEffect).
+	distributions add:
+		(Distribution withProbabilityOf: 0.2 for: SpeedUpEffect).
+	distributions add:
+		(Distribution withProbabilityOf: 0.2 for: WormHoleEffect).
+	distributions add:
+		(Distribution withProbabilityOf: 0.1 for: (MoonWalkEffect for: n)).
+	distributions add: (Distribution
+			 withProbabilityOf: 0.08
+			 for: (HyperJumpEffect for: n upTo: parsecs)).
+	distributions add:
+		(Distribution withProbabilityOf: 0.02 for: AtomicBombEffect).
+
 	board := Board
 		         of: n
 		         andLength: parsecs
@@ -65,12 +72,12 @@ BoardTest >> testABoardOfTenBoxesCreatedWithASequenceHasTheHardcodedAmountOfBoxe
 
 	| enterprise board boxSequence aNormalBox aSpeedUpBox aWormHoleBox aMoonWalkBox aHyperJumpBox anAtomicBombBox |
 	enterprise := Spaceship called: 'enterprise'.
-	aNormalBox := Box withEffect: NormalBox new.
-	aSpeedUpBox := Box withEffect: SpeedUpBox new.
-	aWormHoleBox := Box withEffect: WormHoleBox new.
-	aMoonWalkBox := Box withEffect: (MoonWalkBox displacing: 1).
-	aHyperJumpBox := Box withEffect: (HyperJump with: { 1 }).
-	anAtomicBombBox := Box withEffect: AtomicBombBox new.
+	aNormalBox := Box with: NoEffect new.
+	aSpeedUpBox := Box with: SpeedUpEffect new.
+	aWormHoleBox := Box with: WormHoleEffect new.
+	aMoonWalkBox := Box with: (MoonWalkEffect displacing: 1).
+	aHyperJumpBox := Box with: (HyperJumpEffect with: { 1 }).
+	anAtomicBombBox := Box with: AtomicBombEffect new.
 	boxSequence := { 
 		               aNormalBox.
 		               aNormalBox.
@@ -107,7 +114,7 @@ BoardTest >> testASpaceshipCannotPlayWhenItIsNotItsTurn [
 	spaceship2 := Spaceship called: 'SP2'.
 	spaceship3 := Spaceship called: 'SP3'.
 	distributions := OrderedCollection new.
-	distributions add: (Distribution withProbabilityOf: 1 for: NormalBox).
+	distributions add: (Distribution withProbabilityOf: 1 for: NoEffect).
 	board := Board of: n andLength: parsecs for: 1 playedByMany: { 
 			         spaceship1.
 			         spaceship2.
@@ -125,7 +132,7 @@ BoardTest >> testASpaceshipThatLandsOnANormalBoxDoesntMove [
 
 	| spaceship board |
 	spaceship := Spaceship called: 'SP1'.
-	board := Board of: 10 for: 1 playedBy: spaceship andA: {Box withEffect: NormalBox new}.
+	board := Board of: 10 for: 1 playedBy: spaceship andA: {Box with: NoEffect new}.
 	board moveSpaceshipOf: spaceship name by: 1.
 
 	self assert: (board positionOf: spaceship name) equals: 1
@@ -136,14 +143,14 @@ BoardTest >> testASpaceshipThatLandsOnASpeedUpBoxEndsUpFourBoxesAfter [
 
 	| spaceship board normalBox speedUpBox boxSequence box1 box2 box3 box4 box5 |
 	spaceship := Spaceship called: 'SP1'.
-	normalBox := NormalBox new.
-	speedUpBox := SpeedUpBox new.
+	normalBox := NoEffect new.
+	speedUpBox := SpeedUpEffect new.
 
-	box1 := Box withEffect: speedUpBox.
-	box2 := Box withEffect: normalBox.
-	box3 := Box withEffect: normalBox.
-	box4 := Box withEffect: normalBox.
-	box5 := Box withEffect: normalBox.
+	box1 := Box with: speedUpBox.
+	box2 := Box with: normalBox.
+	box3 := Box with: normalBox.
+	box4 := Box with: normalBox.
+	box5 := Box with: normalBox.
 
 	boxSequence := { 
 		               box1.
@@ -171,7 +178,7 @@ BoardTest >> testASpaceshipsLapPositionVariesToTwoAfterCompletingFirstLap [
 		         of: 10
 		         for: 2
 		         playedBy: spaceship
-		         andA: { (Box withEffect: NormalBox new) }.
+		         andA: { (Box with: NoEffect new) }.
 	loadedDie := LoadedDie with: 5.
 	resultOfTheRoll := loadedDie roll.
 	board moveSpaceshipOf: spaceshipName by: resultOfTheRoll.
@@ -187,7 +194,7 @@ BoardTest >> testASpaceshipsPositionVariesInFiveWithAFiniteBoardAfterOneRollOfAL
 	n := 10.
 	spaceshipName := 'aPlayer'.
 	spaceship := Spaceship called: spaceshipName.
-	board := Board of: n for: 1 playedBy: spaceship andA: {Box withEffect: NormalBox new}.
+	board := Board of: n for: 1 playedBy: spaceship andA: {Box with: NoEffect new}.
 	loadedDie := LoadedDie with: 5.
 	resultOfTheRoll := loadedDie roll.
 	board moveSpaceshipOf: spaceshipName by: resultOfTheRoll.
@@ -202,7 +209,7 @@ BoardTest >> testBoardCannotBeCreatedWithALegthMinorThanTheNumberOfBoxes [
 	| spaceship distributions |
 	spaceship := Spaceship called: 'player'.
 	distributions := OrderedCollection new.
-	distributions add: (Distribution withProbabilityOf: 1 for: NormalBox).
+	distributions add: (Distribution withProbabilityOf: 1 for: NoEffect).
 	
 	self
 		should: [ 
@@ -223,7 +230,7 @@ BoardTest >> testBoardCannotBeCreatedWithANegativeLegth [
 	| spaceship distributions |
 	spaceship := Spaceship called: 'player'.
 	distributions := OrderedCollection new.
-	distributions add: (Distribution withProbabilityOf: 1 for: NormalBox).
+	distributions add: (Distribution withProbabilityOf: 1 for: NoEffect).
 
 	self
 		should: [ 
@@ -243,7 +250,7 @@ BoardTest >> testBoardCannotBeCreatedWithANumberOfBoxesMinorThanOne [
 	| spaceship distributions |
 	spaceship := Spaceship called: 'player'.
 	distributions := OrderedCollection new.
-	distributions add: (Distribution withProbabilityOf: 1 for: NormalBox).
+	distributions add: (Distribution withProbabilityOf: 1 for: NoEffect).
 	
 	self
 		should: [ 
@@ -263,7 +270,7 @@ BoardTest >> testBoardCannotBeCreatedWithANumberOfLapsMinorThanOne [
 	| spaceship distributions |
 	spaceship := Spaceship called: 'player'.
 	distributions := OrderedCollection new.
-	distributions add: (Distribution withProbabilityOf: 1 for: NormalBox).
+	distributions add: (Distribution withProbabilityOf: 1 for: NoEffect).
 
 	self
 		should: [ 
@@ -285,7 +292,7 @@ BoardTest >> testBoardCannotBeCreatedWithMoreThanOneSpaceshipAssignedToTheSamePl
 	anotherSpaceship := Spaceship called: 'player1'.
 	otherSpaceship := Spaceship called: 'player3'.
 	distributions := OrderedCollection new.
-	distributions add: (Distribution withProbabilityOf: 1 for: NormalBox).
+	distributions add: (Distribution withProbabilityOf: 1 for: NoEffect).
 
 	self
 		should: [ 
@@ -307,7 +314,7 @@ BoardTest >> testBoardCannotBeCreatedWithoutSpaceships [
 
 	| distributions |
 	distributions := OrderedCollection new.
-	distributions add: (Distribution withProbabilityOf: 1 for: NormalBox).
+	distributions add: (Distribution withProbabilityOf: 1 for: NoEffect).
 
 	self
 		should: [ 
@@ -326,7 +333,7 @@ BoardTest >> testBoardCreatedWithTenBoxesAndALengthOfTwoHundredParsecsHasBoxesLe
 
 	| distributions spaceship board |
 	distributions := OrderedCollection new.
-	distributions add: (Distribution withProbabilityOf: 1 for: NormalBox).
+	distributions add: (Distribution withProbabilityOf: 1 for: NoEffect).
 	spaceship := Spaceship called: 'player'.
 	board := Board
 		         of: 10
@@ -340,18 +347,18 @@ BoardTest >> testBoardCreatedWithTenBoxesAndALengthOfTwoHundredParsecsHasBoxesLe
 { #category : #tests }
 BoardTest >> testSpaceshipLandsOnAtomicBombBoxSetsBackEveryoneToFirstBox [
 
-	| spaceship anotherSpaceship board normalBox boxSequence box1 box2 box3 box4 box5 atomicBombBox otherSpaceship |
+	| spaceship anotherSpaceship board noEffect boxSequence box1 box2 box3 box4 box5 anEffect otherSpaceship |
 	spaceship := Spaceship called: 'SP1'.
 	anotherSpaceship := Spaceship called: 'SP2'.
 	otherSpaceship := Spaceship called: 'SP3'.
-	normalBox := NormalBox new.
-	atomicBombBox := AtomicBombBox new.
+	noEffect := NoEffect new.
+	anEffect := AtomicBombEffect new.
 
-	box1 := Box withEffect: normalBox.
-	box2 := Box withEffect: normalBox.
-	box3 := Box withEffect: normalBox.
-	box4 := Box withEffect: normalBox.
-	box5 := Box withEffect: atomicBombBox.
+	box1 := Box with: noEffect.
+	box2 := Box with: noEffect.
+	box3 := Box with: noEffect.
+	box4 := Box with: noEffect.
+	box5 := Box with: anEffect.
 
 	boxSequence := { 
 		               box1.
@@ -380,17 +387,17 @@ BoardTest >> testSpaceshipLandsOnAtomicBombBoxSetsBackEveryoneToFirstBox [
 { #category : #tests }
 BoardTest >> testSpaceshipLandsOnMoonWalkBoxSetsBackOtherSpaceshipsExceptItself [
 
-	| spaceship anotherSpaceship board normalBox moonWalkBox boxSequence box1 box2 box3 box4 box5 |
+	| spaceship anotherSpaceship board noEffect anEffect boxSequence box1 box2 box3 box4 box5 |
 	spaceship := Spaceship called: 'SP1'.
 	anotherSpaceship := Spaceship called: 'SP2'.
-	normalBox := NormalBox new.
-	moonWalkBox := MoonWalkBox displacing: 1.
+	noEffect := NoEffect new.
+	anEffect := MoonWalkEffect displacing: 1.
 
-	box1 := Box withEffect: normalBox.
-	box2 := Box withEffect: moonWalkBox.
-	box3 := Box withEffect: normalBox.
-	box4 := Box withEffect: normalBox.
-	box5 := Box withEffect: normalBox.
+	box1 := Box with: noEffect.
+	box2 := Box with: anEffect.
+	box3 := Box with: noEffect.
+	box4 := Box with: noEffect.
+	box5 := Box with: noEffect.
 
 	boxSequence := { 
 		               box1.
@@ -415,16 +422,16 @@ BoardTest >> testSpaceshipLandsOnMoonWalkBoxSetsBackOtherSpaceshipsExceptItself 
 { #category : #tests }
 BoardTest >> testSpaceshipLandsOnWormHoleBoxSetsBackItselfFourBoxes [
 
-	| spaceship board normalBox wormHoleBox boxSequence box1 box2 box3 box4 box5 |
+	| spaceship board noEffect anEffect boxSequence box1 box2 box3 box4 box5 |
 	spaceship := Spaceship called: 'SP1'.
-	normalBox := NormalBox new.
-	wormHoleBox := WormHoleBox new.
+	noEffect := NoEffect new.
+	anEffect := WormHoleEffect new.
 
-	box1 := Box withEffect: normalBox.
-	box2 := Box withEffect: normalBox.
-	box3 := Box withEffect: normalBox.
-	box4 := Box withEffect: normalBox.
-	box5 := Box withEffect: wormHoleBox.
+	box1 := Box with: noEffect.
+	box2 := Box with: noEffect.
+	box3 := Box with: noEffect.
+	box4 := Box with: noEffect.
+	box5 := Box with: anEffect.
 
 	boxSequence := { 
 		               box1.
@@ -446,17 +453,17 @@ BoardTest >> testSpaceshipLandsOnWormHoleBoxSetsBackItselfFourBoxes [
 { #category : #tests }
 BoardTest >> testSpaceshipThatLandsOnMoonWalkBoxCantMakeOthersGoToNegativePositions [
 
-	| spaceship board normalBox moonWalkBox boxSequence box1 box2 box3 box4 box5 anotherSpaceship |
+	| spaceship board noEffect anEffect boxSequence box1 box2 box3 box4 box5 anotherSpaceship |
 	spaceship := Spaceship called: 'SP1'.
 	anotherSpaceship := Spaceship called: 'SP2'.
-	normalBox := NormalBox new.
-	moonWalkBox := MoonWalkBox displacing: 10.
+	noEffect := NoEffect new.
+	anEffect := MoonWalkEffect displacing: 10.
 
-	box1 := Box withEffect: moonWalkBox.
-	box2 := Box withEffect: normalBox.
-	box3 := Box withEffect: normalBox.
-	box4 := Box withEffect: normalBox.
-	box5 := Box withEffect: normalBox.
+	box1 := Box with: anEffect.
+	box2 := Box with: noEffect.
+	box3 := Box with: noEffect.
+	box4 := Box with: noEffect.
+	box5 := Box with: noEffect.
 
 	boxSequence := { 
 		               box1.
@@ -481,16 +488,16 @@ BoardTest >> testSpaceshipThatLandsOnMoonWalkBoxCantMakeOthersGoToNegativePositi
 { #category : #tests }
 BoardTest >> testSpaceshipThatLandsOnWormHoleBoxCantGoToNegativePositions [
 
-	| spaceship board normalBox wormHoleBox boxSequence box1 box2 box3 box4 box5 |
+	| spaceship board noEffect anEffect boxSequence box1 box2 box3 box4 box5 |
 	spaceship := Spaceship called: 'SP1'.
-	normalBox := NormalBox new.
-	wormHoleBox := WormHoleBox new.
+	noEffect := NoEffect new.
+	anEffect := WormHoleEffect new.
 
-	box1 := Box withEffect: wormHoleBox.
-	box2 := Box withEffect: normalBox.
-	box3 := Box withEffect: normalBox.
-	box4 := Box withEffect: normalBox.
-	box5 := Box withEffect: normalBox.
+	box1 := Box with: anEffect.
+	box2 := Box with: noEffect.
+	box3 := Box with: noEffect.
+	box4 := Box with: noEffect.
+	box5 := Box with: noEffect.
 
 	boxSequence := { 
 		               box1.
@@ -511,17 +518,17 @@ BoardTest >> testSpaceshipThatLandsOnWormHoleBoxCantGoToNegativePositions [
 { #category : #tests }
 BoardTest >> testSpaceshipsThatLandsOnAHyperJumpBoxEndUpFiveBoxesAfterThenFourBoxesAfter [
 
-	| board normalBox hyperJumpBox boxSequence box1 box2 box3 box4 box5 aSpaceship anotherSpaceship |
+	| board noEffect anEffect boxSequence box1 box2 box3 box4 box5 aSpaceship anotherSpaceship |
 	aSpaceship := Spaceship called: 'SP1'.
 	anotherSpaceship := Spaceship called: 'SP2'.
-	normalBox := NormalBox new.
-	hyperJumpBox := HyperJump with: { 10. 8 }.
+	noEffect := NoEffect new.
+	anEffect := HyperJumpEffect with: { 10. 8 }.
 
-	box1 := Box withEffect: hyperJumpBox.
-	box2 := Box withEffect: normalBox.
-	box3 := Box withEffect: normalBox.
-	box4 := Box withEffect: normalBox.
-	box5 := Box withEffect: normalBox.
+	box1 := Box with: anEffect.
+	box2 := Box with: noEffect.
+	box3 := Box with: noEffect.
+	box4 := Box with: noEffect.
+	box5 := Box with: noEffect.
 
 	boxSequence := { 
 		               box1.
@@ -552,17 +559,17 @@ BoardTest >> testSpaceshipsThatLandsOnAHyperJumpBoxEndUpFiveBoxesAfterThenFourBo
 { #category : #tests }
 BoardTest >> testSpaceshipsThatLandsOnAHyperJumpBoxEndUpFiveBoxesAfterThenFourBoxesAfterWithFloatingLengths [
 
-	| board normalBox hyperJumpBox boxSequence box1 box2 box3 box4 box5 aSpaceship anotherSpaceship |
+	| board noEffect anEffect boxSequence box1 box2 box3 box4 box5 aSpaceship anotherSpaceship |
 	aSpaceship := Spaceship called: 'SP1'.
 	anotherSpaceship := Spaceship called: 'SP2'.
-	normalBox := NormalBox new.
-	hyperJumpBox := HyperJump with: { 14. 13 }.
+	noEffect := NoEffect new.
+	anEffect := HyperJumpEffect with: { 14. 13 }.
 
-	box1 := Box withEffect: hyperJumpBox.
-	box2 := Box withEffect: normalBox.
-	box3 := Box withEffect: normalBox.
-	box4 := Box withEffect: normalBox.
-	box5 := Box withEffect: normalBox.
+	box1 := Box with: anEffect.
+	box2 := Box with: noEffect.
+	box3 := Box with: noEffect.
+	box4 := Box with: noEffect.
+	box5 := Box with: noEffect.
 
 	boxSequence := { 
 		               box1.
@@ -588,12 +595,12 @@ BoardTest >> testSpaceshipsThatLandsOnAHyperJumpBoxEndUpFiveBoxesAfterThenFourBo
 { #category : #tests }
 BoardTest >> testSpeedUpDoesntTriggerAnotherSpeedUp [
 
-	| spaceship board normalBox speedUpBox box |
+	| spaceship board anEffect speedUpBox box |
 	spaceship := Spaceship called: 'SP1'.
-	normalBox := NormalBox new.
-	speedUpBox := SpeedUpBox new.
+	anEffect := NoEffect new.
+	speedUpBox := SpeedUpEffect new.
 
-	box := Box withEffect: speedUpBox.
+	box := Box with: speedUpBox.
 
 	board := Board
 		         of: 10

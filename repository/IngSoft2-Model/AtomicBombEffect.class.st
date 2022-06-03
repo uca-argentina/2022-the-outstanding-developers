@@ -1,21 +1,21 @@
 Class {
-	#name : #AtomicBombBox,
+	#name : #AtomicBombEffect,
 	#superclass : #Object,
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'instance creation' }
-AtomicBombBox class >> create [
+AtomicBombEffect class >> create [
 	^self new
 ]
 
 { #category : #effects }
-AtomicBombBox >> effectOnPosition: aBoard [
+AtomicBombEffect >> effectOnPosition: aBoard [
 
 	aBoard moveAllBackToBeginning
 ]
 
 { #category : #accessing }
-AtomicBombBox >> typeOfEffect [
+AtomicBombEffect >> typeOfEffect [
 	^'atomicbomb'
 ]

@@ -17,17 +17,29 @@ BoxTest >> should: block raise: expectedErrorClass withMessage: expectedErrorMes
 { #category : #tests }
 BoxTest >> testHyperJumpBoxAutogeneratesAParsecSequence [
 
-	| box aHyperJump |
-	aHyperJump := HyperJump randomlyOf: 4 upTo: 10.
-	box := Box withEffect: aHyperJump.
-	self assert: box effectOnPosition > 0
+	| box anEffect firstEffect secondEffect |
+	anEffect := HyperJumpEffect randomlyOf: 4 upTo: 10.
+	box := Box with: anEffect.
+	firstEffect := box effectOnPosition.
+	secondEffect := box effectOnPosition.
+	self assert: firstEffect > 0.
+	self assert: secondEffect <= firstEffect
+]
+
+{ #category : #tests }
+BoxTest >> testHyperJumpBoxAutogenerationBoxAmountMustBeGreaterThanZero [
+
+	self
+		should: [ HyperJumpEffect randomlyOf: 1 upTo: 0 ]
+		raise: Error
+		withMessage: 'There must be an amount of at least one Box'
 ]
 
 { #category : #tests }
 BoxTest >> testHyperJumpBoxAutogenerationParsecSequenceMustBeGreaterThanZero [
 
 	self
-		should: [ HyperJump randomlyOf: 0 upTo: 10 ]
+		should: [ HyperJumpEffect randomlyOf: 0 upTo: 10 ]
 		raise: Error
 		withMessage: 'Parsec sequence size must be greater than zero'
 ]
@@ -35,10 +47,10 @@ BoxTest >> testHyperJumpBoxAutogenerationParsecSequenceMustBeGreaterThanZero [
 { #category : #tests }
 BoxTest >> testHyperJumpBoxEffectDisplacesAListOfParsecsValuesRepeatedly [
 
-	| box aHyperJump parsecsList |
+	| box anEffect parsecsList |
 	parsecsList := { 4. 3. 1. 5 }.
-	aHyperJump := HyperJump with: parsecsList.
-	box := Box withEffect: aHyperJump.
+	anEffect := HyperJumpEffect with: parsecsList.
+	box := Box with: anEffect.
 	self assert: box effectOnPosition equals: 4.
 	self assert: box effectOnPosition equals: 3.
 	self assert: box effectOnPosition equals: 1.
@@ -49,10 +61,10 @@ BoxTest >> testHyperJumpBoxEffectDisplacesAListOfParsecsValuesRepeatedly [
 { #category : #tests }
 BoxTest >> testHyperJumpBoxEffectDisplacesFourParsecsForward [
 
-	| box aHyperJump parsecsList |
+	| box anEffect parsecsList |
 	parsecsList := { 4 }.
-	aHyperJump := HyperJump with: parsecsList.
-	box := Box withEffect: aHyperJump.
+	anEffect := HyperJumpEffect with: parsecsList.
+	box := Box with: anEffect.
 	self assert: box effectOnPosition equals: 4
 ]
 
@@ -60,7 +72,7 @@ BoxTest >> testHyperJumpBoxEffectDisplacesFourParsecsForward [
 BoxTest >> testMoonWalkBoxCantBeCreatedWithNegativeDisplacement [
 
 	self
-		should: [ MoonWalkBox displacing: -8 ]
+		should: [ MoonWalkEffect displacing: -8 ]
 		raise: Error
 		withMessage: 'MoonWalkBox displacement should be greater than zero'
 ]
@@ -68,35 +80,35 @@ BoxTest >> testMoonWalkBoxCantBeCreatedWithNegativeDisplacement [
 { #category : #tests }
 BoxTest >> testMoonWalkBoxEffectDisplacesEightPlacesBackwards [
 
-	| box aMoonWalk |
-	aMoonWalk := MoonWalkBox displacing: 8.
-	box := Box withEffect: aMoonWalk.
+	| box anEffect |
+	anEffect := MoonWalkEffect displacing: 8.
+	box := Box with: anEffect.
 	self assert: box effectOnPosition equals: -8
 ]
 
 { #category : #tests }
 BoxTest >> testNormalBoxEffectOnPositionIsZero [
 
-	| box aNormalBox |
-	aNormalBox := NormalBox new.
-	box := Box withEffect: aNormalBox.
+	| box anEffect |
+	anEffect := NoEffect new.
+	box := Box with: anEffect.
 	self assert: box effectOnPosition equals: 0
 ]
 
 { #category : #tests }
 BoxTest >> testSpeedUpBoxEffectDisplacesFourPlacesForwards [
 
-	| box speedUpBox |
-	speedUpBox := SpeedUpBox new.
-	box := Box withEffect: speedUpBox.
+	| box anEffect |
+	anEffect := SpeedUpEffect new.
+	box := Box with: anEffect.
 	self assert: box effectOnPosition equals: 4
 ]
 
 { #category : #tests }
 BoxTest >> testWormHoleBoxEffectDisplacesFourPlacesBackwards [
 
-	| box aHyperJump |
-	aHyperJump := WormHoleBox new.
-	box := Box withEffect: aHyperJump.
+	| box anEffect |
+	anEffect := WormHoleEffect new.
+	box := Box with: anEffect.
 	self assert: box effectOnPosition equals: -4
 ]

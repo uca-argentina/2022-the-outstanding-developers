@@ -114,9 +114,9 @@ Board class >> of: aNumberOfBoxes andLength: someParsecs for: someLaps playedByM
 	self assertLength: someParsecs greaterThan: aNumberOfBoxes.
 	randomBoxGenerator := RandomEventGenerator
 		                      with: aNumberOfBoxes
-		                      distributedWith: aDistribution.
+		                      using: aDistribution.
 	boxSequnce := randomBoxGenerator generate collect: [ :effect | 
-		              Box withEffect: effect ].
+		              Box with: effect ].
 	^ self new
 		  of: aNumberOfBoxes
 		  andLength: someParsecs

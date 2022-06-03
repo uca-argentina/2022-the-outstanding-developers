@@ -1,27 +1,27 @@
 Class {
-	#name : #SpeedUpBox,
+	#name : #SpeedUpEffect,
 	#superclass : #Object,
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'instance creation' }
-SpeedUpBox class >> create [
+SpeedUpEffect class >> create [
 	^self new
 ]
 
 { #category : #effect }
-SpeedUpBox >> effectOnPosition [
+SpeedUpEffect >> effectOnPosition [
 
 	^ 4
 ]
 
 { #category : #effects }
-SpeedUpBox >> effectOnPosition: aBoard [
+SpeedUpEffect >> effectOnPosition: aBoard [
 
 	aBoard moveCurrentBy: self effectOnPosition
 ]
 
 { #category : #accessing }
-SpeedUpBox >> typeOfEffect [
+SpeedUpEffect >> typeOfEffect [
 	^'speedup'
 ]

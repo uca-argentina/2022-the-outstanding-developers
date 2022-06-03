@@ -8,8 +8,24 @@ Class {
 }
 
 { #category : #'instance creation' }
-RandomEventGenerator class >> with: aNumberOfBoxes distributedWith: aDistribution [ 
-	^ self new initializeWith: aNumberOfBoxes andDistributedWith: aDistribution 
+RandomEventGenerator class >> with: aNumberOfBoxes using: aDistribution [ 
+	^ self new initializeWith: aNumberOfBoxes using: aDistribution 
+]
+
+{ #category : #initialization }
+RandomEventGenerator >> createFor: aNumberOfBoxes using: orderedDistribution with: random [
+
+	aNumberOfBoxes timesRepeat: [ 
+		| randomNumber index coveredProbabilities |
+		coveredProbabilities := 0.
+		index := 1.
+		randomNumber := random next.
+		[ randomNumber < ((orderedDistribution at: index) probability + coveredProbabilities) ] 
+			whileFalse: [ 
+				coveredProbabilities := coveredProbabilities + (orderedDistribution at: index) probability.
+				index := index + 1 ].
+		randomBoxes add:
+			(orderedDistribution at: index) classAssociated create ]
 ]
 
 { #category : #accessing }
@@ -18,25 +34,16 @@ RandomEventGenerator >> generate [
 ]
 
 { #category : #initialization }
-RandomEventGenerator >> initializeWith: aNumberOfBoxes andDistributedWith: aDistribution [
+RandomEventGenerator >> initializeWith: aNumberOfBoxes using: aDistribution [
 
-	| r orderedDistributions |
-	r := Random new.
-	orderedDistributions := aDistribution sort: [ 
-		                        :probabilityA 
-		                        :probabilityB | probabilityA < probabilityB ].
+	| random anOrderedDistribution |
+	random := Random new.
+	anOrderedDistribution := aDistribution sort: [ 
+		                       :probabilityA 
+		                       :probabilityB | probabilityA < probabilityB ].
 	randomBoxes := OrderedCollection new.
-	aNumberOfBoxes timesRepeat: [ 
-		| randomNumber i coveredProbabilities |
-		coveredProbabilities := 0.
-		i := 1.
-		randomNumber := r next.
-		[ 
-		randomNumber
-		< ((orderedDistributions at: i) probability + coveredProbabilities) ] 
-			whileFalse: [ 
-				coveredProbabilities := coveredProbabilities
-				                        + (orderedDistributions at: i) probability.
-				i := i + 1 ].
-		randomBoxes add: (orderedDistributions at: i) classAssociated create ]
+	self
+		createFor: aNumberOfBoxes
+		using: anOrderedDistribution
+		with: random
 ]

@@ -1,5 +1,5 @@
 Class {
-	#name : #MoonWalkBox,
+	#name : #MoonWalkEffect,
 	#superclass : #Object,
 	#instVars : [
 		'displacement'
@@ -11,48 +11,48 @@ Class {
 }
 
 { #category : #assertion }
-MoonWalkBox class >> assertValidDisplacement: anAmount [
+MoonWalkEffect class >> assertValidDisplacement: anAmount [
 
 	anAmount > 0 ifFalse: [ 
 		Error signal: 'MoonWalkBox displacement should be greater than zero' ]
 ]
 
 { #category : #'instance creation' }
-MoonWalkBox class >> create [
+MoonWalkEffect class >> create [
 
 	^ self new displacing: numberOfBoxes atRandom
 ]
 
 { #category : #'instance creation' }
-MoonWalkBox class >> displacing: aNumberOfBoxes [
+MoonWalkEffect class >> displacing: aNumberOfBoxes [
 	self assertValidDisplacement: aNumberOfBoxes.
 	^ self new displacing: aNumberOfBoxes
 ]
 
 { #category : #'class initialization' }
-MoonWalkBox class >> for: aNumberOfBoxes [ 
+MoonWalkEffect class >> for: aNumberOfBoxes [ 
 	 numberOfBoxes := aNumberOfBoxes 
 ]
 
 { #category : #initialization }
-MoonWalkBox >> displacing: aNumberOfBoxes [
+MoonWalkEffect >> displacing: aNumberOfBoxes [
 
 	displacement := aNumberOfBoxes
 ]
 
 { #category : #effect }
-MoonWalkBox >> effectOnPosition [
+MoonWalkEffect >> effectOnPosition [
 
 	^ displacement * -1
 ]
 
 { #category : #effects }
-MoonWalkBox >> effectOnPosition: aBoard [
+MoonWalkEffect >> effectOnPosition: aBoard [
 
 	aBoard moveAllExceptCurrentBy: self effectOnPosition
 ]
 
 { #category : #accessing }
-MoonWalkBox >> typeOfEffect [
+MoonWalkEffect >> typeOfEffect [
 	^'moonwalk'
 ]

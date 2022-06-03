@@ -1,5 +1,5 @@
 Class {
-	#name : #HyperJump,
+	#name : #HyperJumpEffect,
 	#superclass : #Object,
 	#instVars : [
 		'parsecs',
@@ -13,7 +13,7 @@ Class {
 }
 
 { #category : #'instance creation' }
-HyperJump class >> create [
+HyperJumpEffect class >> create [
 
 	| r |
 	r := Random new.
@@ -21,38 +21,44 @@ HyperJump class >> create [
 ]
 
 { #category : #'class initialization' }
-HyperJump class >> for: aNumberOfBoxes upTo: aLimit [
+HyperJumpEffect class >> for: aNumberOfBoxes upTo: aLimit [
 
 	numberOfBoxes := aNumberOfBoxes.
 	limit := aLimit
 ]
 
 { #category : #'instance creation' }
-HyperJump class >> randomlyOf: aParsecSequenceSize upTo: aBoxAmount [
+HyperJumpEffect class >> randomlyOf: aParsecSequenceSize upTo: aBoxAmount [
 
 	^ self new randomlyOf: aParsecSequenceSize upTo: aBoxAmount
 ]
 
 { #category : #'instance creation' }
-HyperJump class >> with: parsecsValues [ 
+HyperJumpEffect class >> with: parsecsValues [ 
 	^self new with: parsecsValues.
 ]
 
 { #category : #assertion }
-HyperJump >> assertSequenceSizeIsValid: aParsecSequenceSize [
+HyperJumpEffect >> assertBoxAmountIsValid: aBoxAmount [ 
+	aBoxAmount  > 0 ifFalse: [ 
+		Error signal: 'There must be an amount of at least one Box' ]
+]
+
+{ #category : #assertion }
+HyperJumpEffect >> assertSequenceSizeIsValid: aParsecSequenceSize [
 
 	aParsecSequenceSize > 0 ifFalse: [ 
 		Error signal: 'Parsec sequence size must be greater than zero' ]
 ]
 
 { #category : #effect }
-HyperJump >> effectOnPosition [
+HyperJumpEffect >> effectOnPosition [
 
 	^ parsecs at: parsecsValuesHandler index
 ]
 
 { #category : #effects }
-HyperJump >> effectOnPosition: aBoard [
+HyperJumpEffect >> effectOnPosition: aBoard [
 
 	| aNumberOfBoxes |
 	aNumberOfBoxes := (self effectOnPosition / aBoard boxLength) floor.
@@ -60,9 +66,10 @@ HyperJump >> effectOnPosition: aBoard [
 ]
 
 { #category : #initialization }
-HyperJump >> randomlyOf: aParsecSequenceSize upTo: aBoxAmount [
+HyperJumpEffect >> randomlyOf: aParsecSequenceSize upTo: aBoxAmount [
 	
 	self assertSequenceSizeIsValid: aParsecSequenceSize.
+	self assertBoxAmountIsValid: aBoxAmount.
 	parsecs := OrderedCollection new.
 	aParsecSequenceSize timesRepeat: [ 
 		parsecs add: (1 to: aBoxAmount) atRandom ].
@@ -72,12 +79,12 @@ HyperJump >> randomlyOf: aParsecSequenceSize upTo: aBoxAmount [
 ]
 
 { #category : #accessing }
-HyperJump >> typeOfEffect [
+HyperJumpEffect >> typeOfEffect [
 	^'hyperjump'
 ]
 
 { #category : #initialization }
-HyperJump >> with: parsecsValues [
+HyperJumpEffect >> with: parsecsValues [
 
 	parsecs := parsecsValues.
 	parsecsValuesHandler := SequenceHandler for: parsecs size
