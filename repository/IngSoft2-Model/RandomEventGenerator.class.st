@@ -7,9 +7,20 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #asserting }
+RandomEventGenerator class >> assertProbabilitiesAddUpToOne: aDistribution [
+
+	((aDistribution sum:
+		 [ :probabilityDistribution | probabilityDistribution probability ])
+		 = 1) ifFalse: [ 
+		Error signal: 'Probabilities of the distribution must add up to one' ]
+]
+
 { #category : #'instance creation' }
-RandomEventGenerator class >> with: aNumberOfBoxes using: aDistribution [ 
-	^ self new initializeWith: aNumberOfBoxes using: aDistribution 
+RandomEventGenerator class >> with: aNumberOfBoxes using: aDistribution [
+
+	self assertProbabilitiesAddUpToOne: aDistribution.
+	^ self new initializeWith: aNumberOfBoxes using: aDistribution
 ]
 
 { #category : #initialization }
