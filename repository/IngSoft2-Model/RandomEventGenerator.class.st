@@ -24,8 +24,9 @@ RandomEventGenerator class >> with: aNumberOfBoxes using: aDistribution [
 ]
 
 { #category : #initialization }
-RandomEventGenerator >> createFor: aNumberOfBoxes using: orderedDistribution with: random [
-
+RandomEventGenerator >> createFor: aNumberOfBoxes using: orderedDistribution [
+	| random |
+	random := Random new.
 	aNumberOfBoxes timesRepeat: [ 
 		| randomNumber index coveredProbabilities |
 		coveredProbabilities := 0.
@@ -47,14 +48,11 @@ RandomEventGenerator >> generate [
 { #category : #initialization }
 RandomEventGenerator >> initializeWith: aNumberOfBoxes using: aDistribution [
 
-	| random anOrderedDistribution |
-	random := Random new.
+	| anOrderedDistribution |
 	anOrderedDistribution := aDistribution sort: [ 
-		                       :probabilityA 
-		                       :probabilityB | probabilityA < probabilityB ].
+		                         :probabilityA 
+		                         :probabilityB | 
+		                         probabilityA < probabilityB ].
 	randomBoxes := OrderedCollection new.
-	self
-		createFor: aNumberOfBoxes
-		using: anOrderedDistribution
-		with: random
+	self createFor: aNumberOfBoxes using: anOrderedDistribution
 ]

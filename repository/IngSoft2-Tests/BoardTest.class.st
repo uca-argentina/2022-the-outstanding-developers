@@ -345,6 +345,69 @@ BoardTest >> testBoardCreatedWithTenBoxesAndALengthOfTwoHundredParsecsHasBoxesLe
 ]
 
 { #category : #tests }
+BoardTest >> testPlayersInDifferentLapsReturnToTheFirstBoxOfItsLaps [
+
+	| spaceship anotherSpaceship board noEffect boxSequence box1 box2 box3 box4 box5 atomicBombEffect otherSpaceship |
+	spaceship := Spaceship called: 'SP1'.
+	anotherSpaceship := Spaceship called: 'SP2'.
+	otherSpaceship := Spaceship called: 'SP3'.
+	noEffect := NoEffect new.
+	atomicBombEffect := AtomicBombEffect new.
+
+	box1 := Box with: noEffect.
+	box2 := Box with: noEffect.
+	box3 := Box with: noEffect.
+	box4 := Box with: noEffect.
+	box5 := Box with: atomicBombEffect.
+
+	boxSequence := { 
+		               box1.
+		               box2.
+		               box3.
+		               box4.
+		               box5 }.
+
+	board := Board
+		         of: 5
+		         for: 3
+		         playedByMany: { 
+				         spaceship.
+				         anotherSpaceship.
+				         otherSpaceship }
+		         andA: boxSequence.
+	board moveSpaceship: 6. "Avanza toda una vuelta"
+	board moveSpaceship: 6. "Avanza toda una vuelta"
+	board moveSpaceship: 1.
+
+	board moveSpaceship: 6. "Avanza otra vuelta mas"
+	board moveSpaceship: 1. "Lo muevo un poquito"
+	board moveSpaceship: 1.
+
+	board moveSpaceship: 2. "Lo dejo en una posición"
+	board moveSpaceship: 1. "Lo muevo un poco mas"
+
+	self assert: (board positionOf: spaceship name) equals: 3.
+	self assert: (board lapOf: spaceship name) equals: 3.
+
+	self assert: (board positionOf: anotherSpaceship name) equals: 3.
+	self assert: (board lapOf: anotherSpaceship name) equals: 2.
+
+	self assert: (board positionOf: otherSpaceship name) equals: 2.
+	self assert: (board lapOf: otherSpaceship name) equals: 1.
+
+	board moveSpaceship: 3. "Lo hago caer en el AtomicBomb"
+
+	self assert: (board positionOf: spaceship name) equals: 1.
+	self assert: (board lapOf: spaceship name) equals: 3.
+
+	self assert: (board positionOf: anotherSpaceship name) equals: 1.
+	self assert: (board lapOf: anotherSpaceship name) equals: 2.
+
+	self assert: (board positionOf: otherSpaceship name) equals: 1.
+	self assert: (board lapOf: otherSpaceship name) equals: 1
+]
+
+{ #category : #tests }
 BoardTest >> testSpaceshipLandsOnAtomicBombBoxSetsBackEveryoneToFirstBox [
 
 	| spaceship anotherSpaceship board noEffect boxSequence box1 box2 box3 box4 box5 anEffect otherSpaceship |

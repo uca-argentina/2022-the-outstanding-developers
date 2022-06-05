@@ -248,12 +248,15 @@ Board >> moveAfterEffect: anAmount [
 { #category : #movement }
 Board >> moveAllBackToBeginning [
 
-	| spaceshipToMove spaceshipIndex newPosition spaceshipCurrentLap |
+	| currentPosition spaceshipIndex newPosition spaceshipCurrentLap |
 	positions size timesRepeat: [ 
-		spaceshipToMove := (positions at: turnHandler index) spaceship.
-		spaceshipCurrentLap := (positions at: turnHandler index) lap.
-		spaceshipIndex := self indexOfBoardPositionOf: spaceshipToMove.
-		newPosition := BoardPosition following: spaceshipToMove at: 1 in: spaceshipCurrentLap.
+		currentPosition := positions at: turnHandler index.
+		spaceshipCurrentLap := currentPosition lap.
+		spaceshipIndex := self indexOfBoardPositionOf: currentPosition spaceship.
+		newPosition := BoardPosition
+			               following: currentPosition spaceship
+			               at: 1
+			               in: spaceshipCurrentLap.
 		positions
 			replaceFrom: spaceshipIndex
 			to: spaceshipIndex
@@ -307,21 +310,21 @@ Board >> moveSpaceshipOf: aSpaceship by: aNumberOfBoxes [
 		                 nextPositionStartingAt: currentBoardPosition
 		                 in: currentLap
 		                 afterMoving: aNumberOfBoxes.
-	numberOfBoxes = 0
-		ifFalse: [ 
-			newPosition := BoardPosition
+	newPosition := numberOfBoxes = 0
+		               ifFalse: [ 
+			               BoardPosition
 				               following: aSpaceship
 				               at: currentBoardPosition + numberOfBoxes
 				               in: currentLap ]
-		ifTrue: [ 
-			newPosition := BoardPosition
-				               following: aSpaceship
-				               at: 1
-				               in: currentLap + 1 ].
+		               ifTrue: [ 
+		               BoardPosition
+			               following: aSpaceship
+			               at: 1
+			               in: currentLap + 1 ].
 	positions replaceFrom: index to: index with: { newPosition }.
-	newPosition position > boxes size ifFalse: [ 
-		currentBox := boxes at: newPosition position.
-		currentBox effectOnPosition: self ]
+	newPosition position > boxes size ifTrue: [ ^ self ].
+	currentBox := boxes at: newPosition position.
+	currentBox effectOnPosition: self
 ]
 
 { #category : #assertions }
@@ -345,7 +348,7 @@ Board >> nextPositionStartingAt: position in: lap afterMoving: aNumberOfBoxes [
 
 	lap < laps
 		ifTrue: [ 
-			positionToMove <= winningPosition
+			positionToMove < winningPosition
 				ifFalse: [ ^ 0 ]
 				ifTrue: [ ^ aNumberOfBoxes ] ]
 		ifFalse: [ 
