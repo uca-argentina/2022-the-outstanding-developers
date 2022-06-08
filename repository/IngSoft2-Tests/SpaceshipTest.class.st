@@ -42,14 +42,6 @@ SpaceshipTest >> testSpaceshipCreatedWithPlayerNameIsValid [
 ]
 
 { #category : #tests }
-SpaceshipTest >> testSpaceshipOfPlayerOneIsDifferentFromOne [
-
-	| spaceshipOne |
-	spaceshipOne := Spaceship called: 'playerOne'.
-	self assert: spaceshipOne ~= 1
-]
-
-{ #category : #tests }
 SpaceshipTest >> testSpaceshipOfPlayerOneIsDifferentFromSpaceshipOfPlayerTwo [
 
 	| spaceshipOne spaceshipTwo |

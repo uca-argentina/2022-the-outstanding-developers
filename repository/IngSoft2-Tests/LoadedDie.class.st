@@ -2,9 +2,7 @@ Class {
 	#name : #LoadedDie,
 	#superclass : #Object,
 	#instVars : [
-		'result',
 		'sequence',
-		'currentPosition',
 		'sequenceHandler'
 	],
 	#category : #'IngSoft2-Tests'

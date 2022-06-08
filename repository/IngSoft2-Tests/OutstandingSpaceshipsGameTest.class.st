@@ -20,9 +20,14 @@ OutstandingSpaceshipsGameTest >> testANonSimulatedGameCannotBePlayedAfterItFinis
 	| aSpaceship anotherSpaceship board aDie game |
 	aSpaceship := Spaceship called: 'SP1'.
 	anotherSpaceship := Spaceship called: 'SP2'.
-	board := Board of: 7 for: 1 playedByMany: { 
-			         aSpaceship.
-			         anotherSpaceship } andA: {Box with: NoEffect new}.
+	board := Board
+		         of: 7
+		         and: 7
+		         playedFor: 1
+		         byMany: { 
+				         aSpaceship.
+				         anotherSpaceship }
+		         with: { (Box with: NoEffect new) }.
 	aDie := LoadedDie withSequence: { 4. 3 }.
 	game := OutstandingSpaceshipsGame playedOn: board throwing: aDie.
 
@@ -42,9 +47,14 @@ OutstandingSpaceshipsGameTest >> testARoundOfANonSimulatedGameChangesSpaceshipsP
 	| aSpaceship anotherSpaceship board aDie game |
 	aSpaceship := Spaceship called: 'SP1'.
 	anotherSpaceship := Spaceship called: 'SP2'.
-	board := Board of: 15 for: 1 playedByMany: { 
-			         aSpaceship.
-			         anotherSpaceship } andA: {Box with: NoEffect new}.
+	board := Board
+		         of: 15
+					and: 15
+		         playedFor: 1
+		         byMany: { 
+				         aSpaceship.
+				         anotherSpaceship }
+		         with: { (Box with: NoEffect new) }.
 	aDie := LoadedDie withSequence: { 4. 3 }.
 	game := OutstandingSpaceshipsGame playedOn: board throwing: aDie.
 
@@ -56,11 +66,41 @@ OutstandingSpaceshipsGameTest >> testARoundOfANonSimulatedGameChangesSpaceshipsP
 ]
 
 { #category : #tests }
+OutstandingSpaceshipsGameTest >> testGameCanBeWonAndRankingCanBeShown [
+
+	| aSpaceship anotherSpaceship aBoard aDie game otherSpaceship |
+	aSpaceship := Spaceship called: 'Player1'.
+	anotherSpaceship := Spaceship called: 'Player2'.
+	otherSpaceship := Spaceship called: 'Player3'.
+	aBoard := Board
+		          of: 15
+					 and: 15
+		          playedFor: 3
+		          byMany: { 
+				          aSpaceship.
+				          anotherSpaceship. otherSpaceship }
+		          with: { (Box with: NoEffect new) }.
+	aDie := LoadedDie withSequence: {5. 1. 2}.
+	game := OutstandingSpaceshipsGame playedOn: aBoard throwing: aDie.
+
+	game startSimulation.
+
+	self assert: (aBoard rankingPositionOf: 'Player2') equals: 3.
+	self assert: (aBoard rankingPositionOf: 'Player1') equals: 1.
+	self assert: (aBoard rankingPositionOf: 'Player3') equals: 2.
+]
+
+{ #category : #tests }
 OutstandingSpaceshipsGameTest >> testGameWithABoardOfFifteenBoxesALoadedDieAndASpaceshipEndsWithFinalPositionOfSixteen [
 
 	| aSpaceship aBoard aDie game |
 	aSpaceship := Spaceship called: 'Player1'.
-	aBoard := Board of: 15 for: 1 playedBy: aSpaceship andA: {Box with: NoEffect new}.
+	aBoard := Board
+		          of: 15
+		          and: 15
+		          playedFor: 1
+		          by: aSpaceship
+		          with: { (Box with: NoEffect new) }.
 	aDie := LoadedDie with: 5.
 	game := OutstandingSpaceshipsGame playedOn: aBoard throwing: aDie.
 
@@ -76,10 +116,15 @@ OutstandingSpaceshipsGameTest >> testGameWithAFiniteBoardASequenceLoadedDieAndTh
 	aSpaceship := Spaceship called: 'Player1'.
 	anotherSpaceship := Spaceship called: 'Player2'.
 	otherSpaceship := Spaceship called: 'Player3'.
-	aBoard := Board of: 10 for: 3 playedByMany: { 
-			          aSpaceship.
-			          anotherSpaceship.
-			          otherSpaceship } andA: {Box with: NoEffect new}.
+	aBoard := Board
+		          of: 10
+		          and: 10
+		          playedFor: 3
+		          byMany: { 
+				          aSpaceship.
+				          anotherSpaceship.
+				          otherSpaceship }
+		          with: { (Box with: NoEffect new) }.
 	aDie := LoadedDie withSequence: { 1. 4. 3 }.
 	game := OutstandingSpaceshipsGame playedOn: aBoard throwing: aDie.
 
@@ -97,10 +142,15 @@ OutstandingSpaceshipsGameTest >> testGameWithAFiniteBoardASequenceLoadedDieAndTh
 	aSpaceship := Spaceship called: 'Player1'.
 	anotherSpaceship := Spaceship called: 'Player2'.
 	otherSpaceship := Spaceship called: 'Player3'.
-	aBoard := Board of: 10 for: 1 playedByMany: { 
-			          aSpaceship.
-			          anotherSpaceship.
-			          otherSpaceship } andA: {Box with: NoEffect new}.
+	aBoard := Board
+		          of: 10
+		          and: 10
+		          playedFor: 1
+		          byMany: { 
+				          aSpaceship.
+				          anotherSpaceship.
+				          otherSpaceship }
+		          with: { (Box with: NoEffect new) }.
 	aDie := LoadedDie withSequence: { 1. 4. 3 }.
 	game := OutstandingSpaceshipsGame playedOn: aBoard throwing: aDie.
 
@@ -116,7 +166,12 @@ OutstandingSpaceshipsGameTest >> testGameWithASpaceshipABoardWithFiveBoxesAndALo
 
 	| aBoard aDice spaceship game resultOfTheRoll |
 	spaceship := Spaceship called: 'APlayerName'.
-	aBoard := Board of: 5 for: 1 playedBy: spaceship andA: {Box with: NoEffect new}.
+	aBoard := Board
+		          of: 5
+		          and: 5
+		          playedFor: 1
+		          by: spaceship
+		          with: { (Box with: NoEffect new) }.
 	aDice := LoadedDie with: 4.
 
 	game := OutstandingSpaceshipsGame playedOn: aBoard throwing: aDice.
@@ -131,7 +186,12 @@ OutstandingSpaceshipsGameTest >> testGameWithASpaceshipAndABoardEndsWhenItComple
 
 	| aSpaceship aBoard aDie game |
 	aSpaceship := Spaceship called: 'Player1'.
-	aBoard := Board of: 15 for: 3 playedBy: aSpaceship andA: {Box with: NoEffect new}.
+	aBoard := Board
+		          of: 15
+		          and: 15
+		          playedFor: 3
+		          by: aSpaceship
+		          with: { (Box with: NoEffect new) }.
 	aDie := LoadedDie with: 5.
 	game := OutstandingSpaceshipsGame playedOn: aBoard throwing: aDie.
 
@@ -147,9 +207,14 @@ OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndADiceCupEn
 	| aSpaceship anotherSpaceship aBoard aDie game anotherDie otherDie aDiceCup |
 	aSpaceship := Spaceship called: 'Player1'.
 	anotherSpaceship := Spaceship called: 'Player2'.
-	aBoard := Board of: 50 for: 3 playedByMany: { 
-			          aSpaceship.
-			          anotherSpaceship } andA: {Box with: NoEffect new}.
+	aBoard := Board
+		          of: 50
+		          and: 50
+		          playedFor: 3
+		          byMany: { 
+				          aSpaceship.
+				          anotherSpaceship }
+		          with: { (Box with: NoEffect new) }.
 	aDie := Die with: 4.
 	anotherDie := Die with: 5.
 	otherDie := Die with: 6.
@@ -170,9 +235,14 @@ OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndADieEnds [
 	| aSpaceship anotherSpaceship aBoard aDie game |
 	aSpaceship := Spaceship called: 'Player1'.
 	anotherSpaceship := Spaceship called: 'Player2'.
-	aBoard := Board of: 15 for: 2 playedByMany: { 
-			          aSpaceship.
-			          anotherSpaceship } andA: {Box with: NoEffect new}.
+	aBoard := Board
+		          of: 15
+		          and: 15
+		          playedFor: 2
+		          byMany: { 
+				          aSpaceship.
+				          anotherSpaceship }
+		          with: { (Box with: NoEffect new) }.
 	aDie := Die with: 4.
 	game := OutstandingSpaceshipsGame playedOn: aBoard throwing: aDie.
 
@@ -187,9 +257,14 @@ OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndALoadedDie
 	| aSpaceship anotherSpaceship aBoard aLoadedDie game resultOfTheRoll |
 	aSpaceship := Spaceship called: 'Player1'.
 	anotherSpaceship := Spaceship called: 'Player2'.
-	aBoard := Board of: 5 for: 1 playedByMany: { 
-			          aSpaceship.
-			          anotherSpaceship } andA: {Box with: NoEffect new}.
+	aBoard := Board
+		          of: 5
+		          and: 5
+		          playedFor: 1
+		          byMany: { 
+				          aSpaceship.
+				          anotherSpaceship }
+		          with: { (Box with: NoEffect new) }.
 	aLoadedDie := LoadedDie with: 3.
 	game := OutstandingSpaceshipsGame
 		        playedOn: aBoard
@@ -209,9 +284,14 @@ OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndASequenced
 	| aSpaceship anotherSpaceship aBoard aDie game |
 	aSpaceship := Spaceship called: 'Player1'.
 	anotherSpaceship := Spaceship called: 'Player2'.
-	aBoard := Board of: 15 for: 2 playedByMany: { 
-			          aSpaceship.
-			          anotherSpaceship } andA: {Box with: NoEffect new}.
+	aBoard := Board
+		          of: 15
+		          and: 15
+		          playedFor: 2
+		          byMany: { 
+				          aSpaceship.
+				          anotherSpaceship }
+		          with: { (Box with: NoEffect new) }.
 	aDie := LoadedDie withSequence: { 1. 3 }.
 	game := OutstandingSpaceshipsGame playedOn: aBoard throwing: aDie.
 
@@ -226,9 +306,14 @@ OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndLoadedDieH
 	| aSpaceship anotherSpaceship aBoard aDie game |
 	aSpaceship := Spaceship called: 'Player1'.
 	anotherSpaceship := Spaceship called: 'Player2'.
-	aBoard := Board of: 15 for: 1 playedByMany: { 
-			          aSpaceship.
-			          anotherSpaceship } andA: {Box with: NoEffect new}.
+	aBoard := Board
+		          of: 15
+		          and: 15
+		          playedFor: 1
+		          byMany: { 
+				          aSpaceship.
+				          anotherSpaceship }
+		          with: { (Box with: NoEffect new) }.
 	aDie := LoadedDie with: 4.
 	game := OutstandingSpaceshipsGame playedOn: aBoard throwing: aDie.
 
@@ -236,28 +321,4 @@ OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndLoadedDieH
 
 	self assert: (aBoard positionOf: 'Player1') equals: 16.
 	self assert: (aBoard positionOf: 'Player2') equals: 12
-]
-
-{ #category : #tests }
-OutstandingSpaceshipsGameTest >> testGameWithTwoSpaceshipsAndABoardEndsWhenOneCompletesThreeLaps [
-
-	| aSpaceship anotherSpaceship aBoard aDie game otherSpaceship |
-	aSpaceship := Spaceship called: 'Player1'.
-	anotherSpaceship := Spaceship called: 'Player2'.
-	otherSpaceship := Spaceship called: 'Player3'.
-	aBoard := Board
-		          of: 15
-		          for: 3
-		          playedByMany: { 
-				          aSpaceship.
-				          anotherSpaceship. otherSpaceship }
-		          andA: { (Box with: NoEffect new) }.
-	aDie := LoadedDie withSequence: {5. 1. 2}.
-	game := OutstandingSpaceshipsGame playedOn: aBoard throwing: aDie.
-
-	game startSimulation.
-
-	self assert: (aBoard rankingPositionOf: 'Player2') equals: 3.
-	self assert: (aBoard rankingPositionOf: 'Player1') equals: 1.
-	self assert: (aBoard rankingPositionOf: 'Player3') equals: 2.
 ]

@@ -26,7 +26,7 @@ BoardTest >> testABoardOfFifteenBoxesCreatedWithAShorterSequenceHasTheHardcodedA
 	aHyperJumpBox := Box with: (HyperJumpEffect with: { 1 }).
 	anAtomicBombBox := Box with: AtomicBombEffect new.
 	boxSequence := { aNormalBox. aSpeedUpBox. aWormHoleBox. aMoonWalkBox. aHyperJumpBox. anAtomicBombBox  }.
-	board := Board of: 15 andLength: 15 for: 1 playedBy: enterprise andA: boxSequence .
+	board := Board of: 15 and: 15 playedFor: 1 by: enterprise with: boxSequence .
 	self assert: board amountOfBoxes equals: 15.
 	self assert: board amountOfNormalBoxes equals: 3.
 	self assert: board amountOfSpeedUpBoxes equals: 3.
@@ -60,10 +60,10 @@ BoardTest >> testABoardOfOneHundredRandomGeneratedBoxesHasOneHundredBoxes [
 
 	board := Board
 		         of: n
-		         andLength: parsecs
-		         for: 1
-		         playedBy: enterprise
-		         distributed: distributions.
+		         and: parsecs
+		         playedFor: 1
+		         by: enterprise
+		         givenBy: distributions.
 	self assert: board amountOfBoxes equals: 100
 ]
 
@@ -91,10 +91,10 @@ BoardTest >> testABoardOfTenBoxesCreatedWithASequenceHasTheHardcodedAmountOfBoxe
 		               anAtomicBombBox }.
 	board := Board
 		         of: 10
-		         andLength: 10
-		         for: 1
-		         playedBy: enterprise
-		         andA: boxSequence.
+		         and: 10
+		         playedFor: 1
+		         by: enterprise
+		         with: boxSequence.
 	self assert: board amountOfBoxes equals: 10.
 	self assert: board amountOfNormalBoxes equals: 2.
 	self assert: board amountOfSpeedUpBoxes equals: 2.
@@ -115,10 +115,10 @@ BoardTest >> testASpaceshipCannotPlayWhenItIsNotItsTurn [
 	spaceship3 := Spaceship called: 'SP3'.
 	distributions := OrderedCollection new.
 	distributions add: (Distribution withProbabilityOf: 1 for: NoEffect).
-	board := Board of: n andLength: parsecs for: 1 playedByMany: { 
+	board := Board of: n and: parsecs playedFor: 1 byMany: { 
 			         spaceship1.
 			         spaceship2.
-			         spaceship3 } distributed: distributions.
+			         spaceship3 } givenBy: distributions.
 	board moveSpaceship: 1.
 	board moveSpaceship: 1.
 	self
@@ -132,7 +132,7 @@ BoardTest >> testASpaceshipThatLandsOnANormalBoxDoesntMove [
 
 	| spaceship board |
 	spaceship := Spaceship called: 'SP1'.
-	board := Board of: 10 for: 1 playedBy: spaceship andA: {Box with: NoEffect new}.
+	board := Board of: 10 and: 10 playedFor: 1 by: spaceship with: {Box with: NoEffect new}.
 	board moveSpaceshipOf: spaceship name by: 1.
 
 	self assert: (board positionOf: spaceship name) equals: 1
@@ -160,9 +160,10 @@ BoardTest >> testASpaceshipThatLandsOnASpeedUpBoxEndsUpFourBoxesAfter [
 		               box5 }.
 	board := Board
 		         of: 10
-		         for: 1
-		         playedBy: spaceship
-		         andA: boxSequence.
+					and: 10
+		         playedFor: 1
+		         by: spaceship
+		         with: boxSequence.
 	board moveSpaceshipOf: spaceship name by: 1.
 
 	self assert: (board positionOf: spaceship name) equals: 5
@@ -176,9 +177,10 @@ BoardTest >> testASpaceshipsLapPositionVariesToTwoAfterCompletingFirstLap [
 	spaceship := Spaceship called: spaceshipName.
 	board := Board
 		         of: 10
-		         for: 2
-		         playedBy: spaceship
-		         andA: { (Box with: NoEffect new) }.
+					and: 10
+		         playedFor: 2
+		         by: spaceship
+		         with: { (Box with: NoEffect new) }.
 	loadedDie := LoadedDie with: 5.
 	resultOfTheRoll := loadedDie roll.
 	board moveSpaceshipOf: spaceshipName by: resultOfTheRoll.
@@ -194,7 +196,7 @@ BoardTest >> testASpaceshipsPositionVariesInFiveWithAFiniteBoardAfterOneRollOfAL
 	n := 10.
 	spaceshipName := 'aPlayer'.
 	spaceship := Spaceship called: spaceshipName.
-	board := Board of: n for: 1 playedBy: spaceship andA: {Box with: NoEffect new}.
+	board := Board of: n and: n playedFor: 1 by: spaceship with: {Box with: NoEffect new}.
 	loadedDie := LoadedDie with: 5.
 	resultOfTheRoll := loadedDie roll.
 	board moveSpaceshipOf: spaceshipName by: resultOfTheRoll.
@@ -215,10 +217,10 @@ BoardTest >> testBoardCannotBeCreatedWithALegthMinorThanTheNumberOfBoxes [
 		should: [ 
 			Board
 				of: 10
-				andLength: 8
-				for: 1
-				playedBy: spaceship
-				distributed: distributions ]
+				and: 8
+				playedFor: 1
+				by: spaceship
+				givenBy: distributions ]
 		raise: Error
 		withMessage:
 		'Board length should be greater or equal to number of boxes'
@@ -236,10 +238,10 @@ BoardTest >> testBoardCannotBeCreatedWithANegativeLegth [
 		should: [ 
 			Board
 				of: 10
-				andLength: -10
-				for: 1
-				playedBy: spaceship
-				distributed: distributions ]
+				and: -10
+				playedFor: 1
+				by: spaceship
+				givenBy: distributions ]
 		raise: Error
 		withMessage: 'Board length should be greater than zero'
 ]
@@ -256,10 +258,10 @@ BoardTest >> testBoardCannotBeCreatedWithANumberOfBoxesMinorThanOne [
 		should: [ 
 			Board
 				of: -5
-				andLength: 10
-				for: 1
-				playedBy: spaceship
-				distributed: distributions ]
+				and: 10
+				playedFor: 1
+				by: spaceship
+				givenBy: distributions ]
 		raise: Error
 		withMessage: 'Number of boxes should be greater than zero'
 ]
@@ -276,10 +278,10 @@ BoardTest >> testBoardCannotBeCreatedWithANumberOfLapsMinorThanOne [
 		should: [ 
 			Board
 				of: 15
-				andLength: 10
-				for: -1
-				playedBy: spaceship
-				distributed: distributions ]
+				and: 10
+				playedFor: -1
+				by: spaceship
+				givenBy: distributions ]
 		raise: Error
 		withMessage: 'Number of laps should be greater than zero'
 ]
@@ -298,13 +300,13 @@ BoardTest >> testBoardCannotBeCreatedWithMoreThanOneSpaceshipAssignedToTheSamePl
 		should: [ 
 			Board
 				of: 15
-				andLength: 10
-				for: 1
-				playedByMany: { 
+				and: 10
+				playedFor: 1
+				byMany: { 
 						aSpaceship.
 						anotherSpaceship.
 						otherSpaceship }
-				distributed: distributions ]
+				givenBy: distributions ]
 		raise: Error
 		withMessage: 'Spaceships must be assigned to different players'
 ]
@@ -320,10 +322,10 @@ BoardTest >> testBoardCannotBeCreatedWithoutSpaceships [
 		should: [ 
 			Board
 				of: 10
-				andLength: 10
-				for: 1
-				playedByMany: {  }
-				distributed: distributions ]
+				and: 10
+				playedFor: 1
+				byMany: {  }
+				givenBy: distributions ]
 		raise: Error
 		withMessage: 'Must use at least one spaceship'
 ]
@@ -337,10 +339,10 @@ BoardTest >> testBoardCreatedWithTenBoxesAndALengthOfTwoHundredParsecsHasBoxesLe
 	spaceship := Spaceship called: 'player'.
 	board := Board
 		         of: 10
-		         andLength: 200
-		         for: 1
-		         playedBy: spaceship
-		         distributed: distributions.
+		         and: 200
+		         playedFor: 1
+		         by: spaceship
+		         givenBy: distributions.
 	self assert: board boxLength equals: 20
 ]
 
@@ -369,22 +371,23 @@ BoardTest >> testPlayersInDifferentLapsReturnToTheFirstBoxOfItsLaps [
 
 	board := Board
 		         of: 5
-		         for: 3
-		         playedByMany: { 
+					and: 5 
+		         playedFor: 3
+		         byMany: { 
 				         spaceship.
 				         anotherSpaceship.
 				         otherSpaceship }
-		         andA: boxSequence.
-	board moveSpaceship: 6. "Avanza toda una vuelta"
-	board moveSpaceship: 6. "Avanza toda una vuelta"
+		         with: boxSequence.
+	board moveSpaceship: 6.
+	board moveSpaceship: 6.
 	board moveSpaceship: 1.
 
-	board moveSpaceship: 6. "Avanza otra vuelta mas"
-	board moveSpaceship: 1. "Lo muevo un poquito"
+	board moveSpaceship: 6.
+	board moveSpaceship: 1.
 	board moveSpaceship: 1.
 
-	board moveSpaceship: 2. "Lo dejo en una posición"
-	board moveSpaceship: 1. "Lo muevo un poco mas"
+	board moveSpaceship: 2.
+	board moveSpaceship: 1.
 
 	self assert: (board positionOf: spaceship name) equals: 3.
 	self assert: (board lapOf: spaceship name) equals: 3.
@@ -395,7 +398,7 @@ BoardTest >> testPlayersInDifferentLapsReturnToTheFirstBoxOfItsLaps [
 	self assert: (board positionOf: otherSpaceship name) equals: 2.
 	self assert: (board lapOf: otherSpaceship name) equals: 1.
 
-	board moveSpaceship: 3. "Lo hago caer en el AtomicBomb"
+	board moveSpaceship: 3.
 
 	self assert: (board positionOf: spaceship name) equals: 1.
 	self assert: (board lapOf: spaceship name) equals: 3.
@@ -431,12 +434,13 @@ BoardTest >> testSpaceshipLandsOnAtomicBombBoxSetsBackEveryoneToFirstBox [
 		               box5 }.
 	board := Board
 		         of: 10
-		         for: 1
-		         playedByMany: { 
+					and: 10
+		         playedFor: 1
+		         byMany: { 
 				         spaceship.
 				         anotherSpaceship.
 				         otherSpaceship }
-		         andA: boxSequence.
+		         with: boxSequence.
 	board moveSpaceship: 3.
 	board moveSpaceship: 2.
 	board moveSpaceship: 1.
@@ -444,7 +448,10 @@ BoardTest >> testSpaceshipLandsOnAtomicBombBoxSetsBackEveryoneToFirstBox [
 
 	self assert: (board positionOf: spaceship name) equals: 1.
 	self assert: (board positionOf: anotherSpaceship name) equals: 1.
-	self assert: (board positionOf: otherSpaceship name) equals: 1
+	self assert: (board positionOf: otherSpaceship name) equals: 1.
+	self assert: (board lapOf: spaceship name) equals: 1.
+	self assert: (board lapOf: anotherSpaceship name) equals: 1.
+	self assert: (board lapOf: otherSpaceship name) equals: 1
 ]
 
 { #category : #tests }
@@ -470,16 +477,19 @@ BoardTest >> testSpaceshipLandsOnMoonWalkBoxSetsBackOtherSpaceshipsExceptItself 
 		               box5 }.
 	board := Board
 		         of: 10
-		         for: 1
-		         playedByMany: { 
+					and: 10
+		         playedFor: 1
+		         byMany: { 
 				         spaceship.
 				         anotherSpaceship }
-		         andA: boxSequence.
+		         with: boxSequence.
 	board moveSpaceship: 3.
 	board moveSpaceship: 2.
 
 	self assert: (board positionOf: spaceship name) equals: 2.
-	self assert: (board positionOf: anotherSpaceship name) equals: 2
+	self assert: (board positionOf: anotherSpaceship name) equals: 2.
+	self assert: (board lapOf: spaceship name) equals: 1.
+	self assert: (board lapOf: anotherSpaceship name) equals: 1
 ]
 
 { #category : #tests }
@@ -504,13 +514,15 @@ BoardTest >> testSpaceshipLandsOnWormHoleBoxSetsBackItselfFourBoxes [
 		               box5 }.
 	board := Board
 		         of: 10
-		         for: 2
-		         playedBy: spaceship
-		         andA: boxSequence.
+					and: 10
+		         playedFor: 2
+		         by: spaceship
+		         with: boxSequence.
 	board moveSpaceship: 3.
 	board moveSpaceship: 2.
 
-	self assert: (board positionOf: spaceship name) equals: 1
+	self assert: (board positionOf: spaceship name) equals: 1.
+	self assert: (board lapOf: spaceship name) equals: 1
 ]
 
 { #category : #tests }
@@ -536,16 +548,19 @@ BoardTest >> testSpaceshipThatLandsOnMoonWalkBoxCantMakeOthersGoToNegativePositi
 		               box5 }.
 	board := Board
 		         of: 10
-		         for: 2
-		         playedByMany: { 
+					and: 10
+		         playedFor: 2
+		         byMany: { 
 				         spaceship.
 				         anotherSpaceship }
-		         andA: boxSequence.
+		         with: boxSequence.
 	board moveSpaceship: 5.
 	board moveSpaceship: 1.
 
 	self assert: (board positionOf: spaceship name) equals: 1.
-	self assert: (board positionOf: anotherSpaceship name) equals: 1
+	self assert: (board positionOf: anotherSpaceship name) equals: 1.
+	self assert: (board lapOf: spaceship name) equals: 1.
+	self assert: (board lapOf: anotherSpaceship name) equals: 1
 ]
 
 { #category : #tests }
@@ -570,9 +585,10 @@ BoardTest >> testSpaceshipThatLandsOnWormHoleBoxCantGoToNegativePositions [
 		               box5 }.
 	board := Board
 		         of: 10
-		         for: 2
-		         playedBy: spaceship
-		         andA: boxSequence.
+					and: 10
+		         playedFor: 2
+		         by: spaceship
+		         with: boxSequence.
 	board moveSpaceship: 1.
 
 	self assert: (board positionOf: spaceship name) equals: 1
@@ -601,12 +617,12 @@ BoardTest >> testSpaceshipsThatLandsOnAHyperJumpBoxEndUpFiveBoxesAfterThenFourBo
 		               box5 }.
 	board := Board
 		         of: 10
-		         andLength: 20
-		         for: 1
-		         playedByMany: { 
+		         and: 20
+		         playedFor: 1
+		         byMany: { 
 				         aSpaceship.
 				         anotherSpaceship }
-		         andA: boxSequence.
+		         with: boxSequence.
 	board moveSpaceship: 1.
 	board moveSpaceship: 1.
 
@@ -642,12 +658,12 @@ BoardTest >> testSpaceshipsThatLandsOnAHyperJumpBoxEndUpFiveBoxesAfterThenFourBo
 		               box5 }.
 	board := Board
 		         of: 15
-		         andLength: 100
-		         for: 1
-		         playedByMany: { 
+		         and: 100
+		         playedFor: 1
+		         byMany: { 
 				         aSpaceship.
 				         anotherSpaceship }
-		         andA: boxSequence.
+		         with: boxSequence.
 	board moveSpaceship: 1.
 	board moveSpaceship: 1.
 
@@ -667,9 +683,10 @@ BoardTest >> testSpeedUpDoesntTriggerAnotherSpeedUp [
 
 	board := Board
 		         of: 10
-		         for: 1
-		         playedBy: spaceship
-		         andA: { box }.
+					and: 10
+		         playedFor: 1
+		         by: spaceship
+		         with: { box }.
 	board moveSpaceshipOf: spaceship name by: 1.
 
 	self assert: (board positionOf: spaceship name) equals: 5

@@ -12,7 +12,8 @@ AtomicBombEffect class >> create [
 { #category : #effects }
 AtomicBombEffect >> effectOnPosition: aBoard [
 
-	aBoard moveAllBackToBeginning
+	aBoard moveAllBackToBeginning.
+	^'Do not move'
 ]
 
 { #category : #accessing }

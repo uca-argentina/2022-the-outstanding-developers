@@ -18,7 +18,7 @@ SpeedUpEffect >> effectOnPosition [
 { #category : #effects }
 SpeedUpEffect >> effectOnPosition: aBoard [
 
-	aBoard moveCurrentBy: self effectOnPosition
+	^ (self effectOnPosition)
 ]
 
 { #category : #accessing }

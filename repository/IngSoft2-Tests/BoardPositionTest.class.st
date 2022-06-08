@@ -15,7 +15,7 @@ BoardPositionTest >> should: block raise: expectedErrorClass withMessage: expect
 ]
 
 { #category : #tests }
-BoardPositionTest >> testBoardPositionCantBeNegative [
+BoardPositionTest >> testBoardPositionIsOneIfSetNegative [
 
 	| boardPosition spaceship |
 	spaceship := Spaceship called: 'aPlayer'.

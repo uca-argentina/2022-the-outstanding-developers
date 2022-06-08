@@ -15,6 +15,15 @@ BoxTest >> should: block raise: expectedErrorClass withMessage: expectedErrorMes
 ]
 
 { #category : #tests }
+BoxTest >> testBoxWithNoEffectDoesNotModifyPosition [
+
+	| box anEffect |
+	anEffect := NoEffect new.
+	box := Box with: anEffect.
+	self assert: box effectOnPosition equals: 0
+]
+
+{ #category : #tests }
 BoxTest >> testHyperJumpBoxAutogeneratesAParsecSequence [
 
 	| box anEffect firstEffect secondEffect |
@@ -84,15 +93,6 @@ BoxTest >> testMoonWalkBoxEffectDisplacesEightPlacesBackwards [
 	anEffect := MoonWalkEffect displacing: 8.
 	box := Box with: anEffect.
 	self assert: box effectOnPosition equals: -8
-]
-
-{ #category : #tests }
-BoxTest >> testNormalBoxEffectOnPositionIsZero [
-
-	| box anEffect |
-	anEffect := NoEffect new.
-	box := Box with: anEffect.
-	self assert: box effectOnPosition equals: 0
 ]
 
 { #category : #tests }

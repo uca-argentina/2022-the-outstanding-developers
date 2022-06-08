@@ -48,11 +48,6 @@ RandomEventGenerator >> generate [
 { #category : #initialization }
 RandomEventGenerator >> initializeWith: aNumberOfBoxes using: aDistribution [
 
-	| anOrderedDistribution |
-	anOrderedDistribution := aDistribution sort: [ 
-		                         :probabilityA 
-		                         :probabilityB | 
-		                         probabilityA < probabilityB ].
 	randomBoxes := OrderedCollection new.
-	self createFor: aNumberOfBoxes using: anOrderedDistribution
+	self createFor: aNumberOfBoxes using: aDistribution
 ]

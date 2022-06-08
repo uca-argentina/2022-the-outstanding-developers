@@ -18,10 +18,10 @@ NoEffect >> effectOnPosition [
 { #category : #effects }
 NoEffect >> effectOnPosition: aBoard [
 
-	
+	^ (self effectOnPosition)
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 NoEffect >> typeOfEffect [
 	^'normal'
 ]

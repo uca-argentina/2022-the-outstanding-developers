@@ -22,12 +22,13 @@ Box >> effectOnPosition [
 { #category : #effects }
 Box >> effectOnPosition: aBoard [
 
-	effect effectOnPosition: aBoard
+	^ (effect effectOnPosition: aBoard)
 ]
 
 { #category : #accessing }
 Box >> effectType [
-	^effect typeOfEffect
+
+	^ effect typeOfEffect
 ]
 
 { #category : #initialization }

@@ -49,7 +49,8 @@ MoonWalkEffect >> effectOnPosition [
 { #category : #effects }
 MoonWalkEffect >> effectOnPosition: aBoard [
 
-	aBoard moveAllExceptCurrentBy: self effectOnPosition
+	aBoard moveAllExceptCurrentBy: self effectOnPosition.
+	^0
 ]
 
 { #category : #accessing }

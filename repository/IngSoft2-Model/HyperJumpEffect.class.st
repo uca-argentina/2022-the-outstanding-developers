@@ -62,7 +62,7 @@ HyperJumpEffect >> effectOnPosition: aBoard [
 
 	| aNumberOfBoxes |
 	aNumberOfBoxes := (self effectOnPosition / aBoard boxLength) floor.
-	aBoard moveCurrentBy: aNumberOfBoxes
+	^ aNumberOfBoxes
 ]
 
 { #category : #initialization }

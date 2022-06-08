@@ -19,7 +19,7 @@ WormHoleEffect >> effectOnPosition [
 { #category : #effects }
 WormHoleEffect >> effectOnPosition: aBoard [
 
-	aBoard moveCurrentBy: self effectOnPosition
+	^ (self effectOnPosition)
 ]
 
 { #category : #accesing }
