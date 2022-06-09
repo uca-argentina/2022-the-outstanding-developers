@@ -6,7 +6,7 @@ Class {
 		'turnHandler',
 		'positions',
 		'laps',
-		'boxLength'
+		'boxParsecLength'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -137,15 +137,9 @@ Board >> amountOfBoxes [
 ]
 
 { #category : #properties }
-Board >> amountOfBoxes: type [
+Board >> amountOfBoxes: aType [
 
-	| normalBoxes |
-	normalBoxes := 0.
-	1 to: boxes size do: [ :i | 
-		| box |
-		box := boxes at: i.
-		box effectType = type ifTrue: [ normalBoxes := normalBoxes + 1 ] ].
-	^ normalBoxes
+	^(boxes select:[:box | box effectType = aType]) size.
 ]
 
 { #category : #properties }
@@ -160,7 +154,7 @@ Board >> amountOfMoonWalkBoxes [
 ]
 
 { #category : #properties }
-Board >> amountOfNormalBoxes [
+Board >> amountOfNoEffectBoxes [
 
 	^ self amountOfBoxes: 'normal'
 ]
@@ -185,9 +179,9 @@ Board >> assertThisIsPlayersTurn: index [
 ]
 
 { #category : #accessing }
-Board >> boxLength [
+Board >> boxParsecLength [
 
-	^ boxLength
+	^ boxParsecLength
 ]
 
 { #category : #playing }
@@ -206,6 +200,28 @@ Board >> lapOf: aSpaceship [
 	spaceshipLap := (positions select: [ :position | 
 		                 position spaceship = aSpaceship ]) at: 1.
 	^ spaceshipLap lap
+]
+
+{ #category : #playing }
+Board >> move: aSpaceship by: aNumberOfBoxes [
+
+	| newPositionWithoutEffect index currentBox movementAfterEffect currentBoardPosition currentLap newPositionAfterEffect|
+	index := self indexOfBoardPositionOf: aSpaceship.
+	self assertThisIsPlayersTurn: index.
+	
+	currentBoardPosition := (positions at: index) position.
+	currentLap := (positions at: index) lap.
+	
+	newPositionWithoutEffect := (self move: aSpaceship in: currentBoardPosition and: currentLap by: aNumberOfBoxes).
+	
+	newPositionWithoutEffect position > boxes size ifTrue: [ positions replaceFrom: index to: index with: { newPositionWithoutEffect }.
+		^self ].
+	currentBox := boxes at: newPositionWithoutEffect position.
+	movementAfterEffect := currentBox applyEffectOn: self.
+	movementAfterEffect = 'Do not move' 
+	ifFalse: [newPositionAfterEffect := (self move: aSpaceship in: (newPositionWithoutEffect position) and: (newPositionWithoutEffect lap) by: movementAfterEffect)]
+	ifTrue: [ ^self ].
+	positions replaceFrom: index to: index with: { newPositionAfterEffect }.
 ]
 
 { #category : #playing }
@@ -278,31 +294,9 @@ Board >> moveAllExceptCurrentBy: anAmount [
 { #category : #movement }
 Board >> moveSpaceship: aNumberOfBoxes [
 
-	| currentSpaceship |
-	currentSpaceship := (positions at: turnHandler index) spaceship.
-	self moveSpaceshipOf: currentSpaceship by: aNumberOfBoxes
-]
-
-{ #category : #playing }
-Board >> moveSpaceshipOf: aSpaceship by: aNumberOfBoxes [
-
-	| newPositionWithoutEffect index currentBox movementAfterEffect currentBoardPosition currentLap newPositionAfterEffect|
-	index := self indexOfBoardPositionOf: aSpaceship.
-	self assertThisIsPlayersTurn: index.
-	
-	currentBoardPosition := (positions at: index) position.
-	currentLap := (positions at: index) lap.
-	
-	newPositionWithoutEffect := (self move: aSpaceship in: currentBoardPosition and: currentLap by: aNumberOfBoxes).
-	
-	newPositionWithoutEffect position > boxes size ifTrue: [ positions replaceFrom: index to: index with: { newPositionWithoutEffect }.
-		^self ].
-	currentBox := boxes at: newPositionWithoutEffect position.
-	movementAfterEffect := currentBox effectOnPosition: self.
-	movementAfterEffect = 'Do not move' 
-	ifFalse: [newPositionAfterEffect := (self move: aSpaceship in: (newPositionWithoutEffect position) and: (newPositionWithoutEffect lap) by: movementAfterEffect)]
-	ifTrue: [ ^self ].
-	positions replaceFrom: index to: index with: { newPositionAfterEffect }.
+	| spaceshipPlaying |
+	spaceshipPlaying := (positions at: turnHandler index) spaceship.
+	self move: spaceshipPlaying by: aNumberOfBoxes
 ]
 
 { #category : #assertions }
@@ -335,16 +329,13 @@ Board >> of: aNumberOfBoxes and: parsecsLength playedFor: someLaps byMany: space
 	positions := spaceships collect: [ :spaceship | 
 		             BoardPosition following: spaceship name ].
 	turnHandler := SequenceHandler for: spaceships size.
-	boxLength := parsecsLength / aNumberOfBoxes
+	boxParsecLength := parsecsLength / aNumberOfBoxes
 ]
 
 { #category : #accessing }
 Board >> positionOf: aSpaceship [
 
-	| positionOfSpaceship |
-	positionOfSpaceship := (positions select: [ :position | 
-		                        position spaceship = aSpaceship ]) at: 1.
-	^ positionOfSpaceship position
+   ^ (positions detect: [ :position | position spaceship = aSpaceship ]) position
 ]
 
 { #category : #accessing }

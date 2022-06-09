@@ -9,16 +9,16 @@ NoEffect class >> create [
 	^self new
 ]
 
+{ #category : #effects }
+NoEffect >> applyEffectOn: aBoard [
+
+	^ (self effectOnPosition)
+]
+
 { #category : #effect }
 NoEffect >> effectOnPosition [
 
 	^ 0
-]
-
-{ #category : #effects }
-NoEffect >> effectOnPosition: aBoard [
-
-	^ (self effectOnPosition)
 ]
 
 { #category : #accessing }

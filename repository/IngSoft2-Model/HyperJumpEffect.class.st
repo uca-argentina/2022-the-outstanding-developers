@@ -38,6 +38,14 @@ HyperJumpEffect class >> with: parsecsValues [
 	^self new with: parsecsValues.
 ]
 
+{ #category : #effects }
+HyperJumpEffect >> applyEffectOn: aBoard [
+
+	| aNumberOfBoxes |
+	aNumberOfBoxes := (self effectOnPosition / aBoard boxParsecLength) floor.
+	^ aNumberOfBoxes
+]
+
 { #category : #assertion }
 HyperJumpEffect >> assertBoxAmountIsValid: aBoxAmount [ 
 	aBoxAmount  > 0 ifFalse: [ 
@@ -55,14 +63,6 @@ HyperJumpEffect >> assertSequenceSizeIsValid: aParsecSequenceSize [
 HyperJumpEffect >> effectOnPosition [
 
 	^ parsecs at: parsecsValuesHandler index
-]
-
-{ #category : #effects }
-HyperJumpEffect >> effectOnPosition: aBoard [
-
-	| aNumberOfBoxes |
-	aNumberOfBoxes := (self effectOnPosition / aBoard boxLength) floor.
-	^ aNumberOfBoxes
 ]
 
 { #category : #initialization }

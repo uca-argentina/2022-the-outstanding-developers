@@ -34,23 +34,23 @@ MoonWalkEffect class >> for: aNumberOfBoxes [
 	 numberOfBoxes := aNumberOfBoxes 
 ]
 
+{ #category : #effects }
+MoonWalkEffect >> applyEffectOn: aBoard [
+
+	aBoard moveAllExceptCurrentBy: self effectOnPosition.
+	^ 0
+]
+
 { #category : #initialization }
 MoonWalkEffect >> displacing: aNumberOfBoxes [
 
-	displacement := aNumberOfBoxes
-]
-
-{ #category : #effect }
-MoonWalkEffect >> effectOnPosition [
-
-	^ displacement * -1
+	displacement := (-1 * aNumberOfBoxes)
 ]
 
 { #category : #effects }
-MoonWalkEffect >> effectOnPosition: aBoard [
+MoonWalkEffect >> effectOnPosition [
 
-	aBoard moveAllExceptCurrentBy: self effectOnPosition.
-	^0
+	^ displacement
 ]
 
 { #category : #accessing }

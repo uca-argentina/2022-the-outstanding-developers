@@ -28,7 +28,7 @@ BoardTest >> testABoardOfFifteenBoxesCreatedWithAShorterSequenceHasTheHardcodedA
 	boxSequence := { aNormalBox. aSpeedUpBox. aWormHoleBox. aMoonWalkBox. aHyperJumpBox. anAtomicBombBox  }.
 	board := Board of: 15 and: 15 playedFor: 1 by: enterprise with: boxSequence .
 	self assert: board amountOfBoxes equals: 15.
-	self assert: board amountOfNormalBoxes equals: 3.
+	self assert: board amountOfNoEffectBoxes equals: 3.
 	self assert: board amountOfSpeedUpBoxes equals: 3.
 	self assert: board amountOfWormHoleBoxes equals: 3.
 	self assert: board amountOfMoonWalkBoxes equals: 2.
@@ -96,7 +96,7 @@ BoardTest >> testABoardOfTenBoxesCreatedWithASequenceHasTheHardcodedAmountOfBoxe
 		         by: enterprise
 		         with: boxSequence.
 	self assert: board amountOfBoxes equals: 10.
-	self assert: board amountOfNormalBoxes equals: 2.
+	self assert: board amountOfNoEffectBoxes equals: 2.
 	self assert: board amountOfSpeedUpBoxes equals: 2.
 	self assert: board amountOfWormHoleBoxes equals: 1.
 	self assert: board amountOfMoonWalkBoxes equals: 1.
@@ -122,7 +122,7 @@ BoardTest >> testASpaceshipCannotPlayWhenItIsNotItsTurn [
 	board moveSpaceship: 1.
 	board moveSpaceship: 1.
 	self
-		should: [ board moveSpaceshipOf: spaceship1 name by: 15 ]
+		should: [ board move: spaceship1 name by: 15 ]
 		raise: Error
 		withMessage: 'This is not the players turn'
 ]
@@ -133,7 +133,7 @@ BoardTest >> testASpaceshipThatLandsOnANormalBoxDoesntMove [
 	| spaceship board |
 	spaceship := Spaceship called: 'SP1'.
 	board := Board of: 10 and: 10 playedFor: 1 by: spaceship with: {Box with: NoEffect new}.
-	board moveSpaceshipOf: spaceship name by: 1.
+	board move: spaceship name by: 1.
 
 	self assert: (board positionOf: spaceship name) equals: 1
 ]
@@ -164,7 +164,7 @@ BoardTest >> testASpaceshipThatLandsOnASpeedUpBoxEndsUpFourBoxesAfter [
 		         playedFor: 1
 		         by: spaceship
 		         with: boxSequence.
-	board moveSpaceshipOf: spaceship name by: 1.
+	board move: spaceship name by: 1.
 
 	self assert: (board positionOf: spaceship name) equals: 5
 ]
@@ -183,9 +183,9 @@ BoardTest >> testASpaceshipsLapPositionVariesToTwoAfterCompletingFirstLap [
 		         with: { (Box with: NoEffect new) }.
 	loadedDie := LoadedDie with: 5.
 	resultOfTheRoll := loadedDie roll.
-	board moveSpaceshipOf: spaceshipName by: resultOfTheRoll.
-	board moveSpaceshipOf: spaceshipName by: resultOfTheRoll.
-	board moveSpaceshipOf: spaceshipName by: resultOfTheRoll.
+	board move: spaceshipName by: resultOfTheRoll.
+	board move: spaceshipName by: resultOfTheRoll.
+	board move: spaceshipName by: resultOfTheRoll.
 	self assert: (board lapOf: spaceshipName) equals: 2
 ]
 
@@ -199,7 +199,7 @@ BoardTest >> testASpaceshipsPositionVariesInFiveWithAFiniteBoardAfterOneRollOfAL
 	board := Board of: n and: n playedFor: 1 by: spaceship with: {Box with: NoEffect new}.
 	loadedDie := LoadedDie with: 5.
 	resultOfTheRoll := loadedDie roll.
-	board moveSpaceshipOf: spaceshipName by: resultOfTheRoll.
+	board move: spaceshipName by: resultOfTheRoll.
 	self
 		assert: (board positionOf: spaceshipName)
 		equals: resultOfTheRoll
@@ -343,7 +343,7 @@ BoardTest >> testBoardCreatedWithTenBoxesAndALengthOfTwoHundredParsecsHasBoxesLe
 		         playedFor: 1
 		         by: spaceship
 		         givenBy: distributions.
-	self assert: board boxLength equals: 20
+	self assert: board boxParsecLength equals: 20
 ]
 
 { #category : #tests }
@@ -687,7 +687,7 @@ BoardTest >> testSpeedUpDoesntTriggerAnotherSpeedUp [
 		         playedFor: 1
 		         by: spaceship
 		         with: { box }.
-	board moveSpaceshipOf: spaceship name by: 1.
+	board move: spaceship name by: 1.
 
 	self assert: (board positionOf: spaceship name) equals: 5
 ]

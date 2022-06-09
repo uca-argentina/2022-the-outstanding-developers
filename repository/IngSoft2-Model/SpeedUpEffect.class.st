@@ -9,16 +9,16 @@ SpeedUpEffect class >> create [
 	^self new
 ]
 
-{ #category : #effect }
-SpeedUpEffect >> effectOnPosition [
+{ #category : #effects }
+SpeedUpEffect >> applyEffectOn: aBoard [
 
-	^ 4
+	^ self effectOnPosition
 ]
 
 { #category : #effects }
-SpeedUpEffect >> effectOnPosition: aBoard [
+SpeedUpEffect >> effectOnPosition [
 
-	^ (self effectOnPosition)
+	^ 4
 ]
 
 { #category : #accessing }

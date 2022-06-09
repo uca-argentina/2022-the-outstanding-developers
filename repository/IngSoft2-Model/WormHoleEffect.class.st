@@ -10,16 +10,16 @@ WormHoleEffect class >> create [
 	^ self new
 ]
 
-{ #category : #effect }
-WormHoleEffect >> effectOnPosition [
+{ #category : #effects }
+WormHoleEffect >> applyEffectOn: aBoard [
 
-	^ -4
+	^ self effectOnPosition
 ]
 
 { #category : #effects }
-WormHoleEffect >> effectOnPosition: aBoard [
+WormHoleEffect >> effectOnPosition [
 
-	^ (self effectOnPosition)
+	^ -4
 ]
 
 { #category : #accesing }

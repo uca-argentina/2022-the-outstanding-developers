@@ -14,15 +14,15 @@ Box class >> with: anEffect [
 ]
 
 { #category : #effects }
-Box >> effectOnPosition [
+Box >> applyEffectOn: aBoard [
 
-	^ effect effectOnPosition
+	^ (effect applyEffectOn: aBoard)
 ]
 
 { #category : #effects }
-Box >> effectOnPosition: aBoard [
+Box >> effectOnPosition [
 
-	^ (effect effectOnPosition: aBoard)
+	^ effect effectOnPosition
 ]
 
 { #category : #accessing }
