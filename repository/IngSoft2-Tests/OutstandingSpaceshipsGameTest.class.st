@@ -270,10 +270,9 @@ OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndALoadedDie
 		        playedOn: aBoard
 		        throwing: aLoadedDie.
 
-	resultOfTheRoll := aLoadedDie roll.
-	aBoard moveSpaceship: resultOfTheRoll.
-	aBoard moveSpaceship: resultOfTheRoll.
-	aBoard moveSpaceship: resultOfTheRoll.
+	game play.
+	game play.
+	game play.
 
 	self assert: game thereIsAWinner
 ]
