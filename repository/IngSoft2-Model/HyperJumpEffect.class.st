@@ -15,9 +15,9 @@ Class {
 { #category : #'instance creation' }
 HyperJumpEffect class >> create [
 
-	| r |
-	r := Random new.
-	^ self randomlyOf: (r next * (numberOfBoxes - 1) + 1) floor upTo: limit
+	| random |
+	random := Random new.
+	^ self randomlyOf: (random next * (numberOfBoxes - 1) + 1) floor
 ]
 
 { #category : #'class initialization' }
@@ -28,9 +28,9 @@ HyperJumpEffect class >> for: aNumberOfBoxes upTo: aLimit [
 ]
 
 { #category : #'instance creation' }
-HyperJumpEffect class >> randomlyOf: aParsecSequenceSize upTo: aBoxAmount [
+HyperJumpEffect class >> randomlyOf: aParsecSequenceSize [
 
-	^ self new randomlyOf: aParsecSequenceSize upTo: aBoxAmount
+	^ self new randomlyOf: aParsecSequenceSize
 ]
 
 { #category : #'instance creation' }
@@ -62,17 +62,18 @@ HyperJumpEffect >> assertSequenceSizeIsValid: aParsecSequenceSize [
 { #category : #effect }
 HyperJumpEffect >> effectOnPosition [
 
-	^ parsecs at: parsecsValuesHandler index
+	^ parsecs at: parsecsValuesHandler nextValue
 ]
 
 { #category : #initialization }
-HyperJumpEffect >> randomlyOf: aParsecSequenceSize upTo: aBoxAmount [
-	
+HyperJumpEffect >> randomlyOf: aParsecSequenceSize [
+
+	| random |
 	self assertSequenceSizeIsValid: aParsecSequenceSize.
-	self assertBoxAmountIsValid: aBoxAmount.
+	random := Random new.
 	parsecs := OrderedCollection new.
 	aParsecSequenceSize timesRepeat: [ 
-		parsecs add: (1 to: aBoxAmount) atRandom ].
+		parsecs add: random next / random next ].
 	parsecs sort: [ :parsecValue1 :parsecValue2 | 
 		parsecValue1 > parsecValue2 ].
 	parsecsValuesHandler := SequenceHandler for: parsecs size

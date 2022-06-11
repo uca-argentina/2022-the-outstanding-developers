@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'sequenceSize',
 		'currentSequenceIndex',
-		'beingUsedNow'
+		'sequenceValueInUse'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -18,21 +18,13 @@ SequenceHandler class >> for: aSequenceSize [
 { #category : #assertion }
 SequenceHandler >> assertSequenceIndexIs: anIndex [
 
-	^ anIndex = beingUsedNow
+	^ anIndex = sequenceValueInUse
 ]
 
 { #category : #accessing }
 SequenceHandler >> currentIndex [
 
-	^ beingUsedNow
-]
-
-{ #category : #turns }
-SequenceHandler >> index [
-
-	beingUsedNow := currentSequenceIndex.
-	currentSequenceIndex := (currentSequenceIndex rem: sequenceSize) + 1.
-	^ beingUsedNow
+	^ sequenceValueInUse
 ]
 
 { #category : #initialization }
@@ -40,5 +32,13 @@ SequenceHandler >> initializeFor: aSequenceSize [
 
 	sequenceSize := aSequenceSize.
 	currentSequenceIndex := 1.
-	beingUsedNow := 1
+	sequenceValueInUse := 1
+]
+
+{ #category : #turns }
+SequenceHandler >> nextValue [
+
+	sequenceValueInUse := currentSequenceIndex.
+	currentSequenceIndex := (currentSequenceIndex rem: sequenceSize) + 1.
+	^ sequenceValueInUse
 ]

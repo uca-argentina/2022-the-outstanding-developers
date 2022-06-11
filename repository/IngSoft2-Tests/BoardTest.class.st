@@ -107,22 +107,22 @@ BoardTest >> testABoardOfTenBoxesCreatedWithASequenceHasTheHardcodedAmountOfBoxe
 { #category : #tests }
 BoardTest >> testASpaceshipCannotPlayWhenItIsNotItsTurn [
 
-	| distributions spaceship1 spaceship2 spaceship3 board n parsecs |
+	| distributions enterprise zathura delorean board n parsecs |
 	n := 100.
 	parsecs := 100.
-	spaceship1 := Spaceship called: 'SP1'.
-	spaceship2 := Spaceship called: 'SP2'.
-	spaceship3 := Spaceship called: 'SP3'.
+	enterprise := Spaceship called: 'Enterprise'.
+	zathura := Spaceship called: 'Zathura'.
+	delorean := Spaceship called: 'Delorean'.
 	distributions := OrderedCollection new.
 	distributions add: (Distribution withProbabilityOf: 1 for: NoEffect).
 	board := Board of: n and: parsecs playedFor: 1 byMany: { 
-			         spaceship1.
-			         spaceship2.
-			         spaceship3 } givenBy: distributions.
+			         enterprise.
+			         zathura.
+			         delorean } givenBy: distributions.
 	board moveSpaceship: 1.
 	board moveSpaceship: 1.
 	self
-		should: [ board move: spaceship1 name by: 15 ]
+		should: [ board move: enterprise name by: 15 ]
 		raise: Error
 		withMessage: 'This is not the players turn'
 ]
@@ -130,19 +130,19 @@ BoardTest >> testASpaceshipCannotPlayWhenItIsNotItsTurn [
 { #category : #tests }
 BoardTest >> testASpaceshipThatLandsOnANormalBoxDoesntMove [
 
-	| spaceship board |
-	spaceship := Spaceship called: 'SP1'.
-	board := Board of: 10 and: 10 playedFor: 1 by: spaceship with: {Box with: NoEffect new}.
-	board move: spaceship name by: 1.
+	| enterprise board |
+	enterprise := Spaceship called: 'Enterprise'.
+	board := Board of: 10 and: 10 playedFor: 1 by: enterprise with: {Box with: NoEffect new}.
+	board move: enterprise name by: 1.
 
-	self assert: (board positionOf: spaceship name) equals: 1
+	self assert: (board positionOf: enterprise name) equals: 1
 ]
 
 { #category : #tests }
 BoardTest >> testASpaceshipThatLandsOnASpeedUpBoxEndsUpFourBoxesAfter [
 
-	| spaceship board normalBox speedUpBox boxSequence box1 box2 box3 box4 box5 |
-	spaceship := Spaceship called: 'SP1'.
+	| enterprise board normalBox speedUpBox boxSequence box1 box2 box3 box4 box5 |
+	enterprise := Spaceship called: 'SP1'.
 	normalBox := NoEffect new.
 	speedUpBox := SpeedUpEffect new.
 
@@ -162,75 +162,52 @@ BoardTest >> testASpaceshipThatLandsOnASpeedUpBoxEndsUpFourBoxesAfter [
 		         of: 10
 					and: 10
 		         playedFor: 1
-		         by: spaceship
+		         by: enterprise
 		         with: boxSequence.
-	board move: spaceship name by: 1.
+	board move: enterprise name by: 1.
 
-	self assert: (board positionOf: spaceship name) equals: 5
+	self assert: (board positionOf: enterprise name) equals: 5
 ]
 
 { #category : #tests }
 BoardTest >> testASpaceshipsLapPositionVariesToTwoAfterCompletingFirstLap [
 
-	| spaceshipName spaceship board loadedDie resultOfTheRoll |
-	spaceshipName := 'Player1'.
-	spaceship := Spaceship called: spaceshipName.
+	| enterprise board loadedDie resultOfTheRoll |
+	enterprise := Spaceship called: 'Enterprise'.
 	board := Board
 		         of: 10
 					and: 10
 		         playedFor: 2
-		         by: spaceship
+		         by: enterprise
 		         with: { (Box with: NoEffect new) }.
 	loadedDie := LoadedDie with: 5.
 	resultOfTheRoll := loadedDie roll.
-	board move: spaceshipName by: resultOfTheRoll.
-	board move: spaceshipName by: resultOfTheRoll.
-	board move: spaceshipName by: resultOfTheRoll.
-	self assert: (board lapOf: spaceshipName) equals: 2
+	board move: enterprise name by: resultOfTheRoll.
+	board move: enterprise name by: resultOfTheRoll.
+	board move: enterprise name by: resultOfTheRoll.
+	self assert: (board lapOf: enterprise name) equals: 2
 ]
 
 { #category : #tests }
 BoardTest >> testASpaceshipsPositionVariesInFiveWithAFiniteBoardAfterOneRollOfALoadedDieWithFive [
 
-	| n spaceshipName spaceship board loadedDie resultOfTheRoll |
+	| n enterprise board loadedDie resultOfTheRoll |
 	n := 10.
-	spaceshipName := 'aPlayer'.
-	spaceship := Spaceship called: spaceshipName.
-	board := Board of: n and: n playedFor: 1 by: spaceship with: {Box with: NoEffect new}.
+	enterprise := Spaceship called: 'Enterprise'.
+	board := Board of: n and: n playedFor: 1 by: enterprise with: {Box with: NoEffect new}.
 	loadedDie := LoadedDie with: 5.
 	resultOfTheRoll := loadedDie roll.
-	board move: spaceshipName by: resultOfTheRoll.
+	board move: enterprise name by: resultOfTheRoll.
 	self
-		assert: (board positionOf: spaceshipName)
+		assert: (board positionOf: enterprise name)
 		equals: resultOfTheRoll
-]
-
-{ #category : #tests }
-BoardTest >> testBoardCannotBeCreatedWithALegthMinorThanTheNumberOfBoxes [
-
-	| spaceship distributions |
-	spaceship := Spaceship called: 'player'.
-	distributions := OrderedCollection new.
-	distributions add: (Distribution withProbabilityOf: 1 for: NoEffect).
-	
-	self
-		should: [ 
-			Board
-				of: 10
-				and: 8
-				playedFor: 1
-				by: spaceship
-				givenBy: distributions ]
-		raise: Error
-		withMessage:
-		'Board length should be greater or equal to number of boxes'
 ]
 
 { #category : #tests }
 BoardTest >> testBoardCannotBeCreatedWithANegativeLegth [
 
-	| spaceship distributions |
-	spaceship := Spaceship called: 'player'.
+	| zathura distributions |
+	zathura := Spaceship called: 'Zathura'.
 	distributions := OrderedCollection new.
 	distributions add: (Distribution withProbabilityOf: 1 for: NoEffect).
 
@@ -240,7 +217,7 @@ BoardTest >> testBoardCannotBeCreatedWithANegativeLegth [
 				of: 10
 				and: -10
 				playedFor: 1
-				by: spaceship
+				by: zathura
 				givenBy: distributions ]
 		raise: Error
 		withMessage: 'Board length should be greater than zero'
@@ -249,18 +226,18 @@ BoardTest >> testBoardCannotBeCreatedWithANegativeLegth [
 { #category : #tests }
 BoardTest >> testBoardCannotBeCreatedWithANumberOfBoxesMinorThanOne [
 
-	| spaceship distributions |
-	spaceship := Spaceship called: 'player'.
+	| zathura distributions |
+	zathura := Spaceship called: 'Zathura'.
 	distributions := OrderedCollection new.
 	distributions add: (Distribution withProbabilityOf: 1 for: NoEffect).
-	
+
 	self
 		should: [ 
 			Board
 				of: -5
 				and: 10
 				playedFor: 1
-				by: spaceship
+				by: zathura
 				givenBy: distributions ]
 		raise: Error
 		withMessage: 'Number of boxes should be greater than zero'
@@ -269,8 +246,8 @@ BoardTest >> testBoardCannotBeCreatedWithANumberOfBoxesMinorThanOne [
 { #category : #tests }
 BoardTest >> testBoardCannotBeCreatedWithANumberOfLapsMinorThanOne [
 
-	| spaceship distributions |
-	spaceship := Spaceship called: 'player'.
+	| zathura distributions |
+	zathura := Spaceship called: 'Zathura'.
 	distributions := OrderedCollection new.
 	distributions add: (Distribution withProbabilityOf: 1 for: NoEffect).
 
@@ -280,7 +257,7 @@ BoardTest >> testBoardCannotBeCreatedWithANumberOfLapsMinorThanOne [
 				of: 15
 				and: 10
 				playedFor: -1
-				by: spaceship
+				by: zathura
 				givenBy: distributions ]
 		raise: Error
 		withMessage: 'Number of laps should be greater than zero'
@@ -289,10 +266,10 @@ BoardTest >> testBoardCannotBeCreatedWithANumberOfLapsMinorThanOne [
 { #category : #tests }
 BoardTest >> testBoardCannotBeCreatedWithMoreThanOneSpaceshipAssignedToTheSamePlayer [
 
-	| aSpaceship anotherSpaceship otherSpaceship distributions |
-	aSpaceship := Spaceship called: 'player1'.
-	anotherSpaceship := Spaceship called: 'player1'.
-	otherSpaceship := Spaceship called: 'player3'.
+	| enterprise zathura delorean distributions |
+	enterprise := Spaceship called: 'Enterprise'.
+	zathura := Spaceship called: 'Enterprise'.
+	delorean := Spaceship called: 'Delorean'.
 	distributions := OrderedCollection new.
 	distributions add: (Distribution withProbabilityOf: 1 for: NoEffect).
 
@@ -303,9 +280,9 @@ BoardTest >> testBoardCannotBeCreatedWithMoreThanOneSpaceshipAssignedToTheSamePl
 				and: 10
 				playedFor: 1
 				byMany: { 
-						aSpaceship.
-						anotherSpaceship.
-						otherSpaceship }
+						enterprise.
+						zathura.
+						delorean }
 				givenBy: distributions ]
 		raise: Error
 		withMessage: 'Spaceships must be assigned to different players'
@@ -333,15 +310,15 @@ BoardTest >> testBoardCannotBeCreatedWithoutSpaceships [
 { #category : #tests }
 BoardTest >> testBoardCreatedWithTenBoxesAndALengthOfTwoHundredParsecsHasBoxesLengthOfTen [
 
-	| distributions spaceship board |
+	| distributions enterprise board |
 	distributions := OrderedCollection new.
 	distributions add: (Distribution withProbabilityOf: 1 for: NoEffect).
-	spaceship := Spaceship called: 'player'.
+	enterprise := Spaceship called: 'Enterprise'.
 	board := Board
 		         of: 10
 		         and: 200
 		         playedFor: 1
-		         by: spaceship
+		         by: enterprise
 		         givenBy: distributions.
 	self assert: board boxParsecLength equals: 20
 ]
@@ -349,10 +326,10 @@ BoardTest >> testBoardCreatedWithTenBoxesAndALengthOfTwoHundredParsecsHasBoxesLe
 { #category : #tests }
 BoardTest >> testPlayersInDifferentLapsReturnToTheFirstBoxOfItsLaps [
 
-	| spaceship anotherSpaceship board noEffect boxSequence box1 box2 box3 box4 box5 atomicBombEffect otherSpaceship |
-	spaceship := Spaceship called: 'SP1'.
-	anotherSpaceship := Spaceship called: 'SP2'.
-	otherSpaceship := Spaceship called: 'SP3'.
+	| enterprise zathura board noEffect boxSequence box1 box2 box3 box4 box5 atomicBombEffect delorean |
+	enterprise := Spaceship called: 'Enterprise'.
+	zathura := Spaceship called: 'Zathura'.
+	delorean := Spaceship called: 'Delorean'.
 	noEffect := NoEffect new.
 	atomicBombEffect := AtomicBombEffect new.
 
@@ -371,12 +348,12 @@ BoardTest >> testPlayersInDifferentLapsReturnToTheFirstBoxOfItsLaps [
 
 	board := Board
 		         of: 5
-					and: 5 
+		         and: 5
 		         playedFor: 3
 		         byMany: { 
-				         spaceship.
-				         anotherSpaceship.
-				         otherSpaceship }
+				         enterprise.
+				         zathura.
+				         delorean }
 		         with: boxSequence.
 	board moveSpaceship: 6.
 	board moveSpaceship: 6.
@@ -389,34 +366,34 @@ BoardTest >> testPlayersInDifferentLapsReturnToTheFirstBoxOfItsLaps [
 	board moveSpaceship: 2.
 	board moveSpaceship: 1.
 
-	self assert: (board positionOf: spaceship name) equals: 3.
-	self assert: (board lapOf: spaceship name) equals: 3.
+	self assert: (board positionOf: enterprise name) equals: 3.
+	self assert: (board lapOf: enterprise name) equals: 3.
 
-	self assert: (board positionOf: anotherSpaceship name) equals: 3.
-	self assert: (board lapOf: anotherSpaceship name) equals: 2.
+	self assert: (board positionOf: zathura name) equals: 3.
+	self assert: (board lapOf: zathura name) equals: 2.
 
-	self assert: (board positionOf: otherSpaceship name) equals: 2.
-	self assert: (board lapOf: otherSpaceship name) equals: 1.
-	
+	self assert: (board positionOf: delorean name) equals: 2.
+	self assert: (board lapOf: delorean name) equals: 1.
+
 	board moveSpaceship: 3.
 
-	self assert: (board positionOf: spaceship name) equals: 1.
-	self assert: (board lapOf: spaceship name) equals: 3.
+	self assert: (board positionOf: enterprise name) equals: 1.
+	self assert: (board lapOf: enterprise name) equals: 3.
 
-	self assert: (board positionOf: anotherSpaceship name) equals: 1.
-	self assert: (board lapOf: anotherSpaceship name) equals: 2.
+	self assert: (board positionOf: zathura name) equals: 1.
+	self assert: (board lapOf: zathura name) equals: 2.
 
-	self assert: (board positionOf: otherSpaceship name) equals: 1.
-	self assert: (board lapOf: otherSpaceship name) equals: 1
+	self assert: (board positionOf: delorean name) equals: 1.
+	self assert: (board lapOf: delorean name) equals: 1
 ]
 
 { #category : #tests }
 BoardTest >> testSpaceshipLandsOnAtomicBombBoxSetsBackEveryoneToFirstBox [
 
-	| spaceship anotherSpaceship board noEffect boxSequence box1 box2 box3 box4 box5 anEffect otherSpaceship |
-	spaceship := Spaceship called: 'SP1'.
-	anotherSpaceship := Spaceship called: 'SP2'.
-	otherSpaceship := Spaceship called: 'SP3'.
+	| enterprise zathura board noEffect boxSequence box1 box2 box3 box4 box5 anEffect delorean |
+	enterprise := Spaceship called: 'Enterprise'.
+	zathura := Spaceship called: 'Zathura'.
+	delorean := Spaceship called: 'Delorean'.
 	noEffect := NoEffect new.
 	anEffect := AtomicBombEffect new.
 
@@ -434,32 +411,32 @@ BoardTest >> testSpaceshipLandsOnAtomicBombBoxSetsBackEveryoneToFirstBox [
 		               box5 }.
 	board := Board
 		         of: 10
-					and: 10
+		         and: 10
 		         playedFor: 1
 		         byMany: { 
-				         spaceship.
-				         anotherSpaceship.
-				         otherSpaceship }
+				         enterprise.
+				         zathura.
+				         delorean }
 		         with: boxSequence.
 	board moveSpaceship: 3.
 	board moveSpaceship: 2.
 	board moveSpaceship: 1.
 	board moveSpaceship: 2.
 
-	self assert: (board positionOf: spaceship name) equals: 1.
-	self assert: (board positionOf: anotherSpaceship name) equals: 1.
-	self assert: (board positionOf: otherSpaceship name) equals: 1.
-	self assert: (board lapOf: spaceship name) equals: 1.
-	self assert: (board lapOf: anotherSpaceship name) equals: 1.
-	self assert: (board lapOf: otherSpaceship name) equals: 1
+	self assert: (board positionOf: enterprise name) equals: 1.
+	self assert: (board positionOf: zathura name) equals: 1.
+	self assert: (board positionOf: delorean name) equals: 1.
+	self assert: (board lapOf: enterprise name) equals: 1.
+	self assert: (board lapOf: zathura name) equals: 1.
+	self assert: (board lapOf: delorean name) equals: 1
 ]
 
 { #category : #tests }
 BoardTest >> testSpaceshipLandsOnMoonWalkBoxSetsBackOtherSpaceshipsExceptItself [
 
-	| spaceship anotherSpaceship board noEffect anEffect boxSequence box1 box2 box3 box4 box5 |
-	spaceship := Spaceship called: 'SP1'.
-	anotherSpaceship := Spaceship called: 'SP2'.
+	| enterprise zathura board noEffect anEffect boxSequence box1 box2 box3 box4 box5 |
+	enterprise := Spaceship called: 'Enterprise'.
+	zathura := Spaceship called: 'Zathura'.
 	noEffect := NoEffect new.
 	anEffect := MoonWalkEffect displacing: 1.
 
@@ -477,26 +454,26 @@ BoardTest >> testSpaceshipLandsOnMoonWalkBoxSetsBackOtherSpaceshipsExceptItself 
 		               box5 }.
 	board := Board
 		         of: 10
-					and: 10
+		         and: 10
 		         playedFor: 1
 		         byMany: { 
-				         spaceship.
-				         anotherSpaceship }
+				         enterprise.
+				         zathura }
 		         with: boxSequence.
 	board moveSpaceship: 3.
 	board moveSpaceship: 2.
 
-	self assert: (board positionOf: spaceship name) equals: 2.
-	self assert: (board positionOf: anotherSpaceship name) equals: 2.
-	self assert: (board lapOf: spaceship name) equals: 1.
-	self assert: (board lapOf: anotherSpaceship name) equals: 1
+	self assert: (board positionOf: enterprise name) equals: 2.
+	self assert: (board positionOf: zathura name) equals: 2.
+	self assert: (board lapOf: enterprise name) equals: 1.
+	self assert: (board lapOf: zathura name) equals: 1
 ]
 
 { #category : #tests }
 BoardTest >> testSpaceshipLandsOnWormHoleBoxSetsBackItselfFourBoxes [
 
-	| spaceship board noEffect anEffect boxSequence box1 box2 box3 box4 box5 |
-	spaceship := Spaceship called: 'SP1'.
+	| enterprise board noEffect anEffect boxSequence box1 box2 box3 box4 box5 |
+	enterprise := Spaceship called: 'Enterprise'.
 	noEffect := NoEffect new.
 	anEffect := WormHoleEffect new.
 
@@ -514,23 +491,23 @@ BoardTest >> testSpaceshipLandsOnWormHoleBoxSetsBackItselfFourBoxes [
 		               box5 }.
 	board := Board
 		         of: 10
-					and: 10
+		         and: 10
 		         playedFor: 2
-		         by: spaceship
+		         by: enterprise
 		         with: boxSequence.
 	board moveSpaceship: 3.
 	board moveSpaceship: 2.
 
-	self assert: (board positionOf: spaceship name) equals: 1.
-	self assert: (board lapOf: spaceship name) equals: 1
+	self assert: (board positionOf: enterprise name) equals: 1.
+	self assert: (board lapOf: enterprise name) equals: 1
 ]
 
 { #category : #tests }
 BoardTest >> testSpaceshipRemainsInTheInitialPositionIfEffectIsApplied [
 
-	| spaceship anotherSpaceship board noEffect anEffect boxSequence box1 box2 box3 box4 box5 |
-	spaceship := Spaceship called: 'SP1'.
-	anotherSpaceship := Spaceship called: 'SP2'.
+	| zathura delorean board noEffect anEffect boxSequence box1 box2 box3 box4 box5 |
+	zathura := Spaceship called: 'Zathura'.
+	delorean := Spaceship called: 'Delorean'.
 	noEffect := NoEffect new.
 	anEffect := MoonWalkEffect displacing: 1.
 
@@ -548,26 +525,26 @@ BoardTest >> testSpaceshipRemainsInTheInitialPositionIfEffectIsApplied [
 		               box5 }.
 	board := Board
 		         of: 10
-					and: 10
+		         and: 10
 		         playedFor: 1
 		         byMany: { 
-				         spaceship.
-				         anotherSpaceship }
+				         zathura.
+				         delorean }
 		         with: boxSequence.
 	board moveSpaceship: 2.
 
-	self assert: (board positionOf: spaceship name) equals: 2.
-	self assert: (board positionOf: anotherSpaceship name) equals: 0.
-	self assert: (board lapOf: spaceship name) equals: 1.
-	self assert: (board lapOf: anotherSpaceship name) equals: 1
+	self assert: (board positionOf: zathura name) equals: 2.
+	self assert: (board positionOf: delorean name) equals: 0.
+	self assert: (board lapOf: zathura name) equals: 1.
+	self assert: (board lapOf: delorean name) equals: 1
 ]
 
 { #category : #tests }
 BoardTest >> testSpaceshipThatLandsOnMoonWalkBoxCantMakeOthersGoToNegativePositions [
 
-	| spaceship board noEffect anEffect boxSequence box1 box2 box3 box4 box5 anotherSpaceship |
-	spaceship := Spaceship called: 'SP1'.
-	anotherSpaceship := Spaceship called: 'SP2'.
+	| enterprise board noEffect anEffect boxSequence box1 box2 box3 box4 box5 delorean |
+	enterprise := Spaceship called: 'Enterprise'.
+	delorean := Spaceship called: 'Delorean'.
 	noEffect := NoEffect new.
 	anEffect := MoonWalkEffect displacing: 10.
 
@@ -585,26 +562,26 @@ BoardTest >> testSpaceshipThatLandsOnMoonWalkBoxCantMakeOthersGoToNegativePositi
 		               box5 }.
 	board := Board
 		         of: 10
-					and: 10
+		         and: 10
 		         playedFor: 2
 		         byMany: { 
-				         spaceship.
-				         anotherSpaceship }
+				         enterprise.
+				         delorean }
 		         with: boxSequence.
 	board moveSpaceship: 5.
 	board moveSpaceship: 1.
 
-	self assert: (board positionOf: spaceship name) equals: 1.
-	self assert: (board positionOf: anotherSpaceship name) equals: 1.
-	self assert: (board lapOf: spaceship name) equals: 1.
-	self assert: (board lapOf: anotherSpaceship name) equals: 1
+	self assert: (board positionOf: enterprise name) equals: 1.
+	self assert: (board positionOf: delorean name) equals: 1.
+	self assert: (board lapOf: enterprise name) equals: 1.
+	self assert: (board lapOf: delorean name) equals: 1
 ]
 
 { #category : #tests }
 BoardTest >> testSpaceshipThatLandsOnWormHoleBoxCantGoToNegativePositions [
 
-	| spaceship board noEffect anEffect boxSequence box1 box2 box3 box4 box5 |
-	spaceship := Spaceship called: 'SP1'.
+	| delorean board noEffect anEffect boxSequence box1 box2 box3 box4 box5 |
+	delorean := Spaceship called: 'Delorean'.
 	noEffect := NoEffect new.
 	anEffect := WormHoleEffect new.
 
@@ -622,21 +599,21 @@ BoardTest >> testSpaceshipThatLandsOnWormHoleBoxCantGoToNegativePositions [
 		               box5 }.
 	board := Board
 		         of: 10
-					and: 10
+		         and: 10
 		         playedFor: 2
-		         by: spaceship
+		         by: delorean
 		         with: boxSequence.
 	board moveSpaceship: 1.
 
-	self assert: (board positionOf: spaceship name) equals: 1
+	self assert: (board positionOf: delorean name) equals: 1
 ]
 
 { #category : #tests }
 BoardTest >> testSpaceshipsThatLandsOnAHyperJumpBoxEndUpFiveBoxesAfterThenFourBoxesAfter [
 
-	| board noEffect anEffect boxSequence box1 box2 box3 box4 box5 aSpaceship anotherSpaceship |
-	aSpaceship := Spaceship called: 'SP1'.
-	anotherSpaceship := Spaceship called: 'SP2'.
+	| board noEffect anEffect boxSequence box1 box2 box3 box4 box5 delorean enterprise |
+	delorean := Spaceship called: 'Delorean'.
+	enterprise := Spaceship called: 'Enterprise'.
 	noEffect := NoEffect new.
 	anEffect := HyperJumpEffect with: { 10. 8 }.
 
@@ -657,27 +634,27 @@ BoardTest >> testSpaceshipsThatLandsOnAHyperJumpBoxEndUpFiveBoxesAfterThenFourBo
 		         and: 20
 		         playedFor: 1
 		         byMany: { 
-				         aSpaceship.
-				         anotherSpaceship }
+				         delorean.
+				         enterprise }
 		         with: boxSequence.
 	board moveSpaceship: 1.
 	board moveSpaceship: 1.
 
-	self assert: (board positionOf: aSpaceship name) equals: 6.
-	self assert: (board positionOf: anotherSpaceship name) equals: 5.
+	self assert: (board positionOf: delorean name) equals: 6.
+	self assert: (board positionOf: enterprise name) equals: 5.
 
 	board moveSpaceship: 1.
 	board moveSpaceship: 1.
-	self assert: (board positionOf: aSpaceship name) equals: 7.
-	self assert: (board positionOf: anotherSpaceship name) equals: 11
+	self assert: (board positionOf: delorean name) equals: 7.
+	self assert: (board positionOf: enterprise name) equals: 11
 ]
 
 { #category : #tests }
 BoardTest >> testSpaceshipsThatLandsOnAHyperJumpBoxEndUpFiveBoxesAfterThenFourBoxesAfterWithFloatingLengths [
 
-	| board noEffect anEffect boxSequence box1 box2 box3 box4 box5 aSpaceship anotherSpaceship |
-	aSpaceship := Spaceship called: 'SP1'.
-	anotherSpaceship := Spaceship called: 'SP2'.
+	| board noEffect anEffect boxSequence box1 box2 box3 box4 box5 enterprise zathura |
+	enterprise := Spaceship called: 'Enterprise'.
+	zathura := Spaceship called: 'Zathura'.
 	noEffect := NoEffect new.
 	anEffect := HyperJumpEffect with: { 14. 13 }.
 
@@ -698,21 +675,21 @@ BoardTest >> testSpaceshipsThatLandsOnAHyperJumpBoxEndUpFiveBoxesAfterThenFourBo
 		         and: 100
 		         playedFor: 1
 		         byMany: { 
-				         aSpaceship.
-				         anotherSpaceship }
+				         enterprise.
+				         zathura }
 		         with: boxSequence.
 	board moveSpaceship: 1.
 	board moveSpaceship: 1.
 
-	self assert: (board positionOf: aSpaceship name) equals: 3.
-	self assert: (board positionOf: anotherSpaceship name) equals: 2
+	self assert: (board positionOf: enterprise name) equals: 3.
+	self assert: (board positionOf: zathura name) equals: 2
 ]
 
 { #category : #tests }
 BoardTest >> testSpeedUpDoesntTriggerAnotherSpeedUp [
 
-	| spaceship board anEffect speedUpBox box |
-	spaceship := Spaceship called: 'SP1'.
+	| zathura board anEffect speedUpBox box |
+	zathura := Spaceship called: 'Zathura'.
 	anEffect := NoEffect new.
 	speedUpBox := SpeedUpEffect new.
 
@@ -720,11 +697,11 @@ BoardTest >> testSpeedUpDoesntTriggerAnotherSpeedUp [
 
 	board := Board
 		         of: 10
-					and: 10
+		         and: 10
 		         playedFor: 1
-		         by: spaceship
+		         by: zathura
 		         with: { box }.
-	board move: spaceship name by: 1.
+	board move: zathura name by: 1.
 
-	self assert: (board positionOf: spaceship name) equals: 5
+	self assert: (board positionOf: zathura name) equals: 5
 ]

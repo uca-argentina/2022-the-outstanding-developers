@@ -27,7 +27,7 @@ BoxTest >> testBoxWithNoEffectDoesNotModifyPosition [
 BoxTest >> testHyperJumpBoxAutogeneratesAParsecSequence [
 
 	| box anEffect firstEffect secondEffect |
-	anEffect := HyperJumpEffect randomlyOf: 4 upTo: 10.
+	anEffect := HyperJumpEffect randomlyOf: 4.
 	box := Box with: anEffect.
 	firstEffect := box effectOnPosition.
 	secondEffect := box effectOnPosition.
@@ -36,19 +36,10 @@ BoxTest >> testHyperJumpBoxAutogeneratesAParsecSequence [
 ]
 
 { #category : #tests }
-BoxTest >> testHyperJumpBoxAutogenerationBoxAmountMustBeGreaterThanZero [
-
-	self
-		should: [ HyperJumpEffect randomlyOf: 1 upTo: 0 ]
-		raise: Error
-		withMessage: 'There must be an amount of at least one Box'
-]
-
-{ #category : #tests }
 BoxTest >> testHyperJumpBoxAutogenerationParsecSequenceMustBeGreaterThanZero [
 
 	self
-		should: [ HyperJumpEffect randomlyOf: 0 upTo: 10 ]
+		should: [ HyperJumpEffect randomlyOf: 0 ]
 		raise: Error
 		withMessage: 'Parsec sequence size must be greater than zero'
 ]

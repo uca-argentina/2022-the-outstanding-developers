@@ -17,37 +17,39 @@ SpaceshipPositionTest >> should: block raise: expectedErrorClass withMessage: ex
 { #category : #tests }
 SpaceshipPositionTest >> testInitialBoardPositionIsFiveIfSetToFive [
 
-	| boardPosition spaceship |
-	spaceship := Spaceship called: 'aPlayer'.
+	| boardPosition delorean |
+	delorean := Spaceship called: 'Delorean'.
 	boardPosition := BoardPosition at: 5 in: 1.
-	boardPosition := SpacechipPosition following: spaceship at: boardPosition .
+	boardPosition := SpacechipPosition
+		                 following: delorean
+		                 at: boardPosition.
 	self assert: boardPosition position equals: 5
 ]
 
 { #category : #tests }
 SpaceshipPositionTest >> testInitialBoardPositionIsZero [
 
-	| boardPosition spaceship |
-	spaceship := Spaceship called: 'aPlayer'.
-	boardPosition := SpacechipPosition following: spaceship.
+	| boardPosition zathura |
+	zathura := Spaceship called: 'Zathura'.
+	boardPosition := SpacechipPosition following: zathura.
 	self assert: boardPosition position equals: 0
 ]
 
 { #category : #tests }
 SpaceshipPositionTest >> testInitialBoardPositionLapIsOne [
 
-	| boardPosition spaceship |
-	spaceship := Spaceship called: 'aPlayer'.
-	boardPosition := SpacechipPosition following: spaceship.
+	| boardPosition zathura |
+	zathura := Spaceship called: 'aPlayer'.
+	boardPosition := SpacechipPosition following: zathura.
 	self assert: boardPosition lap equals: 1
 ]
 
 { #category : #tests }
 SpaceshipPositionTest >> testSpaceshipPositionIsOneIfSetNegative [
 
-	| boardPosition spaceship |
-	spaceship := Spaceship called: 'aPlayer'.
+	| boardPosition zathura |
+	zathura := Spaceship called: 'aPlayer'.
 	boardPosition := BoardPosition at: -1 in: 1.
-	boardPosition := SpacechipPosition following: spaceship at: boardPosition .
+	boardPosition := SpacechipPosition following: zathura at: boardPosition .
 	self assert: boardPosition position equals: 1
 ]

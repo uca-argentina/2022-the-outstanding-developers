@@ -12,14 +12,6 @@ Class {
 }
 
 { #category : #assertion }
-Board class >> assertLength: parsecsAmount greaterThan: aNumberOfBoxes [
-
-	parsecsAmount >= aNumberOfBoxes ifFalse: [ 
-		Error signal:
-			'Board length should be greater or equal to number of boxes' ]
-]
-
-{ #category : #assertion }
 Board class >> assertValidNumberOfBoxes: boxes [
 
 	boxes > 0 ifFalse: [ 
@@ -95,7 +87,6 @@ Board class >> of: aNumberOfBoxes and: parsecsLength playedFor: someLaps byMany:
 	self assertValidSpaceships: spaceships.
 	self assertValidNumberOfLaps: someLaps.
 	self assertValidNumberOfLength: parsecsLength.
-	self assertLength: parsecsLength greaterThan: aNumberOfBoxes.
 	randomBoxGenerator := RandomEventGenerator
 		                      with: aNumberOfBoxes
 		                      using: aDistribution.
@@ -116,7 +107,6 @@ Board class >> of: aNumberOfBoxes and: parsecsLength playedFor: someLaps byMany:
 	self assertValidSpaceships: spaceships.
 	self assertValidNumberOfLaps: someLaps.
 	self assertValidNumberOfLength: parsecsLength.
-	self assertLength: parsecsLength greaterThan: aNumberOfBoxes.
 	^ self new
 		  of: aNumberOfBoxes
 		  and: parsecsLength
@@ -241,18 +231,20 @@ Board >> move: aSpaceship in: aPosition and: aLap by: aNumberOfBoxes [
 { #category : #movement }
 Board >> moveAllBackToBeginning [
 
-	positions size timesRepeat: [
+	positions size timesRepeat: [ 
 		| currentPosition |
-		currentPosition := positions at: turnHandler index.
-		self movePlayingSpaceshipAt: currentPosition by: 1 - currentPosition position ]
+		currentPosition := positions at: turnHandler nextValue.
+		self
+			movePlayingSpaceshipAt: currentPosition
+			by: 1 - currentPosition position ]
 ]
 
 { #category : #movement }
 Board >> moveAllExceptCurrentBy: anAmount [
 
-	positions size timesRepeat: [
+	positions size timesRepeat: [ 
 		| currentPosition |
-		currentPosition := positions at: turnHandler index.
+		currentPosition := positions at: turnHandler nextValue.
 		self movePlayingSpaceshipAt: currentPosition by: anAmount ]
 ]
 
@@ -266,8 +258,7 @@ Board >> movePlayingSpaceshipAt: aPosition by: anAmount [
 			                 in: aPosition position
 			                 and: aPosition lap
 			                 by: anAmount.
-		  spaceshipIndex := self positionInPositionsOf:
-			                    aPosition spaceship.
+		  spaceshipIndex := self positionInPositionsOf: aPosition spaceship.
 		  positions
 			  replaceFrom: spaceshipIndex
 			  to: spaceshipIndex
@@ -278,7 +269,7 @@ Board >> movePlayingSpaceshipAt: aPosition by: anAmount [
 Board >> moveSpaceship: aNumberOfBoxes [
 
 	| spaceshipPlaying |
-	spaceshipPlaying := (positions at: turnHandler index) spaceship.
+	spaceshipPlaying := (positions at: turnHandler nextValue) spaceship.
 	self move: spaceshipPlaying by: aNumberOfBoxes
 ]
 
@@ -307,7 +298,7 @@ Board >> of: aNumberOfBoxes and: parsecsLength playedFor: someLaps byMany: space
 	boxes := OrderedCollection new.
 	sequenceHandler := SequenceHandler for: aBoxSequence size.
 	aNumberOfBoxes timesRepeat: [ 
-		boxes add: (aBoxSequence at: sequenceHandler index) ].
+		boxes add: (aBoxSequence at: sequenceHandler nextValue) ].
 	laps := someLaps.
 	positions := spaceships collect: [ :spaceship | 
 		             SpacechipPosition following: spaceship name ].

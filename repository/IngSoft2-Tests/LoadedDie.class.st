@@ -35,5 +35,5 @@ LoadedDie >> initializeWithASequence: aSequence [
 { #category : #rolling }
 LoadedDie >> roll [
 
-	^ sequence at: sequenceHandler index
+	^ sequence at: sequenceHandler nextValue
 ]
