@@ -37,7 +37,7 @@ MoonWalkEffect class >> for: aNumberOfBoxes [
 { #category : #effects }
 MoonWalkEffect >> applyEffectOn: aBoard [
 
-	aBoard moveAllExceptCurrentBy: self effectOnPosition.
+	aBoard moveAllExceptCurrentBy: displacement.
 	^ 0
 ]
 

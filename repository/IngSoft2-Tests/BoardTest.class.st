@@ -397,7 +397,7 @@ BoardTest >> testPlayersInDifferentLapsReturnToTheFirstBoxOfItsLaps [
 
 	self assert: (board positionOf: otherSpaceship name) equals: 2.
 	self assert: (board lapOf: otherSpaceship name) equals: 1.
-
+	
 	board moveSpaceship: 3.
 
 	self assert: (board positionOf: spaceship name) equals: 1.
@@ -523,6 +523,43 @@ BoardTest >> testSpaceshipLandsOnWormHoleBoxSetsBackItselfFourBoxes [
 
 	self assert: (board positionOf: spaceship name) equals: 1.
 	self assert: (board lapOf: spaceship name) equals: 1
+]
+
+{ #category : #tests }
+BoardTest >> testSpaceshipRemainsInTheInitialPositionIfEffectIsApplied [
+
+	| spaceship anotherSpaceship board noEffect anEffect boxSequence box1 box2 box3 box4 box5 |
+	spaceship := Spaceship called: 'SP1'.
+	anotherSpaceship := Spaceship called: 'SP2'.
+	noEffect := NoEffect new.
+	anEffect := MoonWalkEffect displacing: 1.
+
+	box1 := Box with: noEffect.
+	box2 := Box with: anEffect.
+	box3 := Box with: noEffect.
+	box4 := Box with: noEffect.
+	box5 := Box with: noEffect.
+
+	boxSequence := { 
+		               box1.
+		               box2.
+		               box3.
+		               box4.
+		               box5 }.
+	board := Board
+		         of: 10
+					and: 10
+		         playedFor: 1
+		         byMany: { 
+				         spaceship.
+				         anotherSpaceship }
+		         with: boxSequence.
+	board moveSpaceship: 2.
+
+	self assert: (board positionOf: spaceship name) equals: 2.
+	self assert: (board positionOf: anotherSpaceship name) equals: 0.
+	self assert: (board lapOf: spaceship name) equals: 1.
+	self assert: (board lapOf: anotherSpaceship name) equals: 1
 ]
 
 { #category : #tests }
