@@ -60,7 +60,7 @@ BoardTest >> testABoardOfOneHundredRandomGeneratedBoxesHasOneHundredBoxes [
 
 	board := Board
 		         of: n
-		         and: parsecs
+		         andParsecs: parsecs
 		         playedFor: 1
 		         by: enterprise
 		         givenBy: distributions.
@@ -215,7 +215,7 @@ BoardTest >> testBoardCannotBeCreatedWithANegativeLegth [
 		should: [ 
 			Board
 				of: 10
-				and: -10
+				andParsecs: -10
 				playedFor: 1
 				by: zathura
 				givenBy: distributions ]
@@ -235,7 +235,7 @@ BoardTest >> testBoardCannotBeCreatedWithANumberOfBoxesMinorThanOne [
 		should: [ 
 			Board
 				of: -5
-				and: 10
+				andParsecs: 10
 				playedFor: 1
 				by: zathura
 				givenBy: distributions ]
@@ -255,7 +255,7 @@ BoardTest >> testBoardCannotBeCreatedWithANumberOfLapsMinorThanOne [
 		should: [ 
 			Board
 				of: 15
-				and: 10
+				andParsecs: 10
 				playedFor: -1
 				by: zathura
 				givenBy: distributions ]
@@ -316,11 +316,47 @@ BoardTest >> testBoardCreatedWithTenBoxesAndALengthOfTwoHundredParsecsHasBoxesLe
 	enterprise := Spaceship called: 'Enterprise'.
 	board := Board
 		         of: 10
-		         and: 200
+		         andParsecs: 200
 		         playedFor: 1
 		         by: enterprise
 		         givenBy: distributions.
 	self assert: board boxParsecLength equals: 20
+]
+
+{ #category : #tests }
+BoardTest >> testBoardLengthCreatedInLigthYearsCanBeExpressedInParsecsOrLightYears [
+
+	| distributions enterprise board |
+	distributions := OrderedCollection new.
+	distributions add: (Distribution withProbabilityOf: 1 for: NoEffect).
+	enterprise := Spaceship called: 'Enterprise'.
+	board := Board
+		         of: 10
+		         andLigthYear: 30
+		         playedFor: 1
+		         by: enterprise
+		         givenBy: distributions.
+	self assert: board boxParsecLength equals: 1.
+	self assert: board boxLigthYearLength equals: 3
+	
+]
+
+{ #category : #tests }
+BoardTest >> testBoardLengthCreatedInParsecsCanBeExpressedInParsecsOrLightYears [
+
+	| distributions enterprise board |
+	distributions := OrderedCollection new.
+	distributions add: (Distribution withProbabilityOf: 1 for: NoEffect).
+	enterprise := Spaceship called: 'Enterprise'.
+	board := Board
+		         of: 10
+		         andParsecs: 200
+		         playedFor: 1
+		         by: enterprise
+		         givenBy: distributions.
+	self assert: board boxParsecLength equals: 20.
+	self assert: board boxLigthYearLength equals: 60
+	
 ]
 
 { #category : #tests }
@@ -332,7 +368,7 @@ BoardTest >> testBoxesLengthIsAHalfWhenTheAmountOfParsecsIsHalfTheAmountOfBoxes 
 	distributions add: (Distribution withProbabilityOf: 1 for: NoEffect).
 	board := Board
 		of: 20
-		and: 10
+		andParsecs: 10
 		playedFor: 1
 		by: zathura
 		givenBy: distributions.

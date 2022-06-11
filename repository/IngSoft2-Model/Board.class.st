@@ -6,7 +6,8 @@ Class {
 		'turnHandler',
 		'positions',
 		'laps',
-		'boxParsecLength'
+		'boxParsecLength',
+		'boxLigthYearLength'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -58,17 +59,6 @@ Board class >> assertValidSpaceshipsAsigneesAreNotRepeated: spaceships [
 ]
 
 { #category : #'instance creation' }
-Board class >> of: aNumberOfBoxes and: parsecsLength playedFor: someLaps by: aSpaceship givenBy: aDistribution [
-
-	^ self
-		  of: aNumberOfBoxes
-		  and: parsecsLength
-		  playedFor: someLaps
-		  byMany: { aSpaceship }
-		  givenBy: aDistribution
-]
-
-{ #category : #'instance creation' }
 Board class >> of: aNumberOfBoxes and: parsecsLength playedFor: someLaps by: aSpaceship with: aBoxSequence [
 
 	^ self
@@ -113,6 +103,28 @@ Board class >> of: aNumberOfBoxes and: parsecsLength playedFor: someLaps byMany:
 		  playedFor: someLaps
 		  byMany: spaceships
 		  with: aBoxSequence
+]
+
+{ #category : #'instance creation' }
+Board class >> of: aNumberOfBoxes andLigthYear: length playedFor: someLaps by: aSpaceship givenBy: aDistribution [ 
+	
+	^ self
+		  of: aNumberOfBoxes
+		  and: (length / 3)
+		  playedFor: someLaps
+		  byMany: { aSpaceship }
+		  givenBy: aDistribution
+]
+
+{ #category : #'instance creation' }
+Board class >> of: aNumberOfBoxes andParsecs: length playedFor: someLaps by: aSpaceship givenBy: aDistribution [
+
+	^ self
+		  of: aNumberOfBoxes
+		  and: length
+		  playedFor: someLaps
+		  byMany: { aSpaceship }
+		  givenBy: aDistribution
 ]
 
 { #category : #properties }
@@ -166,6 +178,12 @@ Board >> assertThisIsPlayersTurn: index [
 
 	(turnHandler assertSequenceIndexIs: index) ifFalse: [ 
 		Error signal: 'This is not the players turn' ]
+]
+
+{ #category : #accessing }
+Board >> boxLigthYearLength [
+
+	^ boxLigthYearLength
 ]
 
 { #category : #accessing }
@@ -292,7 +310,7 @@ Board >> nextPositionStartingAt: position in: lap afterMoving: aNumberOfBoxes [
 ]
 
 { #category : #initialization }
-Board >> of: aNumberOfBoxes and: parsecsLength playedFor: someLaps byMany: spaceships with: aBoxSequence [
+Board >> of: aNumberOfBoxes and: adimensionalLength playedFor: someLaps byMany: spaceships with: aBoxSequence [
 
 	| sequenceHandler |
 	boxes := OrderedCollection new.
@@ -303,7 +321,8 @@ Board >> of: aNumberOfBoxes and: parsecsLength playedFor: someLaps byMany: space
 	positions := spaceships collect: [ :spaceship | 
 		             SpacechipPosition following: spaceship name ].
 	turnHandler := SequenceHandler for: spaceships size.
-	boxParsecLength := parsecsLength / aNumberOfBoxes
+	boxParsecLength := adimensionalLength / aNumberOfBoxes.
+	boxLigthYearLength := boxParsecLength * 3
 ]
 
 { #category : #playing }
