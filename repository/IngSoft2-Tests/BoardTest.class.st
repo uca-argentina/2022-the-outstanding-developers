@@ -60,7 +60,7 @@ BoardTest >> testABoardOfOneHundredRandomGeneratedBoxesHasOneHundredBoxes [
 
 	board := Board
 		         of: n
-		         andParsecs: parsecs
+		         and: parsecs
 		         playedFor: 1
 		         by: enterprise
 		         givenBy: distributions.
@@ -204,26 +204,6 @@ BoardTest >> testASpaceshipsPositionVariesInFiveWithAFiniteBoardAfterOneRollOfAL
 ]
 
 { #category : #tests }
-BoardTest >> testBoardCannotBeCreatedWithANegativeLegth [
-
-	| zathura distributions |
-	zathura := Spaceship called: 'Zathura'.
-	distributions := OrderedCollection new.
-	distributions add: (Distribution withProbabilityOf: 1 for: NoEffect).
-
-	self
-		should: [ 
-			Board
-				of: 10
-				andParsecs: -10
-				playedFor: 1
-				by: zathura
-				givenBy: distributions ]
-		raise: Error
-		withMessage: 'Board length should be greater than zero'
-]
-
-{ #category : #tests }
 BoardTest >> testBoardCannotBeCreatedWithANumberOfBoxesMinorThanOne [
 
 	| zathura distributions |
@@ -235,7 +215,7 @@ BoardTest >> testBoardCannotBeCreatedWithANumberOfBoxesMinorThanOne [
 		should: [ 
 			Board
 				of: -5
-				andParsecs: 10
+				and: 10
 				playedFor: 1
 				by: zathura
 				givenBy: distributions ]
@@ -255,7 +235,7 @@ BoardTest >> testBoardCannotBeCreatedWithANumberOfLapsMinorThanOne [
 		should: [ 
 			Board
 				of: 15
-				andParsecs: 10
+				and: 10
 				playedFor: -1
 				by: zathura
 				givenBy: distributions ]
@@ -310,13 +290,14 @@ BoardTest >> testBoardCannotBeCreatedWithoutSpaceships [
 { #category : #tests }
 BoardTest >> testBoardCreatedWithTenBoxesAndALengthOfTwoHundredParsecsHasBoxesLengthOfTen [
 
-	| distributions enterprise board |
+	| distributions enterprise board aParsecUnit |
 	distributions := OrderedCollection new.
 	distributions add: (Distribution withProbabilityOf: 1 for: NoEffect).
 	enterprise := Spaceship called: 'Enterprise'.
+	aParsecUnit := ParsecUnit of: 200.
 	board := Board
 		         of: 10
-		         andParsecs: 200
+		         and: aParsecUnit
 		         playedFor: 1
 		         by: enterprise
 		         givenBy: distributions.
@@ -326,13 +307,14 @@ BoardTest >> testBoardCreatedWithTenBoxesAndALengthOfTwoHundredParsecsHasBoxesLe
 { #category : #tests }
 BoardTest >> testBoardLengthCreatedInLigthYearsCanBeExpressedInParsecsOrLightYears [
 
-	| distributions enterprise board |
+	| distributions enterprise board aLightYearUnit |
 	distributions := OrderedCollection new.
 	distributions add: (Distribution withProbabilityOf: 1 for: NoEffect).
 	enterprise := Spaceship called: 'Enterprise'.
+	aLightYearUnit := LightYearUnit of: 30.
 	board := Board
 		         of: 10
-		         andLigthYear: 30
+		         and: aLightYearUnit
 		         playedFor: 1
 		         by: enterprise
 		         givenBy: distributions.
@@ -344,13 +326,14 @@ BoardTest >> testBoardLengthCreatedInLigthYearsCanBeExpressedInParsecsOrLightYea
 { #category : #tests }
 BoardTest >> testBoardLengthCreatedInParsecsCanBeExpressedInParsecsOrLightYears [
 
-	| distributions enterprise board |
+	| distributions enterprise board aParsecUnit |
 	distributions := OrderedCollection new.
 	distributions add: (Distribution withProbabilityOf: 1 for: NoEffect).
+	aParsecUnit := ParsecUnit of: 200.
 	enterprise := Spaceship called: 'Enterprise'.
 	board := Board
 		         of: 10
-		         andParsecs: 200
+		         and: aParsecUnit
 		         playedFor: 1
 		         by: enterprise
 		         givenBy: distributions.
@@ -362,17 +345,18 @@ BoardTest >> testBoardLengthCreatedInParsecsCanBeExpressedInParsecsOrLightYears 
 { #category : #tests }
 BoardTest >> testBoxesLengthIsAHalfWhenTheAmountOfParsecsIsHalfTheAmountOfBoxes [
 
-	| zathura distributions board|
+	| zathura distributions board aParsecUnit |
 	zathura := Spaceship called: 'Zathura'.
 	distributions := OrderedCollection new.
 	distributions add: (Distribution withProbabilityOf: 1 for: NoEffect).
+	aParsecUnit := ParsecUnit of: 10.
 	board := Board
-		of: 20
-		andParsecs: 10
-		playedFor: 1
-		by: zathura
-		givenBy: distributions.
-		
+		         of: 20
+		         and: aParsecUnit
+		         playedFor: 1
+		         by: zathura
+		         givenBy: distributions.
+
 	self assert: board boxParsecLength equals: 0.5
 ]
 
@@ -664,11 +648,12 @@ BoardTest >> testSpaceshipThatLandsOnWormHoleBoxCantGoToNegativePositions [
 { #category : #tests }
 BoardTest >> testSpaceshipsThatLandsOnAHyperJumpBoxEndUpFiveBoxesAfterThenFourBoxesAfter [
 
-	| board noEffect anEffect boxSequence box1 box2 box3 box4 box5 delorean enterprise |
+	| board noEffect anEffect boxSequence box1 box2 box3 box4 box5 delorean enterprise aParsecUnit |
 	delorean := Spaceship called: 'Delorean'.
 	enterprise := Spaceship called: 'Enterprise'.
 	noEffect := NoEffect new.
 	anEffect := HyperJumpEffect with: { 10. 8 }.
+	aParsecUnit := ParsecUnit of: 20.
 
 	box1 := Box with: anEffect.
 	box2 := Box with: noEffect.
@@ -684,7 +669,7 @@ BoardTest >> testSpaceshipsThatLandsOnAHyperJumpBoxEndUpFiveBoxesAfterThenFourBo
 		               box5 }.
 	board := Board
 		         of: 10
-		         and: 20
+		         and: aParsecUnit
 		         playedFor: 1
 		         byMany: { 
 				         delorean.
@@ -705,11 +690,12 @@ BoardTest >> testSpaceshipsThatLandsOnAHyperJumpBoxEndUpFiveBoxesAfterThenFourBo
 { #category : #tests }
 BoardTest >> testSpaceshipsThatLandsOnAHyperJumpBoxEndUpFiveBoxesAfterThenFourBoxesAfterWithFloatingLengths [
 
-	| board noEffect anEffect boxSequence box1 box2 box3 box4 box5 enterprise zathura |
+	| board noEffect anEffect boxSequence box1 box2 box3 box4 box5 enterprise zathura aParsecUnit |
 	enterprise := Spaceship called: 'Enterprise'.
 	zathura := Spaceship called: 'Zathura'.
 	noEffect := NoEffect new.
 	anEffect := HyperJumpEffect with: { 14. 13 }.
+	aParsecUnit := ParsecUnit of: 100.
 
 	box1 := Box with: anEffect.
 	box2 := Box with: noEffect.
@@ -725,7 +711,7 @@ BoardTest >> testSpaceshipsThatLandsOnAHyperJumpBoxEndUpFiveBoxesAfterThenFourBo
 		               box5 }.
 	board := Board
 		         of: 15
-		         and: 100
+		         and: aParsecUnit
 		         playedFor: 1
 		         byMany: { 
 				         enterprise.

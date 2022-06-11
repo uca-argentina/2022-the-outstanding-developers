@@ -27,7 +27,7 @@ BoxTest >> testBoxWithNoEffectDoesNotModifyPosition [
 BoxTest >> testHyperJumpBoxAutogeneratesAParsecSequence [
 
 	| box anEffect firstEffect secondEffect |
-	anEffect := HyperJumpEffect randomlyOf: 4.
+	anEffect := HyperJumpEffect randomlyOf: 4 and: ParsecUnit.
 	box := Box with: anEffect.
 	firstEffect := box effectOnPosition.
 	secondEffect := box effectOnPosition.
