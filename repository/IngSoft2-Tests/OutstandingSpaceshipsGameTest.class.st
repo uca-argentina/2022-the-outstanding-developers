@@ -17,12 +17,17 @@ OutstandingSpaceshipsGameTest >> should: block raise: expectedErrorClass withMes
 { #category : #tests }
 OutstandingSpaceshipsGameTest >> testANonSimulatedGameCannotBePlayedAfterItFinished [
 
-	| aSpaceship anotherSpaceship board aDie game |
-	aSpaceship := Spaceship called: 'SP1'.
-	anotherSpaceship := Spaceship called: 'SP2'.
-	board := Board of: 7 for: 1 playedByMany: { 
-			         aSpaceship.
-			         anotherSpaceship } andA: {Box withEffect: NormalBox new}.
+	| enterprise zathura board aDie game |
+	enterprise := Spaceship called: 'Enterprise'.
+	zathura := Spaceship called: 'Zathura'.
+	board := Board
+		         of: 7
+		         and: 7
+		         playedFor: 1
+		         byMany: { 
+				         enterprise.
+				         zathura }
+		         with: { (Box with: NoEffect new) }.
 	aDie := LoadedDie withSequence: { 4. 3 }.
 	game := OutstandingSpaceshipsGame playedOn: board throwing: aDie.
 
@@ -39,84 +44,135 @@ OutstandingSpaceshipsGameTest >> testANonSimulatedGameCannotBePlayedAfterItFinis
 { #category : #tests }
 OutstandingSpaceshipsGameTest >> testARoundOfANonSimulatedGameChangesSpaceshipsPosition [
 
-	| aSpaceship anotherSpaceship board aDie game |
-	aSpaceship := Spaceship called: 'SP1'.
-	anotherSpaceship := Spaceship called: 'SP2'.
-	board := Board of: 15 for: 1 playedByMany: { 
-			         aSpaceship.
-			         anotherSpaceship } andA: {Box withEffect: NormalBox new}.
+	| enterprise zathura board aDie game |
+	enterprise := Spaceship called: 'Enterprise'.
+	zathura := Spaceship called: 'Zathura'.
+	board := Board
+		         of: 15
+		         and: 15
+		         playedFor: 1
+		         byMany: { 
+				         enterprise.
+				         zathura }
+		         with: { (Box with: NoEffect new) }.
 	aDie := LoadedDie withSequence: { 4. 3 }.
 	game := OutstandingSpaceshipsGame playedOn: board throwing: aDie.
 
 	game play.
 	game play.
 
-	self assert: (board positionOf: aSpaceship name) equals: 4.
-	self assert: (board positionOf: anotherSpaceship name) equals: 3
+	self assert: (board positionOf: enterprise name) equals: 4.
+	self assert: (board positionOf: zathura name) equals: 3
+]
+
+{ #category : #tests }
+OutstandingSpaceshipsGameTest >> testGameCanBeWonAndRankingCanBeShown [
+
+	| zathura enterprise aBoard aDie game delorean |
+	zathura := Spaceship called: 'Zathura'.
+	enterprise := Spaceship called: 'Enterprise'.
+	delorean := Spaceship called: 'Delorean'.
+	aBoard := Board
+		          of: 15
+		          and: 15
+		          playedFor: 3
+		          byMany: { 
+				          zathura.
+				          enterprise.
+				          delorean }
+		          with: { (Box with: NoEffect new) }.
+	aDie := LoadedDie withSequence: { 5. 1. 2 }.
+	game := OutstandingSpaceshipsGame playedOn: aBoard throwing: aDie.
+
+	game startSimulation.
+
+	self assert: (aBoard rankingPositionOf: 'Enterprise') equals: 3.
+	self assert: (aBoard rankingPositionOf: 'Zathura') equals: 1.
+	self assert: (aBoard rankingPositionOf: 'Delorean') equals: 2
 ]
 
 { #category : #tests }
 OutstandingSpaceshipsGameTest >> testGameWithABoardOfFifteenBoxesALoadedDieAndASpaceshipEndsWithFinalPositionOfSixteen [
 
-	| aSpaceship aBoard aDie game |
-	aSpaceship := Spaceship called: 'Player1'.
-	aBoard := Board of: 15 for: 1 playedBy: aSpaceship andA: {Box withEffect: NormalBox new}.
+	| enterprise aBoard aDie game |
+	enterprise := Spaceship called: 'Enterprise'.
+	aBoard := Board
+		          of: 15
+		          and: 15
+		          playedFor: 1
+		          by: enterprise
+		          with: { (Box with: NoEffect new) }.
 	aDie := LoadedDie with: 5.
 	game := OutstandingSpaceshipsGame playedOn: aBoard throwing: aDie.
 
 	game startSimulation.
 
-	self assert: (aBoard positionOf: 'Player1') equals: 16
+	self assert: (aBoard positionOf: 'Enterprise') equals: 16
 ]
 
 { #category : #tests }
 OutstandingSpaceshipsGameTest >> testGameWithAFiniteBoardASequenceLoadedDieAndThreeShipsIsWonAfterThreeLapsAndPlayersHaveSpecificPositions [
 
-	| aSpaceship anotherSpaceship aBoard aDie game otherSpaceship |
-	aSpaceship := Spaceship called: 'Player1'.
-	anotherSpaceship := Spaceship called: 'Player2'.
-	otherSpaceship := Spaceship called: 'Player3'.
-	aBoard := Board of: 10 for: 3 playedByMany: { 
-			          aSpaceship.
-			          anotherSpaceship.
-			          otherSpaceship } andA: {Box withEffect: NormalBox new}.
+	| zathura enterprise aBoard aDie game delorean |
+	zathura := Spaceship called: 'Zathura'.
+	enterprise := Spaceship called: 'Enterprise'.
+	delorean := Spaceship called: 'Delorean'.
+	aBoard := Board
+		          of: 10
+		          and: 10
+		          playedFor: 3
+		          byMany: { 
+				          zathura.
+				          enterprise.
+				          delorean }
+		          with: { (Box with: NoEffect new) }.
 	aDie := LoadedDie withSequence: { 1. 4. 3 }.
 	game := OutstandingSpaceshipsGame playedOn: aBoard throwing: aDie.
 
 	game startSimulation.
 
-	self assert: (aBoard positionOf: 'Player1') equals: 9.
-	self assert: (aBoard positionOf: 'Player2') equals: 11.
-	self assert: (aBoard positionOf: 'Player3') equals: 1
+	self assert: (aBoard positionOf: 'Zathura') equals: 9.
+	self assert: (aBoard positionOf: 'Enterprise') equals: 11.
+	self assert: (aBoard positionOf: 'Delorean') equals: 1
 ]
 
 { #category : #tests }
 OutstandingSpaceshipsGameTest >> testGameWithAFiniteBoardASequenceLoadedDieAndThreeShipsIsWonAndPlayersHaveSpecificPositions [
 
-	| aSpaceship anotherSpaceship aBoard aDie game otherSpaceship |
-	aSpaceship := Spaceship called: 'Player1'.
-	anotherSpaceship := Spaceship called: 'Player2'.
-	otherSpaceship := Spaceship called: 'Player3'.
-	aBoard := Board of: 10 for: 1 playedByMany: { 
-			          aSpaceship.
-			          anotherSpaceship.
-			          otherSpaceship } andA: {Box withEffect: NormalBox new}.
+	| enterprise delorean aBoard aDie game zathura |
+	enterprise := Spaceship called: 'Enterprise'.
+	delorean := Spaceship called: 'Delorean'.
+	zathura := Spaceship called: 'Zathura'.
+	aBoard := Board
+		          of: 10
+		          and: 10
+		          playedFor: 1
+		          byMany: { 
+				          enterprise.
+				          delorean.
+				          zathura }
+		          with: { (Box with: NoEffect new) }.
 	aDie := LoadedDie withSequence: { 1. 4. 3 }.
 	game := OutstandingSpaceshipsGame playedOn: aBoard throwing: aDie.
 
 	game startSimulation.
 
-	self assert: (aBoard positionOf: 'Player1') equals: 3.
-	self assert: (aBoard positionOf: 'Player2') equals: 11.
-	self assert: (aBoard positionOf: 'Player3') equals: 6
+	self assert: (aBoard positionOf: 'Enterprise') equals: 3.
+	self assert: (aBoard positionOf: 'Delorean') equals: 11.
+	self assert: (aBoard positionOf: 'Zathura') equals: 6
 ]
 
 { #category : #tests }
 OutstandingSpaceshipsGameTest >> testGameWithASpaceshipABoardWithFiveBoxesAndALoadedDieWithFourDoesNotEndAfterOneRoll [
 
-	| aBoard aDice spaceship game resultOfTheRoll |
-	spaceship := Spaceship called: 'APlayerName'.
-	aBoard := Board of: 5 for: 1 playedBy: spaceship andA: {Box withEffect: NormalBox new}.
+	| aBoard aDice enterprise game resultOfTheRoll |
+	enterprise := Spaceship called: 'Enterprise'.
+	aBoard := Board
+		          of: 5
+		          and: 5
+		          playedFor: 1
+		          by: enterprise
+		          with: { (Box with: NoEffect new) }.
 	aDice := LoadedDie with: 4.
 
 	game := OutstandingSpaceshipsGame playedOn: aBoard throwing: aDice.
@@ -129,27 +185,37 @@ OutstandingSpaceshipsGameTest >> testGameWithASpaceshipABoardWithFiveBoxesAndALo
 { #category : #tests }
 OutstandingSpaceshipsGameTest >> testGameWithASpaceshipAndABoardEndsWhenItCompletesThreeLaps [
 
-	| aSpaceship aBoard aDie game |
-	aSpaceship := Spaceship called: 'Player1'.
-	aBoard := Board of: 15 for: 3 playedBy: aSpaceship andA: {Box withEffect: NormalBox new}.
+	| enterprise aBoard aDie game |
+	enterprise := Spaceship called: 'Enterprise'.
+	aBoard := Board
+		          of: 15
+		          and: 15
+		          playedFor: 3
+		          by: enterprise
+		          with: { (Box with: NoEffect new) }.
 	aDie := LoadedDie with: 5.
 	game := OutstandingSpaceshipsGame playedOn: aBoard throwing: aDie.
 
 	game startSimulation.
 
-	self assert: (aBoard positionOf: 'Player1') equals: 16.
-	self assert: (aBoard lapOf: 'Player1') equals: 3
+	self assert: (aBoard positionOf: 'Enterprise') equals: 16.
+	self assert: (aBoard lapOf: 'Enterprise') equals: 3
 ]
 
 { #category : #tests }
 OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndADiceCupEnds [
 
-	| aSpaceship anotherSpaceship aBoard aDie game anotherDie otherDie aDiceCup |
-	aSpaceship := Spaceship called: 'Player1'.
-	anotherSpaceship := Spaceship called: 'Player2'.
-	aBoard := Board of: 50 for: 3 playedByMany: { 
-			          aSpaceship.
-			          anotherSpaceship } andA: {Box withEffect: NormalBox new}.
+	| delorean enterprise aBoard aDie game anotherDie otherDie aDiceCup |
+	delorean := Spaceship called: 'Delorean'.
+	enterprise := Spaceship called: 'Enterprise'.
+	aBoard := Board
+		          of: 50
+		          and: 50
+		          playedFor: 3
+		          byMany: { 
+				          delorean.
+				          enterprise }
+		          with: { (Box with: NoEffect new) }.
 	aDie := Die with: 4.
 	anotherDie := Die with: 5.
 	otherDie := Die with: 6.
@@ -167,12 +233,17 @@ OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndADiceCupEn
 { #category : #tests }
 OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndADieEnds [
 
-	| aSpaceship anotherSpaceship aBoard aDie game |
-	aSpaceship := Spaceship called: 'Player1'.
-	anotherSpaceship := Spaceship called: 'Player2'.
-	aBoard := Board of: 15 for: 2 playedByMany: { 
-			          aSpaceship.
-			          anotherSpaceship } andA: {Box withEffect: NormalBox new}.
+	| zathura delorean aBoard aDie game |
+	zathura := Spaceship called: 'Zathura'.
+	delorean := Spaceship called: 'Delorean'.
+	aBoard := Board
+		          of: 15
+		          and: 15
+		          playedFor: 2
+		          byMany: { 
+				          zathura.
+				          delorean }
+		          with: { (Box with: NoEffect new) }.
 	aDie := Die with: 4.
 	game := OutstandingSpaceshipsGame playedOn: aBoard throwing: aDie.
 
@@ -184,21 +255,25 @@ OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndADieEnds [
 { #category : #tests }
 OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndALoadedDieEnds [
 
-	| aSpaceship anotherSpaceship aBoard aLoadedDie game resultOfTheRoll |
-	aSpaceship := Spaceship called: 'Player1'.
-	anotherSpaceship := Spaceship called: 'Player2'.
-	aBoard := Board of: 5 for: 1 playedByMany: { 
-			          aSpaceship.
-			          anotherSpaceship } andA: {Box withEffect: NormalBox new}.
+	| enterprise zathura aBoard aLoadedDie game |
+	enterprise := Spaceship called: 'Enterprise'.
+	zathura := Spaceship called: 'Zathura'.
+	aBoard := Board
+		          of: 5
+		          and: 5
+		          playedFor: 1
+		          byMany: { 
+				          enterprise.
+				          zathura }
+		          with: { (Box with: NoEffect new) }.
 	aLoadedDie := LoadedDie with: 3.
 	game := OutstandingSpaceshipsGame
 		        playedOn: aBoard
 		        throwing: aLoadedDie.
 
-	resultOfTheRoll := aLoadedDie roll.
-	aBoard moveSpaceship: resultOfTheRoll.
-	aBoard moveSpaceship: resultOfTheRoll.
-	aBoard moveSpaceship: resultOfTheRoll.
+	game play.
+	game play.
+	game play.
 
 	self assert: game thereIsAWinner
 ]
@@ -207,57 +282,43 @@ OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndALoadedDie
 OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndASequencedLoadedDieHasTheSecondPlayerAsTheWinner [
 
 	| aSpaceship anotherSpaceship aBoard aDie game |
-	aSpaceship := Spaceship called: 'Player1'.
-	anotherSpaceship := Spaceship called: 'Player2'.
-	aBoard := Board of: 15 for: 2 playedByMany: { 
-			          aSpaceship.
-			          anotherSpaceship } andA: {Box withEffect: NormalBox new}.
+	aSpaceship := Spaceship called: 'Enterprise'.
+	anotherSpaceship := Spaceship called: 'Zathura'.
+	aBoard := Board
+		          of: 15
+		          and: 15
+		          playedFor: 2
+		          byMany: { 
+				          aSpaceship.
+				          anotherSpaceship }
+		          with: { (Box with: NoEffect new) }.
 	aDie := LoadedDie withSequence: { 1. 3 }.
 	game := OutstandingSpaceshipsGame playedOn: aBoard throwing: aDie.
 
 	game startSimulation.
 
-	self assert: game winner equals: 'Player2'
+	self assert: game winner equals: 'Zathura'
 ]
 
 { #category : #tests }
 OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndLoadedDieHasBothSpaceshipsPositionChangeUntilItEnds [
 
-	| aSpaceship anotherSpaceship aBoard aDie game |
-	aSpaceship := Spaceship called: 'Player1'.
-	anotherSpaceship := Spaceship called: 'Player2'.
-	aBoard := Board of: 15 for: 1 playedByMany: { 
-			          aSpaceship.
-			          anotherSpaceship } andA: {Box withEffect: NormalBox new}.
+	| zathura enterprise aBoard aDie game |
+	zathura := Spaceship called: 'Zathura'.
+	enterprise := Spaceship called: 'Enterprise'.
+	aBoard := Board
+		          of: 15
+		          and: 15
+		          playedFor: 1
+		          byMany: { 
+				          zathura.
+				          enterprise }
+		          with: { (Box with: NoEffect new) }.
 	aDie := LoadedDie with: 4.
 	game := OutstandingSpaceshipsGame playedOn: aBoard throwing: aDie.
 
 	game startSimulation.
 
-	self assert: (aBoard positionOf: 'Player1') equals: 16.
-	self assert: (aBoard positionOf: 'Player2') equals: 12
-]
-
-{ #category : #tests }
-OutstandingSpaceshipsGameTest >> testGameWithTwoSpaceshipsAndABoardEndsWhenOneCompletesThreeLaps [
-
-	| aSpaceship anotherSpaceship aBoard aDie game otherSpaceship |
-	aSpaceship := Spaceship called: 'Player1'.
-	anotherSpaceship := Spaceship called: 'Player2'.
-	otherSpaceship := Spaceship called: 'Player3'.
-	aBoard := Board
-		          of: 15
-		          for: 3
-		          playedByMany: { 
-				          aSpaceship.
-				          anotherSpaceship. otherSpaceship }
-		          andA: { (Box withEffect: NormalBox new) }.
-	aDie := LoadedDie withSequence: {5. 6. 1}.
-	game := OutstandingSpaceshipsGame playedOn: aBoard throwing: aDie.
-
-	game startSimulation.
-
-	self assert: (aBoard rankingPositionOf: 'Player2') equals: 1.
-	self assert: (aBoard rankingPositionOf: 'Player1') equals: 2.
-	self assert: (aBoard rankingPositionOf: 'Player3') equals: 3.
+	self assert: (aBoard positionOf: 'Zathura') equals: 16.
+	self assert: (aBoard positionOf: 'Enterprise') equals: 12
 ]

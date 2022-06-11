@@ -2,9 +2,7 @@ Class {
 	#name : #LoadedDie,
 	#superclass : #Object,
 	#instVars : [
-		'result',
 		'sequence',
-		'currentPosition',
 		'sequenceHandler'
 	],
 	#category : #'IngSoft2-Tests'
@@ -37,5 +35,5 @@ LoadedDie >> initializeWithASequence: aSequence [
 { #category : #rolling }
 LoadedDie >> roll [
 
-	^ sequence at: sequenceHandler index
+	^ sequence at: sequenceHandler nextValue
 ]

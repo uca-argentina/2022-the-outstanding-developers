@@ -3,7 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'board',
-		'dice'
+		'dice',
+		'stateOfGame'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -18,33 +19,35 @@ OutstandingSpaceshipsGame class >> playedOn: aBoard throwing: dice [
 OutstandingSpaceshipsGame >> initializeWith: aBoard and: someDice [
 
 	board := aBoard.
-	dice := someDice
+	dice := someDice.
+	stateOfGame := GameNotWonState new
 ]
 
 { #category : #playing }
 OutstandingSpaceshipsGame >> play [
 
+	stateOfGame play: self
+]
+
+{ #category : #playing }
+OutstandingSpaceshipsGame >> playTurn [
+
 	| resultOfTheRoll |
-	self thereIsAWinner
-		ifFalse: [ 
-			resultOfTheRoll := dice roll.
-			board moveSpaceship: resultOfTheRoll ]
-		ifTrue: [ Error signal: 'The game has already been finished' ]
+	resultOfTheRoll := dice roll.
+	board moveSpaceship: resultOfTheRoll.
+	board thereIsAWinner ifTrue: [ stateOfGame := GameWonState new ]
 ]
 
 { #category : #playing }
 OutstandingSpaceshipsGame >> startSimulation [
 
-	| resultOfTheRoll |
-	[ self thereIsAWinner ] whileFalse: [ 
-		resultOfTheRoll := dice roll.
-		board moveSpaceship: resultOfTheRoll ]
+	[ self thereIsAWinner ] whileFalse: [ self playTurn ]
 ]
 
 { #category : #results }
 OutstandingSpaceshipsGame >> thereIsAWinner [
 
-	^ board thereIsAWinner
+	^ stateOfGame isFinished
 ]
 
 { #category : #results }

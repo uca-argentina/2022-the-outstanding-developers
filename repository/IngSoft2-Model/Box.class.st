@@ -8,9 +8,15 @@ Class {
 }
 
 { #category : #'instance creation' }
-Box class >> withEffect: anEffect [ 
+Box class >> with: anEffect [ 
 	
-	^self new withEffect: anEffect
+	^self new with: anEffect
+]
+
+{ #category : #effects }
+Box >> applyEffectOn: aBoard [
+
+	^ (effect applyEffectOn: aBoard)
 ]
 
 { #category : #effects }
@@ -19,19 +25,14 @@ Box >> effectOnPosition [
 	^ effect effectOnPosition
 ]
 
-{ #category : #effects }
-Box >> effectOnPosition: aBoard [
-
-	effect effectOnPosition: aBoard
-]
-
 { #category : #accessing }
 Box >> effectType [
-	^effect typeOfEffect
+
+	^ effect typeOfEffect
 ]
 
 { #category : #initialization }
-Box >> withEffect: anEffect [
+Box >> with: anEffect [
 
 	effect := anEffect
 ]
