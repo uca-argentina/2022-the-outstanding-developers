@@ -22,12 +22,6 @@ Distribution class >> withProbabilityOf: aValue for: aClass [
 	^ self new initializeWithProbabilityOf: aValue for: aClass
 ]
 
-{ #category : #comparing }
-Distribution >> < aDistribution [
-
-	^ self probability < aDistribution probability
-]
-
 { #category : #accessing }
 Distribution >> classAssociated [
 	^class.

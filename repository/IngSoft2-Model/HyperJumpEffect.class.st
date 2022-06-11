@@ -47,12 +47,6 @@ HyperJumpEffect >> applyEffectOn: aBoard [
 ]
 
 { #category : #assertion }
-HyperJumpEffect >> assertBoxAmountIsValid: aBoxAmount [ 
-	aBoxAmount  > 0 ifFalse: [ 
-		Error signal: 'There must be an amount of at least one Box' ]
-]
-
-{ #category : #assertion }
 HyperJumpEffect >> assertSequenceSizeIsValid: aParsecSequenceSize [
 
 	aParsecSequenceSize > 0 ifFalse: [ 
