@@ -324,6 +324,23 @@ BoardTest >> testBoardCreatedWithTenBoxesAndALengthOfTwoHundredParsecsHasBoxesLe
 ]
 
 { #category : #tests }
+BoardTest >> testBoxesLengthIsAHalfWhenTheAmountOfParsecsIsHalfTheAmountOfBoxes [
+
+	| zathura distributions board|
+	zathura := Spaceship called: 'Zathura'.
+	distributions := OrderedCollection new.
+	distributions add: (Distribution withProbabilityOf: 1 for: NoEffect).
+	board := Board
+		of: 20
+		and: 10
+		playedFor: 1
+		by: zathura
+		givenBy: distributions.
+		
+	self assert: board boxParsecLength equals: 0.5
+]
+
+{ #category : #tests }
 BoardTest >> testPlayersInDifferentLapsReturnToTheFirstBoxOfItsLaps [
 
 	| enterprise zathura board noEffect boxSequence box1 box2 box3 box4 box5 atomicBombEffect delorean |

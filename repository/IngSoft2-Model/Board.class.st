@@ -242,7 +242,7 @@ Board >> moveAllBackToBeginning [
 { #category : #movement }
 Board >> moveAllExceptCurrentBy: anAmount [
 
-	positions size timesRepeat: [ 
+	positions size - 1 timesRepeat: [ 
 		| currentPosition |
 		currentPosition := positions at: turnHandler nextValue.
 		self movePlayingSpaceshipAt: currentPosition by: anAmount ]

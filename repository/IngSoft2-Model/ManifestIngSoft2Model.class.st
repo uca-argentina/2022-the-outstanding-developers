@@ -8,6 +8,11 @@ Class {
 }
 
 { #category : #'code-critics' }
+ManifestIngSoft2Model class >> ruleReturnsIfTrueRuleV1FalsePositive [
+	^ #(#(#(#RGMethodDefinition #(#Board #movePlayingSpaceshipAt:by: #false)) #'2022-06-11T16:23:51.843249-03:00') )
+]
+
+{ #category : #'code-critics' }
 ManifestIngSoft2Model class >> ruleTempsReadBeforeWrittenRuleV1FalsePositive [
 	^ #(#(#(#RGMethodDefinition #(#Board #move:by: #false)) #'2022-06-08T21:13:27.114056-03:00') )
 ]
