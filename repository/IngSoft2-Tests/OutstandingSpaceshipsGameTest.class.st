@@ -22,7 +22,7 @@ OutstandingSpaceshipsGameTest >> testANonSimulatedGameCannotBePlayedAfterItFinis
 	zathura := Spaceship called: 'Zathura'.
 	board := Board
 		         of: 7
-		         and: 7
+		         and: (ParsecUnit of: 7)
 		         playedFor: 1
 		         byMany: { 
 				         enterprise.
@@ -49,7 +49,7 @@ OutstandingSpaceshipsGameTest >> testARoundOfANonSimulatedGameChangesSpaceshipsP
 	zathura := Spaceship called: 'Zathura'.
 	board := Board
 		         of: 15
-		         and: 15
+		         and: (ParsecUnit of: 15)
 		         playedFor: 1
 		         byMany: { 
 				         enterprise.
@@ -74,7 +74,7 @@ OutstandingSpaceshipsGameTest >> testGameCanBeWonAndRankingCanBeShown [
 	delorean := Spaceship called: 'Delorean'.
 	aBoard := Board
 		          of: 15
-		          and: 15
+		          and: (ParsecUnit of: 15)
 		          playedFor: 3
 		          byMany: { 
 				          zathura.
@@ -98,7 +98,7 @@ OutstandingSpaceshipsGameTest >> testGameWithABoardOfFifteenBoxesALoadedDieAndAS
 	enterprise := Spaceship called: 'Enterprise'.
 	aBoard := Board
 		          of: 15
-		          and: 15
+		          and: (ParsecUnit of: 15)
 		          playedFor: 1
 		          by: enterprise
 		          with: { (Box with: NoEffect new) }.
@@ -119,7 +119,7 @@ OutstandingSpaceshipsGameTest >> testGameWithAFiniteBoardASequenceLoadedDieAndTh
 	delorean := Spaceship called: 'Delorean'.
 	aBoard := Board
 		          of: 10
-		          and: 10
+		          and: (ParsecUnit of: 10)
 		          playedFor: 3
 		          byMany: { 
 				          zathura.
@@ -145,7 +145,7 @@ OutstandingSpaceshipsGameTest >> testGameWithAFiniteBoardASequenceLoadedDieAndTh
 	zathura := Spaceship called: 'Zathura'.
 	aBoard := Board
 		          of: 10
-		          and: 10
+		          and: (ParsecUnit of: 10)
 		          playedFor: 1
 		          byMany: { 
 				          enterprise.
@@ -169,7 +169,7 @@ OutstandingSpaceshipsGameTest >> testGameWithASpaceshipABoardWithFiveBoxesAndALo
 	enterprise := Spaceship called: 'Enterprise'.
 	aBoard := Board
 		          of: 5
-		          and: 5
+		          and: (ParsecUnit of: 5)
 		          playedFor: 1
 		          by: enterprise
 		          with: { (Box with: NoEffect new) }.
@@ -189,7 +189,7 @@ OutstandingSpaceshipsGameTest >> testGameWithASpaceshipAndABoardEndsWhenItComple
 	enterprise := Spaceship called: 'Enterprise'.
 	aBoard := Board
 		          of: 15
-		          and: 15
+		          and: (ParsecUnit of: 15)
 		          playedFor: 3
 		          by: enterprise
 		          with: { (Box with: NoEffect new) }.
@@ -210,7 +210,7 @@ OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndADiceCupEn
 	enterprise := Spaceship called: 'Enterprise'.
 	aBoard := Board
 		          of: 50
-		          and: 50
+		          and: (ParsecUnit of: 50)
 		          playedFor: 3
 		          byMany: { 
 				          delorean.
@@ -238,7 +238,7 @@ OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndADieEnds [
 	delorean := Spaceship called: 'Delorean'.
 	aBoard := Board
 		          of: 15
-		          and: 15
+		          and: (ParsecUnit of: 15)
 		          playedFor: 2
 		          byMany: { 
 				          zathura.
@@ -260,7 +260,7 @@ OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndALoadedDie
 	zathura := Spaceship called: 'Zathura'.
 	aBoard := Board
 		          of: 5
-		          and: 5
+		          and: (ParsecUnit of: 5)
 		          playedFor: 1
 		          byMany: { 
 				          enterprise.
@@ -286,7 +286,7 @@ OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndASequenced
 	anotherSpaceship := Spaceship called: 'Zathura'.
 	aBoard := Board
 		          of: 15
-		          and: 15
+		          and: (ParsecUnit of: 15)
 		          playedFor: 2
 		          byMany: { 
 				          aSpaceship.
@@ -308,7 +308,7 @@ OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndLoadedDieH
 	enterprise := Spaceship called: 'Enterprise'.
 	aBoard := Board
 		          of: 15
-		          and: 15
+		          and: (ParsecUnit of: 15)
 		          playedFor: 1
 		          byMany: { 
 				          zathura.

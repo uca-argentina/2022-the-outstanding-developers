@@ -2,8 +2,8 @@ Class {
 	#name : #HyperJumpEffect,
 	#superclass : #Object,
 	#instVars : [
-		'parsecs',
-		'parsecsValuesHandler'
+		'parsecsValuesHandler',
+		'sequenceUnits'
 	],
 	#classInstVars : [
 		'numberOfBoxes',
@@ -12,37 +12,41 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #asserting }
+HyperJumpEffect class >> assertMeasurementValuesAreNotEmpty: measurementValues [
+	measurementValues size > 0 ifFalse: [ Error signal: 'Sequence size must be greater than zero' ]
+]
+
 { #category : #'instance creation' }
 HyperJumpEffect class >> create [
+	| randomValue measurementUnit |
+	randomValue := 2 atRandom. 
+	measurementUnit := LightYearUnit.
+	randomValue = 1 ifTrue: [ measurementUnit := ParsecUnit ].
+	^self createFrom: measurementUnit
+]
+
+{ #category : #'instance creation' }
+HyperJumpEffect class >> createFrom: aMeasurementUnit [
 
 	| random |
 	random := Random new.
-	^ self randomlyOf: (random next * (numberOfBoxes - 1) + 1) floor
-]
-
-{ #category : #'class initialization' }
-HyperJumpEffect class >> for: aNumberOfBoxes upTo: aLimit [
-
-	numberOfBoxes := aNumberOfBoxes.
-	limit := aLimit
+	^ self new
+		  randomlyOf: (random next / random next) ceiling
+		  and: aMeasurementUnit
 ]
 
 { #category : #'instance creation' }
-HyperJumpEffect class >> randomlyOf: aParsecSequenceSize [
-
-	^ self new randomlyOf: aParsecSequenceSize
-]
-
-{ #category : #'instance creation' }
-HyperJumpEffect class >> with: parsecsValues [ 
-	^self new with: parsecsValues.
+HyperJumpEffect class >> with: measurementValues [ 
+	self assertMeasurementValuesAreNotEmpty: measurementValues.
+	^self new with: measurementValues.
 ]
 
 { #category : #effects }
 HyperJumpEffect >> applyEffectOn: aBoard [
 
 	| aNumberOfBoxes |
-	aNumberOfBoxes := (self effectOnPosition / aBoard boxParsecLength) floor.
+	aNumberOfBoxes := ((self effectOnPosition / aBoard boardUnitLength) * aBoard amountOfBoxes) floor.
 	^ aNumberOfBoxes
 ]
 
@@ -56,21 +60,21 @@ HyperJumpEffect >> assertSequenceSizeIsValid: aParsecSequenceSize [
 { #category : #effect }
 HyperJumpEffect >> effectOnPosition [
 
-	^ parsecs at: parsecsValuesHandler nextValue
+	^ sequenceUnits at: parsecsValuesHandler nextValue
 ]
 
 { #category : #initialization }
-HyperJumpEffect >> randomlyOf: aParsecSequenceSize [
+HyperJumpEffect >> randomlyOf: aSequenceSize and: aMeasurementUnit [
 
 	| random |
-	self assertSequenceSizeIsValid: aParsecSequenceSize.
+	self assertSequenceSizeIsValid: aSequenceSize.
 	random := Random new.
-	parsecs := OrderedCollection new.
-	aParsecSequenceSize timesRepeat: [ 
-		parsecs add: random next / random next ].
-	parsecs sort: [ :parsecValue1 :parsecValue2 | 
-		parsecValue1 > parsecValue2 ].
-	parsecsValuesHandler := SequenceHandler for: parsecs size
+	sequenceUnits := OrderedCollection new.
+	aSequenceSize timesRepeat: [ 
+		sequenceUnits add: (aMeasurementUnit of: random next / random next) ].
+	sequenceUnits sort: [ :sequenceUnitValue1 :sequenceUnitValue2 | 
+		sequenceUnitValue1 > sequenceUnitValue2 ].
+	parsecsValuesHandler := SequenceHandler for: sequenceUnits size
 ]
 
 { #category : #accessing }
@@ -79,8 +83,8 @@ HyperJumpEffect >> typeOfEffect [
 ]
 
 { #category : #initialization }
-HyperJumpEffect >> with: parsecsValues [
+HyperJumpEffect >> with: measurementValues [
 
-	parsecs := parsecsValues.
-	parsecsValuesHandler := SequenceHandler for: parsecs size
+	sequenceUnits := measurementValues.
+	parsecsValuesHandler := SequenceHandler for: sequenceUnits size
 ]

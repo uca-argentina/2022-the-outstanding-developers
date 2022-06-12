@@ -6,7 +6,7 @@ Class {
 		'turnHandler',
 		'positions',
 		'laps',
-		'boxParsecLength'
+		'boardUnitLength'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -23,13 +23,6 @@ Board class >> assertValidNumberOfLaps: laps [
 
 	laps > 0 ifFalse: [ 
 		Error signal: 'Number of laps should be greater than zero' ]
-]
-
-{ #category : #assertion }
-Board class >> assertValidNumberOfLength: parsecsLength [
-
-	parsecsLength > 0 ifFalse: [ 
-		Error signal: 'Board length should be greater than zero' ]
 ]
 
 { #category : #assertion }
@@ -58,35 +51,34 @@ Board class >> assertValidSpaceshipsAsigneesAreNotRepeated: spaceships [
 ]
 
 { #category : #'instance creation' }
-Board class >> of: aNumberOfBoxes and: parsecsLength playedFor: someLaps by: aSpaceship givenBy: aDistribution [
+Board class >> of: aNumberOfBoxes and: length playedFor: someLaps by: aSpaceship givenBy: aDistribution [
 
 	^ self
 		  of: aNumberOfBoxes
-		  and: parsecsLength
+		  and: length
 		  playedFor: someLaps
 		  byMany: { aSpaceship }
 		  givenBy: aDistribution
 ]
 
 { #category : #'instance creation' }
-Board class >> of: aNumberOfBoxes and: parsecsLength playedFor: someLaps by: aSpaceship with: aBoxSequence [
+Board class >> of: aNumberOfBoxes and: length playedFor: someLaps by: aSpaceship with: aBoxSequence [
 
 	^ self
 		  of: aNumberOfBoxes
-		  and: parsecsLength
+		  and: length
 		  playedFor: someLaps
 		  byMany: { aSpaceship }
 		  with: aBoxSequence
 ]
 
 { #category : #'instance creation' }
-Board class >> of: aNumberOfBoxes and: parsecsLength playedFor: someLaps byMany: spaceships givenBy: aDistribution [
+Board class >> of: aNumberOfBoxes and: length playedFor: someLaps byMany: spaceships givenBy: aDistribution [
 
 	| randomBoxGenerator boxSequnce |
 	self assertValidNumberOfBoxes: aNumberOfBoxes.
 	self assertValidSpaceships: spaceships.
 	self assertValidNumberOfLaps: someLaps.
-	self assertValidNumberOfLength: parsecsLength.
 	randomBoxGenerator := RandomEventGenerator
 		                      with: aNumberOfBoxes
 		                      using: aDistribution.
@@ -94,22 +86,21 @@ Board class >> of: aNumberOfBoxes and: parsecsLength playedFor: someLaps byMany:
 		              Box with: effect ].
 	^ self new
 		  of: aNumberOfBoxes
-		  and: parsecsLength
+		  and: length
 		  playedFor: someLaps
 		  byMany: spaceships
 		  with: boxSequnce
 ]
 
 { #category : #'instance creation' }
-Board class >> of: aNumberOfBoxes and: parsecsLength playedFor: someLaps byMany: spaceships with: aBoxSequence [
+Board class >> of: aNumberOfBoxes and: length playedFor: someLaps byMany: spaceships with: aBoxSequence [
 
 	self assertValidNumberOfBoxes: aNumberOfBoxes.
 	self assertValidSpaceships: spaceships.
 	self assertValidNumberOfLaps: someLaps.
-	self assertValidNumberOfLength: parsecsLength.
 	^ self new
 		  of: aNumberOfBoxes
-		  and: parsecsLength
+		  and: length
 		  playedFor: someLaps
 		  byMany: spaceships
 		  with: aBoxSequence
@@ -169,9 +160,20 @@ Board >> assertThisIsPlayersTurn: index [
 ]
 
 { #category : #accessing }
+Board >> boardUnitLength [
+	^ boardUnitLength
+]
+
+{ #category : #accessing }
+Board >> boxLigthYearLength [
+
+	^ boardUnitLength inLightYears / boxes size
+]
+
+{ #category : #accessing }
 Board >> boxParsecLength [
 
-	^ boxParsecLength
+	^ boardUnitLength inParsecs / boxes size
 ]
 
 { #category : #accessing }
@@ -292,7 +294,7 @@ Board >> nextPositionStartingAt: position in: lap afterMoving: aNumberOfBoxes [
 ]
 
 { #category : #initialization }
-Board >> of: aNumberOfBoxes and: parsecsLength playedFor: someLaps byMany: spaceships with: aBoxSequence [
+Board >> of: aNumberOfBoxes and: length playedFor: someLaps byMany: spaceships with: aBoxSequence [
 
 	| sequenceHandler |
 	boxes := OrderedCollection new.
@@ -303,7 +305,7 @@ Board >> of: aNumberOfBoxes and: parsecsLength playedFor: someLaps byMany: space
 	positions := spaceships collect: [ :spaceship | 
 		             SpacechipPosition following: spaceship name ].
 	turnHandler := SequenceHandler for: spaceships size.
-	boxParsecLength := parsecsLength / aNumberOfBoxes
+	boardUnitLength := length.
 ]
 
 { #category : #playing }

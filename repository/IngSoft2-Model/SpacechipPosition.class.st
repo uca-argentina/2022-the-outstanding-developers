@@ -2,9 +2,7 @@ Class {
 	#name : #SpacechipPosition,
 	#superclass : #Object,
 	#instVars : [
-		'position',
 		'spaceship',
-		'lap',
 		'boardPosition'
 	],
 	#category : #'IngSoft2-Model'
