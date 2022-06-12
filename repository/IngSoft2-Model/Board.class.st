@@ -177,12 +177,6 @@ Board >> boxParsecLength [
 ]
 
 { #category : #accessing }
-Board >> boxUnitLength [
-
-	^ boardUnitLength / boxes size
-]
-
-{ #category : #accessing }
 Board >> lapOf: aSpaceship [
 
 	| spaceshipLap |
