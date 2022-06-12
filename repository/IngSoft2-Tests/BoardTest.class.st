@@ -43,9 +43,10 @@ BoardTest >> testABoardOfOneHundredRandomGeneratedBoxesHasOneHundredBoxes [
 	n := 100.
 	parsecs := ParsecUnit of: 100.
 	enterprise := Spaceship called: 'enterprise'.
+	
 	distributions := OrderedCollection new.
 	distributions add:
-		(Distribution withProbabilityOf: 0.4 for: NoEffect).
+		(Distribution withProbabilityOf: 0.3 for: NoEffect).
 	distributions add:
 		(Distribution withProbabilityOf: 0.2 for: SpeedUpEffect).
 	distributions add:
@@ -56,6 +57,8 @@ BoardTest >> testABoardOfOneHundredRandomGeneratedBoxesHasOneHundredBoxes [
 		(Distribution withProbabilityOf: 0.08 for: HyperJumpEffect).
 	distributions add:
 		(Distribution withProbabilityOf: 0.02 for: AtomicBombEffect).
+	distributions add:
+		(Distribution withProbabilityOf: 0.1 for: CardAwarderEffect).
 
 	board := Board
 		         of: n
