@@ -31,8 +31,8 @@ BoxTest >> testHyperJumpBoxAutogeneratesASequence [
 	box := Box with: anEffect.
 	firstEffect := box effectOnPosition.
 	secondEffect := box effectOnPosition.
-	self assert: firstEffect > 0.
-	self assert: secondEffect <= firstEffect
+	self assert: firstEffect valueOfMeasurement > 0.
+	self assert: secondEffect valueOfMeasurement <= firstEffect valueOfMeasurement
 ]
 
 { #category : #tests }
@@ -51,11 +51,11 @@ BoxTest >> testHyperJumpBoxEffectDisplacesAListOfParsecsValuesRepeatedly [
 	parsecsList := { ParsecUnit of: 4. ParsecUnit of: 3. ParsecUnit of: 1. ParsecUnit of: 5 }.
 	anEffect := HyperJumpEffect with: parsecsList.
 	box := Box with: anEffect.
-	self assert: box effectOnPosition equals: 4.
-	self assert: box effectOnPosition equals: 3.
-	self assert: box effectOnPosition equals: 1.
-	self assert: box effectOnPosition equals: 5.
-	self assert: box effectOnPosition equals: 4
+	self assert: box effectOnPosition valueOfMeasurement equals: 4.
+	self assert: box effectOnPosition valueOfMeasurement equals: 3.
+	self assert: box effectOnPosition valueOfMeasurement equals: 1.
+	self assert: box effectOnPosition valueOfMeasurement equals: 5.
+	self assert: box effectOnPosition valueOfMeasurement equals: 4
 ]
 
 { #category : #tests }
@@ -65,7 +65,7 @@ BoxTest >> testHyperJumpBoxEffectDisplacesFourParsecsForward [
 	parsecsList := { ParsecUnit of: 4 }.
 	anEffect := HyperJumpEffect with: parsecsList.
 	box := Box with: anEffect.
-	self assert: box effectOnPosition equals: 4
+	self assert: box effectOnPosition valueOfMeasurement equals: 4
 ]
 
 { #category : #tests }
@@ -75,7 +75,7 @@ BoxTest >> testHyperJumpBoxEffectDisplacesSixLightYearsForward [
 	lightYearList := { LightYearUnit of: 6 }.
 	anEffect := HyperJumpEffect with: lightYearList.
 	box := Box with: anEffect.
-	self assert: box effectOnPosition equals: 6
+	self assert: box effectOnPosition valueOfMeasurement equals: 6
 ]
 
 { #category : #tests }
