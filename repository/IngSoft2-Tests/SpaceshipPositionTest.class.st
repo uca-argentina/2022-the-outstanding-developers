@@ -20,7 +20,7 @@ SpaceshipPositionTest >> testInitialBoardPositionIsFiveIfSetToFive [
 	| boardPosition delorean |
 	delorean := Spaceship called: 'Delorean'.
 	boardPosition := BoardPosition at: 5 in: 1.
-	boardPosition := SpacechipPosition
+	boardPosition := SpaceshipPosition
 		                 following: delorean
 		                 at: boardPosition.
 	self assert: boardPosition position equals: 5
@@ -31,7 +31,7 @@ SpaceshipPositionTest >> testInitialBoardPositionIsZero [
 
 	| boardPosition zathura |
 	zathura := Spaceship called: 'Zathura'.
-	boardPosition := SpacechipPosition following: zathura.
+	boardPosition := SpaceshipPosition following: zathura.
 	self assert: boardPosition position equals: 0
 ]
 
@@ -40,7 +40,7 @@ SpaceshipPositionTest >> testInitialBoardPositionLapIsOne [
 
 	| boardPosition zathura |
 	zathura := Spaceship called: 'aPlayer'.
-	boardPosition := SpacechipPosition following: zathura.
+	boardPosition := SpaceshipPosition following: zathura.
 	self assert: boardPosition lap equals: 1
 ]
 
@@ -50,6 +50,6 @@ SpaceshipPositionTest >> testSpaceshipPositionIsOneIfSetNegative [
 	| boardPosition zathura |
 	zathura := Spaceship called: 'aPlayer'.
 	boardPosition := BoardPosition at: -1 in: 1.
-	boardPosition := SpacechipPosition following: zathura at: boardPosition .
+	boardPosition := SpaceshipPosition following: zathura at: boardPosition .
 	self assert: boardPosition position equals: 1
 ]

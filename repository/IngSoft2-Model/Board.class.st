@@ -217,14 +217,14 @@ Board >> move: aSpaceship in: aPosition and: aLap by: aNumberOfBoxes [
 		                 afterMoving: aNumberOfBoxes.
 	newPosition := positionToMove = -1
 		               ifFalse: [ 
-			               SpacechipPosition
+			               SpaceshipPosition
 				               following: aSpaceship
 				               at:
 				               (BoardPosition
 					                at: positionToMove
 					                in: aLap) ]
 		               ifTrue: [ 
-			               SpacechipPosition
+			               SpaceshipPosition
 				               following: aSpaceship
 				               at: (BoardPosition at: 1 in: aLap + 1) ].
 	^ newPosition
@@ -303,7 +303,7 @@ Board >> of: aNumberOfBoxes and: length playedFor: someLaps byMany: spaceships w
 		boxes add: (aBoxSequence at: sequenceHandler nextValue) ].
 	laps := someLaps.
 	positions := spaceships collect: [ :spaceship | 
-		             SpacechipPosition following: spaceship name ].
+		             SpaceshipPosition following: spaceship name ].
 	turnHandler := SequenceHandler for: spaceships size.
 	boardUnitLength := length.
 ]
