@@ -10,8 +10,8 @@ Class {
 { #category : #asserting }
 RandomEventGenerator class >> assertProbabilitiesAddUpToOne: aDistribution [
 
-	((aDistribution sum:
-		 [ :probabilityDistribution | probabilityDistribution probability ])
+	(((aDistribution sum:
+		 [ :probabilityDistribution | probabilityDistribution probability ]) round: 2)
 		 = 1) ifFalse: [ 
 		Error signal: 'Probabilities of the distribution must add up to one' ]
 ]
