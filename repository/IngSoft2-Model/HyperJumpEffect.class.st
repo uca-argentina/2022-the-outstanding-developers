@@ -2,7 +2,6 @@ Class {
 	#name : #HyperJumpEffect,
 	#superclass : #Object,
 	#instVars : [
-		'parsecs',
 		'parsecsValuesHandler',
 		'sequenceUnits'
 	],
@@ -13,39 +12,41 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #asserting }
+HyperJumpEffect class >> assertMeasurementValuesAreNotEmpty: measurementValues [
+	measurementValues size > 0 ifFalse: [ Error signal: 'Sequence size must be greater than zero' ]
+]
+
+{ #category : #'instance creation' }
+HyperJumpEffect class >> create [
+	| randomValue measurementUnit |
+	randomValue := 2 atRandom. 
+	measurementUnit := LightYearUnit.
+	randomValue = 1 ifTrue: [ measurementUnit := ParsecUnit ].
+	^self createFrom: measurementUnit
+]
+
 { #category : #'instance creation' }
 HyperJumpEffect class >> createFrom: aMeasurementUnit [
 
 	| random |
 	random := Random new.
-	^ self
-		  randomlyOf: (random next * (numberOfBoxes - 1) + 1) floor
+	^ self new
+		  randomlyOf: (random next / random next) ceiling
 		  and: aMeasurementUnit
 ]
 
-{ #category : #'class initialization' }
-HyperJumpEffect class >> for: aNumberOfBoxes upTo: aLimit [
-
-	numberOfBoxes := aNumberOfBoxes.
-	limit := aLimit
-]
-
 { #category : #'instance creation' }
-HyperJumpEffect class >> randomlyOf: aSequenceSize and: aMeasurementUnit [
-
-	^ self new randomlyOf: aSequenceSize and: aMeasurementUnit 
-]
-
-{ #category : #'instance creation' }
-HyperJumpEffect class >> with: parsecsValues [ 
-	^self new with: parsecsValues.
+HyperJumpEffect class >> with: measurementValues [ 
+	self assertMeasurementValuesAreNotEmpty: measurementValues.
+	^self new with: measurementValues.
 ]
 
 { #category : #effects }
 HyperJumpEffect >> applyEffectOn: aBoard [
 
 	| aNumberOfBoxes |
-	aNumberOfBoxes := (self effectOnPosition / aBoard boxParsecLength) floor.
+	aNumberOfBoxes := ((self effectOnPosition / aBoard boardUnitLength) * aBoard amountOfBoxes) floor.
 	^ aNumberOfBoxes
 ]
 
@@ -82,8 +83,8 @@ HyperJumpEffect >> typeOfEffect [
 ]
 
 { #category : #initialization }
-HyperJumpEffect >> with: parsecsValues [
+HyperJumpEffect >> with: measurementValues [
 
-	parsecs := parsecsValues.
-	parsecsValuesHandler := SequenceHandler for: parsecs size
+	sequenceUnits := measurementValues.
+	parsecsValuesHandler := SequenceHandler for: sequenceUnits size
 ]

@@ -160,6 +160,11 @@ Board >> assertThisIsPlayersTurn: index [
 ]
 
 { #category : #accessing }
+Board >> boardUnitLength [
+	^ boardUnitLength
+]
+
+{ #category : #accessing }
 Board >> boxLigthYearLength [
 
 	^ boardUnitLength inLightYears / boxes size
@@ -169,6 +174,12 @@ Board >> boxLigthYearLength [
 Board >> boxParsecLength [
 
 	^ boardUnitLength inParsecs / boxes size
+]
+
+{ #category : #accessing }
+Board >> boxUnitLength [
+
+	^ boardUnitLength / boxes size
 ]
 
 { #category : #accessing }

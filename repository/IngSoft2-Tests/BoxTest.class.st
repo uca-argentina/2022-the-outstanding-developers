@@ -24,10 +24,10 @@ BoxTest >> testBoxWithNoEffectDoesNotModifyPosition [
 ]
 
 { #category : #tests }
-BoxTest >> testHyperJumpBoxAutogeneratesAParsecSequence [
+BoxTest >> testHyperJumpBoxAutogeneratesASequence [
 
 	| box anEffect firstEffect secondEffect |
-	anEffect := HyperJumpEffect randomlyOf: 4 and: ParsecUnit.
+	anEffect := HyperJumpEffect create.
 	box := Box with: anEffect.
 	firstEffect := box effectOnPosition.
 	secondEffect := box effectOnPosition.
@@ -36,19 +36,19 @@ BoxTest >> testHyperJumpBoxAutogeneratesAParsecSequence [
 ]
 
 { #category : #tests }
-BoxTest >> testHyperJumpBoxAutogenerationParsecSequenceMustBeGreaterThanZero [
+BoxTest >> testHyperJumpBoxCantBeCreatedWithAnEmptySequence [
 
 	self
-		should: [ HyperJumpEffect randomlyOf: 0 ]
+		should: [ HyperJumpEffect with: {  } ]
 		raise: Error
-		withMessage: 'Parsec sequence size must be greater than zero'
+		withMessage: 'Sequence size must be greater than zero'
 ]
 
 { #category : #tests }
 BoxTest >> testHyperJumpBoxEffectDisplacesAListOfParsecsValuesRepeatedly [
 
 	| box anEffect parsecsList |
-	parsecsList := { 4. 3. 1. 5 }.
+	parsecsList := { ParsecUnit of: 4. ParsecUnit of: 3. ParsecUnit of: 1. ParsecUnit of: 5 }.
 	anEffect := HyperJumpEffect with: parsecsList.
 	box := Box with: anEffect.
 	self assert: box effectOnPosition equals: 4.
@@ -62,10 +62,20 @@ BoxTest >> testHyperJumpBoxEffectDisplacesAListOfParsecsValuesRepeatedly [
 BoxTest >> testHyperJumpBoxEffectDisplacesFourParsecsForward [
 
 	| box anEffect parsecsList |
-	parsecsList := { 4 }.
+	parsecsList := { ParsecUnit of: 4 }.
 	anEffect := HyperJumpEffect with: parsecsList.
 	box := Box with: anEffect.
 	self assert: box effectOnPosition equals: 4
+]
+
+{ #category : #tests }
+BoxTest >> testHyperJumpBoxEffectDisplacesSixLightYearsForward [
+
+	| box anEffect lightYearList |
+	lightYearList := { LightYearUnit of: 6 }.
+	anEffect := HyperJumpEffect with: lightYearList.
+	box := Box with: anEffect.
+	self assert: box effectOnPosition equals: 6
 ]
 
 { #category : #tests }

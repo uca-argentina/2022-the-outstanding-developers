@@ -21,6 +21,16 @@ LightYearUnit class >> of: aLightYearsAmount [
 	^ self new of: aLightYearsAmount
 ]
 
+{ #category : #operations }
+LightYearUnit >> / aUnit [ 
+	^ lightYearsAmount / aUnit inLightYears 
+]
+
+{ #category : #comparing }
+LightYearUnit >> > aUnit [ 
+	^ lightYearsAmount > aUnit inLightYears 
+]
+
 { #category : #accessing }
 LightYearUnit >> inLightYears [
 
@@ -37,4 +47,10 @@ LightYearUnit >> inParsecs [
 LightYearUnit >> of: aLightYearsAmount [
 
 	lightYearsAmount := aLightYearsAmount
+]
+
+{ #category : #accessing }
+LightYearUnit >> valueOfMeasurement [
+
+	^ lightYearsAmount
 ]

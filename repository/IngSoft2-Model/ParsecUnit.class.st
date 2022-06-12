@@ -20,10 +20,16 @@ ParsecUnit class >> of: anAmountOfParsecs [
 	^self new of: anAmountOfParsecs.
 ]
 
-{ #category : #comparing }
-ParsecUnit >> > aParsecUnit [
+{ #category : #operations }
+ParsecUnit >> / aUnit [
 
-	^ parsecAmount > aParsecUnit inParsecs
+	^ parsecAmount / aUnit inParsecs
+]
+
+{ #category : #comparing }
+ParsecUnit >> > aUnit [
+
+	^ parsecAmount > aUnit inParsecs
 ]
 
 { #category : #conversion }
@@ -42,4 +48,9 @@ ParsecUnit >> inParsecs [
 ParsecUnit >> of: anAmountOfParsecs [
 
 	parsecAmount := anAmountOfParsecs
+]
+
+{ #category : #accessing }
+ParsecUnit >> valueOfMeasurement [
+	^ parsecAmount
 ]

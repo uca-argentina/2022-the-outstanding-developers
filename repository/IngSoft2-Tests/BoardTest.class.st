@@ -26,7 +26,7 @@ BoardTest >> testABoardOfFifteenBoxesCreatedWithAShorterSequenceHasTheHardcodedA
 	aHyperJumpBox := Box with: (HyperJumpEffect with: { 1 }).
 	anAtomicBombBox := Box with: AtomicBombEffect new.
 	boxSequence := { aNormalBox. aSpeedUpBox. aWormHoleBox. aMoonWalkBox. aHyperJumpBox. anAtomicBombBox  }.
-	board := Board of: 15 and: 15 playedFor: 1 by: enterprise with: boxSequence .
+	board := Board of: 15 and: (ParsecUnit of: 15) playedFor: 1 by: enterprise with: boxSequence .
 	self assert: board amountOfBoxes equals: 15.
 	self assert: board amountOfNoEffectBoxes equals: 3.
 	self assert: board amountOfSpeedUpBoxes equals: 3.
@@ -41,7 +41,7 @@ BoardTest >> testABoardOfOneHundredRandomGeneratedBoxesHasOneHundredBoxes [
 
 	| n parsecs enterprise board distributions |
 	n := 100.
-	parsecs := 100.
+	parsecs := ParsecUnit of: 100.
 	enterprise := Spaceship called: 'enterprise'.
 	distributions := OrderedCollection new.
 	distributions add:
@@ -52,9 +52,8 @@ BoardTest >> testABoardOfOneHundredRandomGeneratedBoxesHasOneHundredBoxes [
 		(Distribution withProbabilityOf: 0.2 for: WormHoleEffect).
 	distributions add:
 		(Distribution withProbabilityOf: 0.1 for: (MoonWalkEffect for: n)).
-	distributions add: (Distribution
-			 withProbabilityOf: 0.08
-			 for: (HyperJumpEffect for: n upTo: parsecs)).
+	distributions add:
+		(Distribution withProbabilityOf: 0.08 for: HyperJumpEffect).
 	distributions add:
 		(Distribution withProbabilityOf: 0.02 for: AtomicBombEffect).
 
@@ -91,7 +90,7 @@ BoardTest >> testABoardOfTenBoxesCreatedWithASequenceHasTheHardcodedAmountOfBoxe
 		               anAtomicBombBox }.
 	board := Board
 		         of: 10
-		         and: 10
+		         and: (ParsecUnit of: 10)
 		         playedFor: 1
 		         by: enterprise
 		         with: boxSequence.
@@ -109,7 +108,7 @@ BoardTest >> testASpaceshipCannotPlayWhenItIsNotItsTurn [
 
 	| distributions enterprise zathura delorean board n parsecs |
 	n := 100.
-	parsecs := 100.
+	parsecs := ParsecUnit of: 100.
 	enterprise := Spaceship called: 'Enterprise'.
 	zathura := Spaceship called: 'Zathura'.
 	delorean := Spaceship called: 'Delorean'.
@@ -132,7 +131,7 @@ BoardTest >> testASpaceshipThatLandsOnANormalBoxDoesntMove [
 
 	| enterprise board |
 	enterprise := Spaceship called: 'Enterprise'.
-	board := Board of: 10 and: 10 playedFor: 1 by: enterprise with: {Box with: NoEffect new}.
+	board := Board of: 10 and: (ParsecUnit of: 10) playedFor: 1 by: enterprise with: {Box with: NoEffect new}.
 	board move: enterprise name by: 1.
 
 	self assert: (board positionOf: enterprise name) equals: 1
@@ -160,7 +159,7 @@ BoardTest >> testASpaceshipThatLandsOnASpeedUpBoxEndsUpFourBoxesAfter [
 		               box5 }.
 	board := Board
 		         of: 10
-					and: 10
+					and: (ParsecUnit of: 10)
 		         playedFor: 1
 		         by: enterprise
 		         with: boxSequence.
@@ -176,7 +175,7 @@ BoardTest >> testASpaceshipsLapPositionVariesToTwoAfterCompletingFirstLap [
 	enterprise := Spaceship called: 'Enterprise'.
 	board := Board
 		         of: 10
-					and: 10
+					and: (ParsecUnit of: 10)
 		         playedFor: 2
 		         by: enterprise
 		         with: { (Box with: NoEffect new) }.
@@ -192,9 +191,9 @@ BoardTest >> testASpaceshipsLapPositionVariesToTwoAfterCompletingFirstLap [
 BoardTest >> testASpaceshipsPositionVariesInFiveWithAFiniteBoardAfterOneRollOfALoadedDieWithFive [
 
 	| n enterprise board loadedDie resultOfTheRoll |
-	n := 10.
+	n := ParsecUnit of: 10.
 	enterprise := Spaceship called: 'Enterprise'.
-	board := Board of: n and: n playedFor: 1 by: enterprise with: {Box with: NoEffect new}.
+	board := Board of: 10 and: n playedFor: 1 by: enterprise with: {Box with: NoEffect new}.
 	loadedDie := LoadedDie with: 5.
 	resultOfTheRoll := loadedDie roll.
 	board move: enterprise name by: resultOfTheRoll.
@@ -215,7 +214,7 @@ BoardTest >> testBoardCannotBeCreatedWithANumberOfBoxesMinorThanOne [
 		should: [ 
 			Board
 				of: -5
-				and: 10
+				and: (ParsecUnit of: 10)
 				playedFor: 1
 				by: zathura
 				givenBy: distributions ]
@@ -235,7 +234,7 @@ BoardTest >> testBoardCannotBeCreatedWithANumberOfLapsMinorThanOne [
 		should: [ 
 			Board
 				of: 15
-				and: 10
+				and: (ParsecUnit of: 10)
 				playedFor: -1
 				by: zathura
 				givenBy: distributions ]
@@ -257,7 +256,7 @@ BoardTest >> testBoardCannotBeCreatedWithMoreThanOneSpaceshipAssignedToTheSamePl
 		should: [ 
 			Board
 				of: 15
-				and: 10
+				and: (ParsecUnit of: 10)
 				playedFor: 1
 				byMany: { 
 						enterprise.
@@ -279,7 +278,7 @@ BoardTest >> testBoardCannotBeCreatedWithoutSpaceships [
 		should: [ 
 			Board
 				of: 10
-				and: 10
+				and: (ParsecUnit of: 10)
 				playedFor: 1
 				byMany: {  }
 				givenBy: distributions ]
@@ -385,7 +384,7 @@ BoardTest >> testPlayersInDifferentLapsReturnToTheFirstBoxOfItsLaps [
 
 	board := Board
 		         of: 5
-		         and: 5
+		         and: (ParsecUnit of: 5)
 		         playedFor: 3
 		         byMany: { 
 				         enterprise.
@@ -448,7 +447,7 @@ BoardTest >> testSpaceshipLandsOnAtomicBombBoxSetsBackEveryoneToFirstBox [
 		               box5 }.
 	board := Board
 		         of: 10
-		         and: 10
+		         and: (ParsecUnit of: 10)
 		         playedFor: 1
 		         byMany: { 
 				         enterprise.
@@ -491,7 +490,7 @@ BoardTest >> testSpaceshipLandsOnMoonWalkBoxSetsBackOtherSpaceshipsExceptItself 
 		               box5 }.
 	board := Board
 		         of: 10
-		         and: 10
+		         and: (ParsecUnit of: 10)
 		         playedFor: 1
 		         byMany: { 
 				         enterprise.
@@ -528,7 +527,7 @@ BoardTest >> testSpaceshipLandsOnWormHoleBoxSetsBackItselfFourBoxes [
 		               box5 }.
 	board := Board
 		         of: 10
-		         and: 10
+		         and: (ParsecUnit of: 10)
 		         playedFor: 2
 		         by: enterprise
 		         with: boxSequence.
@@ -562,7 +561,7 @@ BoardTest >> testSpaceshipRemainsInTheInitialPositionIfEffectIsApplied [
 		               box5 }.
 	board := Board
 		         of: 10
-		         and: 10
+		         and: (ParsecUnit of: 10)
 		         playedFor: 1
 		         byMany: { 
 				         zathura.
@@ -599,7 +598,7 @@ BoardTest >> testSpaceshipThatLandsOnMoonWalkBoxCantMakeOthersGoToNegativePositi
 		               box5 }.
 	board := Board
 		         of: 10
-		         and: 10
+		         and: (ParsecUnit of: 10)
 		         playedFor: 2
 		         byMany: { 
 				         enterprise.
@@ -636,7 +635,7 @@ BoardTest >> testSpaceshipThatLandsOnWormHoleBoxCantGoToNegativePositions [
 		               box5 }.
 	board := Board
 		         of: 10
-		         and: 10
+		         and: (ParsecUnit of: 10)
 		         playedFor: 2
 		         by: delorean
 		         with: boxSequence.
@@ -646,13 +645,69 @@ BoardTest >> testSpaceshipThatLandsOnWormHoleBoxCantGoToNegativePositions [
 ]
 
 { #category : #tests }
+BoardTest >> testSpaceshipsOnABordInLightYearsThatLandsOnAHyperJumpBoxInParsecsEndsOnNextBox [
+
+	| board noEffect anEffect boxSequence box1 box2 box3 delorean aLigthYearUnit |
+	delorean := Spaceship called: 'Delorean'.
+	noEffect := NoEffect new.
+	anEffect := HyperJumpEffect with: { (ParsecUnit of: 3) }.
+	aLigthYearUnit := LightYearUnit of: 60.
+
+	box1 := Box with: anEffect.
+	box2 := Box with: noEffect.
+	box3 := Box with: noEffect.
+
+	boxSequence := { 
+		               box1.
+		               box2.
+		               box3 }.
+	board := Board
+		         of: 10
+		         and: aLigthYearUnit
+		         playedFor: 1
+		         by: delorean
+		         with: boxSequence.
+	board moveSpaceship: 1.
+
+	self assert: (board positionOf: delorean name) equals: 2
+]
+
+{ #category : #tests }
+BoardTest >> testSpaceshipsOnABordInParsecsThatLandsOnAHyperJumpBoxInLightYearsEndsOnNextBox [
+
+	| board noEffect anEffect boxSequence box1 box2 box3 delorean aParsecUnit |
+	delorean := Spaceship called: 'Delorean'.
+	noEffect := NoEffect new.
+	anEffect := HyperJumpEffect with: { (LightYearUnit of: 15) }.
+	aParsecUnit := ParsecUnit of: 40.
+
+	box1 := Box with: anEffect.
+	box2 := Box with: noEffect.
+	box3 := Box with: noEffect.
+
+	boxSequence := { 
+		               box1.
+		               box2.
+		               box3 }.
+	board := Board
+		         of: 10
+		         and: aParsecUnit
+		         playedFor: 1
+		         by: delorean
+		         with: boxSequence.
+	board moveSpaceship: 1.
+
+	self assert: (board positionOf: delorean name) equals: 2
+]
+
+{ #category : #tests }
 BoardTest >> testSpaceshipsThatLandsOnAHyperJumpBoxEndUpFiveBoxesAfterThenFourBoxesAfter [
 
 	| board noEffect anEffect boxSequence box1 box2 box3 box4 box5 delorean enterprise aParsecUnit |
 	delorean := Spaceship called: 'Delorean'.
 	enterprise := Spaceship called: 'Enterprise'.
 	noEffect := NoEffect new.
-	anEffect := HyperJumpEffect with: { 10. 8 }.
+	anEffect := HyperJumpEffect with: { ParsecUnit of: 10. ParsecUnit of: 8 }.
 	aParsecUnit := ParsecUnit of: 20.
 
 	box1 := Box with: anEffect.
@@ -694,7 +749,7 @@ BoardTest >> testSpaceshipsThatLandsOnAHyperJumpBoxEndUpFiveBoxesAfterThenFourBo
 	enterprise := Spaceship called: 'Enterprise'.
 	zathura := Spaceship called: 'Zathura'.
 	noEffect := NoEffect new.
-	anEffect := HyperJumpEffect with: { 14. 13 }.
+	anEffect := HyperJumpEffect with: { ParsecUnit of: 14. ParsecUnit of: 13 }.
 	aParsecUnit := ParsecUnit of: 100.
 
 	box1 := Box with: anEffect.
@@ -725,6 +780,34 @@ BoardTest >> testSpaceshipsThatLandsOnAHyperJumpBoxEndUpFiveBoxesAfterThenFourBo
 ]
 
 { #category : #tests }
+BoardTest >> testSpaceshipsThatLandsOnAHyperJumpBoxWithLightYearsEndsOnNextBox [
+
+	| board noEffect anEffect boxSequence box1 box2 box3 delorean aLightYearUnit |
+	delorean := Spaceship called: 'Delorean'.
+	noEffect := NoEffect new.
+	anEffect := HyperJumpEffect with: { (LightYearUnit of: 6) }.
+	aLightYearUnit := LightYearUnit of: 40.
+
+	box1 := Box with: anEffect.
+	box2 := Box with: noEffect.
+	box3 := Box with: noEffect.
+
+	boxSequence := { 
+		               box1.
+		               box2.
+		               box3 }.
+	board := Board
+		         of: 10
+		         and: aLightYearUnit
+		         playedFor: 1
+		         by: delorean
+		         with: boxSequence.
+	board moveSpaceship: 1.
+
+	self assert: (board positionOf: delorean name) equals: 2
+]
+
+{ #category : #tests }
 BoardTest >> testSpeedUpDoesntTriggerAnotherSpeedUp [
 
 	| zathura board anEffect speedUpBox box |
@@ -736,7 +819,7 @@ BoardTest >> testSpeedUpDoesntTriggerAnotherSpeedUp [
 
 	board := Board
 		         of: 10
-		         and: 10
+		         and: (ParsecUnit of: 10)
 		         playedFor: 1
 		         by: zathura
 		         with: { box }.
