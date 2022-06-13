@@ -2,7 +2,8 @@ Class {
 	#name : #Spaceship,
 	#superclass : #Object,
 	#instVars : [
-		'name'
+		'name',
+		'unplayedCards'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -27,6 +28,12 @@ Spaceship >> = anObject [
 	^ self class = anObject class and: [ name = anObject name ]
 ]
 
+{ #category : #accessing }
+Spaceship >> cardDeck [
+
+	^ unplayedCards
+]
+
 { #category : #comparing }
 Spaceship >> hash [
 
@@ -43,4 +50,26 @@ Spaceship >> initializeCalling: aSpaceshipName [
 Spaceship >> name [
 
 	^ name
+]
+
+{ #category : #assignment }
+Spaceship >> receives: aCard [
+
+	self receivesMany: { aCard }
+]
+
+{ #category : #assignment }
+Spaceship >> receivesMany: cards [
+
+	unplayedCards := cards
+]
+
+{ #category : #'card throwing' }
+Spaceship >> throw: BANANACard to: aSpaceship in: aBoard [
+
+	"assert de que hay n cartas en el arrreglo interno"
+
+	| aCard |
+	aCard := unplayedCards at: BANANACard.
+	aBoard throw: aCard to: aSpaceship
 ]

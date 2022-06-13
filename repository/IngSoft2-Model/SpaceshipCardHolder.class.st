@@ -3,7 +3,7 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'spaceship',
-		'cardsDeck'
+		'cardDeck'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -20,15 +20,28 @@ SpaceshipCardHolder class >> of: aSpaceship holdingMany: cards [
 	^ self new of: aSpaceship holdingMany: cards
 ]
 
+{ #category : #'card deck modifying' }
+SpaceshipCardHolder >> add: aCard [
+
+	cardDeck add: aCard
+]
+
+{ #category : #accessing }
+SpaceshipCardHolder >> cardDeck [
+
+	^ cardDeck 
+]
+
 { #category : #initialization }
 SpaceshipCardHolder >> of: aSpaceship holdingMany: cards [
 
 	spaceship := aSpaceship.
-	cardsDeck := cards
+	cardDeck := OrderedCollection new.
+	cards do: [ :card | cardDeck add: card ]
 ]
 
 { #category : #accessing }
-SpaceshipCardHolder >> unplayedCards [
+SpaceshipCardHolder >> spaceship [
 
-	^ cardsDeck 
+	^ spaceship
 ]

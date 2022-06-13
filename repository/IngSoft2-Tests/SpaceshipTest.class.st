@@ -42,6 +42,32 @@ SpaceshipTest >> testSpaceshipCreatedWithPlayerNameIsValid [
 ]
 
 { #category : #tests }
+SpaceshipTest >> testSpaceshipHasOnePendingCardToPlay [
+
+	| delorean aCard |
+	delorean := Spaceship called: 'Delorean'.
+	aCard := OverloadCard new.
+	delorean receives: aCard.
+
+	self assert: delorean cardDeck equals: { aCard }
+]
+
+{ #category : #tests }
+SpaceshipTest >> testSpaceshipHasTwoPendingCardsToPlay [
+
+	| delorean overloadCard speedCard cards |
+	delorean := Spaceship called: 'Delorean'.
+	overloadCard := OverloadCard new.
+	speedCard := SpeedCard new.
+	cards := { 
+		         overloadCard.
+		         speedCard }.
+	delorean receivesMany: cards.
+
+	self assert: delorean cardDeck equals: cards
+]
+
+{ #category : #tests }
 SpaceshipTest >> testSpaceshipOfPlayerOneIsDifferentFromSpaceshipOfPlayerTwo [
 
 	| spaceshipOne spaceshipTwo |

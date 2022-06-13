@@ -307,6 +307,26 @@ BoardTest >> testBoardCreatedWithTenBoxesAndALengthOfTwoHundredParsecsHasBoxesLe
 ]
 
 { #category : #tests }
+BoardTest >> testBoardIsCreatedWithASpaceshipCardDeck [
+
+	| zathura distributions board aParsecUnit zathuraCardHolder |
+	zathura := Spaceship called: 'Zathura'.
+	distributions := OrderedCollection new.
+	distributions add: (Distribution withProbabilityOf: 1 for: NoEffect).
+	aParsecUnit := ParsecUnit of: 10.
+	zathuraCardHolder := SpaceshipCardHolder
+		                     of: zathura
+		                     holdingMany: {  }.
+	board := Board
+		         of: 20
+		         and: aParsecUnit
+		         playedFor: 1
+		         by: zathura
+		         givenBy: distributions.
+"	self assert: board spaceshipsCardDeck equals: { zathuraCardHolder }"
+]
+
+{ #category : #tests }
 BoardTest >> testBoardLengthCreatedInLigthYearsCanBeExpressedInParsecsOrLightYears [
 
 	| distributions enterprise board aLightYearUnit |

@@ -5,21 +5,31 @@ Class {
 }
 
 { #category : #tests }
-CardTest >> testOverloadCardReducesInTwoTheSpaceshipDiceThrow [
+CardTest >> testASpaceshipThrowsACardToAnotherOneAndItBecomesPartOfTheGame [
 
-	| aCard enterprise aBoard delorean spaceshipsPlaying |
-	aCard := OverloadCard new.
+	| speedCard enterprise aBoard delorean collectionOfCards |
+	speedCard := SpeedCard new.
+
 	enterprise := Spaceship called: 'Enterprise'.
+	enterprise receives: speedCard.
+
 	delorean := Spaceship called: 'Delorean'.
 	aBoard := Board
 		          of: 10
 		          and: (ParsecUnit of: 10)
 		          playedFor: 1
-		          by: enterprise
+		          byMany: { 
+				          enterprise.
+				          delorean }
 		          with: { NoEffect new }.
-	
-"	spaceshipsPlaying := delorean meetOtherSpaceshipsIn: aBoard.
-	delorean throw: aCard to: (spaceshipsPlaying at: 2) in: aBoard.
-	aBoard moveSpaceship: 5.
-	self assert: (aBoard positionOf: enterprise name) equals: 3"
+	enterprise throw: 1 to: delorean in: aBoard.
+
+	collectionOfCards := OrderedCollection new.
+	collectionOfCards add: speedCard.
+	self assert: (aBoard cardDeckOf: delorean) equals: collectionOfCards
+]
+
+{ #category : #tests }
+CardTest >> testOverloadCardReducesInTwoTheSpaceshipDiceThrow [
+
 ]

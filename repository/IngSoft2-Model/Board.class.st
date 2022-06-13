@@ -6,7 +6,8 @@ Class {
 		'turnHandler',
 		'positions',
 		'laps',
-		'boardUnitLength'
+		'boardUnitLength',
+		'spaceshipsCardDeck'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -177,6 +178,12 @@ Board >> boxParsecLength [
 ]
 
 { #category : #accessing }
+Board >> cardDeckOf: aSpaceship [ 
+
+	   ^ (spaceshipsCardDeck detect: [ :spaceshipCardDeck | spaceshipCardDeck spaceship = aSpaceship ]) cardDeck
+]
+
+{ #category : #accessing }
 Board >> lapOf: aSpaceship [
 
 	| spaceshipLap |
@@ -272,6 +279,8 @@ Board >> moveSpaceship: aNumberOfBoxes [
 
 	| spaceshipPlaying |
 	spaceshipPlaying := (positions at: turnHandler nextValue) spaceship.
+	"verificar que cartas tiene"
+	"afectar el resultado en numberOfBoxes"
 	self move: spaceshipPlaying by: aNumberOfBoxes
 ]
 
@@ -304,8 +313,10 @@ Board >> of: aNumberOfBoxes and: length playedFor: someLaps byMany: spaceships w
 	laps := someLaps.
 	positions := spaceships collect: [ :spaceship | 
 		             SpaceshipPosition following: spaceship name ].
+	spaceshipsCardDeck := spaceships collect: [ :spaceship | 
+		             SpaceshipCardHolder of: spaceship holdingMany: { } ].
 	turnHandler := SequenceHandler for: spaceships size.
-	boardUnitLength := length.
+	boardUnitLength := length
 ]
 
 { #category : #playing }
@@ -339,12 +350,28 @@ Board >> rankingPositionOf: aSpaceshipName [
 	^ index
 ]
 
+{ #category : #accessing }
+Board >> spaceshipsCardDeck [
+
+	^ spaceshipsCardDeck
+]
+
 { #category : #properties }
 Board >> thereIsAWinner [
 
 	^ positions anySatisfy: [ :boardPosition | 
 		  boardPosition position > self amountOfBoxes
 		  & (boardPosition lap = laps) ]
+]
+
+{ #category : #'card throwing' }
+Board >> throw: aCard to: aSpaceship [ 
+
+	"buscar el card holder correspondiente a la nave"
+	"agregar la carta al card holder"
+	| spaceshipDeck  |
+	spaceshipDeck := spaceshipsCardDeck detect: [ :spaceshipCardDeck | spaceshipCardDeck spaceship = aSpaceship ].
+	spaceshipDeck add: aCard.
 ]
 
 { #category : #properties }
