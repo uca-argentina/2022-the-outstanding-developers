@@ -91,7 +91,7 @@ SpaceshipTest >> testSpaceshipThatStartsWithTwoCardsAndPlaysOneHasOneCardLeftToP
 	| delorean anOverloadCard aSpeedCard starlink aBoard |
 	delorean := Spaceship called: 'Delorean'.
 	starlink := Spaceship called: 'Starlink'.
-	anOverloadCard := OverloadCard new.
+	anOverloadCard := OverloadCard asA: PermanentCard new.
 	aSpeedCard := SpeedCard new.
 	aBoard := Board
 		          of: 10

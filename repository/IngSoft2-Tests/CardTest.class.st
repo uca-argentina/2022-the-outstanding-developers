@@ -4,11 +4,44 @@ Class {
 	#category : #'IngSoft2-Tests'
 }
 
+{ #category : #asserting }
+CardTest >> should: block raise: expectedErrorClass withMessage: expectedErrorMessage [
+
+	self
+		should: block
+		raise: expectedErrorClass
+		whoseDescriptionIncludes: expectedErrorMessage
+		description: 'Test did not failed as expected'
+]
+
+{ #category : #tests }
+CardTest >> testAPermanentCardCantBeUsedIfItIsNotTheSpaceshipsTurn [
+
+	| overloadCard enterprise aBoard delorean |
+	overloadCard := OverloadCard asA: PermanentCard new.
+	delorean := Spaceship called: 'Delorean'.
+	enterprise := Spaceship called: 'Enterprise'.
+	enterprise receives: overloadCard.
+	aBoard := Board
+		          of: 10
+		          and: (ParsecUnit of: 10)
+		          playedFor: 1
+		          byMany: { 
+				          enterprise.
+				          delorean }
+		          with: { (Box with: NoEffect new) }.
+	aBoard moveSpaceship: 3.
+	self
+		should: [ enterprise throw: 1 to: 'Delorean' in: aBoard ]
+		raise: Error
+		withMessage: 'Permanent cards can only be thrown in spaceships turn'
+]
+
 { #category : #tests }
 CardTest >> testASpaceshipThrowsACardToAnotherOneAndItBecomesPartOfTheGame [
 
 	| speedCard enterprise aBoard delorean collectionOfCards |
-	speedCard := SpeedCard new.
+	speedCard := SpeedCard asA: PermanentCard new.
 
 	enterprise := Spaceship called: 'Enterprise'.
 	enterprise receives: speedCard.
@@ -33,9 +66,9 @@ CardTest >> testASpaceshipThrowsACardToAnotherOneAndItBecomesPartOfTheGame [
 CardTest >> testEffectOfMultipleCardsIsAddesUpIntoTheSpaceshipDiceThrow [
 
 	| anOverloadCard enterprise aBoard delorean aSpeedCard anotherSpeedCard |
-	anOverloadCard := OverloadCard new.
-	aSpeedCard := SpeedCard new.
-	anotherSpeedCard := SpeedCard new.
+	anOverloadCard := OverloadCard asA: PermanentCard new.
+	aSpeedCard := SpeedCard asA: PermanentCard new.
+	anotherSpeedCard := SpeedCard asA: PermanentCard new.
 
 	enterprise := Spaceship called: 'Enterprise'.
 	enterprise receivesMany: { 
@@ -64,7 +97,7 @@ CardTest >> testEffectOfMultipleCardsIsAddesUpIntoTheSpaceshipDiceThrow [
 { #category : #tests }
 CardTest >> testOverloadCardProducesSpaceshipToGoBackwards [
 	| overloadCard enterprise aBoard delorean |
-	overloadCard := OverloadCard new.
+	overloadCard := OverloadCard  asA: PermanentCard new.
 
 	enterprise := Spaceship called: 'Enterprise'.
 	enterprise receives: overloadCard.
@@ -92,7 +125,7 @@ CardTest >> testOverloadCardProducesSpaceshipToGoBackwards [
 { #category : #tests }
 CardTest >> testOverloadCardReducesInTwoTheSpaceshipDiceThrow [
 	| overloadCard enterprise aBoard delorean |
-	overloadCard := OverloadCard new.
+	overloadCard := OverloadCard  asA: PermanentCard new.
 
 	enterprise := Spaceship called: 'Enterprise'.
 	enterprise receives: overloadCard.
@@ -116,7 +149,7 @@ CardTest >> testOverloadCardReducesInTwoTheSpaceshipDiceThrow [
 { #category : #tests }
 CardTest >> testSpeedupCardincreasesInOneTheSpaceshipDiceThrow [
 	| speedCard enterprise aBoard delorean |
-	speedCard := SpeedCard new.
+	speedCard := SpeedCard  asA: PermanentCard new.
 
 	enterprise := Spaceship called: 'Enterprise'.
 	enterprise receives: speedCard.

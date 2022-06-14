@@ -28,6 +28,13 @@ Spaceship >> = anObject [
 	^ self class = anObject class and: [ name = anObject name ]
 ]
 
+{ #category : #asserting }
+Spaceship >> assertCardCanBeThrown: aCard in: aBoard [
+
+	aCard assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs:
+		(aBoard isSpaceshipsTurn: name)
+]
+
 { #category : #accessing }
 Spaceship >> cardDeck [
 
@@ -71,5 +78,6 @@ Spaceship >> throw: BANANACard to: aSpaceship in: aBoard [
 
 	| aCard |
 	aCard := unplayedCards removeAt: BANANACard.
+	self assertCardCanBeThrown: aCard in: aBoard.
 	aBoard throw: aCard to: aSpaceship
 ]

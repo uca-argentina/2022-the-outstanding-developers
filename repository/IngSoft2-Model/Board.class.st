@@ -183,6 +183,13 @@ Board >> cardDeckOf: aSpaceship [
 	   ^ (spaceshipsCardDeck detect: [ :spaceshipCardDeck | spaceshipCardDeck spaceship name = aSpaceship ]) cardDeck
 ]
 
+{ #category : #validation }
+Board >> isSpaceshipsTurn: aSpaceship [
+
+	^ turnHandler assertCurrentIndexIs:
+		(self positionInPositionsOf: aSpaceship)
+]
+
 { #category : #accessing }
 Board >> lapOf: aSpaceship [
 
@@ -323,8 +330,8 @@ Board >> of: aNumberOfBoxes and: length playedFor: someLaps byMany: spaceships w
 Board >> positionInPositionsOf: aSpaceship [
 
 	| currentPosition |
-	currentPosition := (positions select: [ :position | 
-		                    position spaceship = aSpaceship ]) at: 1.
+	currentPosition := (positions detect: [ :position | 
+		                    position spaceship = aSpaceship ]).
 	^ positions indexOf: currentPosition
 ]
 

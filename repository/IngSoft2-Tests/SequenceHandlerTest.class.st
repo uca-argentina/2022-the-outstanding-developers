@@ -39,7 +39,7 @@ SequenceHandlerTest >> testSequenceHandlerReturnsCurrentIndexWithoutIncrementing
 	| turnHandler |
 	turnHandler := SequenceHandler for: 3.
 	turnHandler nextValue.
-	self assert: turnHandler currentIndex equals: 1.
+	self assert: turnHandler currentIndex equals: 2.
 	turnHandler nextValue.
-	self assert: turnHandler currentIndex equals: 2
+	self assert: turnHandler currentIndex equals: 3
 ]

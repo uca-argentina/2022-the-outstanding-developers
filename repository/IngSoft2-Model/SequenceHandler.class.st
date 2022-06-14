@@ -15,16 +15,22 @@ SequenceHandler class >> for: aSequenceSize [
 	^ self new initializeFor: aSequenceSize
 ]
 
+{ #category : #asserting }
+SequenceHandler >> assertCurrentIndexIs: anIndex [
+
+	^ anIndex = currentSequenceIndex
+]
+
 { #category : #assertion }
 SequenceHandler >> assertSequenceIndexIs: anIndex [
 
-	^ anIndex = sequenceValueInUse
+	^ anIndex = sequenceValueInUse   
 ]
 
 { #category : #accessing }
 SequenceHandler >> currentIndex [
 
-	^ sequenceValueInUse
+	^ currentSequenceIndex
 ]
 
 { #category : #initialization }
