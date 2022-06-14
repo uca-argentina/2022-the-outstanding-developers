@@ -1,5 +1,5 @@
 Class {
-	#name : #SpeedCard,
+	#name : #AccelerationCard,
 	#superclass : #Object,
 	#instVars : [
 		'typeOfCard'
@@ -8,25 +8,25 @@ Class {
 }
 
 { #category : #'instance creation' }
-SpeedCard class >> asA: aTypeOfCard [
+AccelerationCard class >> asA: aTypeOfCard [
 
 	^ self new initializeAs: aTypeOfCard
 ]
 
 { #category : #asserting }
-SpeedCard >> assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs: anAssertion [
+AccelerationCard >> assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs: anAssertion [
 
 	typeOfCard canBeThrownWithCurrentTurn: anAssertion
 ]
 
 { #category : #effect }
-SpeedCard >> effectOnThrow [
+AccelerationCard >> effectOnThrow [
 
 	^ 1
 ]
 
 { #category : #initialization }
-SpeedCard >> initializeAs: aTypeOfCard [
+AccelerationCard >> initializeAs: aTypeOfCard [
 
 	typeOfCard := aTypeOfCard
 ]

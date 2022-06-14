@@ -72,12 +72,23 @@ Spaceship >> receivesMany: cards [
 ]
 
 { #category : #'card throwing' }
+Spaceship >> throw: BANANACard in: aBoard [ 
+	
+	| aCard |
+	aCard := unplayedCards at: BANANACard.
+	self assertCardCanBeThrown: aCard in: aBoard.
+	unplayedCards removeAt: BANANACard.
+	aBoard throw: aCard.
+]
+
+{ #category : #'card throwing' }
 Spaceship >> throw: BANANACard to: aSpaceship in: aBoard [
 
 	"assert de que hay n cartas en el arrreglo interno"
 
 	| aCard |
-	aCard := unplayedCards removeAt: BANANACard.
+	aCard := unplayedCards at: BANANACard.
 	self assertCardCanBeThrown: aCard in: aBoard.
+	unplayedCards removeAt: BANANACard.
 	aBoard throw: aCard to: aSpaceship
 ]

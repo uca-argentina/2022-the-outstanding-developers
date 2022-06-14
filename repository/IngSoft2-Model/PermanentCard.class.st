@@ -5,6 +5,9 @@ Class {
 }
 
 { #category : #validation }
-PermanentCard >> canBeThrownWithCurrentTurn: isCurrentTurn [ 
-	isCurrentTurn ifFalse: [ Error signal: 'Permanent cards can only be thrown in spaceships turn' ]
+PermanentCard >> canBeThrownWithCurrentTurn: isCurrentTurn [
+
+	isCurrentTurn ifFalse: [ 
+		Error signal:
+			'Permanent cards can only be thrown in spaceships turn' ]
 ]

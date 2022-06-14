@@ -372,6 +372,12 @@ Board >> thereIsAWinner [
 ]
 
 { #category : #'card throwing' }
+Board >> throw: aCard [ 
+	
+	spaceshipsCardDeck do: [ :spaceshipCardDeck | spaceshipCardDeck add: aCard ].
+]
+
+{ #category : #'card throwing' }
 Board >> throw: aCard to: aSpaceship [ 
 
 	"buscar el card holder correspondiente a la nave"

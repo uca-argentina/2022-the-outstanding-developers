@@ -144,7 +144,7 @@ BoardTest >> testASpaceshipThatLandsOnANormalBoxDoesntMove [
 BoardTest >> testASpaceshipThatLandsOnASpeedUpBoxEndsUpFourBoxesAfter [
 
 	| enterprise board normalBox speedUpBox boxSequence box1 box2 box3 box4 box5 |
-	enterprise := Spaceship called: 'SP1'.
+	enterprise := Spaceship called: 'Enterprise'.
 	normalBox := NoEffect new.
 	speedUpBox := SpeedUpEffect new.
 
