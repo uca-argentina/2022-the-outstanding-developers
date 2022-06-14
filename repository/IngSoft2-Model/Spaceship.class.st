@@ -61,7 +61,7 @@ Spaceship >> receives: aCard [
 { #category : #assignment }
 Spaceship >> receivesMany: cards [
 
-	unplayedCards := cards
+	unplayedCards := cards asOrderedCollection
 ]
 
 { #category : #'card throwing' }
@@ -70,6 +70,6 @@ Spaceship >> throw: BANANACard to: aSpaceship in: aBoard [
 	"assert de que hay n cartas en el arrreglo interno"
 
 	| aCard |
-	aCard := unplayedCards at: BANANACard.
+	aCard := unplayedCards removeAt: BANANACard.
 	aBoard throw: aCard to: aSpaceship
 ]

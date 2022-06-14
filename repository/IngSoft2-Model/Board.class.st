@@ -180,7 +180,7 @@ Board >> boxParsecLength [
 { #category : #accessing }
 Board >> cardDeckOf: aSpaceship [ 
 
-	   ^ (spaceshipsCardDeck detect: [ :spaceshipCardDeck | spaceshipCardDeck spaceship = aSpaceship ]) cardDeck
+	   ^ (spaceshipsCardDeck detect: [ :spaceshipCardDeck | spaceshipCardDeck spaceship name = aSpaceship ]) cardDeck
 ]
 
 { #category : #accessing }
@@ -277,11 +277,11 @@ Board >> movePlayingSpaceshipAt: aPosition by: anAmount [
 { #category : #movement }
 Board >> moveSpaceship: aNumberOfBoxes [
 
-	| spaceshipPlaying |
+	| spaceshipPlaying deckOfSpaceship effectOnDiceThrow |
 	spaceshipPlaying := (positions at: turnHandler nextValue) spaceship.
-	"verificar que cartas tiene"
-	"afectar el resultado en numberOfBoxes"
-	self move: spaceshipPlaying by: aNumberOfBoxes
+	deckOfSpaceship := self cardDeckOf: spaceshipPlaying.
+	effectOnDiceThrow := deckOfSpaceship sum: [ :card | card effectOnThrow ].
+	self move: spaceshipPlaying by: (aNumberOfBoxes + effectOnDiceThrow )
 ]
 
 { #category : #assertions }
@@ -370,7 +370,7 @@ Board >> throw: aCard to: aSpaceship [
 	"buscar el card holder correspondiente a la nave"
 	"agregar la carta al card holder"
 	| spaceshipDeck  |
-	spaceshipDeck := spaceshipsCardDeck detect: [ :spaceshipCardDeck | spaceshipCardDeck spaceship = aSpaceship ].
+	spaceshipDeck := spaceshipsCardDeck detect: [ :spaceshipCardDeck | spaceshipCardDeck spaceship name = aSpaceship ].
 	spaceshipDeck add: aCard.
 ]
 

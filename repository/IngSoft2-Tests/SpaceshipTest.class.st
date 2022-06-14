@@ -49,7 +49,7 @@ SpaceshipTest >> testSpaceshipHasOnePendingCardToPlay [
 	aCard := OverloadCard new.
 	delorean receives: aCard.
 
-	self assert: delorean cardDeck equals: { aCard }
+	self assert: delorean cardDeck size equals: 1
 ]
 
 { #category : #tests }
@@ -64,7 +64,7 @@ SpaceshipTest >> testSpaceshipHasTwoPendingCardsToPlay [
 		         speedCard }.
 	delorean receivesMany: cards.
 
-	self assert: delorean cardDeck equals: cards
+	self assert: delorean cardDeck size equals: 2
 ]
 
 { #category : #tests }
@@ -83,6 +83,32 @@ SpaceshipTest >> testSpaceshipOfPlayerOneIsEqualToSpaceshipOfPlayerOne [
 	spaceshipOne := Spaceship called: 'playerOne'.
 	spaceshipTwo := Spaceship called: 'playerOne'.
 	self assert: spaceshipOne equals: spaceshipTwo
+]
+
+{ #category : #tests }
+SpaceshipTest >> testSpaceshipThatStartsWithTwoCardsAndPlaysOneHasOneCardLeftToPlay [
+
+	| delorean anOverloadCard aSpeedCard starlink aBoard |
+	delorean := Spaceship called: 'Delorean'.
+	starlink := Spaceship called: 'Starlink'.
+	anOverloadCard := OverloadCard new.
+	aSpeedCard := SpeedCard new.
+	aBoard := Board
+		          of: 10
+		          and: (ParsecUnit of: 10)
+		          playedFor: 1
+		          byMany: { 
+				          delorean.
+				          starlink }
+		          with: { (Box with: NoEffect new) }.
+	delorean receivesMany: { 
+			anOverloadCard.
+			aSpeedCard }.
+
+	self assert: delorean cardDeck size equals: 2.
+
+	delorean throw: 1 to: 'Starlink' in: aBoard.
+	self assert: delorean cardDeck size equals: 1
 ]
 
 { #category : #tests }
