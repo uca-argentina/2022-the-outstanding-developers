@@ -92,6 +92,48 @@ OutstandingSpaceshipsGameTest >> testGameCanBeWonAndRankingCanBeShown [
 ]
 
 { #category : #tests }
+OutstandingSpaceshipsGameTest >> testGameGivesTwoRandomCardsToEachSpaceshipAtTheBegining [
+
+	| aBoard aLoadedDie anOustandingGame aCardDistribution |
+	aBoard := Board
+		          of: 15
+		          and: (ParsecUnit of: 15)
+		          playedFor: 2
+		          with: { (Box with: NoEffect new) }.
+	aLoadedDie := LoadedDie with: 4.
+
+	aCardDistribution := OrderedCollection new.
+
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1 / 6
+			 for: (SpeedCard behavingAsA: PermanentCard)).
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1 / 6
+			 for: (AccelerationCard behavingAsA: PermanentCard)).
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1 / 6
+			 for: (OverloadCard as: PermanentCard)).
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1 / 6
+			 for: (CancellationCard behavingAsA: InstantaneousCard)).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 / 6 for: RedoCard).
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1 / 6
+			 for: (RepeatCard behavingAsA: InstantaneousCard)).
+
+	anOustandingGame := OutstandingSpaceshipsGame
+		                    playedByMany: { 'Delorean'. 'Enterprise' }
+		                    on: aBoard
+		                    throwing: aLoadedDie
+		                    using: aCardDistribution.
+
+
+	self assert: (anOustandingGame deckOf: 'Delorean') size equals: 2.
+	self assert: (anOustandingGame deckOf: 'Enterprise') size equals: 2
+]
+
+{ #category : #tests }
 OutstandingSpaceshipsGameTest >> testGameWithABoardOfFifteenBoxesALoadedDieAndASpaceshipEndsWithFinalPositionOfSixteen [
 
 	| enterprise aBoard aDie game |

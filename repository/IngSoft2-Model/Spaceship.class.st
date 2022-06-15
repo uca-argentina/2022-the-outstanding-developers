@@ -29,10 +29,29 @@ Spaceship >> = anObject [
 ]
 
 { #category : #asserting }
+Spaceship >> assertAmountOfCardsIsValid: anAmount [
+
+	anAmount < 0 ifTrue: [ 
+		Error signal: 'Cannot select a card of index smaller than 1' ]
+]
+
+{ #category : #asserting }
 Spaceship >> assertCardCanBeThrown: aCard in: aBoard [
 
+	aBoard assertACardCanBeThrown.
 	aCard assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs:
 		(aBoard isSpaceshipsTurn: name)
+]
+
+{ #category : #asserting }
+Spaceship >> assertSpaceshipHasNAmountOfCards: anAmount [
+
+	unplayedCards isEmpty
+		ifTrue: [ Error signal: 'The spaceship doesnt have cards to throw' ]
+		ifFalse: [ 
+			anAmount > unplayedCards size ifTrue: [ 
+				Error signal:
+					'The card selected is not in the spaceship card deck' ] ]
 ]
 
 { #category : #accessing }
@@ -87,6 +106,8 @@ Spaceship >> throw: BANANACard to: aSpaceship in: aBoard [
 	"assert de que hay n cartas en el arrreglo interno"
 
 	| aCard |
+	self assertAmountOfCardsIsValid: BANANACard.
+	self assertSpaceshipHasNAmountOfCards: BANANACard.
 	aCard := unplayedCards at: BANANACard.
 	self assertCardCanBeThrown: aCard in: aBoard.
 	unplayedCards removeAt: BANANACard.

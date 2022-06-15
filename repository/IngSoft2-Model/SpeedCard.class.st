@@ -4,6 +4,9 @@ Class {
 	#instVars : [
 		'typeOfCard'
 	],
+	#classInstVars : [
+		'cardType'
+	],
 	#category : #'IngSoft2-Model'
 }
 
@@ -11,6 +14,18 @@ Class {
 SpeedCard class >> asA: aTypeOfCard [
 
 	^ self new initializeAs: aTypeOfCard
+]
+
+{ #category : #'class initialization' }
+SpeedCard class >> behavingAsA: typeOfCard [
+	
+	cardType := typeOfCard 
+]
+
+{ #category : #initialization }
+SpeedCard class >> create [
+
+	^ self new initializeAs: cardType new
 ]
 
 { #category : #asserting }

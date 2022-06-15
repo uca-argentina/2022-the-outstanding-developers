@@ -26,31 +26,6 @@ Board class >> assertValidNumberOfLaps: laps [
 		Error signal: 'Number of laps should be greater than zero' ]
 ]
 
-{ #category : #assertion }
-Board class >> assertValidNumberOfSpaceshipsIsGreaterThanZero: spaceships [
-
-	spaceships isEmpty ifTrue: [ 
-		Error signal: 'Must use at least one spaceship' ]
-]
-
-{ #category : #assertion }
-Board class >> assertValidSpaceships: spaceships [
-
-	self assertValidNumberOfSpaceshipsIsGreaterThanZero: spaceships.
-	self assertValidSpaceshipsAsigneesAreNotRepeated: spaceships
-]
-
-{ #category : #assertion }
-Board class >> assertValidSpaceshipsAsigneesAreNotRepeated: spaceships [
-
-	| uniqueSpaceships |
-	uniqueSpaceships := spaceships asOrderedCollection
-		                       removeDuplicates asArray.
-
-	(spaceships size = uniqueSpaceships size) ifFalse: [ 
-		Error signal: 'Spaceships must be assigned to different players' ]
-]
-
 { #category : #'instance creation' }
 Board class >> of: aNumberOfBoxes and: length playedFor: someLaps by: aSpaceship givenBy: aDistribution [
 
@@ -60,17 +35,6 @@ Board class >> of: aNumberOfBoxes and: length playedFor: someLaps by: aSpaceship
 		  playedFor: someLaps
 		  byMany: { aSpaceship }
 		  givenBy: aDistribution
-]
-
-{ #category : #'instance creation' }
-Board class >> of: aNumberOfBoxes and: length playedFor: someLaps by: aSpaceship with: aBoxSequence [
-
-	^ self
-		  of: aNumberOfBoxes
-		  and: length
-		  playedFor: someLaps
-		  byMany: { aSpaceship }
-		  with: aBoxSequence
 ]
 
 { #category : #'instance creation' }
@@ -104,6 +68,18 @@ Board class >> of: aNumberOfBoxes and: length playedFor: someLaps byMany: spaces
 		  and: length
 		  playedFor: someLaps
 		  byMany: spaceships
+		  with: aBoxSequence
+]
+
+{ #category : #'instance creation' }
+Board class >> of: aNumberOfBoxes and: aLength playedFor: someLaps with: aBoxSequence [
+
+	self assertValidNumberOfBoxes: aNumberOfBoxes.
+	self assertValidNumberOfLaps: someLaps.
+	^ self new
+		  of: aNumberOfBoxes
+		  and: aLength
+		  playedFor: someLaps
 		  with: aBoxSequence
 ]
 
@@ -151,6 +127,13 @@ Board >> amountOfSpeedUpBoxes [
 Board >> amountOfWormHoleBoxes [
 
 	^ self amountOfBoxes: 'wormhole'
+]
+
+{ #category : #asserting }
+Board >> assertACardCanBeThrown [
+
+	self thereIsAWinner ifTrue: [ 
+		Error signal: 'Cards can only be thrown if game has not finished' ]
 ]
 
 { #category : #asserting }
@@ -326,6 +309,26 @@ Board >> of: aNumberOfBoxes and: length playedFor: someLaps byMany: spaceships w
 	boardUnitLength := length
 ]
 
+{ #category : #initialization }
+Board >> of: aNumberOfBoxes and: aLength playedFor: someLaps with: aBoxSequence [
+
+	| sequenceHandler |
+	boxes := OrderedCollection new.
+	sequenceHandler := SequenceHandler for: aBoxSequence size.
+	aNumberOfBoxes timesRepeat: [ 
+		boxes add: (aBoxSequence at: sequenceHandler nextValue) ].
+	laps := someLaps.
+	boardUnitLength := aLength
+]
+
+{ #category : #properties }
+Board >> playingWith: spaceships [
+
+	positions := spaceships collect: [ :spaceship | 
+		             SpaceshipPosition following: spaceship ].
+	turnHandler := SequenceHandler for: spaceships size
+]
+
 { #category : #playing }
 Board >> positionInPositionsOf: aSpaceship [
 
@@ -378,13 +381,12 @@ Board >> throw: aCard [
 ]
 
 { #category : #'card throwing' }
-Board >> throw: aCard to: aSpaceship [ 
+Board >> throw: aCard to: aSpaceship [
 
-	"buscar el card holder correspondiente a la nave"
-	"agregar la carta al card holder"
-	| spaceshipDeck  |
-	spaceshipDeck := spaceshipsCardDeck detect: [ :spaceshipCardDeck | spaceshipCardDeck spaceship name = aSpaceship ].
-	spaceshipDeck add: aCard.
+	| spaceshipDeck |
+	spaceshipDeck := spaceshipsCardDeck detect: [ :spaceshipCardDeck | 
+		                 spaceshipCardDeck spaceship name = aSpaceship ].
+	spaceshipDeck add: aCard
 ]
 
 { #category : #properties }

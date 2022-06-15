@@ -31,24 +31,25 @@ CardTest >> testACardIsNotTakenAwayFromASpaceshipWhenThrownButNotItsTurn [
 				          delorean }
 		          with: { (Box with: NoEffect new) }.
 	aBoard moveSpaceship: 3.
-	
+
 	self
 		should: [ enterprise throw: 1 to: 'Delorean' in: aBoard ]
 		raise: Error
 		withMessage: 'Permanent cards can only be thrown in spaceships turn'.
-		
+
 	collectionOfCards := OrderedCollection new.
 	collectionOfCards add: overloadCard.
 	self assert: enterprise cardDeck equals: collectionOfCards.
-	self assert: (aBoard cardDeckOf: 'Delorean') equals: OrderedCollection new.
-	
+	self
+		assert: (aBoard cardDeckOf: 'Delorean')
+		equals: OrderedCollection new
 ]
 
 { #category : #tests }
 CardTest >> testACardIsTakenAwayFromASpaceshipWhenThrown [
 
 	| overloadCard enterprise aBoard delorean |
-	overloadCard := OverloadCard  asA: PermanentCard new.
+	overloadCard := OverloadCard asA: PermanentCard new.
 
 	enterprise := Spaceship called: 'Enterprise'.
 	enterprise receives: overloadCard.
@@ -61,10 +62,12 @@ CardTest >> testACardIsTakenAwayFromASpaceshipWhenThrown [
 		          byMany: { 
 				          enterprise.
 				          delorean }
-		          with: { Box with: NoEffect new }.
+		          with: { (Box with: NoEffect new) }.
 	enterprise throw: 1 to: 'Delorean' in: aBoard.
 
-	self assert: (aBoard cardDeckOf: 'Enterprise') equals: (OrderedCollection new).
+	self
+		assert: (aBoard cardDeckOf: 'Enterprise')
+		equals: OrderedCollection new
 ]
 
 { #category : #tests }
@@ -83,11 +86,39 @@ CardTest >> testAPermanentCardCantBeUsedIfItIsNotTheSpaceshipsTurn [
 				          enterprise.
 				          delorean }
 		          with: { (Box with: NoEffect new) }.
+	
 	aBoard moveSpaceship: 3.
+	
 	self
 		should: [ enterprise throw: 1 to: 'Delorean' in: aBoard ]
 		raise: Error
 		withMessage: 'Permanent cards can only be thrown in spaceships turn'
+]
+
+{ #category : #tests }
+CardTest >> testASpaceshipCannotThrowACardItDoesntHave [
+
+	| overloadCard enterprise aBoard delorean |
+	overloadCard := OverloadCard asA: PermanentCard new.
+	enterprise := Spaceship called: 'Enterprise'.
+	delorean := Spaceship called: 'Delorean'.
+	delorean receives: overloadCard.
+
+	aBoard := Board
+		          of: 10
+		          and: (ParsecUnit of: 10)
+		          playedFor: 1
+		          byMany: { 
+				          enterprise.
+				          delorean }
+		          with: { (Box with: NoEffect new) }.
+
+	aBoard moveSpaceship: 3.
+	delorean throw: 1 to: 'Enterprise' in: aBoard.
+	self
+		should: [ delorean throw: 1 to: 'Enterprise' in: aBoard ]
+		raise: Error
+		withMessage: 'The spaceship doesnt have cards to throw'
 ]
 
 { #category : #tests }
@@ -107,51 +138,141 @@ CardTest >> testASpaceshipThrowsACardToAnotherOneAndItBecomesPartOfTheGame [
 		          byMany: { 
 				          enterprise.
 				          delorean }
-		          with: { Box with: NoEffect new }.
+		          with: { (Box with: NoEffect new) }.
 	enterprise throw: 1 to: 'Delorean' in: aBoard.
 
 	collectionOfCards := OrderedCollection new.
 	collectionOfCards add: speedCard.
-	self assert: (aBoard cardDeckOf: 'Delorean') equals: collectionOfCards
+	self
+		assert: (aBoard cardDeckOf: 'Delorean')
+		equals: collectionOfCards
 ]
 
 { #category : #tests }
 CardTest >> testAccelerationCardIncreasesInOneAllTheSpaceshipsDiceThrows [
 
 	| accelerationCard enterprise aBoard delorean zathura |
-	
 	accelerationCard := AccelerationCard asA: PermanentCard new.
 
 	enterprise := Spaceship called: 'Enterprise'.
 	delorean := Spaceship called: 'Delorean'.
 	zathura := Spaceship called: 'Zathura'.
 	enterprise receives: accelerationCard.
-	
+
 	aBoard := Board
 		          of: 10
 		          and: (ParsecUnit of: 10)
 		          playedFor: 1
 		          byMany: { 
 				          enterprise.
-				          delorean. zathura}
+				          delorean.
+				          zathura }
 		          with: { (Box with: NoEffect new) }.
 	enterprise throw: 1 in: aBoard.
+
 	aBoard moveSpaceship: 3.
 	aBoard moveSpaceship: 4.
 	aBoard moveSpaceship: 5.
+
 	self assert: (aBoard positionOf: 'Enterprise') equals: 4.
 	self assert: (aBoard positionOf: 'Delorean') equals: 5.
 	self assert: (aBoard positionOf: 'Zathura') equals: 6.
+
 	aBoard moveSpaceship: 2.
 	aBoard moveSpaceship: 2.
 	aBoard moveSpaceship: 2.
+
 	self assert: (aBoard positionOf: 'Enterprise') equals: 7.
 	self assert: (aBoard positionOf: 'Delorean') equals: 8.
-	self assert: (aBoard positionOf: 'Zathura') equals: 9.
+	self assert: (aBoard positionOf: 'Zathura') equals: 9
 ]
 
 { #category : #tests }
-CardTest >> testEffectOfMultipleCardsIsAddesUpIntoTheSpaceshipDiceThrow [
+CardTest >> testAnInstantaneousCardCanOnlyBeUsedOnce [
+
+	| overloadCard aBoard delorean enterprise |
+	overloadCard := OverloadCard asA: InstantaneousCard new.
+	delorean := Spaceship called: 'Delorean'.
+	enterprise := Spaceship called: 'Enterprise'.
+	delorean receives: overloadCard.
+
+	aBoard := Board
+		          of: 10
+		          and: (ParsecUnit of: 10)
+		          playedFor: 1
+		          byMany: { 
+				          delorean.
+				          enterprise }
+		          with: { (Box with: NoEffect new) }.
+
+	delorean throw: 1 to: 'Enterprise' in: aBoard.
+	"self halt."
+	self
+		should: [ delorean throw: 1 to: 'Enterprise' in: aBoard ]
+		raise: Error
+		withMessage: 'No se, algun error'
+]
+
+{ #category : #tests }
+CardTest >> testAnInstantaneousCardCantBeUsedIfTheGameHasFinished [
+
+	| overloadCard enterprise aBoard delorean |
+	overloadCard := OverloadCard asA: InstantaneousCard new.
+	enterprise := Spaceship called: 'Enterprise'.
+	delorean := Spaceship called: 'Delorean'.
+	delorean receives: overloadCard.
+
+	aBoard := Board
+		          of: 10
+		          and: (ParsecUnit of: 10)
+		          playedFor: 1
+		          byMany: { 
+				          enterprise.
+				          delorean }
+		          with: { (Box with: NoEffect new) }.
+
+	aBoard moveSpaceship: 3.
+	aBoard moveSpaceship: 2.
+	aBoard moveSpaceship: 8.
+
+	self
+		should: [ delorean throw: 1 to: 'Enterprise' in: aBoard ]
+		raise: Error
+		withMessage: 'Cards can only be thrown if game has not finished'
+]
+
+{ #category : #tests }
+CardTest >> testCancellationCardRemovesAPermanentCard [
+
+	| cancellationCard aBoard delorean enterprise overloadCard |
+	cancellationCard := CancellationCard asA: InstantaneousCard new.
+	overloadCard := OverloadCard asA: PermanentCard new.
+	delorean := Spaceship called: 'Delorean'.
+	enterprise := Spaceship called: 'Enterprise'.
+"	delorean receives: overloadCard.
+	delorean receives: cancellationCard.
+	El juego se las debe dar"
+
+	aBoard := Board
+		          of: 10
+		          and: (ParsecUnit of: 10)
+		          playedFor: 1
+		          byMany: { 
+				          delorean.
+				          enterprise }
+		          with: { (Box with: NoEffect new) }.
+		
+
+	"delorean throw: 1 to: 'Enterprise' in: aBoard.
+	delorean throw: 1 to: (CardWithPlayer withPlayer: 'Enterprise' and: 'overload') in: aBoard."
+	self
+		should: [ delorean throw: 1 to: 'Enterprise' in: aBoard ]
+		raise: Error
+		withMessage: 'No se, algun error'
+]
+
+{ #category : #tests }
+CardTest >> testEffectOfMultipleCardsIsAddedUpIntoTheSpaceshipDiceThrow [
 
 	| anOverloadCard enterprise aBoard delorean aSpeedCard anotherSpeedCard |
 	anOverloadCard := OverloadCard asA: PermanentCard new.
@@ -173,20 +294,25 @@ CardTest >> testEffectOfMultipleCardsIsAddesUpIntoTheSpaceshipDiceThrow [
 				          enterprise.
 				          delorean }
 		          with: { (Box with: NoEffect new) }.
+
 	enterprise throw: 1 to: 'Delorean' in: aBoard.
 	enterprise throw: 2 to: 'Delorean' in: aBoard.
 	enterprise throw: 1 to: 'Delorean' in: aBoard.
+
 	aBoard moveSpaceship: 3.
 	aBoard moveSpaceship: 4.
+
 	self assert: (aBoard positionOf: 'Enterprise') equals: 3.
 	self assert: (aBoard positionOf: 'Delorean') equals: 4
 ]
 
 { #category : #tests }
 CardTest >> testOverloadCardProducesSpaceshipToGoBackwards [
-"Cual es el sentido de este si está el de ReducesInTwo?"
+
+	"Cual es el sentido de este si está el de ReducesInTwo?"
+
 	| overloadCard enterprise aBoard delorean |
-	overloadCard := OverloadCard  asA: PermanentCard new.
+	overloadCard := OverloadCard asA: PermanentCard new.
 
 	enterprise := Spaceship called: 'Enterprise'.
 	enterprise receives: overloadCard.
@@ -199,22 +325,28 @@ CardTest >> testOverloadCardProducesSpaceshipToGoBackwards [
 		          byMany: { 
 				          enterprise.
 				          delorean }
-		          with: { Box with: NoEffect new }.
+		          with: { (Box with: NoEffect new) }.
+
 	aBoard moveSpaceship: 3.
 	aBoard moveSpaceship: 4.
+
 	self assert: (aBoard positionOf: 'Enterprise') equals: 3.
 	self assert: (aBoard positionOf: 'Delorean') equals: 4.
+
 	enterprise throw: 1 to: 'Delorean' in: aBoard.
+
 	aBoard moveSpaceship: 2.
 	aBoard moveSpaceship: 1.
+
 	self assert: (aBoard positionOf: 'Enterprise') equals: 5.
 	self assert: (aBoard positionOf: 'Delorean') equals: 3
 ]
 
 { #category : #tests }
 CardTest >> testOverloadCardReducesInTwoTheSpaceshipDiceThrow [
+
 	| overloadCard enterprise aBoard delorean |
-	overloadCard := OverloadCard  asA: PermanentCard new.
+	overloadCard := OverloadCard asA: PermanentCard new.
 
 	enterprise := Spaceship called: 'Enterprise'.
 	enterprise receives: overloadCard.
@@ -227,8 +359,10 @@ CardTest >> testOverloadCardReducesInTwoTheSpaceshipDiceThrow [
 		          byMany: { 
 				          enterprise.
 				          delorean }
-		          with: { Box with: NoEffect new }.
+		          with: { (Box with: NoEffect new) }.
+
 	enterprise throw: 1 to: 'Delorean' in: aBoard.
+
 	aBoard moveSpaceship: 3.
 	aBoard moveSpaceship: 4.
 	self assert: (aBoard positionOf: 'Enterprise') equals: 3.
