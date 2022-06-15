@@ -25,15 +25,26 @@ BoardTest >> testABoardOfFifteenBoxesCreatedWithAShorterSequenceHasTheHardcodedA
 	aMoonWalkBox := Box with: (MoonWalkEffect displacing: 1).
 	aHyperJumpBox := Box with: (HyperJumpEffect with: { 1 }).
 	anAtomicBombBox := Box with: AtomicBombEffect new.
-	boxSequence := { aNormalBox. aSpeedUpBox. aWormHoleBox. aMoonWalkBox. aHyperJumpBox. anAtomicBombBox  }.
-	board := Board of: 15 and: (ParsecUnit of: 15) playedFor: 1 by: enterprise with: boxSequence .
+	boxSequence := { 
+		               aNormalBox.
+		               aSpeedUpBox.
+		               aWormHoleBox.
+		               aMoonWalkBox.
+		               aHyperJumpBox.
+		               anAtomicBombBox }.
+	board := Board
+		         of: 15
+		         and: (ParsecUnit of: 15)
+		         playedFor: 1
+		         with: boxSequence.
+		
 	self assert: board amountOfBoxes equals: 15.
 	self assert: board amountOfNoEffectBoxes equals: 3.
 	self assert: board amountOfSpeedUpBoxes equals: 3.
 	self assert: board amountOfWormHoleBoxes equals: 3.
 	self assert: board amountOfMoonWalkBoxes equals: 2.
 	self assert: board amountOfHyperJumpBoxes equals: 2.
-	self assert: board amountOfAtomicBombBoxes equals: 2.
+	self assert: board amountOfAtomicBombBoxes equals: 2
 ]
 
 { #category : #tests }
@@ -64,7 +75,6 @@ BoardTest >> testABoardOfOneHundredRandomGeneratedBoxesHasOneHundredBoxes [
 		         of: n
 		         and: parsecs
 		         playedFor: 1
-		         by: enterprise
 		         givenBy: distributions.
 	self assert: board amountOfBoxes equals: 100
 ]
@@ -95,7 +105,6 @@ BoardTest >> testABoardOfTenBoxesCreatedWithASequenceHasTheHardcodedAmountOfBoxe
 		         of: 10
 		         and: (ParsecUnit of: 10)
 		         playedFor: 1
-		         by: enterprise
 		         with: boxSequence.
 	self assert: board amountOfBoxes equals: 10.
 	self assert: board amountOfNoEffectBoxes equals: 2.
@@ -109,50 +118,83 @@ BoardTest >> testABoardOfTenBoxesCreatedWithASequenceHasTheHardcodedAmountOfBoxe
 { #category : #tests }
 BoardTest >> testASpaceshipCannotPlayWhenItIsNotItsTurn [
 
-	| distributions enterprise zathura delorean board n parsecs |
+	| aBoxDistribution aBoard n parsecs aLoadedDie anOustandingGame aCardDistribution |
 	n := 100.
 	parsecs := ParsecUnit of: 100.
-	enterprise := Spaceship called: 'Enterprise'.
-	zathura := Spaceship called: 'Zathura'.
-	delorean := Spaceship called: 'Delorean'.
-	distributions := OrderedCollection new.
-	distributions add: (Distribution withProbabilityOf: 1 for: NoEffect).
-	board := Board of: n and: parsecs playedFor: 1 byMany: { 
-			         enterprise.
-			         zathura.
-			         delorean } givenBy: distributions.
-	board moveSpaceship: 1.
-	board moveSpaceship: 1.
+	aBoxDistribution := OrderedCollection new.
+	aBoxDistribution add: (Distribution withProbabilityOf: 1 for: NoEffect).
+	aLoadedDie := LoadedDie with: 1.
+	aCardDistribution := OrderedCollection new.
+
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1
+			 for: (SpeedCard behavingAsA: PermanentCard)).
+	aBoard := Board
+		          of: n
+		          and: parsecs
+		          playedFor: 1
+		          givenBy: aBoxDistribution.
+	anOustandingGame := OutstandingSpaceshipsGame
+		                    playedByMany:
+		                    { 'Enterprise'. 'Zathura'. 'Delorean' }
+		                    on: aBoard
+		                    throwing: aLoadedDie
+		                    using: aCardDistribution.
+	anOustandingGame playTurn.
+	anOustandingGame playTurn.
 	self
-		should: [ board move: enterprise name by: 15 ]
+		should: [ aBoard move: 'Enterprise' by: 15 ]
 		raise: Error
 		withMessage: 'This is not the players turn'
 ]
 
 { #category : #tests }
-BoardTest >> testASpaceshipThatLandsOnANormalBoxDoesntMove [
+BoardTest >> testASpaceshipThatLandsOnABoxWithNoEffectDoesntMove [
 
-	| enterprise board |
-	enterprise := Spaceship called: 'Enterprise'.
-	board := Board of: 10 and: (ParsecUnit of: 10) playedFor: 1 by: enterprise with: {Box with: NoEffect new}.
-	board move: enterprise name by: 1.
+	| aBoard aBoxDistribution aLoadedDie aCardDistribution anOutstandingGame |
+	aBoxDistribution := OrderedCollection new.
+	aBoxDistribution add:
+		(Distribution withProbabilityOf: 1 for: NoEffect).
+	aLoadedDie := LoadedDie with: 3. "Se da 3 al dado y se 'restan' 2 de la carta, que da de resultado 1"
 
-	self assert: (board positionOf: enterprise name) equals: 1
+	aCardDistribution := OrderedCollection new.
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1
+			 for: (OverloadCard behavingAsA: PermanentCard)).
+
+	aBoard := Board
+		          of: 10
+		          and: (ParsecUnit of: 10)
+		          playedFor: 1
+		          with: { (Box with: NoEffect new) }.
+	
+	anOutstandingGame := OutstandingSpaceshipsGame
+		                     playedByMany: { 'Enterprise' }
+		                     on: aBoard
+		                     throwing: aLoadedDie
+		                     using: aCardDistribution.
+	anOutstandingGame playTurn.
+	
+	self assert: (aBoard positionOf: 'Enterprise') equals: 1
 ]
 
 { #category : #tests }
-BoardTest >> testASpaceshipThatLandsOnASpeedUpBoxEndsUpFourBoxesAfter [
+BoardTest >> testASpaceshipThatLandsOnABoxWithSpeedUpEffectEndsUpFourBoxesAfter [
 
-	| enterprise board normalBox speedUpBox boxSequence box1 box2 box3 box4 box5 |
-	enterprise := Spaceship called: 'Enterprise'.
-	normalBox := NoEffect new.
-	speedUpBox := SpeedUpEffect new.
+	| aBoard noEffect speedUpEffect boxSequence box1 box2 box3 box4 box5 aCardDistribution anOutstandingGame |
+	noEffect := NoEffect new.
+	speedUpEffect := SpeedUpEffect new.
 
-	box1 := Box with: speedUpBox.
-	box2 := Box with: normalBox.
-	box3 := Box with: normalBox.
-	box4 := Box with: normalBox.
-	box5 := Box with: normalBox.
+	aCardDistribution := OrderedCollection new.
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1
+			 for: (OverloadCard behavingAsA: PermanentCard)).
+
+	box1 := Box with: speedUpEffect.
+	box2 := Box with: noEffect.
+	box3 := Box with: noEffect.
+	box4 := Box with: noEffect.
+	box5 := Box with: noEffect.
 
 	boxSequence := { 
 		               box1.
@@ -160,49 +202,77 @@ BoardTest >> testASpaceshipThatLandsOnASpeedUpBoxEndsUpFourBoxesAfter [
 		               box3.
 		               box4.
 		               box5 }.
-	board := Board
-		         of: 10
-					and: (ParsecUnit of: 10)
-		         playedFor: 1
-		         by: enterprise
-		         with: boxSequence.
-	board move: enterprise name by: 1.
+	aBoard := Board
+		          of: 10
+		          and: (ParsecUnit of: 10)
+		          playedFor: 1
+		          with: boxSequence.
 
-	self assert: (board positionOf: enterprise name) equals: 5
+	anOutstandingGame := OutstandingSpaceshipsGame
+		                     playedByMany: { 'Enterprise' }
+		                     on: aBoard
+		                     throwing: (LoadedDie with: 3)
+		                     using: aCardDistribution.
+	anOutstandingGame playTurn.
+	"aBoard move: 'Enterprise' by: 1."
+
+	self assert: (aBoard positionOf: 'Enterprise') equals: 5
 ]
 
 { #category : #tests }
 BoardTest >> testASpaceshipsLapPositionVariesToTwoAfterCompletingFirstLap [
 
-	| enterprise board loadedDie resultOfTheRoll |
-	enterprise := Spaceship called: 'Enterprise'.
-	board := Board
-		         of: 10
-					and: (ParsecUnit of: 10)
-		         playedFor: 2
-		         by: enterprise
-		         with: { (Box with: NoEffect new) }.
-	loadedDie := LoadedDie with: 5.
-	resultOfTheRoll := loadedDie roll.
+	| aBoard aLoadedDie aCardDistribution anOtstandingGame |
+	aCardDistribution := OrderedCollection new.
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1
+			 for: (OverloadCard behavingAsA: PermanentCard)).
+
+	aBoard := Board
+		          of: 10
+		          and: (ParsecUnit of: 10)
+		          playedFor: 2
+		          with: { (Box with: NoEffect new) }.
+	aLoadedDie := LoadedDie with: 7. "5=7-2"
+	anOtstandingGame := OutstandingSpaceshipsGame
+		                    playedByMany: { 'Enterprise' }
+		                    on: aBoard
+		                    throwing: aLoadedDie
+		                    using: aCardDistribution.
+	anOtstandingGame playTurn.
+	anOtstandingGame playTurn.
+	anOtstandingGame playTurn.
+	"	resultOfTheRoll := loadedDie roll."
+	"board move: enterprise name by: resultOfTheRoll.
 	board move: enterprise name by: resultOfTheRoll.
-	board move: enterprise name by: resultOfTheRoll.
-	board move: enterprise name by: resultOfTheRoll.
-	self assert: (board lapOf: enterprise name) equals: 2
+	board move: enterprise name by: resultOfTheRoll."
+	self assert: (aBoard lapOf: 'Enterprise') equals: 2
 ]
 
 { #category : #tests }
 BoardTest >> testASpaceshipsPositionVariesInFiveWithAFiniteBoardAfterOneRollOfALoadedDieWithFive [
 
-	| n enterprise board loadedDie resultOfTheRoll |
-	n := ParsecUnit of: 10.
-	enterprise := Spaceship called: 'Enterprise'.
-	board := Board of: 10 and: n playedFor: 1 by: enterprise with: {Box with: NoEffect new}.
-	loadedDie := LoadedDie with: 5.
-	resultOfTheRoll := loadedDie roll.
-	board move: enterprise name by: resultOfTheRoll.
-	self
-		assert: (board positionOf: enterprise name)
-		equals: resultOfTheRoll
+	| enterprise board loadedDie resultOfTheRoll aCardDistribution anOutstandingGame |
+	aCardDistribution := OrderedCollection new.
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1
+			 for: (OverloadCard behavingAsA: PermanentCard)).
+
+	board := Board
+		         of: 10
+		         and: (ParsecUnit of: 10)
+		         playedFor: 1
+		         with: { (Box with: NoEffect new) }.
+	loadedDie := LoadedDie with: 7.
+	anOutstandingGame := OutstandingSpaceshipsGame
+		                     playedByMany: { 'Enterprise' }
+		                     on: board
+		                     throwing: loadedDie
+		                     using: aCardDistribution.
+	anOutstandingGame playTurn.
+	"resultOfTheRoll := loadedDie roll.
+	board move: enterprise name by: resultOfTheRoll."
+	self assert: (board positionOf: 'Enterprise') equals: 5
 ]
 
 { #category : #tests }
@@ -239,7 +309,6 @@ BoardTest >> testBoardCannotBeCreatedWithANumberOfLapsMinorThanOne [
 				of: 15
 				and: (ParsecUnit of: 10)
 				playedFor: -1
-				by: zathura
 				givenBy: distributions ]
 		raise: Error
 		withMessage: 'Number of laps should be greater than zero'
@@ -301,7 +370,6 @@ BoardTest >> testBoardCreatedWithTenBoxesAndALengthOfTwoHundredParsecsHasBoxesLe
 		         of: 10
 		         and: aParsecUnit
 		         playedFor: 1
-		         by: enterprise
 		         givenBy: distributions.
 	self assert: board boxParsecLength equals: 20
 ]
@@ -321,7 +389,6 @@ BoardTest >> testBoardIsCreatedWithASpaceshipCardDeck [
 		         of: 20
 		         and: aParsecUnit
 		         playedFor: 1
-		         by: zathura
 		         givenBy: distributions.
 "	self assert: board spaceshipsCardDeck equals: { zathuraCardHolder }"
 ]
@@ -338,7 +405,6 @@ BoardTest >> testBoardLengthCreatedInLigthYearsCanBeExpressedInParsecsOrLightYea
 		         of: 10
 		         and: aLightYearUnit
 		         playedFor: 1
-		         by: enterprise
 		         givenBy: distributions.
 	self assert: board boxParsecLength equals: 1.
 	self assert: board boxLigthYearLength equals: 3
@@ -348,16 +414,14 @@ BoardTest >> testBoardLengthCreatedInLigthYearsCanBeExpressedInParsecsOrLightYea
 { #category : #tests }
 BoardTest >> testBoardLengthCreatedInParsecsCanBeExpressedInParsecsOrLightYears [
 
-	| distributions enterprise board aParsecUnit |
+	| distributions board aParsecUnit |
 	distributions := OrderedCollection new.
 	distributions add: (Distribution withProbabilityOf: 1 for: NoEffect).
 	aParsecUnit := ParsecUnit of: 200.
-	enterprise := Spaceship called: 'Enterprise'.
 	board := Board
 		         of: 10
 		         and: aParsecUnit
 		         playedFor: 1
-		         by: enterprise
 		         givenBy: distributions.
 	self assert: board boxParsecLength equals: 20.
 	self assert: board boxLigthYearLength equals: 60
@@ -367,8 +431,7 @@ BoardTest >> testBoardLengthCreatedInParsecsCanBeExpressedInParsecsOrLightYears 
 { #category : #tests }
 BoardTest >> testBoxesLengthIsAHalfWhenTheAmountOfParsecsIsHalfTheAmountOfBoxes [
 
-	| zathura distributions board aParsecUnit |
-	zathura := Spaceship called: 'Zathura'.
+	| distributions board aParsecUnit |
 	distributions := OrderedCollection new.
 	distributions add: (Distribution withProbabilityOf: 1 for: NoEffect).
 	aParsecUnit := ParsecUnit of: 10.
@@ -376,7 +439,6 @@ BoardTest >> testBoxesLengthIsAHalfWhenTheAmountOfParsecsIsHalfTheAmountOfBoxes 
 		         of: 20
 		         and: aParsecUnit
 		         playedFor: 1
-		         by: zathura
 		         givenBy: distributions.
 
 	self assert: board boxParsecLength equals: 0.5
@@ -409,11 +471,8 @@ BoardTest >> testPlayersInDifferentLapsReturnToTheFirstBoxOfItsLaps [
 		         of: 5
 		         and: (ParsecUnit of: 5)
 		         playedFor: 3
-		         byMany: { 
-				         enterprise.
-				         zathura.
-				         delorean }
 		         with: boxSequence.
+	
 	board moveSpaceship: 6.
 	board moveSpaceship: 6.
 	board moveSpaceship: 1.

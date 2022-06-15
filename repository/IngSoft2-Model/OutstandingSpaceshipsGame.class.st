@@ -62,7 +62,7 @@ OutstandingSpaceshipsGame class >> playedOn: aBoard throwing: dice [
 { #category : #accessing }
 OutstandingSpaceshipsGame >> cardsAffectingOf: aSpaceship [ 
 
-	^ (spaceshipsAffectingCardDeck select: [ :spaceshipCardDeck | 
+	^ (spaceshipsCardDeck select: [ :spaceshipCardDeck | 
 		   spaceshipCardDeck spaceship = aSpaceship ])
 ]
 
@@ -120,7 +120,6 @@ OutstandingSpaceshipsGame >> initializeWith: aBoard many: spaceships throwing: s
 	spaceshipsPlaying := spaceships.
 	dice := someDice.
 	stateOfGame := GameNotWonState new.
-	spaceshipsAffectingCardDeck := OrderedCollection new.
 	self dealWith: aCardDistribution.
 ]
 
@@ -136,7 +135,7 @@ OutstandingSpaceshipsGame >> playTurn [
 	| resultOfTheRoll deckOfSpaceship effectOnDiceThrow |
 	resultOfTheRoll := dice roll.
 	deckOfSpaceship := self cardsAffectingOf: board spaceshipPlaying.
-	effectOnDiceThrow := deckOfSpaceship sum: [ :card | card effectOnThrow ].
+	effectOnDiceThrow := deckOfSpaceship sum: [ :cardHolder | cardHolder effectOnThrow ].
 	board moveSpaceship: resultOfTheRoll + effectOnDiceThrow.
 	board thereIsAWinner ifTrue: [ stateOfGame := GameWonState new ]
 ]

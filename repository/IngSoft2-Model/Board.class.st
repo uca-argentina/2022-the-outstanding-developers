@@ -58,17 +58,21 @@ Board class >> of: aNumberOfBoxes and: length playedFor: someLaps byMany: spaces
 ]
 
 { #category : #'instance creation' }
-Board class >> of: aNumberOfBoxes and: length playedFor: someLaps byMany: spaceships with: aBoxSequence [
+Board class >> of: aNumberOfBoxes and: length playedFor: someLaps givenBy: aDistribution [
 
+	| randomBoxGenerator boxSequnce |
 	self assertValidNumberOfBoxes: aNumberOfBoxes.
-	self assertValidSpaceships: spaceships.
 	self assertValidNumberOfLaps: someLaps.
+	randomBoxGenerator := RandomEventGenerator
+		                      with: aNumberOfBoxes
+		                      using: aDistribution.
+	boxSequnce := randomBoxGenerator generate collect: [ :effect | 
+		              Box with: effect ].
 	^ self new
 		  of: aNumberOfBoxes
 		  and: length
 		  playedFor: someLaps
-		  byMany: spaceships
-		  with: aBoxSequence
+		  with: boxSequnce
 ]
 
 { #category : #'instance creation' }
