@@ -65,9 +65,6 @@ OutstandingSpaceshipsGameTest >> testARoundOfANonSimulatedGameChangesSpaceshipsP
 		         of: 15
 		         and: (ParsecUnit of: 15)
 		         playedFor: 1
-		         byMany: { 
-				         enterprise.
-				         zathura }
 		         with: { (Box with: NoEffect new) }.
 	aDie := LoadedDie withSequence: { 4. 3 }.
 	game := OutstandingSpaceshipsGame playedOn: board throwing: aDie.

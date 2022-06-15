@@ -17,19 +17,26 @@ CardTest >> should: block raise: expectedErrorClass withMessage: expectedErrorMe
 { #category : #tests }
 CardTest >> testACardIsNotTakenAwayFromASpaceshipWhenThrownButNotItsTurn [
 
-	| overloadCard enterprise aBoard delorean collectionOfCards |
+	| overloadCard enterprise aBoard delorean collectionOfCards aCardDistribution anOutstandingGame |
 	overloadCard := OverloadCard asA: PermanentCard new.
-	delorean := Spaceship called: 'Delorean'.
-	enterprise := Spaceship called: 'Enterprise'.
-	enterprise receives: overloadCard.
+	"enterprise receives: overloadCard. -> esto esta mal porque permite hacer trampa"
+	aCardDistribution := OrderedCollection new.
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1
+			 for: (OverloadCard behavingAsA: PermanentCard)).
 	aBoard := Board
 		          of: 10
 		          and: (ParsecUnit of: 10)
 		          playedFor: 1
-		          byMany: { 
-				          enterprise.
-				          delorean }
 		          with: { (Box with: NoEffect new) }.
+	
+	anOutstandingGame := OutstandingSpaceshipsGame
+		                     playedByMany:
+		                     { 'Delorean' }
+		                     on: aBoard
+		                     throwing:
+		                     (LoadedDie withSequence: { 7. 6. 5. 6 })
+		                     using: aCardDistribution.
 	aBoard moveSpaceship: 3.
 
 	self

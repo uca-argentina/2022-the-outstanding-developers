@@ -97,9 +97,6 @@ SpaceshipTest >> testSpaceshipThatStartsWithTwoCardsAndPlaysOneHasOneCardLeftToP
 		          of: 10
 		          and: (ParsecUnit of: 10)
 		          playedFor: 1
-		          byMany: { 
-				          delorean.
-				          starlink }
 		          with: { (Box with: NoEffect new) }.
 	delorean receivesMany: { 
 			anOverloadCard.
