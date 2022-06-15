@@ -316,7 +316,7 @@ BoardTest >> testBoardIsCreatedWithASpaceshipCardDeck [
 	aParsecUnit := ParsecUnit of: 10.
 	zathuraCardHolder := SpaceshipCardHolder
 		                     of: zathura
-		                     holdingMany: {  }.
+		                     holding: {  }.
 	board := Board
 		         of: 20
 		         and: aParsecUnit

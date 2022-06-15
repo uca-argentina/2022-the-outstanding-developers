@@ -6,7 +6,8 @@ Class {
 		'dice',
 		'stateOfGame',
 		'spaceshipsCardDeck',
-		'spaceshipsPlaying'
+		'spaceshipsPlaying',
+		'spaceshipsAffectingCardDeck'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -58,6 +59,13 @@ OutstandingSpaceshipsGame class >> playedOn: aBoard throwing: dice [
 	^ self new initializeWith: aBoard and: dice
 ]
 
+{ #category : #accessing }
+OutstandingSpaceshipsGame >> cardsAffectingOf: aSpaceship [ 
+
+	^ (spaceshipsAffectingCardDeck select: [ :spaceshipCardDeck | 
+		   spaceshipCardDeck spaceship = aSpaceship ])
+]
+
 { #category : #setup }
 OutstandingSpaceshipsGame >> dealCards [
 
@@ -72,14 +80,10 @@ OutstandingSpaceshipsGame >> dealWith: aCardDistribution [
 		                 with: 1
 		                 using: aCardDistribution.
 	spaceshipsCardDeck := OrderedCollection new.
-	"spaceshipsPlaying collect: [ :spaceship | 
-		                      SpaceshipCardHolder
-			                      of: spaceship
-			                      holding: cardGenerator generate ]."
 	spaceshipsPlaying do: [ :spaceship | 
 		2 timesRepeat: [ 
 			spaceshipsCardDeck add:
-				(SpaceshipCardHolder of: spaceship holding: cardGenerator generate) ] ]
+				(SpaceshipCardHolder of: spaceship holding: (cardGenerator generate at: 1)) ] ]
 ]
 
 { #category : #accessing }
@@ -106,7 +110,6 @@ OutstandingSpaceshipsGame >> initializeWith: aBoard many: spaceships and: someDi
 	dice := someDice.
 	stateOfGame := GameNotWonState new.
 	self dealCards.
-	self halt.
 ]
 
 { #category : #initialization }
@@ -117,6 +120,7 @@ OutstandingSpaceshipsGame >> initializeWith: aBoard many: spaceships throwing: s
 	spaceshipsPlaying := spaceships.
 	dice := someDice.
 	stateOfGame := GameNotWonState new.
+	spaceshipsAffectingCardDeck := OrderedCollection new.
 	self dealWith: aCardDistribution.
 ]
 
@@ -129,9 +133,11 @@ OutstandingSpaceshipsGame >> play [
 { #category : #playing }
 OutstandingSpaceshipsGame >> playTurn [
 
-	| resultOfTheRoll |
+	| resultOfTheRoll deckOfSpaceship effectOnDiceThrow |
 	resultOfTheRoll := dice roll.
-	board moveSpaceship: resultOfTheRoll.
+	deckOfSpaceship := self cardsAffectingOf: board spaceshipPlaying.
+	effectOnDiceThrow := deckOfSpaceship sum: [ :card | card effectOnThrow ].
+	board moveSpaceship: resultOfTheRoll + effectOnDiceThrow.
 	board thereIsAWinner ifTrue: [ stateOfGame := GameWonState new ]
 ]
 

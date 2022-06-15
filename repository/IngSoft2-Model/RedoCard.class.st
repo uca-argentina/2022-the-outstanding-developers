@@ -9,3 +9,8 @@ RedoCard class >> create [
 
 	^ self new
 ]
+
+{ #category : #effect }
+RedoCard >> effectOnThrow [
+	^0
+]

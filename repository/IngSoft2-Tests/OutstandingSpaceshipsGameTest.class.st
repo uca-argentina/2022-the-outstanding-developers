@@ -17,19 +17,33 @@ OutstandingSpaceshipsGameTest >> should: block raise: expectedErrorClass withMes
 { #category : #tests }
 OutstandingSpaceshipsGameTest >> testANonSimulatedGameCannotBePlayedAfterItFinished [
 
-	| enterprise zathura board aDie game |
-	enterprise := Spaceship called: 'Enterprise'.
-	zathura := Spaceship called: 'Zathura'.
+	| board aDie game aCardDistribution |
 	board := Board
 		         of: 7
 		         and: (ParsecUnit of: 7)
 		         playedFor: 1
-		         byMany: { 
-				         enterprise.
-				         zathura }
 		         with: { (Box with: NoEffect new) }.
 	aDie := LoadedDie withSequence: { 4. 3 }.
-	game := OutstandingSpaceshipsGame playedOn: board throwing: aDie.
+	aCardDistribution := OrderedCollection new.
+
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1 / 6
+			 for: (SpeedCard behavingAsA: PermanentCard)).
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1 / 6
+			 for: (AccelerationCard behavingAsA: PermanentCard)).
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1 / 6
+			 for: (OverloadCard behavingAsA: PermanentCard)).
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1 / 6
+			 for: (CancellationCard behavingAsA: InstantaneousCard)).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 / 6 for: RedoCard).
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1 / 6
+			 for: (RepeatCard behavingAsA: InstantaneousCard)).
+	game := OutstandingSpaceshipsGame playedByMany: {'Enterprise'. 'Zathura'} on: board throwing: aDie using: aCardDistribution.
 
 	game play.
 	game play.
@@ -112,7 +126,7 @@ OutstandingSpaceshipsGameTest >> testGameGivesTwoRandomCardsToEachSpaceshipAtThe
 			 for: (AccelerationCard behavingAsA: PermanentCard)).
 	aCardDistribution add: (Distribution
 			 withProbabilityOf: 1 / 6
-			 for: (OverloadCard as: PermanentCard)).
+			 for: (OverloadCard behavingAsA: PermanentCard)).
 	aCardDistribution add: (Distribution
 			 withProbabilityOf: 1 / 6
 			 for: (CancellationCard behavingAsA: InstantaneousCard)).

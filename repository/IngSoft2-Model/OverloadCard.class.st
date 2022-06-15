@@ -4,6 +4,9 @@ Class {
 	#instVars : [
 		'typeOfCard'
 	],
+	#classInstVars : [
+		'typeOfCard'
+	],
 	#category : #'IngSoft2-Model'
 }
 
@@ -11,6 +14,18 @@ Class {
 OverloadCard class >> asA: aTypeOfCard [
 
 	^self new initializeAs: aTypeOfCard
+]
+
+{ #category : #'class ini' }
+OverloadCard class >> behavingAsA: aTypeOfCard [
+
+	typeOfCard := aTypeOfCard
+]
+
+{ #category : #'instance creation' }
+OverloadCard class >> create [
+
+	^ self new initializeAs: typeOfCard  new
 ]
 
 { #category : #asserting }

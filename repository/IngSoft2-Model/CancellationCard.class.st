@@ -35,6 +35,11 @@ CancellationCard >> assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs: aBoo
 	self shouldBeImplemented.
 ]
 
+{ #category : #effect }
+CancellationCard >> effectOnThrow [
+	^0
+]
+
 { #category : #initialization }
 CancellationCard >> initializeAs: aTypeOfcard [
 

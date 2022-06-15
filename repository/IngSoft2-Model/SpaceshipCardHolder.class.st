@@ -3,21 +3,16 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'spaceship',
-		'cardDeck'
+		'cardDeck',
+		'card'
 	],
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'instance creation' }
-SpaceshipCardHolder class >> of: aSpaceship holding: aCard [ 
-	
-	^ self new of: aSpaceship holdingMany: {aCard}
-]
+SpaceshipCardHolder class >> of: aSpaceship holding: aCard [
 
-{ #category : #'instance creation' }
-SpaceshipCardHolder class >> of: aSpaceship holdingMany: cards [ 
-	
-	^ self new of: aSpaceship holdingMany: cards
+	^ self new of: aSpaceship holding: aCard
 ]
 
 { #category : #'card deck modifying' }
@@ -32,12 +27,17 @@ SpaceshipCardHolder >> cardDeck [
 	^ cardDeck 
 ]
 
+{ #category : #accessing }
+SpaceshipCardHolder >> effectOnThrow [
+
+	^ card effectOnThrow
+]
+
 { #category : #initialization }
-SpaceshipCardHolder >> of: aSpaceship holdingMany: cards [
+SpaceshipCardHolder >> of: aSpaceship holding: aCard [
 
 	spaceship := aSpaceship.
-	cardDeck := OrderedCollection new.
-	cards do: [ :card | cardDeck add: card ]
+	card := aCard
 ]
 
 { #category : #accessing }

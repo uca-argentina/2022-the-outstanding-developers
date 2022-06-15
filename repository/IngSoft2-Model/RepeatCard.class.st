@@ -22,6 +22,12 @@ RepeatCard class >> create [
 	^ self new initializeAs: cardType new
 ]
 
+{ #category : #effect }
+RepeatCard >> effectOnThrow [
+
+	^ 0
+]
+
 { #category : #initialization }
 RepeatCard >> initializeAs: aTypeOfCard [
 

@@ -267,11 +267,11 @@ Board >> movePlayingSpaceshipAt: aPosition by: anAmount [
 { #category : #movement }
 Board >> moveSpaceship: aNumberOfBoxes [
 
-	| spaceshipPlaying deckOfSpaceship effectOnDiceThrow |
+	| spaceshipPlaying |
 	spaceshipPlaying := (positions at: turnHandler nextValue) spaceship.
-	deckOfSpaceship := self cardDeckOf: spaceshipPlaying.
-	effectOnDiceThrow := deckOfSpaceship sum: [ :card | card effectOnThrow ].
-	self move: spaceshipPlaying by: (aNumberOfBoxes + effectOnDiceThrow )
+	"deckOfSpaceship := self cardDeckOf: spaceshipPlaying.
+	effectOnDiceThrow := deckOfSpaceship sum: [ :card | card effectOnThrow ]."
+	self move: spaceshipPlaying by: aNumberOfBoxes
 ]
 
 { #category : #assertions }
@@ -304,7 +304,7 @@ Board >> of: aNumberOfBoxes and: length playedFor: someLaps byMany: spaceships w
 	positions := spaceships collect: [ :spaceship | 
 		             SpaceshipPosition following: spaceship name ].
 	spaceshipsCardDeck := spaceships collect: [ :spaceship | 
-		             SpaceshipCardHolder of: spaceship holdingMany: { } ].
+		             SpaceshipCardHolder of: spaceship holding: { } ].
 	turnHandler := SequenceHandler for: spaceships size.
 	boardUnitLength := length
 ]
@@ -358,6 +358,12 @@ Board >> rankingPositionOf: aSpaceshipName [
 				ifTrue: [ notFound := false ]
 				ifFalse: [ index := index + 1 ] ].
 	^ index
+]
+
+{ #category : #accessing }
+Board >> spaceshipPlaying [
+
+	^ (positions at: turnHandler currentIndex) spaceship
 ]
 
 { #category : #accessing }
