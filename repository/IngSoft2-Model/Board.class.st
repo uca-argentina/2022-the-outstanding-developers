@@ -7,7 +7,8 @@ Class {
 		'positions',
 		'laps',
 		'boardUnitLength',
-		'spaceshipsCardDeck'
+		'spaceshipsCardDeck',
+		'game'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -147,6 +148,11 @@ Board >> assertThisIsPlayersTurn: index [
 		Error signal: 'This is not the players turn' ]
 ]
 
+{ #category : #playing }
+Board >> assignToCurrentSpaceship: aCard [
+	game addHolding: (SpaceshipCardHolder of: self lastSpacechipToHavePlayed holding: aCard )
+]
+
 { #category : #accessing }
 Board >> boardUnitLength [
 	^ boardUnitLength
@@ -186,6 +192,12 @@ Board >> lapOf: aSpaceship [
 	^ spaceshipLap lap
 ]
 
+{ #category : #accessing }
+Board >> lastSpacechipToHavePlayed [
+
+	^ (positions at: turnHandler sequenceValueInUse) spaceship
+]
+
 { #category : #playing }
 Board >> move: aSpaceship by: aNumberOfBoxes [
 
@@ -206,7 +218,6 @@ Board >> move: aSpaceship by: aNumberOfBoxes [
 	ifFalse: [newPositionAfterEffect := (self move: aSpaceship in: (newPositionWithoutEffect position) and: (newPositionWithoutEffect lap) by: movementAfterEffect)]
 	ifTrue: [ ^self ].
 	positions replaceFrom: positionAmongPositions to: positionAmongPositions with: { newPositionAfterEffect }.
-	^ currentBox
 ]
 
 { #category : #playing }
@@ -274,8 +285,7 @@ Board >> moveSpaceship: aNumberOfBoxes [
 
 	| spaceshipPlaying currentBox|
 	spaceshipPlaying := (positions at: turnHandler nextValue) spaceship.
-	currentBox := self move: spaceshipPlaying by: aNumberOfBoxes.
-	^ (currentBox giveACardTo: spaceshipPlaying). "Me retorna True o False de si tiene que dar carta o no"
+	self move: spaceshipPlaying by: aNumberOfBoxes
 ]
 
 { #category : #assertions }
@@ -328,6 +338,15 @@ Board >> of: aNumberOfBoxes and: aLength playedFor: someLaps with: aBoxSequence 
 { #category : #properties }
 Board >> playingWith: spaceships [
 
+	positions := spaceships collect: [ :spaceship | 
+		             SpaceshipPosition following: spaceship ].
+	turnHandler := SequenceHandler for: spaceships size
+]
+
+{ #category : #properties }
+Board >> playingWith: spaceships in: aGame [
+
+	game := aGame.
 	positions := spaceships collect: [ :spaceship | 
 		             SpaceshipPosition following: spaceship ].
 	turnHandler := SequenceHandler for: spaceships size

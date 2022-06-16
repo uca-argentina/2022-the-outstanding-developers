@@ -48,3 +48,9 @@ SequenceHandler >> nextValue [
 	currentSequenceIndex := (currentSequenceIndex rem: sequenceSize) + 1.
 	^ sequenceValueInUse
 ]
+
+{ #category : #accessing }
+SequenceHandler >> sequenceValueInUse [
+
+	^ sequenceValueInUse
+]

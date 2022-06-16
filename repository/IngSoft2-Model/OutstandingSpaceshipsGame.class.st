@@ -78,6 +78,11 @@ OutstandingSpaceshipsGame >> addAffectingAll: aCard [
 	spaceshipsPlaying do: [ :spaceship | self addAffecting: (SpaceshipCardHolder of: spaceship holding: aCard) ]
 ]
 
+{ #category : #playing }
+OutstandingSpaceshipsGame >> addHolding: aSpaceshipCardHolder [ 
+	spaceshipsCardDeck add: aSpaceshipCardHolder 
+]
+
 { #category : #assertion }
 OutstandingSpaceshipsGame >> assertCardBelongsToSpaceship: cardPosition [
 	cardPosition = 0 ifTrue: [ Error signal: 'The spaceship doesnt have cards to throw' ]
@@ -158,7 +163,7 @@ OutstandingSpaceshipsGame >> initializeWith: aBoard many: spaceships and: someDi
 OutstandingSpaceshipsGame >> initializeWith: aBoard many: spaceships throwing: someDice using: aCardDistribution [
 
 	board := aBoard.
-	aBoard playingWith: spaceships.
+	aBoard playingWith: spaceships in: self.
 	spaceshipsPlaying := spaceships.
 	dice := someDice.
 	stateOfGame := GameNotWonState new.
@@ -180,8 +185,6 @@ OutstandingSpaceshipsGame >> playTurn [
 	deckOfSpaceship := self cardsAffectingOf: board spaceshipPlaying.
 	effectOnDiceThrow := deckOfSpaceship sum: [ :cardHolder | cardHolder effectOnThrow ].
 	board moveSpaceship: resultOfTheRoll + effectOnDiceThrow.
-	self halt.
-	"Aca dar la carta"
 	board thereIsAWinner ifTrue: [ stateOfGame := GameWonState new ]
 ]
 
