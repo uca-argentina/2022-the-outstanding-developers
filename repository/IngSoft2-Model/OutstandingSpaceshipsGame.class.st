@@ -66,6 +66,17 @@ OutstandingSpaceshipsGame class >> playedOn: aBoard throwing: dice [
 	^ self new initializeWith: aBoard and: dice
 ]
 
+{ #category : #playing }
+OutstandingSpaceshipsGame >> addAffecting: aSpaceshipCardHolder [
+
+	spaceshipsAffectingCardDeck add: aSpaceshipCardHolder
+]
+
+{ #category : #assertion }
+OutstandingSpaceshipsGame >> assertCardBelongsToSpaceship: cardPosition [
+	cardPosition = 0 ifTrue: [ Error signal: 'The spaceship doesnt have cards to throw' ]
+]
+
 { #category : #asserting }
 OutstandingSpaceshipsGame >> assertCardCanBeThrown [
 	self shouldBeImplemented.
@@ -179,17 +190,18 @@ OutstandingSpaceshipsGame >> thereIsAWinner [
 ]
 
 { #category : #'card throwing' }
-OutstandingSpaceshipsGame >> throws: aCard from: aSpaceship [ 
-	
-	"Self assert de que existe la carta en su deck"
-	"self assertCardCanBeThrown: aCard in: board."
-	
-	| cardToBeRemoved |
-	self assertCardCanBeThrown: aCard from: aSpaceship.
+OutstandingSpaceshipsGame >> throws: aCard from: aSpaceship [
+
+	| cardToBeRemoved cardToBeThrown |
 	cardToBeRemoved := spaceshipsCardDeck findFirst: [ :spaceshipCardDeck | 
-		                 spaceshipCardDeck spaceship = aSpaceship and: (spaceshipCardDeck card) = aCard ].
+		                   spaceshipCardDeck spaceship = aSpaceship and:
+			                   spaceshipCardDeck card = aCard ].
+	self assertCardBelongsToSpaceship: cardToBeRemoved.
+	self
+		assertCardCanBeThrown: (spaceshipsCardDeck at: cardToBeRemoved) card
+		from: aSpaceship.
 	spaceshipsCardDeck removeAt: cardToBeRemoved.
-	
+	aCard incorporateTo: self
 ]
 
 { #category : #results }

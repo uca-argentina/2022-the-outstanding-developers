@@ -5,10 +5,16 @@ Class {
 		'typeOfCard'
 	],
 	#classInstVars : [
-		'cardType'
+		'cardType',
+		'spaceship'
 	],
 	#category : #'IngSoft2-Model'
 }
+
+{ #category : #playing }
+SpeedCard class >> addTo: anOutstandingSpaceshipsGame [ 
+	anOutstandingSpaceshipsGame addAffecting: (SpaceshipCardHolder of: spaceship holding: self create )
+]
 
 { #category : #'instance creation' }
 SpeedCard class >> asA: aTypeOfCard [
@@ -26,6 +32,32 @@ SpeedCard class >> behavingAsA: typeOfCard [
 SpeedCard class >> create [
 
 	^ self new initializeAs: cardType new
+]
+
+{ #category : #playing }
+SpeedCard class >> incorporateTo: anOutstandingSpaceshipsGame [ 
+	| aTypeOfCard |
+	aTypeOfCard := cardType new.
+	aTypeOfCard incorporate: self To: anOutstandingSpaceshipsGame.
+]
+
+{ #category : #accessing }
+SpeedCard class >> thrownAt: aSpaceship [
+
+	spaceship := aSpaceship
+]
+
+{ #category : #accessing }
+SpeedCard class >> thrownAt: aSpaceship asA: typeOfCard [ 
+	spaceship := aSpaceship.
+	cardType := typeOfCard
+	
+]
+
+{ #category : #comparing }
+SpeedCard >> = aCard [
+
+	^ self class = aCard
 ]
 
 { #category : #asserting }

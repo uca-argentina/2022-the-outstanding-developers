@@ -109,11 +109,11 @@ SpaceshipTest >> testSpaceshipThatStartsWithTwoCardsAndPlaysOneHasOneCardLeftToP
 		                     (LoadedDie with: 1)
 		                     using: aCardDistribution.
 
-	self assert: (anOutstandingGame deckOf: 'Delorean') size equals: 2.
+	self assert: (anOutstandingGame deckOf: 'Enterprise') size equals: 2.
 
-	anOutstandingGame throws: (OverloadCard thrownAt: 'Enterprise') from: 'Delorean'.
+	anOutstandingGame throws: (OverloadCard thrownAt: 'Delorean') from: 'Enterprise'.
 	
-	self assert: (anOutstandingGame deckOf: 'Delorean') size equals: 1
+	self assert: (anOutstandingGame deckOf: 'Enterprise') size equals: 1
 ]
 
 { #category : #tests }

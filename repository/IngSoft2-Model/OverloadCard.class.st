@@ -11,6 +11,11 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #playing }
+OverloadCard class >> addTo: anOutstandingSpaceshipsGame [ 
+	anOutstandingSpaceshipsGame addAffecting: (SpaceshipCardHolder of: spaceship holding: self create )
+]
+
 { #category : #'instance creation' }
 OverloadCard class >> asA: aTypeOfCard [
 
@@ -29,10 +34,23 @@ OverloadCard class >> create [
 	^ self new initializeAs: typeOfCard  new
 ]
 
+{ #category : #playing }
+OverloadCard class >> incorporateTo: anOutstandingSpaceshipsGame [ 
+	| aTypeOfCard |
+	aTypeOfCard := typeOfCard new.
+	aTypeOfCard incorporate: self To: anOutstandingSpaceshipsGame.
+]
+
 { #category : #throwing }
 OverloadCard class >> thrownAt: aSpaceship [ 
 	
 	spaceship := aSpaceship.
+]
+
+{ #category : #'class initialization' }
+OverloadCard class >> thrownAt: aSpaceship asA: cardType [ 
+	spaceship := aSpaceship.
+	typeOfCard := cardType 
 ]
 
 { #category : #initialization }

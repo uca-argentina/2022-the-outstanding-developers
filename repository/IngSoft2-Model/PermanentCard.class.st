@@ -11,3 +11,8 @@ PermanentCard >> canBeThrownWithCurrentTurn: isCurrentTurn [
 		Error signal:
 			'Permanent cards can only be thrown in spaceships turn' ]
 ]
+
+{ #category : #playing }
+PermanentCard >> incorporate: aCard To: anOutstandingSpaceshipsGame [ 
+	aCard addTo: anOutstandingSpaceshipsGame
+]
