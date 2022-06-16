@@ -22,9 +22,9 @@ SpaceshipCardHolder >> add: aCard [
 ]
 
 { #category : #accessing }
-SpaceshipCardHolder >> cardDeck [
+SpaceshipCardHolder >> card [
 
-	^ cardDeck 
+	^ card
 ]
 
 { #category : #accessing }

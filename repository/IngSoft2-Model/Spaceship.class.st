@@ -55,7 +55,7 @@ Spaceship >> assertSpaceshipHasNAmountOfCards: anAmount [
 ]
 
 { #category : #accessing }
-Spaceship >> cardDeck [
+Spaceship >> card [
 
 	^ unplayedCards
 ]

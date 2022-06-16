@@ -5,7 +5,8 @@ Class {
 		'typeOfCard'
 	],
 	#classInstVars : [
-		'typeOfCard'
+		'typeOfCard',
+		'spaceship'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -26,6 +27,18 @@ OverloadCard class >> behavingAsA: aTypeOfCard [
 OverloadCard class >> create [
 
 	^ self new initializeAs: typeOfCard  new
+]
+
+{ #category : #throwing }
+OverloadCard class >> thrownAt: aSpaceship [ 
+	
+	spaceship := aSpaceship.
+]
+
+{ #category : #initialization }
+OverloadCard >> = aCard [
+
+	^ self class = aCard
 ]
 
 { #category : #asserting }

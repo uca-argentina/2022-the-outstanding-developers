@@ -49,7 +49,7 @@ SpaceshipTest >> testSpaceshipHasOnePendingCardToPlay [
 	aCard := OverloadCard new.
 	delorean receives: aCard.
 
-	self assert: delorean cardDeck size equals: 1
+	self assert: delorean card size equals: 1
 ]
 
 { #category : #tests }
@@ -64,7 +64,7 @@ SpaceshipTest >> testSpaceshipHasTwoPendingCardsToPlay [
 		         speedCard }.
 	delorean receivesMany: cards.
 
-	self assert: delorean cardDeck size equals: 2
+	self assert: delorean card size equals: 2
 ]
 
 { #category : #tests }
@@ -88,24 +88,32 @@ SpaceshipTest >> testSpaceshipOfPlayerOneIsEqualToSpaceshipOfPlayerOne [
 { #category : #tests }
 SpaceshipTest >> testSpaceshipThatStartsWithTwoCardsAndPlaysOneHasOneCardLeftToPlay [
 
-	| delorean anOverloadCard aSpeedCard starlink aBoard |
-	delorean := Spaceship called: 'Delorean'.
-	starlink := Spaceship called: 'Starlink'.
-	anOverloadCard := OverloadCard asA: PermanentCard new.
-	aSpeedCard := SpeedCard new.
+	| aBoard aCardDistribution anOutstandingGame|
+
 	aBoard := Board
 		          of: 10
 		          and: (ParsecUnit of: 10)
 		          playedFor: 1
 		          with: { (Box with: NoEffect new) }.
-	delorean receivesMany: { 
-			anOverloadCard.
-			aSpeedCard }.
 
-	self assert: delorean cardDeck size equals: 2.
+	aCardDistribution := OrderedCollection new.
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1
+			 for: (OverloadCard behavingAsA: PermanentCard)).
+	
+	anOutstandingGame := OutstandingSpaceshipsGame
+		                     playedByMany:
+		                     { 'Enterprise'. 'Delorean' }
+		                     on: aBoard
+		                     throwing:
+		                     (LoadedDie with: 1)
+		                     using: aCardDistribution.
 
-	delorean throw: 1 to: 'Starlink' in: aBoard.
-	self assert: delorean cardDeck size equals: 1
+	self assert: (anOutstandingGame deckOf: 'Delorean') size equals: 2.
+
+	anOutstandingGame throws: (OverloadCard thrownAt: 'Enterprise') from: 'Delorean'.
+	
+	self assert: (anOutstandingGame deckOf: 'Delorean') size equals: 1
 ]
 
 { #category : #tests }

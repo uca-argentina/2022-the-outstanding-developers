@@ -17,9 +17,8 @@ CardTest >> should: block raise: expectedErrorClass withMessage: expectedErrorMe
 { #category : #tests }
 CardTest >> testACardIsNotTakenAwayFromASpaceshipWhenThrownButNotItsTurn [
 
-	| overloadCard enterprise aBoard delorean collectionOfCards aCardDistribution anOutstandingGame |
+	| overloadCard aBoard collectionOfCards aCardDistribution anOutstandingGame |
 	overloadCard := OverloadCard asA: PermanentCard new.
-	"enterprise receives: overloadCard. -> esto esta mal porque permite hacer trampa"
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add: (Distribution
 			 withProbabilityOf: 1
@@ -32,24 +31,26 @@ CardTest >> testACardIsNotTakenAwayFromASpaceshipWhenThrownButNotItsTurn [
 	
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedByMany:
-		                     { 'Delorean' }
+		                     { 'Delorean'. 'Enterprise' }
 		                     on: aBoard
 		                     throwing:
 		                     (LoadedDie withSequence: { 7. 6. 5. 6 })
 		                     using: aCardDistribution.
-	aBoard moveSpaceship: 3.
-
+	anOutstandingGame play.
+	self halt.
+	anOutstandingGame throws: (OverloadCard thrownAt: 'Enterprise' ) from: 'Delorean'.
+	
 	self
-		should: [ enterprise throw: 1 to: 'Delorean' in: aBoard ]
+		should: [ anOutstandingGame throws: (OverloadCard thrownAt: 'Enterprise' ) from: 'Delorean' ]
 		raise: Error
 		withMessage: 'Permanent cards can only be thrown in spaceships turn'.
 
 	collectionOfCards := OrderedCollection new.
 	collectionOfCards add: overloadCard.
-	self assert: enterprise cardDeck equals: collectionOfCards.
+	collectionOfCards add: overloadCard.
 	self
-		assert: (aBoard cardDeckOf: 'Delorean')
-		equals: OrderedCollection new
+		assert: (aBoard cardDeckOf: 'Enterprise')
+		equals: collectionOfCards
 ]
 
 { #category : #tests }

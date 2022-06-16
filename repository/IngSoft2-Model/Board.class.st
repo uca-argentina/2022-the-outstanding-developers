@@ -167,7 +167,7 @@ Board >> boxParsecLength [
 { #category : #accessing }
 Board >> cardDeckOf: aSpaceship [ 
 
-	   ^ (spaceshipsCardDeck detect: [ :spaceshipCardDeck | spaceshipCardDeck spaceship name = aSpaceship ]) cardDeck
+	   ^ (spaceshipsCardDeck detect: [ :spaceshipCardDeck | spaceshipCardDeck spaceship name = aSpaceship ]) card
 ]
 
 { #category : #validation }
@@ -273,8 +273,6 @@ Board >> moveSpaceship: aNumberOfBoxes [
 
 	| spaceshipPlaying |
 	spaceshipPlaying := (positions at: turnHandler nextValue) spaceship.
-	"deckOfSpaceship := self cardDeckOf: spaceshipPlaying.
-	effectOnDiceThrow := deckOfSpaceship sum: [ :card | card effectOnThrow ]."
 	self move: spaceshipPlaying by: aNumberOfBoxes
 ]
 
