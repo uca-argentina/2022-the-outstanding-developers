@@ -24,6 +24,57 @@ BoxTest >> testBoxWithNoEffectDoesNotModifyPosition [
 ]
 
 { #category : #tests }
+BoxTest >> testCardAwarderBoxEffectDoesNotModifyPosition [
+
+	| box anEffect |
+	
+	anEffect := CardAwarderEffect create.
+	box := Box with: anEffect.
+	self assert: box effectOnPosition equals: 0
+]
+
+{ #category : #tests }
+BoxTest >> testCardAwarderBoxEffectGivesACardToTheSpaceshipThatLandsOnIt [
+
+	| aBoard noEffect cardAwarderEffect boxSequence box1 box2 box3 box4 box5 aCardDistribution anOutstandingGame |
+	
+	noEffect := NoEffect new.
+	cardAwarderEffect := CardAwarderEffect new.
+
+	aCardDistribution := OrderedCollection new.
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1
+			 for: (OverloadCard behavingAsA: PermanentCard)).
+
+	box1 := Box with: cardAwarderEffect.
+	box2 := Box with: noEffect.
+	box3 := Box with: noEffect.
+	box4 := Box with: noEffect.
+	box5 := Box with: noEffect.
+
+	boxSequence := { 
+		               box1.
+		               box2.
+		               box3.
+		               box4.
+		               box5 }.
+	aBoard := Board
+		          of: 10
+		          and: (ParsecUnit of: 10)
+		          playedFor: 1
+		          with: boxSequence.
+
+	anOutstandingGame := OutstandingSpaceshipsGame
+		                     playedBy: 'Enterprise'
+		                     on: aBoard
+		                     throwing: (LoadedDie with: 1)
+		                     using: aCardDistribution.
+	anOutstandingGame play.
+	
+	self assert: (anOutstandingGame deckOf: 'Enterprise') size equals: 3.
+]
+
+{ #category : #tests }
 BoxTest >> testHyperJumpBoxAutogeneratesASequence [
 
 	| box anEffect firstEffect secondEffect |

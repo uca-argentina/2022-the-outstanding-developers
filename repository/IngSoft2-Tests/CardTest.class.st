@@ -78,7 +78,7 @@ CardTest >> testACardIsTakenAwayFromASpaceshipWhenThrown [
 { #category : #tests }
 CardTest >> testASpaceshipCannotThrowACardItDoesntHave [
 
-	| overloadCard aBoard aCardDistribution anOutstandingGame |
+	| aBoard aCardDistribution anOutstandingGame |
 	aBoard := Board
 		          of: 10
 		          and: (ParsecUnit of: 10)
@@ -104,36 +104,38 @@ CardTest >> testASpaceshipCannotThrowACardItDoesntHave [
 { #category : #tests }
 CardTest >> testAccelerationCardIncreasesInOneAllTheSpaceshipsDiceThrows [
 
-	| accelerationCard enterprise aBoard delorean zathura |
-	accelerationCard := AccelerationCard asA: PermanentCard new.
-
-	enterprise := Spaceship called: 'Enterprise'.
-	delorean := Spaceship called: 'Delorean'.
-	zathura := Spaceship called: 'Zathura'.
-	enterprise receives: accelerationCard.
+	| aBoard aCardDistribution anOutstandingGame |
 
 	aBoard := Board
 		          of: 10
 		          and: (ParsecUnit of: 10)
 		          playedFor: 1
-		          byMany: { 
-				          enterprise.
-				          delorean.
-				          zathura }
 		          with: { (Box with: NoEffect new) }.
-	enterprise throw: 1 in: aBoard.
+		
+	aCardDistribution := OrderedCollection new.
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1
+			 for: (AccelerationCard behavingAsA: PermanentCard)).
+	anOutstandingGame := OutstandingSpaceshipsGame
+		                     playedByMany: { 'Enterprise'. 'Delorean'. 'Zathura' }
+		                     on: aBoard
+		                     throwing:
+		                     (LoadedDie withSequence: {3. 4. 5. 2. 2. 2 })
+		                     using: aCardDistribution.	
+	
+	anOutstandingGame throws: (AccelerationCard behavingAsA: PermanentCard) from: 'Enterprise'.
 
-	aBoard moveSpaceship: 3.
-	aBoard moveSpaceship: 4.
-	aBoard moveSpaceship: 5.
+	anOutstandingGame play.
+	anOutstandingGame play.
+	anOutstandingGame play.
 
 	self assert: (aBoard positionOf: 'Enterprise') equals: 4.
 	self assert: (aBoard positionOf: 'Delorean') equals: 5.
 	self assert: (aBoard positionOf: 'Zathura') equals: 6.
 
-	aBoard moveSpaceship: 2.
-	aBoard moveSpaceship: 2.
-	aBoard moveSpaceship: 2.
+	anOutstandingGame play.
+	anOutstandingGame play.
+	anOutstandingGame play.
 
 	self assert: (aBoard positionOf: 'Enterprise') equals: 7.
 	self assert: (aBoard positionOf: 'Delorean') equals: 8.
@@ -210,9 +212,6 @@ CardTest >> testCancellationCardRemovesAPermanentCard [
 		          of: 10
 		          and: (ParsecUnit of: 10)
 		          playedFor: 1
-		          byMany: { 
-				          delorean.
-				          enterprise }
 		          with: { (Box with: NoEffect new) }.
 		
 
@@ -225,38 +224,34 @@ CardTest >> testCancellationCardRemovesAPermanentCard [
 ]
 
 { #category : #tests }
-CardTest >> testEffectOfMultipleCardsIsAddedUpIntoTheSpaceshipDiceThrow [
+CardTest >> testEffectOfMultipleSpeedCardsIsAddedUpIntoTheSpaceshipDiceThrow [
 
-	| anOverloadCard enterprise aBoard delorean aSpeedCard anotherSpeedCard |
-	anOverloadCard := OverloadCard asA: PermanentCard new.
-	aSpeedCard := SpeedCard asA: PermanentCard new.
-	anotherSpeedCard := SpeedCard asA: PermanentCard new.
+	| aBoard aCardDistribution anOutstandingGame |
 
-	enterprise := Spaceship called: 'Enterprise'.
-	enterprise receivesMany: { 
-			anOverloadCard.
-			aSpeedCard.
-			anotherSpeedCard }.
-
-	delorean := Spaceship called: 'Delorean'.
 	aBoard := Board
 		          of: 10
 		          and: (ParsecUnit of: 10)
 		          playedFor: 1
-		          byMany: { 
-				          enterprise.
-				          delorean }
 		          with: { (Box with: NoEffect new) }.
+	
+	aCardDistribution := OrderedCollection new.
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1
+			 for: (SpeedCard behavingAsA: PermanentCard)).
+	anOutstandingGame := OutstandingSpaceshipsGame
+		                     playedByMany: { 'Enterprise'. 'Delorean'}
+		                     on: aBoard
+		                     throwing:
+		                     (LoadedDie with: 1)
+		                     using: aCardDistribution.	
+	
+	anOutstandingGame throws: (SpeedCard thrownAt: 'Delorean' asA: PermanentCard) from: 'Enterprise'.
+	anOutstandingGame throws: (SpeedCard thrownAt: 'Delorean' asA: PermanentCard) from: 'Enterprise'.
+	anOutstandingGame play.
+	anOutstandingGame play.
 
-	enterprise throw: 1 to: 'Delorean' in: aBoard.
-	enterprise throw: 2 to: 'Delorean' in: aBoard.
-	enterprise throw: 1 to: 'Delorean' in: aBoard.
-
-	aBoard moveSpaceship: 3.
-	aBoard moveSpaceship: 4.
-
-	self assert: (aBoard positionOf: 'Enterprise') equals: 3.
-	self assert: (aBoard positionOf: 'Delorean') equals: 4
+	self assert: (aBoard positionOf: 'Enterprise') equals: 1.
+	self assert: (aBoard positionOf: 'Delorean') equals: 3
 ]
 
 { #category : #tests }
@@ -325,9 +320,9 @@ CardTest >> testOverloadCardReducesInTwoTheSpaceshipDiceThrow [
 ]
 
 { #category : #tests }
-CardTest >> testSpeedupCardIncreasesInOneTheSpaceshipDiceThrow [
+CardTest >> testSpeedCardIncreasesInOneTheSpaceshipDiceThrow [
 
-	| speedCard enterprise aBoard delorean aCardDistribution anOutstandingGame |
+	| aBoard aCardDistribution anOutstandingGame |
 	aBoard := Board
 		          of: 10
 		          and: (ParsecUnit of: 10)

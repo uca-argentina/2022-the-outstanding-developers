@@ -10,6 +10,12 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
+{ #category : #playing }
+AccelerationCard class >> addTo: anOutstandingSpaceshipsGame [
+
+	anOutstandingSpaceshipsGame addAffectingAll: self create.
+]
+
 { #category : #'instance creation' }
 AccelerationCard class >> asA: aTypeOfCard [
 
@@ -26,6 +32,19 @@ AccelerationCard class >> behavingAsA: typeOfCard [
 AccelerationCard class >> create [
 
 	^ self new initializeAs: cardType new
+]
+
+{ #category : #playing }
+AccelerationCard class >> incorporateTo: anOutstandingSpaceshipsGame [ 
+	| aTypeOfCard |
+	aTypeOfCard := cardType new.
+	aTypeOfCard incorporate: self To: anOutstandingSpaceshipsGame.
+]
+
+{ #category : #initialization }
+AccelerationCard >> = aCard [
+
+	^ self class = aCard
 ]
 
 { #category : #asserting }

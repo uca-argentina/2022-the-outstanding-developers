@@ -12,8 +12,10 @@ Class {
 }
 
 { #category : #playing }
-SpeedCard class >> addTo: anOutstandingSpaceshipsGame [ 
-	anOutstandingSpaceshipsGame addAffecting: (SpaceshipCardHolder of: spaceship holding: self create )
+SpeedCard class >> addTo: anOutstandingSpaceshipsGame [
+
+	anOutstandingSpaceshipsGame addAffecting:
+		(SpaceshipCardHolder of: spaceship holding: self create)
 ]
 
 { #category : #'instance creation' }

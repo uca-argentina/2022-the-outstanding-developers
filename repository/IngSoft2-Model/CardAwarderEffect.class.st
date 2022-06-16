@@ -9,3 +9,14 @@ CardAwarderEffect class >> create [
 
 	^ self new
 ]
+
+{ #category : #effects }
+CardAwarderEffect >> applyEffectOn: aBoard [
+
+	^ self effectOnPosition
+]
+
+{ #category : #effects }
+CardAwarderEffect >> effectOnPosition [
+	^ 0
+]

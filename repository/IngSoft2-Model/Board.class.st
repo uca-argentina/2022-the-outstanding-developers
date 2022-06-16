@@ -206,6 +206,7 @@ Board >> move: aSpaceship by: aNumberOfBoxes [
 	ifFalse: [newPositionAfterEffect := (self move: aSpaceship in: (newPositionWithoutEffect position) and: (newPositionWithoutEffect lap) by: movementAfterEffect)]
 	ifTrue: [ ^self ].
 	positions replaceFrom: positionAmongPositions to: positionAmongPositions with: { newPositionAfterEffect }.
+	^ currentBox
 ]
 
 { #category : #playing }
@@ -271,9 +272,10 @@ Board >> movePlayingSpaceshipAt: aPosition by: anAmount [
 { #category : #movement }
 Board >> moveSpaceship: aNumberOfBoxes [
 
-	| spaceshipPlaying |
+	| spaceshipPlaying currentBox|
 	spaceshipPlaying := (positions at: turnHandler nextValue) spaceship.
-	self move: spaceshipPlaying by: aNumberOfBoxes
+	currentBox := self move: spaceshipPlaying by: aNumberOfBoxes.
+	^ (currentBox giveACardTo: spaceshipPlaying). "Me retorna True o False de si tiene que dar carta o no"
 ]
 
 { #category : #assertions }
