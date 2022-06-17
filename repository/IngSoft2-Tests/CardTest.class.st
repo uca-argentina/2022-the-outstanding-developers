@@ -143,57 +143,128 @@ CardTest >> testAccelerationCardIncreasesInOneAllTheSpaceshipsDiceThrows [
 ]
 
 { #category : #tests }
-CardTest >> testAnInstantaneousCardCanOnlyBeUsedOnce [
+CardTest >> testAnInstantaneousCardCantBeUsedIfTheGameHasFinished [
 
-	| overloadCard aBoard delorean enterprise |
-	overloadCard := OverloadCard asA: InstantaneousCard new.
-	delorean := Spaceship called: 'Delorean'.
-	enterprise := Spaceship called: 'Enterprise'.
-	delorean receives: overloadCard.
+	| aBoard aCardDistribution anotherCardDistribution cardAwarderEffect box1 box2 box3 box4 box5 anOutstandingGame |
+	aCardDistribution := OrderedCollection new.
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1
+			 for: (OverloadCard behavingAsA: PermanentCard)).
+	anotherCardDistribution := OrderedCollection new.
+	anotherCardDistribution add: (Distribution
+			 withProbabilityOf: 1
+			 for: (CancellationCard behavingAsA: InstantaneousCard)).
+	cardAwarderEffect := CardAwarderEffect with: anotherCardDistribution.
+
+	box1 := Box with: cardAwarderEffect.
+	box2 := Box with: cardAwarderEffect.
+	box3 := Box with: NoEffect new.
+	box4 := Box with: NoEffect new.
+	box5 := Box with: NoEffect new.
 
 	aBoard := Board
 		          of: 10
 		          and: (ParsecUnit of: 10)
 		          playedFor: 1
-		          byMany: { 
-				          delorean.
-				          enterprise }
-		          with: { (Box with: NoEffect new) }.
+		          with: { 
+				          box1.
+				          box2.
+				          box3.
+				          box4.
+				          box5 }.
 
-	delorean throw: 1 to: 'Enterprise' in: aBoard.
-	"self halt."
+	anOutstandingGame := OutstandingSpaceshipsGame
+		                     playedByMany: { 'Enterprise'. 'Delorean' }
+		                     on: aBoard
+		                     throwing:
+		                     (LoadedDie withSequence: {1. 1. 1. 1. 1. 1. 8})
+		                     using: aCardDistribution.
+	anOutstandingGame play.
+	anOutstandingGame
+		throws: (OverloadCard thrownAt: 'Enterprise' asA: PermanentCard)
+		from: 'Delorean'.
+	anOutstandingGame play.
+	anOutstandingGame
+		throws: (CancellationCard
+				 thrownAt: 'Overload'
+				 affecting: 'Enterprise'
+				 asA: InstantaneousCard)
+		from: 'Enterprise'.
+	anOutstandingGame play.
+	anOutstandingGame play.
+	anOutstandingGame play.
+	anOutstandingGame play.
+	anOutstandingGame play.
+	
 	self
-		should: [ delorean throw: 1 to: 'Enterprise' in: aBoard ]
+		should: [ anOutstandingGame
+		throws: (CancellationCard
+				 thrownAt: 'Overload'
+				 affecting: 'Enterprise'
+				 asA: InstantaneousCard)
+		from: 'Enterprise'. ]
 		raise: Error
-		withMessage: 'No se, algun error'
+		withMessage: 'Cards can only be thrown if game has not finished'
 ]
 
 { #category : #tests }
-CardTest >> testAnInstantaneousCardCantBeUsedIfTheGameHasFinished [
+CardTest >> testAnInstantaneousCardEffectAffectOnlyOnce [
 
-	| overloadCard enterprise aBoard delorean |
-	overloadCard := OverloadCard asA: InstantaneousCard new.
-	enterprise := Spaceship called: 'Enterprise'.
-	delorean := Spaceship called: 'Delorean'.
-	delorean receives: overloadCard.
+	| aBoard aCardDistribution anotherCardDistribution cardAwarderEffect box1 box2 box3 box4 box5 anOutstandingGame |
+	aCardDistribution := OrderedCollection new.
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1
+			 for: (OverloadCard behavingAsA: PermanentCard)).
+	anotherCardDistribution := OrderedCollection new.
+	anotherCardDistribution add: (Distribution
+			 withProbabilityOf: 1
+			 for: (CancellationCard behavingAsA: InstantaneousCard)).
+	cardAwarderEffect := CardAwarderEffect with: anotherCardDistribution.
+
+	box1 := Box with: cardAwarderEffect.
+	box2 := Box with: NoEffect new.
+	box3 := Box with: NoEffect new.
+	box4 := Box with: NoEffect new.
+	box5 := Box with: NoEffect new.
 
 	aBoard := Board
 		          of: 10
 		          and: (ParsecUnit of: 10)
 		          playedFor: 1
-		          byMany: { 
-				          enterprise.
-				          delorean }
-		          with: { (Box with: NoEffect new) }.
+		          with: { 
+				          box1.
+				          box2.
+				          box3.
+				          box4.
+				          box5 }.
 
-	aBoard moveSpaceship: 3.
-	aBoard moveSpaceship: 2.
-	aBoard moveSpaceship: 8.
-
-	self
-		should: [ delorean throw: 1 to: 'Enterprise' in: aBoard ]
-		raise: Error
-		withMessage: 'Cards can only be thrown if game has not finished'
+	anOutstandingGame := OutstandingSpaceshipsGame
+		                     playedByMany: { 'Enterprise'. 'Delorean' }
+		                     on: aBoard
+		                     throwing:
+		                     (LoadedDie withSequence: { 1. 2. 3. 3. 4 })
+		                     using: aCardDistribution.
+	anOutstandingGame play.
+	anOutstandingGame
+		throws: (OverloadCard thrownAt: 'Enterprise' asA: PermanentCard)
+		from: 'Delorean'.
+	anOutstandingGame
+		throws: (OverloadCard thrownAt: 'Enterprise' asA: PermanentCard)
+		from: 'Delorean'.
+	anOutstandingGame play.
+	
+	self assert: (anOutstandingGame cardsAffectingOf: 'Enterprise') size equals: 2.
+	
+	anOutstandingGame
+		throws: (CancellationCard
+				 thrownAt: 'Overload'
+				 affecting: 'Enterprise'
+				 asA: InstantaneousCard)
+		from: 'Enterprise'.
+	
+	self assert: (anOutstandingGame cardsAffectingOf: 'Enterprise') size equals: 1.
+		
+	
 ]
 
 { #category : #tests }
