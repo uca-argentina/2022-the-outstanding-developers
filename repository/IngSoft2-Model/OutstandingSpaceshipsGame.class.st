@@ -7,7 +7,8 @@ Class {
 		'stateOfGame',
 		'spaceshipsCardDeck',
 		'spaceshipsPlaying',
-		'spaceshipsAffectingCardDeck'
+		'spaceshipsAffectingCardDeck',
+		'lastPlayedCard'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -69,12 +70,14 @@ OutstandingSpaceshipsGame class >> playedOn: aBoard throwing: dice [
 { #category : #playing }
 OutstandingSpaceshipsGame >> addAffecting: aSpaceshipCardHolder [
 
+	lastPlayedCard := aSpaceshipCardHolder card.
 	spaceshipsAffectingCardDeck add: aSpaceshipCardHolder
 ]
 
 { #category : #playing }
 OutstandingSpaceshipsGame >> addAffectingAll: aCard [ 
 	
+	lastPlayedCard := aCard.
 	spaceshipsPlaying do: [ :spaceship | self addAffecting: (SpaceshipCardHolder of: spaceship holding: aCard) ]
 ]
 
@@ -123,6 +126,7 @@ OutstandingSpaceshipsGame >> cancel: aCard affecting: aSpaceship [
 		                   spaceshipAffectingCardDeck spaceship = aSpaceship and:
 			                   [spaceshipAffectingCardDeck card name = aCard] ].
 	self assertCardCanBeRemoved: cardToBeRemoved.
+	lastPlayedCard := aCard.
 	spaceshipsAffectingCardDeck removeAt: cardToBeRemoved 
 ]
 
@@ -186,7 +190,8 @@ OutstandingSpaceshipsGame >> initializeWith: aBoard many: spaceships and: someDi
 
 { #category : #initialization }
 OutstandingSpaceshipsGame >> initializeWith: aBoard many: spaceships throwing: someDice using: aCardDistribution [
-
+	
+	lastPlayedCard := ''.
 	board := aBoard.
 	aBoard playingWith: spaceships in: self.
 	spaceshipsPlaying := spaceships.
@@ -194,6 +199,11 @@ OutstandingSpaceshipsGame >> initializeWith: aBoard many: spaceships throwing: s
 	stateOfGame := GameNotWonState new.
 	spaceshipsAffectingCardDeck := OrderedCollection new.
 	self dealWith: aCardDistribution.
+]
+
+{ #category : #accessing }
+OutstandingSpaceshipsGame >> lastPlayedCard [
+	^ lastPlayedCard
 ]
 
 { #category : #playing }

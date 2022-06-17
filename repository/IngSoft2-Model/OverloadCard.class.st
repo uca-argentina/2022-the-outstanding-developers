@@ -70,10 +70,22 @@ OverloadCard >> assertItIsThrowableInTurn: anAssertion in: anOutstandingSpaceshi
 	self assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs: anAssertion.
 ]
 
+{ #category : #accessing }
+OverloadCard >> cardBehaviour [
+	^ typeOfCard 
+]
+
 { #category : #effect }
 OverloadCard >> effectOnThrow [
 
 	^ -2
+]
+
+{ #category : #playing }
+OverloadCard >> incorporateTo: anOutstandingSpaceshipsGame theElement: aCard [ 
+	| cardHolder |
+	cardHolder := SpaceshipCardHolder of: aCard target holding: aCard createWithCard.
+	anOutstandingSpaceshipsGame addAffecting: cardHolder
 ]
 
 { #category : #initialization }

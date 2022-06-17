@@ -524,6 +524,150 @@ CardTest >> testOverloadCardReducesInTwoTheSpaceshipDiceThrow [
 ]
 
 { #category : #tests }
+CardTest >> testRedoRepeatsAcceleration [
+
+	| aBoard aCardDistribution anotherCardDistribution cardAwarderEffect box1 box2 box3 box4 box5 anOutstandingGame |
+	aCardDistribution := OrderedCollection new.
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1
+			 for: (AccelerationCard behavingAsA: PermanentCard)).
+	anotherCardDistribution := OrderedCollection new.
+	anotherCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: RedoCard).
+	cardAwarderEffect := CardAwarderEffect with: anotherCardDistribution.
+
+	box1 := Box with: cardAwarderEffect.
+	box2 := Box with: NoEffect new.
+	box3 := Box with: NoEffect new.
+	box4 := Box with: NoEffect new.
+	box5 := Box with: NoEffect new.
+
+	aBoard := Board
+		          of: 10
+		          and: (ParsecUnit of: 10)
+		          playedFor: 1
+		          with: { 
+				          box1.
+				          box2.
+				          box3.
+				          box4.
+				          box5 }.
+
+	anOutstandingGame := OutstandingSpaceshipsGame
+		                     playedByMany: { 'Enterprise'. 'Delorean' }
+		                     on: aBoard
+		                     throwing:
+		                     (LoadedDie withSequence: { 1. 2 })
+		                     using: aCardDistribution.
+	anOutstandingGame play.
+	anOutstandingGame
+		throws: (AccelerationCard behavingAsA: PermanentCard)
+		from: 'Delorean'.
+	anOutstandingGame play.
+	self assert: (aBoard positionOf: 'Delorean') equals: 3.
+	anOutstandingGame throws: (RedoCard thrownAt: EmptyCard new) from: 'Enterprise'.
+	anOutstandingGame play.
+	anOutstandingGame play.
+	self assert: (aBoard positionOf: 'Delorean') equals: 7.
+]
+
+{ #category : #tests }
+CardTest >> testRedoRepeatsOverload [
+
+	| aBoard aCardDistribution anotherCardDistribution cardAwarderEffect box1 box2 box3 box4 box5 anOutstandingGame |
+	aCardDistribution := OrderedCollection new.
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1
+			 for: (OverloadCard behavingAsA: PermanentCard)).
+	anotherCardDistribution := OrderedCollection new.
+	anotherCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: RedoCard).
+	cardAwarderEffect := CardAwarderEffect with: anotherCardDistribution.
+
+	box1 := Box with: cardAwarderEffect.
+	box2 := Box with: NoEffect new.
+	box3 := Box with: NoEffect new.
+	box4 := Box with: NoEffect new.
+	box5 := Box with: NoEffect new.
+
+	aBoard := Board
+		          of: 10
+		          and: (ParsecUnit of: 10)
+		          playedFor: 1
+		          with: { 
+				          box1.
+				          box2.
+				          box3.
+				          box4.
+				          box5 }.
+
+	anOutstandingGame := OutstandingSpaceshipsGame
+		                     playedByMany: { 'Enterprise'. 'Delorean' }
+		                     on: aBoard
+		                     throwing:
+		                     (LoadedDie withSequence: { 1. 2 })
+		                     using: aCardDistribution.
+	anOutstandingGame play.
+	anOutstandingGame
+		throws: (OverloadCard thrownAt: 'Enterprise' asA: PermanentCard)
+		from: 'Delorean'.
+	anOutstandingGame play.
+	self assert: (aBoard positionOf: 'Delorean') equals: 2.
+	anOutstandingGame throws: (RedoCard thrownAt: 'Delorean') from: 'Enterprise'.
+	anOutstandingGame play.
+	anOutstandingGame play.
+	self assert: (aBoard positionOf: 'Delorean') equals: 2.
+]
+
+{ #category : #tests }
+CardTest >> testRedoRepeatsSpeed [
+
+	| aBoard aCardDistribution anotherCardDistribution cardAwarderEffect box1 box2 box3 box4 box5 anOutstandingGame |
+	aCardDistribution := OrderedCollection new.
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1
+			 for: (SpeedCard behavingAsA: PermanentCard)).
+	anotherCardDistribution := OrderedCollection new.
+	anotherCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: RedoCard).
+	cardAwarderEffect := CardAwarderEffect with: anotherCardDistribution.
+
+	box1 := Box with: cardAwarderEffect.
+	box2 := Box with: NoEffect new.
+	box3 := Box with: NoEffect new.
+	box4 := Box with: NoEffect new.
+	box5 := Box with: NoEffect new.
+
+	aBoard := Board
+		          of: 10
+		          and: (ParsecUnit of: 10)
+		          playedFor: 1
+		          with: { 
+				          box1.
+				          box2.
+				          box3.
+				          box4.
+				          box5 }.
+
+	anOutstandingGame := OutstandingSpaceshipsGame
+		                     playedByMany: { 'Enterprise'. 'Delorean' }
+		                     on: aBoard
+		                     throwing:
+		                     (LoadedDie withSequence: { 1. 2 })
+		                     using: aCardDistribution.
+	anOutstandingGame play.
+	anOutstandingGame
+		throws: (SpeedCard thrownAt: 'Enterprise' asA: PermanentCard)
+		from: 'Delorean'.
+	anOutstandingGame play.
+	self assert: (aBoard positionOf: 'Delorean') equals: 2.
+	anOutstandingGame throws: (RedoCard thrownAt: 'Delorean') from: 'Enterprise'.
+	anOutstandingGame play.
+	anOutstandingGame play.
+	self assert: (aBoard positionOf: 'Delorean') equals: 5.
+]
+
+{ #category : #tests }
 CardTest >> testSpeedCardIncreasesInOneTheSpaceshipDiceThrow [
 
 	| aBoard aCardDistribution anOutstandingGame |

@@ -73,10 +73,23 @@ SpeedCard >> assertItIsThrowableInTurn: anAssertion in: anOutstandingSpaceshipsG
 	self assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs: anAssertion 
 ]
 
+{ #category : #accesing }
+SpeedCard >> cardBehaviour [
+
+	^ typeOfCard
+]
+
 { #category : #effect }
 SpeedCard >> effectOnThrow [
 
 	^ 1
+]
+
+{ #category : #playing }
+SpeedCard >> incorporateTo: anOutstandingSpaceshipsGame theElement: aCard [
+	| cardHolder |
+	cardHolder := SpaceshipCardHolder of: aCard target holding: aCard createWithCard.
+	anOutstandingSpaceshipsGame addAffecting: cardHolder
 ]
 
 { #category : #initialization }

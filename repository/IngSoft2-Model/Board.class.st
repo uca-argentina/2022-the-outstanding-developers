@@ -225,17 +225,20 @@ Board >> move: aSpaceship in: aPosition and: aLap by: aNumberOfBoxes [
 
 	| positionToMove newPosition |
 	positionToMove := self
-		                 nextPositionStartingAt: aPosition
-		                 in: aLap
-		                 afterMoving: aNumberOfBoxes.
+		                  nextPositionStartingAt: aPosition
+		                  in: aLap
+		                  afterMoving: aNumberOfBoxes.
 	newPosition := positionToMove = -1
 		               ifFalse: [ 
-			               SpaceshipPosition
-				               following: aSpaceship
-				               at:
-				               (BoardPosition
-					                at: positionToMove
-					                in: aLap) ]
+			               positionToMove = 0
+				               ifFalse: [ 
+					               SpaceshipPosition
+						               following: aSpaceship
+						               at: (BoardPosition at: positionToMove in: aLap) ]
+				               ifTrue: [ 
+					               SpaceshipPosition
+						               following: aSpaceship
+						               at: (BoardPosition at: 1 in: aLap) ] ]
 		               ifTrue: [ 
 			               SpaceshipPosition
 				               following: aSpaceship

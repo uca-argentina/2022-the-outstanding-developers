@@ -58,10 +58,21 @@ AccelerationCard >> assertItIsThrowableInTurn: anAssertion in: anOutstandingSpac
 	self assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs: anAssertion 
 ]
 
+{ #category : #accessing }
+AccelerationCard >> cardBehaviour [
+
+	^ typeOfCard
+]
+
 { #category : #effect }
 AccelerationCard >> effectOnThrow [
 
 	^ 1
+]
+
+{ #category : #playing }
+AccelerationCard >> incorporateTo: anOutstandingSpaceshipsGame theElement: aCard [ 
+	anOutstandingSpaceshipsGame addAffectingAll: aCard createWithCard
 ]
 
 { #category : #initialization }
