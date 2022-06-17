@@ -129,17 +129,17 @@ CardTest >> testAccelerationCardIncreasesInOneAllTheSpaceshipsDiceThrows [
 	anOutstandingGame play.
 	anOutstandingGame play.
 
-	self assert: (aBoard positionOf: 'Enterprise') equals: 4.
-	self assert: (aBoard positionOf: 'Delorean') equals: 5.
-	self assert: (aBoard positionOf: 'Zathura') equals: 6.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 4.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 5.
+	self assert: (aBoard boxPositionOf: 'Zathura') equals: 6.
 
 	anOutstandingGame play.
 	anOutstandingGame play.
 	anOutstandingGame play.
 
-	self assert: (aBoard positionOf: 'Enterprise') equals: 7.
-	self assert: (aBoard positionOf: 'Delorean') equals: 8.
-	self assert: (aBoard positionOf: 'Zathura') equals: 9
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 7.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 8.
+	self assert: (aBoard boxPositionOf: 'Zathura') equals: 9
 ]
 
 { #category : #tests }
@@ -259,8 +259,6 @@ CardTest >> testAnInstantaneousCardEffectAffectOnlyOnce [
 		from: 'Enterprise'.
 	
 	self assert: (anOutstandingGame cardsAffectingOf: 'Enterprise') size equals: 1.
-		
-	
 ]
 
 { #category : #tests }
@@ -389,22 +387,23 @@ CardTest >> testCancellationCardRemovesASpeedPermanentCard [
 		                     (LoadedDie withSequence: { 1. 2. 3. 3. 4 })
 		                     using: aCardDistribution.
 	anOutstandingGame play.
+	
 	anOutstandingGame
 		throws: (SpeedCard thrownAt: 'Enterprise' asA: PermanentCard)
 		from: 'Delorean'.
 	anOutstandingGame play.
 
-	self assert: (aBoard positionOf: 'Enterprise') equals: 1.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 1.
 	self assert: (aBoard lapOf: 'Enterprise') equals: 1.
-	self assert: (aBoard positionOf: 'Delorean') equals: 2.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 2.
 	self assert: (aBoard lapOf: 'Delorean') equals: 1.
 
 	anOutstandingGame play.
 	anOutstandingGame play.
 
-	self assert: (aBoard positionOf: 'Enterprise') equals: 5.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 5.
 	self assert: (aBoard lapOf: 'Enterprise') equals: 1.
-	self assert: (aBoard positionOf: 'Delorean') equals: 5.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 5.
 	self assert: (aBoard lapOf: 'Delorean') equals: 1.
 	
 	anOutstandingGame
@@ -415,9 +414,9 @@ CardTest >> testCancellationCardRemovesASpeedPermanentCard [
 	anOutstandingGame play.
 	anOutstandingGame play.
 	
-	self assert: (aBoard positionOf: 'Enterprise') equals: 9.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 9.
 	self assert: (aBoard lapOf: 'Enterprise') equals: 1.
-	self assert: (aBoard positionOf: 'Delorean') equals: 6.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 6.
 	self assert: (aBoard lapOf: 'Delorean') equals: 1
 ]
 
@@ -464,17 +463,17 @@ CardTest >> testCancellationCardRemovesAnAccelerationPermanentCard [
 		from: 'Delorean'.
 	anOutstandingGame play.
 
-	self assert: (aBoard positionOf: 'Enterprise') equals: 1.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 1.
 	self assert: (aBoard lapOf: 'Enterprise') equals: 1.
-	self assert: (aBoard positionOf: 'Delorean') equals: 3.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 3.
 	self assert: (aBoard lapOf: 'Delorean') equals: 1.
 
 	anOutstandingGame play.
 	anOutstandingGame play.
 
-	self assert: (aBoard positionOf: 'Enterprise') equals: 5.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 5.
 	self assert: (aBoard lapOf: 'Enterprise') equals: 1.
-	self assert: (aBoard positionOf: 'Delorean') equals: 7.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 7.
 	self assert: (aBoard lapOf: 'Delorean') equals: 1.
 
 	anOutstandingGame
@@ -485,9 +484,9 @@ CardTest >> testCancellationCardRemovesAnAccelerationPermanentCard [
 	anOutstandingGame play.
 	anOutstandingGame play.
 
-	self assert: (aBoard positionOf: 'Enterprise') equals: 9.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 9.
 	self assert: (aBoard lapOf: 'Enterprise') equals: 1.
-	self assert: (aBoard positionOf: 'Delorean') equals: 8.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 8.
 	self assert: (aBoard lapOf: 'Delorean') equals: 1
 ]
 
@@ -534,17 +533,17 @@ CardTest >> testCancellationCardRemovesAnOverloadPermanentCard [
 		from: 'Delorean'.
 	anOutstandingGame play.
 
-	self assert: (aBoard positionOf: 'Enterprise') equals: 1.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 1.
 	self assert: (aBoard lapOf: 'Enterprise') equals: 1.
-	self assert: (aBoard positionOf: 'Delorean') equals: 2.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 2.
 	self assert: (aBoard lapOf: 'Delorean') equals: 1.
 
 	anOutstandingGame play.
 	anOutstandingGame play.
 
-	self assert: (aBoard positionOf: 'Enterprise') equals: 2.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 2.
 	self assert: (aBoard lapOf: 'Enterprise') equals: 1.
-	self assert: (aBoard positionOf: 'Delorean') equals: 5.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 5.
 	self assert: (aBoard lapOf: 'Delorean') equals: 1.
 	
 	anOutstandingGame
@@ -555,9 +554,9 @@ CardTest >> testCancellationCardRemovesAnOverloadPermanentCard [
 	anOutstandingGame play.
 	anOutstandingGame play.
 	
-	self assert: (aBoard positionOf: 'Enterprise') equals: 6.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 6.
 	self assert: (aBoard lapOf: 'Enterprise') equals: 1.
-	self assert: (aBoard positionOf: 'Delorean') equals: 6.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 6.
 	self assert: (aBoard lapOf: 'Delorean') equals: 1
 ]
 
@@ -607,17 +606,17 @@ CardTest >> testCancellationCardRemovesOnlyOneAccelerationPermanentCard [
 		from: 'Delorean'.
 	anOutstandingGame play.
 
-	self assert: (aBoard positionOf: 'Enterprise') equals: 1.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 1.
 	self assert: (aBoard lapOf: 'Enterprise') equals: 1.
-	self assert: (aBoard positionOf: 'Delorean') equals: 4.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 4.
 	self assert: (aBoard lapOf: 'Delorean') equals: 1.
 
 	anOutstandingGame play.
 	anOutstandingGame play.
 
-	self assert: (aBoard positionOf: 'Enterprise') equals: 6.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 6.
 	self assert: (aBoard lapOf: 'Enterprise') equals: 1.
-	self assert: (aBoard positionOf: 'Delorean') equals: 9.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 9.
 	self assert: (aBoard lapOf: 'Delorean') equals: 1.
 
 	anOutstandingGame
@@ -627,9 +626,9 @@ CardTest >> testCancellationCardRemovesOnlyOneAccelerationPermanentCard [
 	anOutstandingGame play.
 	anOutstandingGame play.
 
-	self assert: (aBoard positionOf: 'Enterprise') equals: 11.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 11.
 	self assert: (aBoard lapOf: 'Enterprise') equals: 1.
-	self assert: (aBoard positionOf: 'Delorean') equals: 11.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 11.
 	self assert: (aBoard lapOf: 'Delorean') equals: 1
 ]
 
@@ -660,8 +659,8 @@ CardTest >> testEffectOfMultipleSpeedCardsIsAddedUpIntoTheSpaceshipDiceThrow [
 	anOutstandingGame play.
 	anOutstandingGame play.
 
-	self assert: (aBoard positionOf: 'Enterprise') equals: 1.
-	self assert: (aBoard positionOf: 'Delorean') equals: 3
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 1.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 3
 ]
 
 { #category : #tests }
@@ -689,15 +688,15 @@ CardTest >> testOverloadCardProducesSpaceshipToGoBackwards [
 	anOutstandingGame play.
 	anOutstandingGame play.
 	
-	self assert: (aBoard positionOf: 'Enterprise') equals: 3.
-	self assert: (aBoard positionOf: 'Delorean') equals: 4.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 3.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 4.
 	anOutstandingGame throws: (OverloadCard thrownAt: 'Delorean' asA: PermanentCard) from: 'Enterprise'. 
 
 	anOutstandingGame play.
 	anOutstandingGame play.
 
-	self assert: (aBoard positionOf: 'Enterprise') equals: 5.
-	self assert: (aBoard positionOf: 'Delorean') equals: 3
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 5.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 3
 ]
 
 { #category : #tests }
@@ -725,8 +724,49 @@ CardTest >> testOverloadCardReducesInTwoTheSpaceshipDiceThrow [
 
 	anOutstandingGame play.
 	anOutstandingGame play.
-	self assert: (aBoard positionOf: 'Enterprise') equals: 3.
-	self assert: (aBoard positionOf: 'Delorean') equals: 2
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 3.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 2
+]
+
+{ #category : #tests }
+CardTest >> testRedoCantBePlayedIfNoCardHasBeenPlayedBefore [
+
+	| aCardDistribution cardAwarderEffect box1 box2 box3 box4 box5 aBoard anOutstandingGame |
+	aCardDistribution := OrderedCollection new.
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: RedoCard).
+	cardAwarderEffect := CardAwarderEffect with: aCardDistribution.
+
+	box1 := Box with: cardAwarderEffect.
+	box2 := Box with: cardAwarderEffect.
+	box3 := Box with: cardAwarderEffect.
+	box4 := Box with: cardAwarderEffect.
+	box5 := Box with: cardAwarderEffect.
+
+	aBoard := Board
+		          of: 20
+		          and: (ParsecUnit of: 20)
+		          playedFor: 1
+		          with: { 
+				          box1.
+				          box2.
+				          box3.
+				          box4.
+				          box5 }.
+
+	anOutstandingGame := OutstandingSpaceshipsGame
+		                     playedBy: 'Enterprise'
+		                     on: aBoard
+		                     throwing: (LoadedDie with: 1)
+		                     using: aCardDistribution.
+
+	self
+		should: [ 
+			anOutstandingGame
+				throws: (RedoCard thrownAt: 'Enterprise')
+				from: 'Enterprise' ]
+		raise: Error
+		withMessage: 'No card has been played yet'
 ]
 
 { #category : #tests }
@@ -769,33 +809,33 @@ CardTest >> testRedoRepeatsAPreviousRedoCard [
 		throws: (SpeedCard thrownAt: 'Enterprise' asA: PermanentCard)
 		from: 'Delorean'.
 	anOutstandingGame play.
-	self assert: (aBoard positionOf: 'Enterprise') equals: 1.
-	self assert: (aBoard positionOf: 'Delorean') equals: 2.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 1.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 2.
 	anOutstandingGame
 		throws: (RedoCard thrownAt: 'Delorean')
 		from: 'Enterprise'.
 	anOutstandingGame play.
-	self assert: (aBoard positionOf: 'Enterprise') equals: 3.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 3.
 	anOutstandingGame play.
-	self assert: (aBoard positionOf: 'Delorean') equals: 5.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 5.
 	anOutstandingGame play.
-	self assert: (aBoard positionOf: 'Enterprise') equals: 5.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 5.
 	anOutstandingGame
 		throws: (RedoCard thrownAt: 'Enterprise')
 		from: 'Delorean'.
 	anOutstandingGame play.
-	self assert: (aBoard positionOf: 'Delorean') equals: 8.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 8.
 	anOutstandingGame play.
-	self assert: (aBoard positionOf: 'Enterprise') equals: 8.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 8.
 	anOutstandingGame play.
-	self assert: (aBoard positionOf: 'Delorean') equals: 11.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 11.
 	anOutstandingGame
 		throws: (RedoCard thrownAt: 'Delorean')
 		from: 'Enterprise'.
 	anOutstandingGame play.
-	self assert: (aBoard positionOf: 'Enterprise') equals: 11.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 11.
 	anOutstandingGame play.
-	self assert: (aBoard positionOf: 'Delorean') equals: 15
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 15
 ]
 
 { #category : #tests }
@@ -839,11 +879,11 @@ CardTest >> testRedoRepeatsAcceleration [
 		throws: (AccelerationCard behavingAsA: PermanentCard)
 		from: 'Delorean'.
 	anOutstandingGame play.
-	self assert: (aBoard positionOf: 'Delorean') equals: 3.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 3.
 	anOutstandingGame throws: (RedoCard thrownAt: EmptyCard new) from: 'Enterprise'.
 	anOutstandingGame play.
 	anOutstandingGame play.
-	self assert: (aBoard positionOf: 'Delorean') equals: 7.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 7.
 ]
 
 { #category : #tests }
@@ -888,7 +928,7 @@ CardTest >> testRedoRepeatsCancellation [
 		                     throwing: (LoadedDie withSequence: { 1. 2. 3 })
 		                     using: aCardDistribution.
 	anOutstandingGame play.
-	self assert: (aBoard positionOf: 'Enterprise') equals: 1.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 1.
 	anOutstandingGame
 		throws: (OverloadCard thrownAt: 'Enterprise' asA: PermanentCard)
 		from: 'Delorean'.
@@ -896,20 +936,22 @@ CardTest >> testRedoRepeatsCancellation [
 		throws: (OverloadCard thrownAt: 'Enterprise' asA: PermanentCard)
 		from: 'Delorean'.
 	anOutstandingGame play.
-	self assert: (aBoard positionOf: 'Delorean') equals: 2.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 2.
 	anOutstandingGame
 		throws: (CancellationCard
 				 thrownAt: (OverloadCard thrownAt: 'Enterprise')
 				 asA: InstantaneousCard)
 		from: 'Enterprise'.
 	anOutstandingGame play.
-	self assert: (aBoard positionOf: 'Enterprise') equals: 2.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 2.
 	anOutstandingGame play.
-	self assert: (aBoard positionOf: 'Delorean') equals: 3.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 3.
 
-	anOutstandingGame throws: (RedoCard thrownAt: (OverloadCard thrownAt: 'Enterprise')) from: 'Enterprise'.
+	anOutstandingGame
+		throws: (RedoCard thrownAt: (OverloadCard thrownAt: 'Enterprise'))
+		from: 'Enterprise'.
 	anOutstandingGame play.
-	self assert: (aBoard positionOf: 'Enterprise') equals: 4.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 4
 ]
 
 { #category : #tests }
@@ -953,11 +995,11 @@ CardTest >> testRedoRepeatsOverload [
 		throws: (OverloadCard thrownAt: 'Enterprise' asA: PermanentCard)
 		from: 'Delorean'.
 	anOutstandingGame play.
-	self assert: (aBoard positionOf: 'Delorean') equals: 2.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 2.
 	anOutstandingGame throws: (RedoCard thrownAt: 'Delorean') from: 'Enterprise'.
 	anOutstandingGame play.
 	anOutstandingGame play.
-	self assert: (aBoard positionOf: 'Delorean') equals: 2.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 2.
 ]
 
 { #category : #tests }
@@ -1001,11 +1043,376 @@ CardTest >> testRedoRepeatsSpeed [
 		throws: (SpeedCard thrownAt: 'Enterprise' asA: PermanentCard)
 		from: 'Delorean'.
 	anOutstandingGame play.
-	self assert: (aBoard positionOf: 'Delorean') equals: 2.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 2.
 	anOutstandingGame throws: (RedoCard thrownAt: 'Delorean') from: 'Enterprise'.
 	anOutstandingGame play.
 	anOutstandingGame play.
-	self assert: (aBoard positionOf: 'Delorean') equals: 5.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 5.
+]
+
+{ #category : #tests }
+CardTest >> testRepeatReplaysAtomicBombEffect [
+
+	| aBoard aCardDistribution box1 box2 box3 box4 box5 anOutstandingGame atomicBombEffect |
+	aCardDistribution := OrderedCollection new.
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1
+			 for: (RepeatCard behavingAsA: InstantaneousCard)).
+
+	atomicBombEffect := AtomicBombEffect create.
+
+	box1 := Box with: NoEffect new.
+	box2 := Box with: NoEffect new.
+	box3 := Box with: NoEffect new.
+	box4 := Box with: NoEffect new.
+	box5 := Box with: atomicBombEffect.
+
+	aBoard := Board
+		          of: 20
+		          and: (ParsecUnit of: 20)
+		          playedFor: 1
+		          with: { 
+				          box1.
+				          box2.
+				          box3.
+				          box4.
+				          box5 }.
+
+	anOutstandingGame := OutstandingSpaceshipsGame
+		                     playedByMany: { 'Enterprise'. 'Delorean' }
+		                     on: aBoard
+		                     throwing:
+		                     (LoadedDie withSequence: { 1. 4. 4. 6. 6 })
+		                     using: aCardDistribution.
+
+	anOutstandingGame play.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 1.
+
+	anOutstandingGame play.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 4.
+
+	anOutstandingGame play.
+
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 1.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 1.
+
+	anOutstandingGame
+		throws: (RepeatCard thrownAt: 'Delorean')
+		from: 'Enterprise'.
+
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 1.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 1
+]
+
+{ #category : #tests }
+CardTest >> testRepeatReplaysCardAwarderEffect [
+
+	| aBoard aCardDistribution box1 box2 box3 box4 box5 anOutstandingGame cardAwarderEffect |
+	aCardDistribution := OrderedCollection new.
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1
+			 for: (RepeatCard behavingAsA: InstantaneousCard)).
+
+	cardAwarderEffect := CardAwarderEffect with: aCardDistribution.
+
+	box1 := Box with: NoEffect new.
+	box2 := Box with: NoEffect new.
+	box3 := Box with: NoEffect new.
+	box4 := Box with: NoEffect new.
+	box5 := Box with: cardAwarderEffect.
+
+	aBoard := Board
+		          of: 20
+		          and: (ParsecUnit of: 20)
+		          playedFor: 1
+		          with: { 
+				          box1.
+				          box2.
+				          box3.
+				          box4.
+				          box5 }.
+
+	anOutstandingGame := OutstandingSpaceshipsGame
+		                     playedByMany: { 'Enterprise'. 'Delorean' }
+		                     on: aBoard
+		                     throwing: (LoadedDie withSequence: { 1. 4. 4 })
+		                     using: aCardDistribution.
+
+	self assert: (anOutstandingGame deckOf: 'Enterprise') size equals: 2.
+	self assert: (anOutstandingGame deckOf: 'Delorean') size equals: 2.
+
+	anOutstandingGame play.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 1.
+
+	anOutstandingGame play.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 4.
+	
+	anOutstandingGame play.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 5.
+	
+
+	anOutstandingGame
+		throws: (RepeatCard thrownAt: 'Delorean')
+		from: 'Enterprise'.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 5.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 4.
+
+	self assert: (anOutstandingGame deckOf: 'Enterprise') size equals: 2.
+	self assert: (anOutstandingGame deckOf: 'Delorean') size equals: 3
+]
+
+{ #category : #tests }
+CardTest >> testRepeatReplaysHyperJumpEffect [
+
+	| aBoard aCardDistribution box1 box2 box3 box4 box5 anOutstandingGame wormHoleEffect |
+	aCardDistribution := OrderedCollection new.
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1
+			 for: (RepeatCard behavingAsA: InstantaneousCard)).
+
+	wormHoleEffect := WormHoleEffect create.
+
+	box1 := Box with: NoEffect new.
+	box2 := Box with: NoEffect new.
+	box3 := Box with: NoEffect new.
+	box4 := Box with: NoEffect new.
+	box5 := Box with: wormHoleEffect.
+
+	aBoard := Board
+		          of: 20
+		          and: (ParsecUnit of: 20)
+		          playedFor: 1
+		          with: { 
+				          box1.
+				          box2.
+				          box3.
+				          box4.
+				          box5 }.
+
+	anOutstandingGame := OutstandingSpaceshipsGame
+		                     playedByMany: { 'Enterprise'. 'Delorean' }
+		                     on: aBoard
+		                     throwing: (LoadedDie withSequence: { 1. 3. 4 })
+		                     using: aCardDistribution.
+
+	anOutstandingGame play.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 1.
+
+	anOutstandingGame play.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 3.
+
+	anOutstandingGame play.
+
+	anOutstandingGame
+		throws: (RepeatCard thrownAt: 'Delorean')
+		from: 'Enterprise'.
+	
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 1.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 1
+]
+
+{ #category : #tests }
+CardTest >> testRepeatReplaysMoonWalkEffect [
+
+	| aBoard aCardDistribution box1 box2 box3 box4 box5 anOutstandingGame moonWalkEffect |
+	aCardDistribution := OrderedCollection new.
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1
+			 for: (RepeatCard behavingAsA: InstantaneousCard)).
+
+	moonWalkEffect := MoonWalkEffect displacing: 2.
+
+	box1 := Box with: NoEffect new.
+	box2 := Box with: NoEffect new.
+	box3 := Box with: NoEffect new.
+	box4 := Box with: moonWalkEffect.
+	box5 := Box with: NoEffect new.
+
+	aBoard := Board
+		          of: 20
+		          and: (ParsecUnit of: 20)
+		          playedFor: 1
+		          with: { 
+				          box1.
+				          box2.
+				          box3.
+				          box4.
+				          box5 }.
+
+	anOutstandingGame := OutstandingSpaceshipsGame
+		                     playedByMany: { 'Enterprise'. 'Delorean' }
+		                     on: aBoard
+		                     throwing:
+		                     (LoadedDie withSequence: { 5. 3. 1. 1 })
+		                     using: aCardDistribution.
+
+	anOutstandingGame play.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 5.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 0.
+
+
+	anOutstandingGame play.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 5.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 3.
+
+	anOutstandingGame play.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 6.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 3.
+
+	anOutstandingGame play.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 4.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 4.
+	
+	anOutstandingGame
+		throws: (RepeatCard thrownAt: 'Delorean')
+		from: 'Enterprise'.
+
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 2.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 4
+]
+
+{ #category : #tests }
+CardTest >> testRepeatReplaysNoEffectOnPosition [
+
+	| aBoard aCardDistribution box1 box2 box3 box4 box5 anOutstandingGame |
+	aCardDistribution := OrderedCollection new.
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1
+			 for: (RepeatCard behavingAsA: InstantaneousCard)).
+
+	box1 := Box with: NoEffect new.
+	box2 := Box with: NoEffect new.
+	box3 := Box with: NoEffect new.
+	box4 := Box with: NoEffect new.
+	box5 := Box with: NoEffect new.
+
+	aBoard := Board
+		          of: 20
+		          and: (ParsecUnit of: 20)
+		          playedFor: 1
+		          with: { 
+				          box1.
+				          box2.
+				          box3.
+				          box4.
+				          box5 }.
+
+	anOutstandingGame := OutstandingSpaceshipsGame
+		                     playedByMany: { 'Enterprise'. 'Delorean' }
+		                     on: aBoard
+		                     throwing: (LoadedDie withSequence: { 1. 3. 4 })
+		                     using: aCardDistribution.
+
+	anOutstandingGame play.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 1.
+
+	anOutstandingGame play.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 3.
+
+	anOutstandingGame play.
+
+	anOutstandingGame
+		throws: (RepeatCard thrownAt: 'Delorean')
+		from: 'Enterprise'.
+
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 5.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 3
+]
+
+{ #category : #tests }
+CardTest >> testRepeatReplaysSpeedUpEffect [
+
+	| aBoard aCardDistribution box1 box2 box3 box4 box5 anOutstandingGame speedUpEffect |
+	aCardDistribution := OrderedCollection new.
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1
+			 for: (RepeatCard behavingAsA: InstantaneousCard)).
+	
+	speedUpEffect := SpeedUpEffect create.
+
+	box1 := Box with: speedUpEffect .
+	box2 := Box with: NoEffect new.
+	box3 := Box with: NoEffect new.
+	box4 := Box with: NoEffect new.
+	box5 := Box with: NoEffect new.
+
+	aBoard := Board
+		          of: 20
+		          and: (ParsecUnit of: 20)
+		          playedFor: 1
+		          with: { 
+				          box1.
+				          box2.
+				          box3.
+				          box4.
+				          box5 }.
+
+	anOutstandingGame := OutstandingSpaceshipsGame
+		                     playedByMany: { 'Enterprise'. 'Delorean' }
+		                     on: aBoard
+		                     throwing: (LoadedDie with: 1)
+		                     using: aCardDistribution.
+	
+	anOutstandingGame play.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 5.
+	
+	anOutstandingGame play.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 5.
+	
+	anOutstandingGame
+		throws: (RepeatCard thrownAt: 'Delorean')
+		from: 'Enterprise'.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 9
+]
+
+{ #category : #tests }
+CardTest >> testRepeatReplaysWormHoleEffect [
+
+	| aBoard aCardDistribution box1 box2 box3 box4 box5 anOutstandingGame wormHoleEffect |
+	aCardDistribution := OrderedCollection new.
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1
+			 for: (RepeatCard behavingAsA: InstantaneousCard)).
+
+	wormHoleEffect := WormHoleEffect create.
+
+	box1 := Box with: NoEffect new.
+	box2 := Box with: NoEffect new.
+	box3 := Box with: NoEffect new.
+	box4 := Box with: NoEffect new.
+	box5 := Box with: wormHoleEffect.
+
+	aBoard := Board
+		          of: 20
+		          and: (ParsecUnit of: 20)
+		          playedFor: 1
+		          with: { 
+				          box1.
+				          box2.
+				          box3.
+				          box4.
+				          box5 }.
+
+	anOutstandingGame := OutstandingSpaceshipsGame
+		                     playedByMany: { 'Enterprise'. 'Delorean' }
+		                     on: aBoard
+		                     throwing: (LoadedDie withSequence: { 1. 3. 4 })
+		                     using: aCardDistribution.
+
+	anOutstandingGame play.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 1.
+
+	anOutstandingGame play.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 3.
+
+	anOutstandingGame play.
+
+	anOutstandingGame
+		throws: (RepeatCard thrownAt: 'Delorean')
+		from: 'Enterprise'.
+	
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 1.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 1
 ]
 
 { #category : #tests }
@@ -1030,6 +1437,6 @@ CardTest >> testSpeedCardIncreasesInOneTheSpaceshipDiceThrow [
 	anOutstandingGame throws: (SpeedCard thrownAt: 'Enterprise' asA: PermanentCard) from: 'Delorean'.
 	anOutstandingGame play.
 	anOutstandingGame play.
-	self assert: (aBoard positionOf: 'Delorean') equals: 3.
-	self assert: (aBoard positionOf: 'Enterprise') equals: 5
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 3.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 5
 ]

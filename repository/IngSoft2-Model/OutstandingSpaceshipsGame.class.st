@@ -91,7 +91,7 @@ OutstandingSpaceshipsGame >> assertCardBelongsToSpaceship: cardPosition [
 	cardPosition = 0 ifTrue: [ Error signal: 'The spaceship doesnt have cards to throw' ]
 ]
 
-{ #category : #assertions }
+{ #category : #assertion }
 OutstandingSpaceshipsGame >> assertCardCanBeRemoved: aCardPosition [
 
 	aCardPosition = 0 ifTrue: [ 
@@ -228,6 +228,12 @@ OutstandingSpaceshipsGame >> playTurn [
 	effectOnDiceThrow := deckOfSpaceship sum: [ :cardHolder | cardHolder effectOnThrow ].
 	board moveSpaceship: resultOfTheRoll + effectOnDiceThrow.
 	board thereIsAWinner ifTrue: [ stateOfGame := GameWonState new ]
+]
+
+{ #category : #playing }
+OutstandingSpaceshipsGame >> repeatEffectOn: aSpaceship [
+
+	board lastBox effect reApplyEffectTo: aSpaceship on: board
 ]
 
 { #category : #playing }

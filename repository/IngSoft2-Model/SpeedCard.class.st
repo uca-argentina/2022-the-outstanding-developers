@@ -31,8 +31,9 @@ SpeedCard class >> behavingAsA: typeOfCard [
 ]
 
 { #category : #playing }
-SpeedCard class >> cancelIn: anOutstandingSpaceshipsGame [ 
-	anOutstandingSpaceshipsGame cancel: 'Speed' affecting: spaceship  
+SpeedCard class >> cancelIn: anOutstandingSpaceshipsGame [
+
+	anOutstandingSpaceshipsGame cancel: 'Speed' affecting: spaceship
 ]
 
 { #category : #accessing }

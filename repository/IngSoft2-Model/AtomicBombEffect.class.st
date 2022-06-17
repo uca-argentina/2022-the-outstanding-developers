@@ -16,6 +16,18 @@ AtomicBombEffect >> applyEffectOn: aBoard [
 	^'Do not move'
 ]
 
+{ #category : #effects }
+AtomicBombEffect >> applyEffectTo: aSpaceship on: aBoard [
+
+	^ self applyEffectOn: aBoard
+]
+
+{ #category : #effects }
+AtomicBombEffect >> reApplyEffectTo: aSpaceship on: aBoard [
+
+	aBoard moveAllBackToBeginning
+]
+
 { #category : #accessing }
 AtomicBombEffect >> typeOfEffect [
 	^'atomicbomb'

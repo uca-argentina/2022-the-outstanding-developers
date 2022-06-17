@@ -17,6 +17,13 @@ RedoCard class >> addTo: anOutstandingSpaceshipsGame [
 	lastPlayedCard incorporateTo: anOutstandingSpaceshipsGame theElement: self.
 ]
 
+{ #category : #assertion }
+RedoCard class >> assertACardHasBeenPlayed [
+
+	lastPlayedCard = '' ifTrue: [ 
+		Error signal: 'No card has been played yet' ]
+]
+
 { #category : #initialization }
 RedoCard class >> create [
 
@@ -33,6 +40,7 @@ RedoCard class >> createWithCard [
 RedoCard class >> incorporateTo: anOutstandingSpaceshipsGame [ 
 
 	lastPlayedCard := anOutstandingSpaceshipsGame lastPlayedCard.
+	self assertACardHasBeenPlayed.
 	lastPlayedCard cardBehaviour incorporate: self To: anOutstandingSpaceshipsGame  
 ]
 

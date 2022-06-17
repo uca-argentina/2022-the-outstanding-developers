@@ -46,7 +46,6 @@ CancellationCard class >> incorporateTo: anOutstandingSpaceshipsGame [
 { #category : #playing }
 CancellationCard class >> playOnceIn: anOutstandingSpaceshipsGame [ 
 	
-	"anOutstandingSpaceshipsGame cancel: targetCard affecting: spaceship"
 	targetCard cancelIn: anOutstandingSpaceshipsGame
 ]
 
@@ -59,9 +58,10 @@ CancellationCard class >> thrownAt: aCard affecting: aSpaceship asA: typeOfCard 
 ]
 
 { #category : #playing }
-CancellationCard class >> thrownAt: aCard asA: typeOfCard [ 
+CancellationCard class >> thrownAt: aCard asA: typeOfCard [
+
 	targetCard := aCard.
-	cardType := typeOfCard 
+	cardType := typeOfCard
 ]
 
 { #category : #comparing }
@@ -75,7 +75,7 @@ CancellationCard >> asA: anInstantaneousCard [
 	self shouldBeImplemented.
 ]
 
-{ #category : #'instance creation' }
+{ #category : #asserting }
 CancellationCard >> assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs: anAssertion [
 
 	typeOfCard canBeThrownWithCurrentTurn: anAssertion

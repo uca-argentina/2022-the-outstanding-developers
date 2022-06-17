@@ -30,6 +30,13 @@ CardAwarderEffect >> applyEffectOn: aBoard [
 	^ self effectOnPosition
 ]
 
+{ #category : #effects }
+CardAwarderEffect >> applyEffectTo: aSpaceship on: aBoard [
+
+	self dealCardTo: aSpaceship in: aBoard.
+	^ self effectOnPosition
+]
+
 { #category : #effect }
 CardAwarderEffect >> dealCard [
 
@@ -43,6 +50,12 @@ CardAwarderEffect >> dealCardIn: aBoard [
 	aBoard assignToCurrentSpaceship: card
 ]
 
+{ #category : #effect }
+CardAwarderEffect >> dealCardTo: aSpaceship in: aBoard [
+
+	aBoard assign: self dealCard to: aSpaceship
+]
+
 { #category : #effects }
 CardAwarderEffect >> effectOnPosition [
 	^ 0
@@ -52,4 +65,12 @@ CardAwarderEffect >> effectOnPosition [
 CardAwarderEffect >> initializeWith: aRandomEventGenerator [
 
 	cardGenerator := aRandomEventGenerator
+]
+
+{ #category : #effects }
+CardAwarderEffect >> reApplyEffectTo: aSpaceship on: aBoard [ 
+
+	aBoard 
+		movePlayingSpaceshipAt: (aBoard positionOf: aSpaceship)
+		by: (self applyEffectTo: aSpaceship on: aBoard).
 ]

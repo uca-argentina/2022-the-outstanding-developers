@@ -8,7 +8,8 @@ Class {
 		'laps',
 		'boardUnitLength',
 		'spaceshipsCardDeck',
-		'game'
+		'game',
+		'lastBox'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -149,8 +150,21 @@ Board >> assertThisIsPlayersTurn: index [
 ]
 
 { #category : #playing }
+Board >> assign: aCard to: aSpaceship [
+
+	game addHolding:
+		(SpaceshipCardHolder
+			 of: aSpaceship
+			 holding: aCard)
+]
+
+{ #category : #playing }
 Board >> assignToCurrentSpaceship: aCard [
-	game addHolding: (SpaceshipCardHolder of: self lastSpacechipToHavePlayed holding: aCard )
+
+	game addHolding:
+		(SpaceshipCardHolder
+			 of: self lastSpacechipToHavePlayed
+			 holding: aCard)
 ]
 
 { #category : #accessing }
@@ -171,6 +185,12 @@ Board >> boxParsecLength [
 ]
 
 { #category : #accessing }
+Board >> boxPositionOf: aSpaceship [
+
+	^ (self positionOf: aSpaceship) position
+]
+
+{ #category : #accessing }
 Board >> cardDeckOf: aSpaceship [ 
 
 	   ^ (spaceshipsCardDeck detect: [ :spaceshipCardDeck | spaceshipCardDeck spaceship name = aSpaceship ]) card
@@ -186,10 +206,12 @@ Board >> isSpaceshipsTurn: aSpaceship [
 { #category : #accessing }
 Board >> lapOf: aSpaceship [
 
-	| spaceshipLap |
-	spaceshipLap := (positions select: [ :position | 
-		                 position spaceship = aSpaceship ]) at: 1.
-	^ spaceshipLap lap
+	^ (self positionOf: aSpaceship) lap
+]
+
+{ #category : #accessing }
+Board >> lastBox [
+	^ lastBox.
 ]
 
 { #category : #accessing }
@@ -213,6 +235,7 @@ Board >> move: aSpaceship by: aNumberOfBoxes [
 	newPositionWithoutEffect position > boxes size ifTrue: [ positions replaceFrom: positionAmongPositions to: positionAmongPositions with: { newPositionWithoutEffect }.
 		^self ].
 	currentBox := boxes at: newPositionWithoutEffect position.
+	lastBox := currentBox.
 	movementAfterEffect := currentBox applyEffectOn: self.
 	movementAfterEffect = 'Do not move' 
 	ifFalse: [newPositionAfterEffect := (self move: aSpaceship in: (newPositionWithoutEffect position) and: (newPositionWithoutEffect lap) by: movementAfterEffect)]
@@ -255,6 +278,14 @@ Board >> moveAllBackToBeginning [
 		self
 			movePlayingSpaceshipAt: currentPosition
 			by: 1 - currentPosition position ]
+]
+
+{ #category : #movement }
+Board >> moveAllExcept: aSpaceship by: anAmount [
+
+	positions do: [ :position | 
+		position spaceship = aSpaceship ifFalse: [ 
+			self movePlayingSpaceshipAt: position by: anAmount ] ]
 ]
 
 { #category : #movement }
@@ -321,9 +352,12 @@ Board >> of: aNumberOfBoxes and: length playedFor: someLaps byMany: spaceships w
 	positions := spaceships collect: [ :spaceship | 
 		             SpaceshipPosition following: spaceship name ].
 	spaceshipsCardDeck := spaceships collect: [ :spaceship | 
-		             SpaceshipCardHolder of: spaceship holding: { } ].
+		                      SpaceshipCardHolder
+			                      of: spaceship
+			                      holding: {  } ].
 	turnHandler := SequenceHandler for: spaceships size.
-	boardUnitLength := length
+	boardUnitLength := length.
+	lastBox := NoEffect create
 ]
 
 { #category : #initialization }
@@ -335,7 +369,8 @@ Board >> of: aNumberOfBoxes and: aLength playedFor: someLaps with: aBoxSequence 
 	aNumberOfBoxes timesRepeat: [ 
 		boxes add: (aBoxSequence at: sequenceHandler nextValue) ].
 	laps := someLaps.
-	boardUnitLength := aLength
+	boardUnitLength := aLength.
+	lastBox := NoEffect create
 ]
 
 { #category : #properties }
@@ -359,15 +394,14 @@ Board >> playingWith: spaceships in: aGame [
 Board >> positionInPositionsOf: aSpaceship [
 
 	| currentPosition |
-	currentPosition := (positions detect: [ :position | 
-		                    position spaceship = aSpaceship ]).
+	currentPosition := self positionOf: aSpaceship.
 	^ positions indexOf: currentPosition
 ]
 
 { #category : #accessing }
 Board >> positionOf: aSpaceship [
 
-   ^ (positions detect: [ :position | position spaceship = aSpaceship ]) position
+	^ positions detect: [ :position | position spaceship = aSpaceship ]
 ]
 
 { #category : #accessing }

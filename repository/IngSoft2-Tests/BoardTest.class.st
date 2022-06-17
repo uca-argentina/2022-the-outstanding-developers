@@ -175,7 +175,7 @@ BoardTest >> testASpaceshipThatLandsOnABoxWithNoEffectDoesntMove [
 		                     using: aCardDistribution.
 	anOutstandingGame play.
 	
-	self assert: (aBoard positionOf: 'Enterprise') equals: 3
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 3
 ]
 
 { #category : #tests }
@@ -215,7 +215,7 @@ BoardTest >> testASpaceshipThatLandsOnABoxWithSpeedUpEffectEndsUpFourBoxesAfter 
 		                     using: aCardDistribution.
 	anOutstandingGame play.
 
-	self assert: (aBoard positionOf: 'Enterprise') equals: 5
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 5
 ]
 
 { #category : #tests }
@@ -267,7 +267,7 @@ BoardTest >> testASpaceshipsPositionVariesInFiveWithAFiniteBoardAfterOneRollOfAL
 		                     using: aCardDistribution.
 	anOutstandingGame play.
 
-	self assert: (board positionOf: 'Enterprise') equals: 5
+	self assert: (board boxPositionOf: 'Enterprise') equals: 5
 ]
 
 { #category : #tests }
@@ -424,24 +424,24 @@ BoardTest >> testPlayersInDifferentLapsReturnToTheFirstBoxOfItsLaps [
 	anOutstandingGame play.
 	anOutstandingGame play.
 
-	self assert: (aBoard positionOf: 'Enterprise') equals: 3.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 3.
 	self assert: (aBoard lapOf: 'Enterprise') equals: 3.
 
-	self assert: (aBoard positionOf: 'Zathura') equals: 3.
+	self assert: (aBoard boxPositionOf: 'Zathura') equals: 3.
 	self assert: (aBoard lapOf: 'Zathura') equals: 2.
 
-	self assert: (aBoard positionOf: 'Delorean') equals: 2.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 2.
 	self assert: (aBoard lapOf: 'Delorean') equals: 1.
 
 	anOutstandingGame play.
 
-	self assert: (aBoard positionOf: 'Enterprise') equals: 1.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 1.
 	self assert: (aBoard lapOf: 'Enterprise') equals: 3.
 
-	self assert: (aBoard positionOf: 'Zathura') equals: 1.
+	self assert: (aBoard boxPositionOf: 'Zathura') equals: 1.
 	self assert: (aBoard lapOf: 'Zathura') equals: 2.
 
-	self assert: (aBoard positionOf: 'Delorean') equals: 1.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 1.
 	self assert: (aBoard lapOf: 'Delorean') equals: 1
 ]
 
@@ -487,9 +487,9 @@ BoardTest >> testSpaceshipLandsOnAtomicBombBoxSetsBackEveryoneToFirstBox [
 	anOutstandingGame play.
 	anOutstandingGame play.
 
-	self assert: (board positionOf: 'Enterprise') equals: 1.
-	self assert: (board positionOf: 'Zathura') equals: 1.
-	self assert: (board positionOf: 'Delorean') equals: 1.
+	self assert: (board boxPositionOf: 'Enterprise') equals: 1.
+	self assert: (board boxPositionOf: 'Zathura') equals: 1.
+	self assert: (board boxPositionOf: 'Delorean') equals: 1.
 
 	self assert: (board lapOf: 'Enterprise') equals: 1.
 	self assert: (board lapOf: 'Zathura') equals: 1.
@@ -535,8 +535,8 @@ BoardTest >> testSpaceshipLandsOnMoonWalkBoxSetsBackOtherSpaceshipsExceptItself 
 	anOutstandingGame play.
 	anOutstandingGame play.
 
-	self assert: (board positionOf: 'Enterprise') equals: 2.
-	self assert: (board positionOf: 'Zathura') equals: 2.
+	self assert: (board boxPositionOf: 'Enterprise') equals: 2.
+	self assert: (board boxPositionOf: 'Zathura') equals: 2.
 	self assert: (board lapOf: 'Enterprise') equals: 1.
 	self assert: (board lapOf: 'Zathura') equals: 1
 ]
@@ -580,7 +580,7 @@ BoardTest >> testSpaceshipLandsOnWormHoleBoxSetsBackItselfFourBoxes [
 	anOutstandingGame play.
 	anOutstandingGame play.
 
-	self assert: (board positionOf: 'Enterprise') equals: 1.
+	self assert: (board boxPositionOf: 'Enterprise') equals: 1.
 	self assert: (board lapOf: 'Enterprise') equals: 1
 ]
 
@@ -621,8 +621,8 @@ BoardTest >> testSpaceshipRemainsInTheInitialPositionIfEffectIsApplied [
 
 	anOutstandingGame play.
 
-	self assert: (board positionOf: 'Enterprise') equals: 2.
-	self assert: (board positionOf: 'Zathura') equals: 0.
+	self assert: (board boxPositionOf: 'Enterprise') equals: 2.
+	self assert: (board boxPositionOf: 'Zathura') equals: 0.
 
 	self assert: (board lapOf: 'Enterprise') equals: 1.
 	self assert: (board lapOf: 'Zathura') equals: 1
@@ -666,8 +666,8 @@ BoardTest >> testSpaceshipThatLandsOnMoonWalkBoxCantMakeOthersGoToNegativePositi
 	anOutstandingGame play.
 	anOutstandingGame play.
 
-	self assert: (board positionOf: 'Enterprise') equals: 1.
-	self assert: (board positionOf: 'Delorean') equals: 1.
+	self assert: (board boxPositionOf: 'Enterprise') equals: 1.
+	self assert: (board boxPositionOf: 'Delorean') equals: 1.
 
 	self assert: (board lapOf: 'Enterprise') equals: 1.
 	self assert: (board lapOf: 'Delorean') equals: 1
@@ -711,7 +711,7 @@ BoardTest >> testSpaceshipThatLandsOnWormHoleBoxCantGoToNegativePositions [
 		                     using: aCardDistribution.
 	anOutstandingGame play.
 
-	self assert: (board positionOf: 'Delorean') equals: 1
+	self assert: (board boxPositionOf: 'Delorean') equals: 1
 ]
 
 { #category : #tests }
@@ -748,7 +748,7 @@ BoardTest >> testSpaceshipsOnABordInLightYearsThatLandsOnAHyperJumpBoxInParsecsE
 		                     using: aCardDistribution.
 	anOutstandingGame play.
 
-	self assert: (board positionOf: 'Delorean') equals: 2
+	self assert: (board boxPositionOf: 'Delorean') equals: 2
 ]
 
 { #category : #tests }
@@ -785,7 +785,7 @@ BoardTest >> testSpaceshipsOnABordInParsecsThatLandsOnAHyperJumpBoxInLightYearsE
 
 	anOutstandingGame play.
 
-	self assert: (board positionOf: 'Delorean') equals: 2
+	self assert: (board boxPositionOf: 'Delorean') equals: 2
 ]
 
 { #category : #tests }
@@ -829,14 +829,14 @@ BoardTest >> testSpaceshipsThatLandsOnAHyperJumpBoxEndUpFiveBoxesAfterThenFourBo
 	anOutstandingGame play.
 	anOutstandingGame play.
 
-	self assert: (board positionOf: 'Delorean') equals: 6.
-	self assert: (board positionOf: 'Enterprise') equals: 5.
+	self assert: (board boxPositionOf: 'Delorean') equals: 6.
+	self assert: (board boxPositionOf: 'Enterprise') equals: 5.
 
 	anOutstandingGame play.
 	anOutstandingGame play.
 	
-	self assert: (board positionOf: 'Delorean') equals: 7.
-	self assert: (board positionOf: 'Enterprise') equals: 11
+	self assert: (board boxPositionOf: 'Delorean') equals: 7.
+	self assert: (board boxPositionOf: 'Enterprise') equals: 11
 ]
 
 { #category : #tests }
@@ -880,8 +880,8 @@ BoardTest >> testSpaceshipsThatLandsOnAHyperJumpBoxEndUpFiveBoxesAfterThenFourBo
 	anOutstandingGame play.
 	anOutstandingGame play.
 
-	self assert: (board positionOf: 'Enterprise') equals: 3.
-	self assert: (board positionOf: 'Zathura') equals: 2
+	self assert: (board boxPositionOf: 'Enterprise') equals: 3.
+	self assert: (board boxPositionOf: 'Zathura') equals: 2
 ]
 
 { #category : #tests }
@@ -918,7 +918,7 @@ BoardTest >> testSpaceshipsThatLandsOnAHyperJumpBoxWithLightYearsEndsOnNextBox [
 		                     using: aCardDistribution.
 	anOutstandingGame play.
 
-	self assert: (board positionOf: 'Delorean') equals: 2
+	self assert: (board boxPositionOf: 'Delorean') equals: 2
 ]
 
 { #category : #tests }
@@ -947,5 +947,5 @@ BoardTest >> testSpeedUpDoesntTriggerAnotherSpeedUp [
 		                     using: aCardDistribution.
 	anOutstandingGame play.
 
-	self assert: (board positionOf: 'Zathura') equals: 5
+	self assert: (board boxPositionOf: 'Zathura') equals: 5
 ]

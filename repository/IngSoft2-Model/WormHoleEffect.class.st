@@ -17,9 +17,23 @@ WormHoleEffect >> applyEffectOn: aBoard [
 ]
 
 { #category : #effects }
+WormHoleEffect >> applyEffectTo: aSpaceship on: aBoard [
+
+	^ self applyEffectOn: aBoard
+]
+
+{ #category : #effects }
 WormHoleEffect >> effectOnPosition [
 
 	^ -4
+]
+
+{ #category : #effects }
+WormHoleEffect >> reApplyEffectTo: aSpaceship on: aBoard [ 
+
+	aBoard 
+		movePlayingSpaceshipAt: (aBoard positionOf: aSpaceship)
+		by: (self applyEffectTo: aSpaceship on: aBoard).
 ]
 
 { #category : #accesing }

@@ -82,8 +82,8 @@ OutstandingSpaceshipsGameTest >> testARoundOfANonSimulatedGameChangesSpaceshipsP
 	anOutstandingGame play.
 	anOutstandingGame play.
 
-	self assert: (board positionOf: 'Enterprise') equals: 4.
-	self assert: (board positionOf: 'Zathura') equals: 3
+	self assert: (board boxPositionOf: 'Enterprise') equals: 4.
+	self assert: (board boxPositionOf: 'Zathura') equals: 3
 ]
 
 { #category : #tests }
@@ -242,7 +242,7 @@ OutstandingSpaceshipsGameTest >> testGameWithABoardOfFifteenBoxesALoadedDieAndAS
 	
 	anOutstandingGame startSimulation.
 
-	self assert: (aBoard positionOf: 'Enterprise') equals: 16
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 16
 ]
 
 { #category : #tests }
@@ -272,9 +272,9 @@ OutstandingSpaceshipsGameTest >> testGameWithAFiniteBoardASequenceLoadedDieAndTh
 	
 	anOutstandingGame startSimulation.
 	
-	self assert: (aBoard positionOf: 'Zathura') equals: 9.
-	self assert: (aBoard positionOf: 'Enterprise') equals: 11.
-	self assert: (aBoard positionOf: 'Delorean') equals: 1
+	self assert: (aBoard boxPositionOf: 'Zathura') equals: 9.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 11.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 1
 ]
 
 { #category : #tests }
@@ -304,9 +304,9 @@ OutstandingSpaceshipsGameTest >> testGameWithAFiniteBoardASequenceLoadedDieAndTh
 	
 	anOutstandingGame startSimulation.
 
-	self assert: (aBoard positionOf: 'Enterprise') equals: 3.
-	self assert: (aBoard positionOf: 'Delorean') equals: 11.
-	self assert: (aBoard positionOf: 'Zathura') equals: 6
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 3.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 11.
+	self assert: (aBoard boxPositionOf: 'Zathura') equals: 6
 ]
 
 { #category : #tests }
@@ -364,7 +364,7 @@ OutstandingSpaceshipsGameTest >> testGameWithASpaceshipAndABoardEndsWhenItComple
 		
 	anOutstandingGame startSimulation.
 
-	self assert: (aBoard positionOf: 'Enterprise') equals: 16.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 16.
 	self assert: (aBoard lapOf: 'Enterprise') equals: 3
 ]
 
@@ -520,6 +520,6 @@ OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndLoadedDieH
 
 	anOutstandingGame startSimulation.
 
-	self assert: (aBoard positionOf: 'Zathura') equals: 16.
-	self assert: (aBoard positionOf: 'Enterprise') equals: 12
+	self assert: (aBoard boxPositionOf: 'Zathura') equals: 16.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 12
 ]
