@@ -28,6 +28,12 @@ OverloadCard class >> behavingAsA: aTypeOfCard [
 	typeOfCard := aTypeOfCard
 ]
 
+{ #category : #'class initialization' }
+OverloadCard class >> cardName [
+
+	^ 'Overload'
+]
+
 { #category : #'instance creation' }
 OverloadCard class >> create [
 
@@ -39,6 +45,12 @@ OverloadCard class >> incorporateTo: anOutstandingSpaceshipsGame [
 	| aTypeOfCard |
 	aTypeOfCard := typeOfCard new.
 	aTypeOfCard incorporate: self To: anOutstandingSpaceshipsGame.
+]
+
+{ #category : #accessing }
+OverloadCard class >> spaceship [
+
+	^ spaceship
 ]
 
 { #category : #throwing }
@@ -72,7 +84,8 @@ OverloadCard >> assertItIsThrowableInTurn: anAssertion in: anOutstandingSpaceshi
 
 { #category : #accessing }
 OverloadCard >> cardBehaviour [
-	^ typeOfCard 
+
+	^ typeOfCard
 ]
 
 { #category : #effect }
@@ -84,7 +97,7 @@ OverloadCard >> effectOnThrow [
 { #category : #playing }
 OverloadCard >> incorporateTo: anOutstandingSpaceshipsGame theElement: aCard [ 
 	| cardHolder |
-	cardHolder := SpaceshipCardHolder of: aCard target holding: aCard createWithCard.
+	cardHolder := SpaceshipCardHolder of: aCard target holding: ((aCard createWithCard) card).
 	anOutstandingSpaceshipsGame addAffecting: cardHolder
 ]
 
@@ -94,7 +107,7 @@ OverloadCard >> initializeAs: aTypeOfCard [
 	typeOfCard := aTypeOfCard
 ]
 
-{ #category : #accessing }
+{ #category : #initialization }
 OverloadCard >> name [
 
 	^ 'Overload'

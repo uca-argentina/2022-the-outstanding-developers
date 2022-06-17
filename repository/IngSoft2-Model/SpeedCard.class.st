@@ -30,6 +30,12 @@ SpeedCard class >> behavingAsA: typeOfCard [
 	cardType := typeOfCard 
 ]
 
+{ #category : #accessing }
+SpeedCard class >> cardName [
+
+	^ 'Speed'
+]
+
 { #category : #initialization }
 SpeedCard class >> create [
 
@@ -41,6 +47,12 @@ SpeedCard class >> incorporateTo: anOutstandingSpaceshipsGame [
 	| aTypeOfCard |
 	aTypeOfCard := cardType new.
 	aTypeOfCard incorporate: self To: anOutstandingSpaceshipsGame.
+]
+
+{ #category : #accessing }
+SpeedCard class >> spaceship [
+
+	^ spaceship
 ]
 
 { #category : #accessing }
@@ -88,7 +100,7 @@ SpeedCard >> effectOnThrow [
 { #category : #playing }
 SpeedCard >> incorporateTo: anOutstandingSpaceshipsGame theElement: aCard [
 	| cardHolder |
-	cardHolder := SpaceshipCardHolder of: aCard target holding: aCard createWithCard.
+	cardHolder := SpaceshipCardHolder of: aCard target holding: ((aCard createWithCard) card).
 	anOutstandingSpaceshipsGame addAffecting: cardHolder
 ]
 

@@ -13,7 +13,7 @@ Class {
 
 { #category : #playing }
 RedoCard class >> addTo: anOutstandingSpaceshipsGame [ 
-	"anOutstandingSpaceshipsGame addAffecting: (SpaceshipCardHolder of: target holding: self createWithCard )"
+	
 	lastPlayedCard incorporateTo: anOutstandingSpaceshipsGame theElement: self.
 ]
 
@@ -25,7 +25,8 @@ RedoCard class >> create [
 
 { #category : #'instance creation' }
 RedoCard class >> createWithCard [
-	^self new initializeWithCard: lastPlayedCard
+
+	^ self new initializeWithCard: lastPlayedCard
 ]
 
 { #category : #playing }
@@ -35,8 +36,15 @@ RedoCard class >> incorporateTo: anOutstandingSpaceshipsGame [
 	lastPlayedCard cardBehaviour incorporate: self To: anOutstandingSpaceshipsGame  
 ]
 
+{ #category : #playing }
+RedoCard class >> playOnceIn: anOutstandingSpaceshipsGame [
+
+	lastPlayedCard incorporateTo: anOutstandingSpaceshipsGame theElement: self.
+]
+
 { #category : #accessing }
 RedoCard class >> target [
+
 	^ target
 ]
 
@@ -44,11 +52,6 @@ RedoCard class >> target [
 RedoCard class >> thrownAt: aTarget [
 
 	target := aTarget
-]
-
-{ #category : #playing }
-RedoCard class >> thrownAt: aString or: aString2 [ 
-	self shouldBeImplemented.
 ]
 
 { #category : #comparing }
@@ -63,9 +66,16 @@ RedoCard >> assertItIsThrowableInTurn: anAssertion in: anOutstandingSpaceshipsGa
 	^ true
 ]
 
+{ #category : #accessing }
+RedoCard >> card [
+
+	^ card
+]
+
 { #category : #effect }
 RedoCard >> effectOnThrow [
-	^ card effectOnThrow 
+
+	^ card effectOnThrow
 ]
 
 { #category : #initialization }

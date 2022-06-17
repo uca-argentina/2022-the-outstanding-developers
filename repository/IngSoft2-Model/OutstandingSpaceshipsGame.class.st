@@ -69,7 +69,7 @@ OutstandingSpaceshipsGame class >> playedOn: aBoard throwing: dice [
 
 { #category : #playing }
 OutstandingSpaceshipsGame >> addAffecting: aSpaceshipCardHolder [
-
+	
 	lastPlayedCard := aSpaceshipCardHolder card.
 	spaceshipsAffectingCardDeck add: aSpaceshipCardHolder
 ]
@@ -126,7 +126,7 @@ OutstandingSpaceshipsGame >> cancel: aCard affecting: aSpaceship [
 		                   spaceshipAffectingCardDeck spaceship = aSpaceship and:
 			                   [spaceshipAffectingCardDeck card name = aCard] ].
 	self assertCardCanBeRemoved: cardToBeRemoved.
-	lastPlayedCard := aCard.
+	lastPlayedCard := (CancellationCard behavingAsA: InstantaneousCard) create.
 	spaceshipsAffectingCardDeck removeAt: cardToBeRemoved 
 ]
 

@@ -28,6 +28,12 @@ AccelerationCard class >> behavingAsA: typeOfCard [
 	cardType := typeOfCard 
 ]
 
+{ #category : #accessing }
+AccelerationCard class >> cardName [
+
+	^ 'Acceleration'
+]
+
 { #category : #initialization }
 AccelerationCard class >> create [
 
@@ -71,8 +77,9 @@ AccelerationCard >> effectOnThrow [
 ]
 
 { #category : #playing }
-AccelerationCard >> incorporateTo: anOutstandingSpaceshipsGame theElement: aCard [ 
-	anOutstandingSpaceshipsGame addAffectingAll: aCard createWithCard
+AccelerationCard >> incorporateTo: anOutstandingSpaceshipsGame theElement: aCard [
+
+	anOutstandingSpaceshipsGame addAffectingAll: ((aCard createWithCard) card)
 ]
 
 { #category : #initialization }

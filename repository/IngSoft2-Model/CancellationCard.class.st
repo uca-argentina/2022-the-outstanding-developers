@@ -24,6 +24,12 @@ CancellationCard class >> behavingAsA: typeOfCard [
 	cardType := typeOfCard 
 ]
 
+{ #category : #accessing }
+CancellationCard class >> cardName [
+
+	^ 'Cancellation'
+]
+
 { #category : #'instance creation' }
 CancellationCard class >> create [
 
@@ -82,9 +88,23 @@ CancellationCard >> assertThereArePermantCardsIn: aGame [
 			'Cancellation card cant be used if there are no Permanet Cards in game' ]
 ]
 
+{ #category : #accessing }
+CancellationCard >> cardBehaviour [
+
+	^ typeOfCard
+]
+
 { #category : #effect }
 CancellationCard >> effectOnThrow [
 	^0
+]
+
+{ #category : #playing }
+CancellationCard >> incorporateTo: anOutstandingSpaceshipsGame theElement: aCard [
+
+	anOutstandingSpaceshipsGame
+		cancel: aCard target cardName
+		affecting: aCard target spaceship
 ]
 
 { #category : #initialization }
