@@ -12,22 +12,10 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'instance creation' }
-CancellationCard class >> asA: aTypeOfCard [
-
-	^ self new initializeAs: aTypeOfCard
-]
-
 { #category : #'class initialization' }
 CancellationCard class >> behavingAsA: typeOfCard [
 	
 	cardType := typeOfCard 
-]
-
-{ #category : #accessing }
-CancellationCard class >> cardName [
-
-	^ 'Cancellation'
 ]
 
 { #category : #'instance creation' }
@@ -70,11 +58,6 @@ CancellationCard >> = aCard [
 	^ self class = aCard
 ]
 
-{ #category : #initialization }
-CancellationCard >> asA: anInstantaneousCard [ 
-	self shouldBeImplemented.
-]
-
 { #category : #asserting }
 CancellationCard >> assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs: anAssertion [
 
@@ -101,27 +84,14 @@ CancellationCard >> cardBehaviour [
 	^ typeOfCard
 ]
 
-{ #category : #effect }
-CancellationCard >> effectOnThrow [
-	^0
-]
-
 { #category : #playing }
 CancellationCard >> incorporateTo: anOutstandingSpaceshipsGame theElement: aCard [
 
-	anOutstandingSpaceshipsGame
-		cancel: aCard target cardName
-		affecting: aCard target spaceship
+	aCard target cancelIn: anOutstandingSpaceshipsGame
 ]
 
 { #category : #initialization }
 CancellationCard >> initializeAs: aTypeOfcard [
 
 	typeOfCard := aTypeOfcard
-]
-
-{ #category : #accessing }
-CancellationCard >> name [
-
-	^ 'Cancellation'
 ]

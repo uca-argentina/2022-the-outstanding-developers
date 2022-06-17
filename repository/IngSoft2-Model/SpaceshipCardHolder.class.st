@@ -15,12 +15,6 @@ SpaceshipCardHolder class >> of: aSpaceship holding: aCard [
 	^ self new of: aSpaceship holding: aCard
 ]
 
-{ #category : #'card deck modifying' }
-SpaceshipCardHolder >> add: aCard [
-
-	cardDeck add: aCard
-]
-
 { #category : #accessing }
 SpaceshipCardHolder >> card [
 

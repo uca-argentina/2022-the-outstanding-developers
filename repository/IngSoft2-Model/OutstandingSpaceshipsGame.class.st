@@ -44,13 +44,6 @@ OutstandingSpaceshipsGame class >> playedBy: spaceship on: aBoard throwing: dice
 ]
 
 { #category : #'instance creation' }
-OutstandingSpaceshipsGame class >> playedByMany: spaceships on: aBoard throwing: dice [
-
-	self assertValidSpaceships: spaceships.
-	^ self new initializeWith: aBoard many: spaceships and: dice
-]
-
-{ #category : #'instance creation' }
 OutstandingSpaceshipsGame class >> playedByMany: spaceships on: aBoard throwing: dice using: aCardDistribution [
 
 	self assertValidSpaceships: spaceships.
@@ -59,12 +52,6 @@ OutstandingSpaceshipsGame class >> playedByMany: spaceships on: aBoard throwing:
 		  many: spaceships
 		  throwing: dice
 		  using: aCardDistribution
-]
-
-{ #category : #'instance creation' }
-OutstandingSpaceshipsGame class >> playedOn: aBoard throwing: dice [
-
-	^ self new initializeWith: aBoard and: dice
 ]
 
 { #category : #playing }
@@ -97,16 +84,6 @@ OutstandingSpaceshipsGame >> assertCardCanBeRemoved: aCardPosition [
 	aCardPosition = 0 ifTrue: [ 
 		Error signal:
 			'Cancellation card cant be used if the chosen card is not in game' ]
-]
-
-{ #category : #asserting }
-OutstandingSpaceshipsGame >> assertCardCanBeThrown [
-	self shouldBeImplemented.
-]
-
-{ #category : #assertion }
-OutstandingSpaceshipsGame >> assertCardCanBeThrown: aClass [ 
-	self shouldBeImplemented.
 ]
 
 { #category : #assertion }
@@ -150,12 +127,6 @@ OutstandingSpaceshipsGame >> countActivePermanentCards [
 ]
 
 { #category : #setup }
-OutstandingSpaceshipsGame >> dealCards [
-
-	
-]
-
-{ #category : #setup }
 OutstandingSpaceshipsGame >> dealWith: aCardDistribution [
 
 	| cardGenerator |
@@ -174,25 +145,6 @@ OutstandingSpaceshipsGame >> deckOf: aSpaceship [
 
 	^ (spaceshipsCardDeck select: [ :spaceshipCardDeck | 
 		   spaceshipCardDeck spaceship = aSpaceship ])
-]
-
-{ #category : #initialization }
-OutstandingSpaceshipsGame >> initializeWith: aBoard and: someDice [
-
-	board := aBoard.
-	dice := someDice.
-	stateOfGame := GameNotWonState new
-]
-
-{ #category : #initialization }
-OutstandingSpaceshipsGame >> initializeWith: aBoard many: spaceships and: someDice [
-
-	board := aBoard.
-	aBoard playingWith: spaceships.
-	spaceshipsPlaying := spaceships.
-	dice := someDice.
-	stateOfGame := GameNotWonState new.
-	self dealCards.
 ]
 
 { #category : #initialization }
@@ -222,7 +174,7 @@ OutstandingSpaceshipsGame >> play [
 { #category : #playing }
 OutstandingSpaceshipsGame >> playTurn [
 
-	| resultOfTheRoll deckOfSpaceship effectOnDiceThrow currentBox|
+	| resultOfTheRoll deckOfSpaceship effectOnDiceThrow |
 	resultOfTheRoll := dice roll.
 	deckOfSpaceship := self cardsAffectingOf: board spaceshipPlaying.
 	effectOnDiceThrow := deckOfSpaceship sum: [ :cardHolder | cardHolder effectOnThrow ].

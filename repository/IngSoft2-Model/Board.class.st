@@ -29,37 +29,6 @@ Board class >> assertValidNumberOfLaps: laps [
 ]
 
 { #category : #'instance creation' }
-Board class >> of: aNumberOfBoxes and: length playedFor: someLaps by: aSpaceship givenBy: aDistribution [
-
-	^ self
-		  of: aNumberOfBoxes
-		  and: length
-		  playedFor: someLaps
-		  byMany: { aSpaceship }
-		  givenBy: aDistribution
-]
-
-{ #category : #'instance creation' }
-Board class >> of: aNumberOfBoxes and: length playedFor: someLaps byMany: spaceships givenBy: aDistribution [
-
-	| randomBoxGenerator boxSequnce |
-	self assertValidNumberOfBoxes: aNumberOfBoxes.
-	self assertValidSpaceships: spaceships.
-	self assertValidNumberOfLaps: someLaps.
-	randomBoxGenerator := RandomEventGenerator
-		                      with: aNumberOfBoxes
-		                      using: aDistribution.
-	boxSequnce := randomBoxGenerator generate collect: [ :effect | 
-		              Box with: effect ].
-	^ self new
-		  of: aNumberOfBoxes
-		  and: length
-		  playedFor: someLaps
-		  byMany: spaceships
-		  with: boxSequnce
-]
-
-{ #category : #'instance creation' }
 Board class >> of: aNumberOfBoxes and: length playedFor: someLaps givenBy: aDistribution [
 
 	| randomBoxGenerator boxSequnce |
@@ -188,12 +157,6 @@ Board >> boxParsecLength [
 Board >> boxPositionOf: aSpaceship [
 
 	^ (self positionOf: aSpaceship) position
-]
-
-{ #category : #accessing }
-Board >> cardDeckOf: aSpaceship [ 
-
-	   ^ (spaceshipsCardDeck detect: [ :spaceshipCardDeck | spaceshipCardDeck spaceship name = aSpaceship ]) card
 ]
 
 { #category : #validation }
@@ -341,26 +304,6 @@ Board >> nextPositionStartingAt: position in: lap afterMoving: aNumberOfBoxes [
 ]
 
 { #category : #initialization }
-Board >> of: aNumberOfBoxes and: length playedFor: someLaps byMany: spaceships with: aBoxSequence [
-
-	| sequenceHandler |
-	boxes := OrderedCollection new.
-	sequenceHandler := SequenceHandler for: aBoxSequence size.
-	aNumberOfBoxes timesRepeat: [ 
-		boxes add: (aBoxSequence at: sequenceHandler nextValue) ].
-	laps := someLaps.
-	positions := spaceships collect: [ :spaceship | 
-		             SpaceshipPosition following: spaceship name ].
-	spaceshipsCardDeck := spaceships collect: [ :spaceship | 
-		                      SpaceshipCardHolder
-			                      of: spaceship
-			                      holding: {  } ].
-	turnHandler := SequenceHandler for: spaceships size.
-	boardUnitLength := length.
-	lastBox := NoEffect create
-]
-
-{ #category : #initialization }
 Board >> of: aNumberOfBoxes and: aLength playedFor: someLaps with: aBoxSequence [
 
 	| sequenceHandler |
@@ -371,14 +314,6 @@ Board >> of: aNumberOfBoxes and: aLength playedFor: someLaps with: aBoxSequence 
 	laps := someLaps.
 	boardUnitLength := aLength.
 	lastBox := NoEffect create
-]
-
-{ #category : #properties }
-Board >> playingWith: spaceships [
-
-	positions := spaceships collect: [ :spaceship | 
-		             SpaceshipPosition following: spaceship ].
-	turnHandler := SequenceHandler for: spaceships size
 ]
 
 { #category : #properties }
@@ -426,33 +361,12 @@ Board >> spaceshipPlaying [
 	^ (positions at: turnHandler currentIndex) spaceship
 ]
 
-{ #category : #accessing }
-Board >> spaceshipsCardDeck [
-
-	^ spaceshipsCardDeck
-]
-
 { #category : #properties }
 Board >> thereIsAWinner [
 
 	^ positions anySatisfy: [ :boardPosition | 
 		  boardPosition position > self amountOfBoxes
 		  & (boardPosition lap = laps) ]
-]
-
-{ #category : #'card throwing' }
-Board >> throw: aCard [ 
-	
-	spaceshipsCardDeck do: [ :spaceshipCardDeck | spaceshipCardDeck add: aCard ].
-]
-
-{ #category : #'card throwing' }
-Board >> throw: aCard to: aSpaceship [
-
-	| spaceshipDeck |
-	spaceshipDeck := spaceshipsCardDeck detect: [ :spaceshipCardDeck | 
-		                 spaceshipCardDeck spaceship name = aSpaceship ].
-	spaceshipDeck add: aCard
 ]
 
 { #category : #properties }

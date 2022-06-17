@@ -16,12 +16,6 @@ AccelerationCard class >> addTo: anOutstandingSpaceshipsGame [
 	anOutstandingSpaceshipsGame addAffectingAll: self create.
 ]
 
-{ #category : #'instance creation' }
-AccelerationCard class >> asA: aTypeOfCard [
-
-	^ self new initializeAs: aTypeOfCard
-]
-
 { #category : #'class initialization' }
 AccelerationCard class >> behavingAsA: typeOfCard [
 	
@@ -31,12 +25,6 @@ AccelerationCard class >> behavingAsA: typeOfCard [
 { #category : #playing }
 AccelerationCard class >> cancelIn: anOutstandingSpaceshipsGame [ 
 	anOutstandingSpaceshipsGame cancelAll: 'Acceleration'
-]
-
-{ #category : #accessing }
-AccelerationCard class >> cardName [
-
-	^ 'Acceleration'
 ]
 
 { #category : #initialization }

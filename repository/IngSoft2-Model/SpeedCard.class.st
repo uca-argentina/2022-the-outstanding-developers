@@ -18,12 +18,6 @@ SpeedCard class >> addTo: anOutstandingSpaceshipsGame [
 		(SpaceshipCardHolder of: spaceship holding: self create)
 ]
 
-{ #category : #'instance creation' }
-SpeedCard class >> asA: aTypeOfCard [
-
-	^ self new initializeAs: aTypeOfCard
-]
-
 { #category : #'class initialization' }
 SpeedCard class >> behavingAsA: typeOfCard [
 	
@@ -34,12 +28,6 @@ SpeedCard class >> behavingAsA: typeOfCard [
 SpeedCard class >> cancelIn: anOutstandingSpaceshipsGame [
 
 	anOutstandingSpaceshipsGame cancel: 'Speed' affecting: spaceship
-]
-
-{ #category : #accessing }
-SpeedCard class >> cardName [
-
-	^ 'Speed'
 ]
 
 { #category : #initialization }
@@ -53,12 +41,6 @@ SpeedCard class >> incorporateTo: anOutstandingSpaceshipsGame [
 	| aTypeOfCard |
 	aTypeOfCard := cardType new.
 	aTypeOfCard incorporate: self To: anOutstandingSpaceshipsGame.
-]
-
-{ #category : #accessing }
-SpeedCard class >> spaceship [
-
-	^ spaceship
 ]
 
 { #category : #accessing }

@@ -17,8 +17,8 @@ CardTest >> should: block raise: expectedErrorClass withMessage: expectedErrorMe
 { #category : #tests }
 CardTest >> testACardIsNotTakenAwayFromASpaceshipWhenThrownButNotItsTurn [
 
-	| overloadCard aBoard collectionOfCards aCardDistribution anOutstandingGame |
-	overloadCard := OverloadCard asA: PermanentCard new.
+	| aBoard aCardDistribution anOutstandingGame |
+
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add: (Distribution
 			 withProbabilityOf: 1
@@ -545,7 +545,7 @@ CardTest >> testCancellationCardRemovesAnOverloadPermanentCard [
 	self assert: (aBoard lapOf: 'Enterprise') equals: 1.
 	self assert: (aBoard boxPositionOf: 'Delorean') equals: 5.
 	self assert: (aBoard lapOf: 'Delorean') equals: 1.
-	
+
 	anOutstandingGame
 		throws: (CancellationCard
 				 thrownAt: (OverloadCard thrownAt: 'Enterprise')
@@ -887,7 +887,143 @@ CardTest >> testRedoRepeatsAcceleration [
 ]
 
 { #category : #tests }
-CardTest >> testRedoRepeatsCancellation [
+CardTest >> testRedoRepeatsCancellationOfASpeed [
+
+	| aBoard aCardDistribution anotherCardDistribution box1 box2 box3 box4 box5 anOutstandingGame cancellationCardAwarderEffect otherCardDistribution redoCardAwarderEffect |
+	aCardDistribution := OrderedCollection new.
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1
+			 for: (SpeedCard behavingAsA: PermanentCard)).
+	anotherCardDistribution := OrderedCollection new.
+	anotherCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: CancellationCard).
+	otherCardDistribution := OrderedCollection new.
+	otherCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: RedoCard).
+	cancellationCardAwarderEffect := CardAwarderEffect with:
+		                                 anotherCardDistribution.
+	redoCardAwarderEffect := CardAwarderEffect with:
+		                         otherCardDistribution.
+
+	box1 := Box with: cancellationCardAwarderEffect.
+	box2 := Box with: redoCardAwarderEffect.
+	box3 := Box with: redoCardAwarderEffect.
+	box4 := Box with: redoCardAwarderEffect.
+	box5 := Box with: redoCardAwarderEffect.
+
+	aBoard := Board
+		          of: 10
+		          and: (ParsecUnit of: 10)
+		          playedFor: 1
+		          with: { 
+				          box1.
+				          box2.
+				          box3.
+				          box4.
+				          box5 }.
+
+	anOutstandingGame := OutstandingSpaceshipsGame
+		                     playedByMany: { 'Enterprise'. 'Delorean' }
+		                     on: aBoard
+		                     throwing: (LoadedDie withSequence: { 1. 2. 3 })
+		                     using: aCardDistribution.
+	anOutstandingGame play.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 1.
+	anOutstandingGame
+		throws: (SpeedCard thrownAt: 'Enterprise' asA: PermanentCard)
+		from: 'Delorean'.
+	anOutstandingGame
+		throws: (SpeedCard thrownAt: 'Enterprise' asA: PermanentCard)
+		from: 'Delorean'.
+	anOutstandingGame play.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 2.
+	anOutstandingGame
+		throws: (CancellationCard
+				 thrownAt: (SpeedCard thrownAt: 'Enterprise')
+				 asA: InstantaneousCard)
+		from: 'Enterprise'.
+	anOutstandingGame play.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 5.
+	anOutstandingGame play.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 3.
+
+	anOutstandingGame
+		throws: (RedoCard thrownAt: (SpeedCard thrownAt: 'Enterprise'))
+		from: 'Enterprise'.
+	anOutstandingGame play.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 7
+]
+
+{ #category : #tests }
+CardTest >> testRedoRepeatsCancellationOfAnAcceleration [
+
+	| aBoard aCardDistribution anotherCardDistribution box1 box2 box3 box4 box5 anOutstandingGame cancellationCardAwarderEffect otherCardDistribution redoCardAwarderEffect |
+	aCardDistribution := OrderedCollection new.
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1
+			 for: (AccelerationCard behavingAsA: PermanentCard)).
+	anotherCardDistribution := OrderedCollection new.
+	anotherCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: CancellationCard).
+	otherCardDistribution := OrderedCollection new.
+	otherCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: RedoCard).
+	cancellationCardAwarderEffect := CardAwarderEffect with:
+		                                 anotherCardDistribution.
+	redoCardAwarderEffect := CardAwarderEffect with:
+		                         otherCardDistribution.
+
+	box1 := Box with: cancellationCardAwarderEffect.
+	box2 := Box with: redoCardAwarderEffect.
+	box3 := Box with: redoCardAwarderEffect.
+	box4 := Box with: redoCardAwarderEffect.
+	box5 := Box with: redoCardAwarderEffect.
+
+	aBoard := Board
+		          of: 10
+		          and: (ParsecUnit of: 10)
+		          playedFor: 1
+		          with: { 
+				          box1.
+				          box2.
+				          box3.
+				          box4.
+				          box5 }.
+
+	anOutstandingGame := OutstandingSpaceshipsGame
+		                     playedByMany: { 'Enterprise'. 'Delorean' }
+		                     on: aBoard
+		                     throwing: (LoadedDie withSequence: { 1. 2. 3 })
+		                     using: aCardDistribution.
+	anOutstandingGame play.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 1.
+	anOutstandingGame
+		throws: (AccelerationCard behavingAsA: PermanentCard)
+		from: 'Delorean'.
+	anOutstandingGame
+		throws: (AccelerationCard behavingAsA: PermanentCard)
+		from: 'Delorean'.
+	anOutstandingGame play.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 4.
+	anOutstandingGame
+		throws: (CancellationCard
+				 thrownAt: AccelerationCard
+				 asA: InstantaneousCard)
+		from: 'Enterprise'.
+	anOutstandingGame play.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 5.
+	anOutstandingGame play.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 6.
+
+	anOutstandingGame
+		throws: (RedoCard thrownAt: AccelerationCard)
+		from: 'Enterprise'.
+	anOutstandingGame play.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 7
+]
+
+{ #category : #tests }
+CardTest >> testRedoRepeatsCancellationOfAnOverload [
 
 	| aBoard aCardDistribution anotherCardDistribution box1 box2 box3 box4 box5 anOutstandingGame cancellationCardAwarderEffect otherCardDistribution redoCardAwarderEffect |
 	aCardDistribution := OrderedCollection new.

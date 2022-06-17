@@ -17,12 +17,6 @@ AtomicBombEffect >> applyEffectOn: aBoard [
 ]
 
 { #category : #effects }
-AtomicBombEffect >> applyEffectTo: aSpaceship on: aBoard [
-
-	^ self applyEffectOn: aBoard
-]
-
-{ #category : #effects }
 AtomicBombEffect >> reApplyEffectTo: aSpaceship on: aBoard [
 
 	aBoard moveAllBackToBeginning

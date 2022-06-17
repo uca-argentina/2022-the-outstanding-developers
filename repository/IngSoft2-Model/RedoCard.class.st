@@ -80,20 +80,8 @@ RedoCard >> card [
 	^ card
 ]
 
-{ #category : #effect }
-RedoCard >> effectOnThrow [
-
-	^ card effectOnThrow
-]
-
 { #category : #initialization }
 RedoCard >> initializeWithCard: aCard [
 
 	card := aCard
-]
-
-{ #category : #accessing }
-RedoCard >> name [
-
-	^ 'Redo'
 ]

@@ -17,8 +17,8 @@ BoardTest >> should: block raise: expectedErrorClass withMessage: expectedErrorM
 { #category : #tests }
 BoardTest >> testABoardOfFifteenBoxesCreatedWithAShorterSequenceHasTheHardcodedAmountOfRepeatedBoxes [
 
-	| enterprise board boxSequence aNormalBox aSpeedUpBox aWormHoleBox aMoonWalkBox aHyperJumpBox anAtomicBombBox |
-	enterprise := Spaceship called: 'enterprise'.
+	| board boxSequence aNormalBox aSpeedUpBox aWormHoleBox aMoonWalkBox aHyperJumpBox anAtomicBombBox |
+
 	aNormalBox := Box with: NoEffect new.
 	aSpeedUpBox := Box with: SpeedUpEffect new.
 	aWormHoleBox := Box with: WormHoleEffect new.
@@ -50,10 +50,9 @@ BoardTest >> testABoardOfFifteenBoxesCreatedWithAShorterSequenceHasTheHardcodedA
 { #category : #tests }
 BoardTest >> testABoardOfOneHundredRandomGeneratedBoxesHasOneHundredBoxes [
 
-	| n parsecs enterprise board distributions |
+	| n parsecs board distributions |
 	n := 100.
 	parsecs := ParsecUnit of: 100.
-	enterprise := Spaceship called: 'enterprise'.
 	
 	distributions := OrderedCollection new.
 	distributions add:
@@ -82,8 +81,8 @@ BoardTest >> testABoardOfOneHundredRandomGeneratedBoxesHasOneHundredBoxes [
 { #category : #tests }
 BoardTest >> testABoardOfTenBoxesCreatedWithASequenceHasTheHardcodedAmountOfBoxes [
 
-	| enterprise board boxSequence aNormalBox aSpeedUpBox aWormHoleBox aMoonWalkBox aHyperJumpBox anAtomicBombBox |
-	enterprise := Spaceship called: 'enterprise'.
+	| board boxSequence aNormalBox aSpeedUpBox aWormHoleBox aMoonWalkBox aHyperJumpBox anAtomicBombBox |
+
 	aNormalBox := Box with: NoEffect new.
 	aSpeedUpBox := Box with: SpeedUpEffect new.
 	aWormHoleBox := Box with: WormHoleEffect new.

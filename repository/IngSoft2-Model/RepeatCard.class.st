@@ -61,20 +61,8 @@ RepeatCard >> assertItIsThrowableInTurn: anAssertion in: aGame [
 		anAssertion
 ]
 
-{ #category : #effect }
-RepeatCard >> effectOnThrow [
-
-	^ 0
-]
-
 { #category : #initialization }
 RepeatCard >> initializeAs: aTypeOfCard [
 
 	typeOfCard := aTypeOfCard
-]
-
-{ #category : #accessing }
-RepeatCard >> name [
-
-	^ 'Repeat'
 ]
