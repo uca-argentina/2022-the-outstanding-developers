@@ -88,6 +88,14 @@ OutstandingSpaceshipsGame >> assertCardBelongsToSpaceship: cardPosition [
 	cardPosition = 0 ifTrue: [ Error signal: 'The spaceship doesnt have cards to throw' ]
 ]
 
+{ #category : #assertions }
+OutstandingSpaceshipsGame >> assertCardCanBeRemoved: aCardPosition [
+
+	aCardPosition = 0 ifTrue: [ 
+		Error signal:
+			'Cancellation card cant be used if the chosen card is not in game' ]
+]
+
 { #category : #asserting }
 OutstandingSpaceshipsGame >> assertCardCanBeThrown [
 	self shouldBeImplemented.
@@ -100,10 +108,22 @@ OutstandingSpaceshipsGame >> assertCardCanBeThrown: aClass [
 
 { #category : #assertion }
 OutstandingSpaceshipsGame >> assertCardCanBeThrown: aCard from: aSpaceship [
-	
+
 	board assertACardCanBeThrown.
-	aCard assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs:
-		(board isSpaceshipsTurn: aSpaceship)
+	aCard
+		assertItIsThrowableInTurn: (board isSpaceshipsTurn: aSpaceship)
+		in: self
+]
+
+{ #category : #playing }
+OutstandingSpaceshipsGame >> cancel: aCard affecting: aSpaceship [ 
+	
+	| cardToBeRemoved |
+	cardToBeRemoved := spaceshipsAffectingCardDeck findFirst: [ :spaceshipAffectingCardDeck | 
+		                   spaceshipAffectingCardDeck spaceship = aSpaceship and:
+			                   [spaceshipAffectingCardDeck card name = aCard] ].
+	self assertCardCanBeRemoved: cardToBeRemoved.
+	spaceshipsAffectingCardDeck removeAt: cardToBeRemoved 
 ]
 
 { #category : #accessing }
@@ -111,6 +131,11 @@ OutstandingSpaceshipsGame >> cardsAffectingOf: aSpaceship [
 
 	^ (spaceshipsAffectingCardDeck select: [ :spaceshipCardDeck | 
 		   spaceshipCardDeck spaceship = aSpaceship ])
+]
+
+{ #category : #accessing }
+OutstandingSpaceshipsGame >> countActivePermanentCards [
+	^ spaceshipsAffectingCardDeck count: [ :spaceshipAffectingCardDeck | spaceshipAffectingCardDeck card typeOfCard = 'Permanent' ]
 ]
 
 { #category : #setup }
@@ -206,7 +231,7 @@ OutstandingSpaceshipsGame >> throws: aCard from: aSpaceship [
 	| cardToBeRemoved cardToBeThrown |
 	cardToBeRemoved := spaceshipsCardDeck findFirst: [ :spaceshipCardDeck | 
 		                   spaceshipCardDeck spaceship = aSpaceship and:
-			                   spaceshipCardDeck card = aCard ].
+			                   [spaceshipCardDeck card = aCard] ].
 	self assertCardBelongsToSpaceship: cardToBeRemoved.
 	self
 		assertCardCanBeThrown: (spaceshipsCardDeck at: cardToBeRemoved) card

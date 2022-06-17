@@ -33,3 +33,9 @@ RepeatCard >> initializeAs: aTypeOfCard [
 
 	typeOfCard := aTypeOfCard
 ]
+
+{ #category : #accessing }
+RepeatCard >> name [
+
+	^ 'Repeat'
+]

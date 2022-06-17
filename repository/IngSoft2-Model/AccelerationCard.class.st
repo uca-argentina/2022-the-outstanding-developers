@@ -53,6 +53,11 @@ AccelerationCard >> assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs: anAs
 	typeOfCard canBeThrownWithCurrentTurn: anAssertion
 ]
 
+{ #category : #assertions }
+AccelerationCard >> assertItIsThrowableInTurn: anAssertion in: anOutstandingSpaceshipsGame [ 
+	self assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs: anAssertion 
+]
+
 { #category : #effect }
 AccelerationCard >> effectOnThrow [
 

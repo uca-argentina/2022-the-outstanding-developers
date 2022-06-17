@@ -9,3 +9,9 @@ InstantaneousCard >> canBeThrownWithCurrentTurn: isCurrentTurn [
 
 	^ true
 ]
+
+{ #category : #playing }
+InstantaneousCard >> incorporate: aCard To: anOutstandingSpaceshipsGame [ 
+	
+	aCard playOnceIn: anOutstandingSpaceshipsGame 
+]

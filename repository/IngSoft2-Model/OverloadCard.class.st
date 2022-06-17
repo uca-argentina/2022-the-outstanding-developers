@@ -65,6 +65,11 @@ OverloadCard >> assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs: anAssert
 	typeOfCard canBeThrownWithCurrentTurn: anAssertion
 ]
 
+{ #category : #assertion }
+OverloadCard >> assertItIsThrowableInTurn: anAssertion in: anOutstandingSpaceshipsGame [ 
+	self assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs: anAssertion.
+]
+
 { #category : #effect }
 OverloadCard >> effectOnThrow [
 
@@ -75,4 +80,16 @@ OverloadCard >> effectOnThrow [
 OverloadCard >> initializeAs: aTypeOfCard [
 
 	typeOfCard := aTypeOfCard
+]
+
+{ #category : #accessing }
+OverloadCard >> name [
+
+	^ 'Overload'
+]
+
+{ #category : #effect }
+OverloadCard >> typeOfCard [
+
+	^ typeOfCard name
 ]

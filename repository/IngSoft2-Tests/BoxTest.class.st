@@ -59,7 +59,7 @@ BoxTest >> testCardAwarderBoxEffectDoesNotModifyPosition [
 		                     using: aCardDistribution.
 	anOutstandingGame play.
 	anOutstandingGame play.
-	
+
 	self assert: (aBoard positionOf: 'Enterprise') equals: 4.
 	self assert: (aBoard lapOf: 'Enterprise') equals: 1.
 	self assert: (aBoard positionOf: 'Delorean') equals: 1.

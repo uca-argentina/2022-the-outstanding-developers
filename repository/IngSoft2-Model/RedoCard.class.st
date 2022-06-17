@@ -14,3 +14,9 @@ RedoCard class >> create [
 RedoCard >> effectOnThrow [
 	^0
 ]
+
+{ #category : #accessing }
+RedoCard >> name [
+
+	^ 'Redo'
+]

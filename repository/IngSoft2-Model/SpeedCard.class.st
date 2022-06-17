@@ -68,6 +68,11 @@ SpeedCard >> assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs: anAssertion
 	typeOfCard canBeThrownWithCurrentTurn: anAssertion
 ]
 
+{ #category : #assertions }
+SpeedCard >> assertItIsThrowableInTurn: anAssertion in: anOutstandingSpaceshipsGame [ 
+	self assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs: anAssertion 
+]
+
 { #category : #effect }
 SpeedCard >> effectOnThrow [
 
@@ -78,4 +83,10 @@ SpeedCard >> effectOnThrow [
 SpeedCard >> initializeAs: aTypeOfCard [
 
 	typeOfCard := aTypeOfCard
+]
+
+{ #category : #accessing }
+SpeedCard >> name [
+
+	^ 'Speed'
 ]
