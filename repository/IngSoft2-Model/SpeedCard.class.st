@@ -30,6 +30,11 @@ SpeedCard class >> behavingAsA: typeOfCard [
 	cardType := typeOfCard 
 ]
 
+{ #category : #playing }
+SpeedCard class >> cancelIn: anOutstandingSpaceshipsGame [ 
+	anOutstandingSpaceshipsGame cancel: 'Speed' affecting: spaceship  
+]
+
 { #category : #accessing }
 SpeedCard class >> cardName [
 
@@ -114,4 +119,9 @@ SpeedCard >> initializeAs: aTypeOfCard [
 SpeedCard >> name [
 
 	^ 'Speed'
+]
+
+{ #category : #accessing }
+SpeedCard >> typeOfCard [
+	^ typeOfCard name
 ]

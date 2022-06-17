@@ -28,6 +28,11 @@ AccelerationCard class >> behavingAsA: typeOfCard [
 	cardType := typeOfCard 
 ]
 
+{ #category : #playing }
+AccelerationCard class >> cancelIn: anOutstandingSpaceshipsGame [ 
+	anOutstandingSpaceshipsGame cancelAll: 'Acceleration'
+]
+
 { #category : #accessing }
 AccelerationCard class >> cardName [
 
@@ -86,4 +91,15 @@ AccelerationCard >> incorporateTo: anOutstandingSpaceshipsGame theElement: aCard
 AccelerationCard >> initializeAs: aTypeOfCard [
 
 	typeOfCard := aTypeOfCard
+]
+
+{ #category : #accesleration }
+AccelerationCard >> name [
+
+	^ 'Acceleration'
+]
+
+{ #category : #accesing }
+AccelerationCard >> typeOfCard [
+	^ typeOfCard name
 ]

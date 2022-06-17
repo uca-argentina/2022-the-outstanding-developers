@@ -28,6 +28,11 @@ OverloadCard class >> behavingAsA: aTypeOfCard [
 	typeOfCard := aTypeOfCard
 ]
 
+{ #category : #playing }
+OverloadCard class >> cancelIn: anOutstandingSpaceshipsGame [ 
+	anOutstandingSpaceshipsGame cancel: 'Overload' affecting: spaceship 
+]
+
 { #category : #'class initialization' }
 OverloadCard class >> cardName [
 

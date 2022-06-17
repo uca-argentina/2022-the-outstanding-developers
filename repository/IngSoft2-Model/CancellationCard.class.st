@@ -46,7 +46,8 @@ CancellationCard class >> incorporateTo: anOutstandingSpaceshipsGame [
 { #category : #playing }
 CancellationCard class >> playOnceIn: anOutstandingSpaceshipsGame [ 
 	
-	anOutstandingSpaceshipsGame cancel: targetCard affecting: spaceship
+	"anOutstandingSpaceshipsGame cancel: targetCard affecting: spaceship"
+	targetCard cancelIn: anOutstandingSpaceshipsGame
 ]
 
 { #category : #playing }
@@ -55,6 +56,12 @@ CancellationCard class >> thrownAt: aCard affecting: aSpaceship asA: typeOfCard 
 	spaceship := aSpaceship.
 	cardType := typeOfCard.
 	targetCard := aCard
+]
+
+{ #category : #playing }
+CancellationCard class >> thrownAt: aCard asA: typeOfCard [ 
+	targetCard := aCard.
+	cardType := typeOfCard 
 ]
 
 { #category : #comparing }

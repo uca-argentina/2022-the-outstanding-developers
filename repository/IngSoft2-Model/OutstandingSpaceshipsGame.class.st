@@ -130,6 +130,13 @@ OutstandingSpaceshipsGame >> cancel: aCard affecting: aSpaceship [
 	spaceshipsAffectingCardDeck removeAt: cardToBeRemoved 
 ]
 
+{ #category : #playing }
+OutstandingSpaceshipsGame >> cancelAll: cardType [
+
+	spaceshipsPlaying do: [ :spaceship | 
+		self cancel: cardType affecting: spaceship ]
+]
+
 { #category : #accessing }
 OutstandingSpaceshipsGame >> cardsAffectingOf: aSpaceship [ 
 
