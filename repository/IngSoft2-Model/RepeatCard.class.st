@@ -24,10 +24,11 @@ RepeatCard class >> create [
 ]
 
 { #category : #playing }
-RepeatCard class >> incorporateTo: anOutstandingSpaceshipsGame [ 
+RepeatCard class >> incorporateTo: anOutstandingSpaceshipsGame [
+
 	| aTypeOfCard |
 	aTypeOfCard := cardType new.
-	aTypeOfCard incorporate: self To: anOutstandingSpaceshipsGame.
+	aTypeOfCard incorporate: self To: anOutstandingSpaceshipsGame
 ]
 
 { #category : #playing }
@@ -59,6 +60,18 @@ RepeatCard >> assertItIsThrowableInTurn: anAssertion in: aGame [
 
 	self assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs:
 		anAssertion
+]
+
+{ #category : #accessing }
+RepeatCard >> cardBehaviour [
+
+	^ typeOfCard
+]
+
+{ #category : #playing }
+RepeatCard >> incorporateTo: anOutstandingSpaceshipsGame the: element [ 
+	
+	anOutstandingSpaceshipsGame repeatEffectOn: element target
 ]
 
 { #category : #initialization }

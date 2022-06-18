@@ -18,17 +18,17 @@ Die class >> assertValid: numberOfSides [
 Die class >> with: numberOfSides [
 
 	self assertValid: numberOfSides.
-	^self new initializeWith: numberOfSides
+	^ self new initializeWith: numberOfSides
 ]
 
 { #category : #initialization }
 Die >> initializeWith: aNumberOfSides [
 
- 	numberOfSides := aNumberOfSides
+	numberOfSides := aNumberOfSides
 ]
 
 { #category : #rolling }
 Die >> roll [
 
-	^numberOfSides atRandom
+	^ numberOfSides atRandom
 ]

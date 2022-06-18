@@ -6,7 +6,8 @@ Class {
 
 { #category : #'instance creation' }
 SpeedUpEffect class >> create [
-	^self new
+
+	^ self new
 ]
 
 { #category : #effects }
@@ -37,5 +38,6 @@ SpeedUpEffect >> reApplyEffectTo: aSpaceship on: aBoard [
 
 { #category : #accessing }
 SpeedUpEffect >> typeOfEffect [
-	^'speedup'
+
+	^ 'Speedup'
 ]

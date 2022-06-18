@@ -14,7 +14,7 @@ Class {
 { #category : #playing }
 RedoCard class >> addTo: anOutstandingSpaceshipsGame [ 
 	
-	lastPlayedCard incorporateTo: anOutstandingSpaceshipsGame theElement: self.
+	lastPlayedCard incorporateTo: anOutstandingSpaceshipsGame the: self.
 ]
 
 { #category : #assertion }
@@ -37,17 +37,19 @@ RedoCard class >> createWithCard [
 ]
 
 { #category : #playing }
-RedoCard class >> incorporateTo: anOutstandingSpaceshipsGame [ 
+RedoCard class >> incorporateTo: anOutstandingSpaceshipsGame [
 
 	lastPlayedCard := anOutstandingSpaceshipsGame lastPlayedCard.
 	self assertACardHasBeenPlayed.
-	lastPlayedCard cardBehaviour incorporate: self To: anOutstandingSpaceshipsGame  
+	lastPlayedCard cardBehaviour
+		incorporate: self
+		To: anOutstandingSpaceshipsGame
 ]
 
 { #category : #playing }
 RedoCard class >> playOnceIn: anOutstandingSpaceshipsGame [
 
-	lastPlayedCard incorporateTo: anOutstandingSpaceshipsGame theElement: self.
+	lastPlayedCard incorporateTo: anOutstandingSpaceshipsGame the: self
 ]
 
 { #category : #accessing }

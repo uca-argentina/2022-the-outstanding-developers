@@ -53,8 +53,10 @@ AccelerationCard >> assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs: anAs
 ]
 
 { #category : #assertions }
-AccelerationCard >> assertItIsThrowableInTurn: anAssertion in: anOutstandingSpaceshipsGame [ 
-	self assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs: anAssertion 
+AccelerationCard >> assertItIsThrowableInTurn: anAssertion in: anOutstandingSpaceshipsGame [
+
+	self assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs:
+		anAssertion
 ]
 
 { #category : #accessing }
@@ -70,9 +72,10 @@ AccelerationCard >> effectOnThrow [
 ]
 
 { #category : #playing }
-AccelerationCard >> incorporateTo: anOutstandingSpaceshipsGame theElement: aCard [
+AccelerationCard >> incorporateTo: anOutstandingSpaceshipsGame the: element [
 
-	anOutstandingSpaceshipsGame addAffectingAll: ((aCard createWithCard) card)
+	anOutstandingSpaceshipsGame addAffectingAll:
+		element createWithCard card
 ]
 
 { #category : #initialization }
@@ -89,5 +92,6 @@ AccelerationCard >> name [
 
 { #category : #accesing }
 AccelerationCard >> typeOfCard [
+
 	^ typeOfCard name
 ]

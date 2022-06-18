@@ -16,9 +16,7 @@ BoardPosition class >> at: aPosition in: aLap [
 		                      aPosition < 0)
 		                     ifTrue: [ 1 ]
 		                     ifFalse: [ aPosition ].
-	validatedLap := aLap < 1
-		                ifTrue: [ 1 ]
-		                ifFalse: [ aLap ].
+	validatedLap := aLap max: 1.
 	^ self new initializeAt: validatedPosition in: validatedLap
 ]
 
@@ -40,10 +38,12 @@ BoardPosition >> initializeAt: aPosition in: aLap [
 
 { #category : #accessing }
 BoardPosition >> lap [
+
 	^ lap
 ]
 
 { #category : #accessing }
 BoardPosition >> position [
+
 	^ position
 ]

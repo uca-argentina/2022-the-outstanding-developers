@@ -30,6 +30,7 @@ SpaceshipPosition >> > aSpaceshipPosition [
 
 { #category : #accessing }
 SpaceshipPosition >> boardPosition [
+
 	^ boardPosition
 ]
 

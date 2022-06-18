@@ -14,10 +14,10 @@ ParsecUnit class >> assertValid: anAmountOfParsecs [
 ]
 
 { #category : #'instance creation' }
-ParsecUnit class >> of: anAmountOfParsecs [ 
+ParsecUnit class >> of: anAmountOfParsecs [
 
-	self assertValid: anAmountOfParsecs. 
-	^self new of: anAmountOfParsecs.
+	self assertValid: anAmountOfParsecs.
+	^ self new of: anAmountOfParsecs
 ]
 
 { #category : #operations }
@@ -52,5 +52,6 @@ ParsecUnit >> of: anAmountOfParsecs [
 
 { #category : #accessing }
 ParsecUnit >> valueOfMeasurement [
+
 	^ parsecAmount
 ]

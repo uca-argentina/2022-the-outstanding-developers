@@ -12,8 +12,10 @@ Class {
 }
 
 { #category : #playing }
-OverloadCard class >> addTo: anOutstandingSpaceshipsGame [ 
-	anOutstandingSpaceshipsGame addAffecting: (SpaceshipCardHolder of: spaceship holding: self create )
+OverloadCard class >> addTo: anOutstandingSpaceshipsGame [
+
+	anOutstandingSpaceshipsGame addAffecting:
+		(SpaceshipCardHolder of: spaceship holding: self create)
 ]
 
 { #category : #'class ini' }
@@ -23,8 +25,9 @@ OverloadCard class >> behavingAsA: aTypeOfCard [
 ]
 
 { #category : #playing }
-OverloadCard class >> cancelIn: anOutstandingSpaceshipsGame [ 
-	anOutstandingSpaceshipsGame cancel: 'Overload' affecting: spaceship 
+OverloadCard class >> cancelIn: anOutstandingSpaceshipsGame [
+
+	anOutstandingSpaceshipsGame cancel: 'Overload' affecting: spaceship
 ]
 
 { #category : #'instance creation' }
@@ -34,10 +37,11 @@ OverloadCard class >> create [
 ]
 
 { #category : #playing }
-OverloadCard class >> incorporateTo: anOutstandingSpaceshipsGame [ 
+OverloadCard class >> incorporateTo: anOutstandingSpaceshipsGame [
+
 	| aTypeOfCard |
 	aTypeOfCard := typeOfCard new.
-	aTypeOfCard incorporate: self To: anOutstandingSpaceshipsGame.
+	aTypeOfCard incorporate: self To: anOutstandingSpaceshipsGame
 ]
 
 { #category : #throwing }
@@ -47,9 +51,10 @@ OverloadCard class >> thrownAt: aSpaceship [
 ]
 
 { #category : #'class initialization' }
-OverloadCard class >> thrownAt: aSpaceship asA: cardType [ 
+OverloadCard class >> thrownAt: aSpaceship asA: cardType [
+
 	spaceship := aSpaceship.
-	typeOfCard := cardType 
+	typeOfCard := cardType
 ]
 
 { #category : #initialization }
@@ -82,9 +87,12 @@ OverloadCard >> effectOnThrow [
 ]
 
 { #category : #playing }
-OverloadCard >> incorporateTo: anOutstandingSpaceshipsGame theElement: aCard [ 
+OverloadCard >> incorporateTo: anOutstandingSpaceshipsGame the: element [
+
 	| cardHolder |
-	cardHolder := SpaceshipCardHolder of: aCard target holding: ((aCard createWithCard) card).
+	cardHolder := SpaceshipCardHolder
+		              of: element target
+		              holding: element createWithCard card.
 	anOutstandingSpaceshipsGame addAffecting: cardHolder
 ]
 

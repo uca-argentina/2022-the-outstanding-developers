@@ -38,5 +38,6 @@ WormHoleEffect >> reApplyEffectTo: aSpaceship on: aBoard [
 
 { #category : #accesing }
 WormHoleEffect >> typeOfEffect [
-	^'wormhole'
+
+	^ 'WormHole'
 ]

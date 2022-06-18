@@ -60,7 +60,8 @@ Board class >> of: aNumberOfBoxes and: aLength playedFor: someLaps with: aBoxSeq
 
 { #category : #properties }
 Board >> amountOfAtomicBombBoxes [
-	^ self amountOfBoxes: 'atomicbomb'
+
+	^ self amountOfBoxes: 'Atomic Bomb'
 ]
 
 { #category : #properties }
@@ -72,36 +73,37 @@ Board >> amountOfBoxes [
 { #category : #properties }
 Board >> amountOfBoxes: aType [
 
-	^(boxes select:[:box | box effectType = aType]) size.
+	^ (boxes select: [ :box | box effectType = aType ]) size
 ]
 
 { #category : #properties }
 Board >> amountOfHyperJumpBoxes [
-	^ self amountOfBoxes: 'hyperjump'
+
+	^ self amountOfBoxes: 'HyperJump'
 ]
 
 { #category : #properties }
 Board >> amountOfMoonWalkBoxes [
 
-	^ self amountOfBoxes: 'moonwalk'
+	^ self amountOfBoxes: 'MoonWalk'
 ]
 
 { #category : #properties }
 Board >> amountOfNoEffectBoxes [
 
-	^ self amountOfBoxes: 'normal'
+	^ self amountOfBoxes: 'Normal'
 ]
 
 { #category : #properties }
 Board >> amountOfSpeedUpBoxes [
 
-	^ self amountOfBoxes: 'speedup'
+	^ self amountOfBoxes: 'Speedup'
 ]
 
 { #category : #properties }
 Board >> amountOfWormHoleBoxes [
 
-	^ self amountOfBoxes: 'wormhole'
+	^ self amountOfBoxes: 'WormHole'
 ]
 
 { #category : #asserting }
@@ -138,6 +140,7 @@ Board >> assignToCurrentSpaceship: aCard [
 
 { #category : #accessing }
 Board >> boardUnitLength [
+
 	^ boardUnitLength
 ]
 
@@ -163,7 +166,7 @@ Board >> boxPositionOf: aSpaceship [
 Board >> isSpaceshipsTurn: aSpaceship [
 
 	^ turnHandler assertCurrentIndexIs:
-		(self positionInPositionsOf: aSpaceship)
+		  (self positionInPositionsOf: aSpaceship)
 ]
 
 { #category : #accessing }
@@ -174,7 +177,8 @@ Board >> lapOf: aSpaceship [
 
 { #category : #accessing }
 Board >> lastBox [
-	^ lastBox.
+
+	^ lastBox
 ]
 
 { #category : #accessing }
@@ -186,24 +190,40 @@ Board >> lastSpacechipToHavePlayed [
 { #category : #playing }
 Board >> move: aSpaceship by: aNumberOfBoxes [
 
-	| newPositionWithoutEffect positionAmongPositions currentBox movementAfterEffect currentBoardPosition currentLap newPositionAfterEffect|
+	| newPositionWithoutEffect positionAmongPositions currentBox movementAfterEffect currentBoardPosition currentLap newPositionAfterEffect |
 	positionAmongPositions := self positionInPositionsOf: aSpaceship.
 	self assertThisIsPlayersTurn: positionAmongPositions.
 	
-	currentBoardPosition := (positions at: positionAmongPositions) position.
+	currentBoardPosition := (positions at: positionAmongPositions)
+		                        position.
 	currentLap := (positions at: positionAmongPositions) lap.
-	
-	newPositionWithoutEffect := (self move: aSpaceship in: currentBoardPosition and: currentLap by: aNumberOfBoxes).
-	
-	newPositionWithoutEffect position > boxes size ifTrue: [ positions replaceFrom: positionAmongPositions to: positionAmongPositions with: { newPositionWithoutEffect }.
-		^self ].
+	newPositionWithoutEffect := self
+		                            move: aSpaceship
+		                            in: currentBoardPosition
+		                            and: currentLap
+		                            by: aNumberOfBoxes.
+
+	newPositionWithoutEffect position > boxes size ifTrue: [ 
+		positions
+			replaceFrom: positionAmongPositions
+			to: positionAmongPositions
+			with: { newPositionWithoutEffect }.
+		^ self ].
 	currentBox := boxes at: newPositionWithoutEffect position.
 	lastBox := currentBox.
 	movementAfterEffect := currentBox applyEffectOn: self.
-	movementAfterEffect = 'Do not move' 
-	ifFalse: [newPositionAfterEffect := (self move: aSpaceship in: (newPositionWithoutEffect position) and: (newPositionWithoutEffect lap) by: movementAfterEffect)]
-	ifTrue: [ ^self ].
-	positions replaceFrom: positionAmongPositions to: positionAmongPositions with: { newPositionAfterEffect }.
+	movementAfterEffect = 'Do not move'
+		ifFalse: [ 
+			newPositionAfterEffect := self
+				                          move: aSpaceship
+				                          in: newPositionWithoutEffect position
+				                          and: newPositionWithoutEffect lap
+				                          by: movementAfterEffect ]
+		ifTrue: [ ^ self ].
+	positions
+		replaceFrom: positionAmongPositions
+		to: positionAmongPositions
+		with: { newPositionAfterEffect }
 ]
 
 { #category : #playing }
@@ -280,7 +300,7 @@ Board >> movePlayingSpaceshipAt: aPosition by: anAmount [
 { #category : #movement }
 Board >> moveSpaceship: aNumberOfBoxes [
 
-	| spaceshipPlaying currentBox|
+	| spaceshipPlaying |
 	spaceshipPlaying := (positions at: turnHandler nextValue) spaceship.
 	self move: spaceshipPlaying by: aNumberOfBoxes
 ]

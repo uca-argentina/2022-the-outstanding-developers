@@ -10,9 +10,8 @@ Class {
 { #category : #asserting }
 RandomEventGenerator class >> assertProbabilitiesAddUpToOne: aDistribution [
 
-	(((aDistribution sum:
-		 [ :probabilityDistribution | probabilityDistribution probability ]) round: 2)
-		 = 1) ifFalse: [ 
+	((aDistribution sum: [ :probabilityDistribution | 
+		  probabilityDistribution probability ]) round: 2) = 1 ifFalse: [ 
 		Error signal: 'Probabilities of the distribution must add up to one' ]
 ]
 
@@ -25,6 +24,7 @@ RandomEventGenerator class >> with: aNumberOfBoxes using: aDistribution [
 
 { #category : #initialization }
 RandomEventGenerator >> createFor: aNumberOfBoxes using: orderedDistribution [
+
 	| random |
 	random := Random new.
 	aNumberOfBoxes timesRepeat: [ 
@@ -32,9 +32,15 @@ RandomEventGenerator >> createFor: aNumberOfBoxes using: orderedDistribution [
 		coveredProbabilities := 0.
 		index := 1.
 		randomNumber := random next.
-		[ randomNumber < ((orderedDistribution at: index) probability + coveredProbabilities) ] 
+		[ 
+		randomNumber
+		<
+		((orderedDistribution at: index) probability + coveredProbabilities) ] 
 			whileFalse: [ 
-				coveredProbabilities := coveredProbabilities + (orderedDistribution at: index) probability.
+				coveredProbabilities := coveredProbabilities
+				                        +
+				                        (orderedDistribution at: index)
+					                        probability.
 				index := index + 1 ].
 		randomBoxes add:
 			(orderedDistribution at: index) classAssociated create ]
@@ -42,7 +48,8 @@ RandomEventGenerator >> createFor: aNumberOfBoxes using: orderedDistribution [
 
 { #category : #accessing }
 RandomEventGenerator >> generate [
-	^randomBoxes 
+
+	^ randomBoxes
 ]
 
 { #category : #initialization }

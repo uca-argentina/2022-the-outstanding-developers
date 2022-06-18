@@ -51,7 +51,7 @@ CardTest >> testACardIsNotTakenAwayFromASpaceshipWhenThrownButNotItsTurn [
 { #category : #tests }
 CardTest >> testACardIsTakenAwayFromASpaceshipWhenThrown [
 
-	| enterprise aBoard aCardDistribution anOutstandingGame |
+	| aBoard aCardDistribution anOutstandingGame |
 	aBoard := Board
 		          of: 10
 		          and: (ParsecUnit of: 10)
@@ -666,8 +666,6 @@ CardTest >> testEffectOfMultipleSpeedCardsIsAddedUpIntoTheSpaceshipDiceThrow [
 { #category : #tests }
 CardTest >> testOverloadCardProducesSpaceshipToGoBackwards [
 
-	"Cual es el sentido de este si está el de ReducesInTwo?"
-
 	| aBoard aCardDistribution anOutstandingGame |
 	aBoard := Board
 		          of: 10
@@ -836,6 +834,58 @@ CardTest >> testRedoRepeatsAPreviousRedoCard [
 	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 11.
 	anOutstandingGame play.
 	self assert: (aBoard boxPositionOf: 'Delorean') equals: 15
+]
+
+{ #category : #tests }
+CardTest >> testRedoRepeatsARepeatCard [
+
+	| aBoard aCardDistribution box1 box2 box3 box4 box5 anOutstandingGame otherCardDistribution cardAwarderRepeatEffect |
+	aCardDistribution := OrderedCollection new.
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1
+			 for: RedoCard).
+	otherCardDistribution := OrderedCollection new.
+	otherCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: (RepeatCard behavingAsA: InstantaneousCard)).
+	cardAwarderRepeatEffect := CardAwarderEffect with: otherCardDistribution.
+
+	box1 := Box with: NoEffect new.
+	box2 := Box with: cardAwarderRepeatEffect.
+	box3 := Box with: SpeedUpEffect new.
+	box4 := Box with: NoEffect new.
+	box5 := Box with: NoEffect new.
+
+	aBoard := Board
+		          of: 20
+		          and: (ParsecUnit of: 20)
+		          playedFor: 1
+		          with: { 
+				          box1.
+				          box2.
+				          box3.
+				          box4.
+				          box5 }.
+
+	anOutstandingGame := OutstandingSpaceshipsGame
+		                     playedByMany: { 'Enterprise'. 'Delorean' }
+		                     on: aBoard
+		                     throwing:
+		                     (LoadedDie withSequence: { 2. 3 })
+		                     using: aCardDistribution.
+	anOutstandingGame play.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 2.
+	anOutstandingGame play.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 7.
+
+	anOutstandingGame
+		throws: (RepeatCard thrownAt: 'Delorean')
+		from: 'Enterprise'.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 11.
+	anOutstandingGame
+		throws: (RedoCard thrownAt: 'Delorean')
+		from: 'Enterprise'.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 15.
+	
 ]
 
 { #category : #tests }

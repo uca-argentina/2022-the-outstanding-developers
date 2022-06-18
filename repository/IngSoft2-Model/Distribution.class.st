@@ -24,7 +24,8 @@ Distribution class >> withProbabilityOf: aValue for: aClass [
 
 { #category : #accessing }
 Distribution >> classAssociated [
-	^class.
+
+	^ class
 ]
 
 { #category : #initialization }
@@ -36,5 +37,6 @@ Distribution >> initializeWithProbabilityOf: aValue for: aClass [
 
 { #category : #accessing }
 Distribution >> probability [
+
 	^ probability
 ]

@@ -25,10 +25,11 @@ CancellationCard class >> create [
 ]
 
 { #category : #playing }
-CancellationCard class >> incorporateTo: anOutstandingSpaceshipsGame [ 
+CancellationCard class >> incorporateTo: anOutstandingSpaceshipsGame [
+
 	| aTypeOfCard |
 	aTypeOfCard := cardType new.
-	aTypeOfCard incorporate: self To: anOutstandingSpaceshipsGame.
+	aTypeOfCard incorporate: self To: anOutstandingSpaceshipsGame
 ]
 
 { #category : #playing }
@@ -66,7 +67,9 @@ CancellationCard >> assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs: anAs
 
 { #category : #asserting }
 CancellationCard >> assertItIsThrowableInTurn: anAssertion in: aGame [
-	self assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs: anAssertion.
+
+	self assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs:
+		anAssertion.
 	self assertThereArePermantCardsIn: aGame
 ]
 
@@ -85,9 +88,9 @@ CancellationCard >> cardBehaviour [
 ]
 
 { #category : #playing }
-CancellationCard >> incorporateTo: anOutstandingSpaceshipsGame theElement: aCard [
+CancellationCard >> incorporateTo: anOutstandingSpaceshipsGame the: element [
 
-	aCard target cancelIn: anOutstandingSpaceshipsGame
+	element target cancelIn: anOutstandingSpaceshipsGame
 ]
 
 { #category : #initialization }

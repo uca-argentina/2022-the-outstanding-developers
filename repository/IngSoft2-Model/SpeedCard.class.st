@@ -20,8 +20,8 @@ SpeedCard class >> addTo: anOutstandingSpaceshipsGame [
 
 { #category : #'class initialization' }
 SpeedCard class >> behavingAsA: typeOfCard [
-	
-	cardType := typeOfCard 
+
+	cardType := typeOfCard
 ]
 
 { #category : #playing }
@@ -37,10 +37,11 @@ SpeedCard class >> create [
 ]
 
 { #category : #playing }
-SpeedCard class >> incorporateTo: anOutstandingSpaceshipsGame [ 
+SpeedCard class >> incorporateTo: anOutstandingSpaceshipsGame [
+
 	| aTypeOfCard |
 	aTypeOfCard := cardType new.
-	aTypeOfCard incorporate: self To: anOutstandingSpaceshipsGame.
+	aTypeOfCard incorporate: self To: anOutstandingSpaceshipsGame
 ]
 
 { #category : #accessing }
@@ -50,10 +51,10 @@ SpeedCard class >> thrownAt: aSpaceship [
 ]
 
 { #category : #accessing }
-SpeedCard class >> thrownAt: aSpaceship asA: typeOfCard [ 
+SpeedCard class >> thrownAt: aSpaceship asA: typeOfCard [
+
 	spaceship := aSpaceship.
 	cardType := typeOfCard
-	
 ]
 
 { #category : #comparing }
@@ -69,8 +70,10 @@ SpeedCard >> assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs: anAssertion
 ]
 
 { #category : #assertions }
-SpeedCard >> assertItIsThrowableInTurn: anAssertion in: anOutstandingSpaceshipsGame [ 
-	self assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs: anAssertion 
+SpeedCard >> assertItIsThrowableInTurn: anAssertion in: anOutstandingSpaceshipsGame [
+
+	self assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs:
+		anAssertion
 ]
 
 { #category : #accesing }
@@ -86,9 +89,12 @@ SpeedCard >> effectOnThrow [
 ]
 
 { #category : #playing }
-SpeedCard >> incorporateTo: anOutstandingSpaceshipsGame theElement: aCard [
+SpeedCard >> incorporateTo: anOutstandingSpaceshipsGame the: element [
+
 	| cardHolder |
-	cardHolder := SpaceshipCardHolder of: aCard target holding: ((aCard createWithCard) card).
+	cardHolder := SpaceshipCardHolder
+		              of: element target
+		              holding: element createWithCard card.
 	anOutstandingSpaceshipsGame addAffecting: cardHolder
 ]
 
@@ -106,5 +112,6 @@ SpeedCard >> name [
 
 { #category : #accessing }
 SpeedCard >> typeOfCard [
+
 	^ typeOfCard name
 ]
