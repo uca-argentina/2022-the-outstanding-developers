@@ -18,7 +18,6 @@ CardTest >> should: block raise: expectedErrorClass withMessage: expectedErrorMe
 CardTest >> testACardIsNotTakenAwayFromASpaceshipWhenThrownButNotItsTurn [
 
 	| aBoard aCardDistribution anOutstandingGame |
-
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add: (Distribution
 			 withProbabilityOf: 1
@@ -28,24 +27,24 @@ CardTest >> testACardIsNotTakenAwayFromASpaceshipWhenThrownButNotItsTurn [
 		          and: (ParsecUnit of: 10)
 		          playedFor: 1
 		          with: { (Box with: NoEffect new) }.
-	
+
 	anOutstandingGame := OutstandingSpaceshipsGame
-		                     playedByMany:
-		                     { 'Delorean'. 'Enterprise' }
+		                     playedByMany: { 'Delorean'. 'Enterprise' }
 		                     on: aBoard
 		                     throwing:
 		                     (LoadedDie withSequence: { 7. 6. 5. 6 })
 		                     using: aCardDistribution.
 	anOutstandingGame play.
-	
+
 	self
-		should: [ anOutstandingGame throws: (OverloadCard thrownAt: 'Enterprise' asA: PermanentCard) from: 'Delorean' ]
+		should: [ 
+			anOutstandingGame
+				throws: (OverloadCard thrownAt: 'Enterprise' asA: PermanentCard)
+				from: 'Delorean' ]
 		raise: Error
 		withMessage: 'Permanent cards can only be thrown in spaceships turn'.
 
-	self
-		assert: (anOutstandingGame deckOf: 'Enterprise') size
-		equals: 2
+	self assert: (anOutstandingGame deckOf: 'Enterprise') size equals: 2
 ]
 
 { #category : #tests }
@@ -91,12 +90,14 @@ CardTest >> testASpaceshipCannotThrowACardItDoesntHave [
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedByMany: { 'Delorean'. 'Enterprise' }
 		                     on: aBoard
-		                     throwing:
-		                     (LoadedDie with: 1)
+		                     throwing: (LoadedDie with: 1)
 		                     using: aCardDistribution.
 
 	self
-		should: [ anOutstandingGame throws: (SpeedCard thrownAt: 'Enterprise' asA: PermanentCard) from: 'Delorean' ]
+		should: [ 
+			anOutstandingGame
+				throws: (SpeedCard thrownAt: 'Enterprise' asA: PermanentCard)
+				from: 'Delorean' ]
 		raise: Error
 		withMessage: 'The spaceship doesnt have cards to throw'
 ]
@@ -105,25 +106,27 @@ CardTest >> testASpaceshipCannotThrowACardItDoesntHave [
 CardTest >> testAccelerationCardIncreasesInOneAllTheSpaceshipsDiceThrows [
 
 	| aBoard aCardDistribution anOutstandingGame |
-
 	aBoard := Board
 		          of: 10
 		          and: (ParsecUnit of: 10)
 		          playedFor: 1
 		          with: { (Box with: NoEffect new) }.
-		
+
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add: (Distribution
 			 withProbabilityOf: 1
 			 for: (AccelerationCard behavingAsA: PermanentCard)).
 	anOutstandingGame := OutstandingSpaceshipsGame
-		                     playedByMany: { 'Enterprise'. 'Delorean'. 'Zathura' }
+		                     playedByMany:
+		                     { 'Enterprise'. 'Delorean'. 'Zathura' }
 		                     on: aBoard
 		                     throwing:
-		                     (LoadedDie withSequence: {3. 4. 5. 2. 2. 2 })
-		                     using: aCardDistribution.	
-	
-	anOutstandingGame throws: (AccelerationCard behavingAsA: PermanentCard) from: 'Enterprise'.
+		                     (LoadedDie withSequence: { 3. 4. 5. 2. 2. 2 })
+		                     using: aCardDistribution.
+
+	anOutstandingGame
+		throws: (AccelerationCard behavingAsA: PermanentCard)
+		from: 'Enterprise'.
 
 	anOutstandingGame play.
 	anOutstandingGame play.
@@ -177,7 +180,8 @@ CardTest >> testAnInstantaneousCardCantBeUsedIfTheGameHasFinished [
 		                     playedByMany: { 'Enterprise'. 'Delorean' }
 		                     on: aBoard
 		                     throwing:
-		                     (LoadedDie withSequence: {1. 1. 1. 1. 1. 1. 8})
+		                     (LoadedDie withSequence:
+			                      { 1. 1. 1. 1. 1. 1. 8 })
 		                     using: aCardDistribution.
 	anOutstandingGame play.
 	anOutstandingGame
@@ -195,11 +199,12 @@ CardTest >> testAnInstantaneousCardCantBeUsedIfTheGameHasFinished [
 	anOutstandingGame play.
 	anOutstandingGame play.
 	self
-		should: [ anOutstandingGame
-		throws: (CancellationCard
-				 thrownAt: (OverloadCard thrownAt: 'Enterprise')
-				 asA: InstantaneousCard)
-		from: 'Enterprise'. ]
+		should: [ 
+			anOutstandingGame
+				throws: (CancellationCard
+						 thrownAt: (OverloadCard thrownAt: 'Enterprise')
+						 asA: InstantaneousCard)
+				from: 'Enterprise' ]
 		raise: Error
 		withMessage: 'Cards can only be thrown if game has not finished'
 ]
@@ -249,16 +254,20 @@ CardTest >> testAnInstantaneousCardEffectAffectOnlyOnce [
 		throws: (OverloadCard thrownAt: 'Enterprise' asA: PermanentCard)
 		from: 'Delorean'.
 	anOutstandingGame play.
-	
-	self assert: (anOutstandingGame cardsAffectingOf: 'Enterprise') size equals: 2.
-	
+
+	self
+		assert: (anOutstandingGame cardsAffectingOf: 'Enterprise') size
+		equals: 2.
+
 	anOutstandingGame
 		throws: (CancellationCard
 				 thrownAt: (OverloadCard thrownAt: 'Enterprise')
 				 asA: InstantaneousCard)
 		from: 'Enterprise'.
-	
-	self assert: (anOutstandingGame cardsAffectingOf: 'Enterprise') size equals: 1.
+
+	self
+		assert: (anOutstandingGame cardsAffectingOf: 'Enterprise') size
+		equals: 1
 ]
 
 { #category : #tests }
@@ -387,7 +396,7 @@ CardTest >> testCancellationCardRemovesASpeedPermanentCard [
 		                     (LoadedDie withSequence: { 1. 2. 3. 3. 4 })
 		                     using: aCardDistribution.
 	anOutstandingGame play.
-	
+
 	anOutstandingGame
 		throws: (SpeedCard thrownAt: 'Enterprise' asA: PermanentCard)
 		from: 'Delorean'.
@@ -405,7 +414,7 @@ CardTest >> testCancellationCardRemovesASpeedPermanentCard [
 	self assert: (aBoard lapOf: 'Enterprise') equals: 1.
 	self assert: (aBoard boxPositionOf: 'Delorean') equals: 5.
 	self assert: (aBoard lapOf: 'Delorean') equals: 1.
-	
+
 	anOutstandingGame
 		throws: (CancellationCard
 				 thrownAt: (SpeedCard thrownAt: 'Enterprise')
@@ -413,7 +422,7 @@ CardTest >> testCancellationCardRemovesASpeedPermanentCard [
 		from: 'Enterprise'.
 	anOutstandingGame play.
 	anOutstandingGame play.
-	
+
 	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 9.
 	self assert: (aBoard lapOf: 'Enterprise') equals: 1.
 	self assert: (aBoard boxPositionOf: 'Delorean') equals: 6.
@@ -477,9 +486,8 @@ CardTest >> testCancellationCardRemovesAnAccelerationPermanentCard [
 	self assert: (aBoard lapOf: 'Delorean') equals: 1.
 
 	anOutstandingGame
-		throws: (CancellationCard
-				 thrownAt: AccelerationCard
-				 asA: InstantaneousCard)
+		throws:
+		(CancellationCard thrownAt: AccelerationCard asA: InstantaneousCard)
 		from: 'Enterprise'.
 	anOutstandingGame play.
 	anOutstandingGame play.
@@ -553,7 +561,7 @@ CardTest >> testCancellationCardRemovesAnOverloadPermanentCard [
 		from: 'Enterprise'.
 	anOutstandingGame play.
 	anOutstandingGame play.
-	
+
 	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 6.
 	self assert: (aBoard lapOf: 'Enterprise') equals: 1.
 	self assert: (aBoard boxPositionOf: 'Delorean') equals: 6.
@@ -636,26 +644,28 @@ CardTest >> testCancellationCardRemovesOnlyOneAccelerationPermanentCard [
 CardTest >> testEffectOfMultipleSpeedCardsIsAddedUpIntoTheSpaceshipDiceThrow [
 
 	| aBoard aCardDistribution anOutstandingGame |
-
 	aBoard := Board
 		          of: 10
 		          and: (ParsecUnit of: 10)
 		          playedFor: 1
 		          with: { (Box with: NoEffect new) }.
-	
+
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add: (Distribution
 			 withProbabilityOf: 1
 			 for: (SpeedCard behavingAsA: PermanentCard)).
 	anOutstandingGame := OutstandingSpaceshipsGame
-		                     playedByMany: { 'Enterprise'. 'Delorean'}
+		                     playedByMany: { 'Enterprise'. 'Delorean' }
 		                     on: aBoard
-		                     throwing:
-		                     (LoadedDie with: 1)
-		                     using: aCardDistribution.	
-	
-	anOutstandingGame throws: (SpeedCard thrownAt: 'Delorean' asA: PermanentCard) from: 'Enterprise'.
-	anOutstandingGame throws: (SpeedCard thrownAt: 'Delorean' asA: PermanentCard) from: 'Enterprise'.
+		                     throwing: (LoadedDie with: 1)
+		                     using: aCardDistribution.
+
+	anOutstandingGame
+		throws: (SpeedCard thrownAt: 'Delorean' asA: PermanentCard)
+		from: 'Enterprise'.
+	anOutstandingGame
+		throws: (SpeedCard thrownAt: 'Delorean' asA: PermanentCard)
+		from: 'Enterprise'.
 	anOutstandingGame play.
 	anOutstandingGame play.
 
@@ -685,10 +695,12 @@ CardTest >> testOverloadCardProducesSpaceshipToGoBackwards [
 		                     using: aCardDistribution.
 	anOutstandingGame play.
 	anOutstandingGame play.
-	
+
 	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 3.
 	self assert: (aBoard boxPositionOf: 'Delorean') equals: 4.
-	anOutstandingGame throws: (OverloadCard thrownAt: 'Delorean' asA: PermanentCard) from: 'Enterprise'. 
+	anOutstandingGame
+		throws: (OverloadCard thrownAt: 'Delorean' asA: PermanentCard)
+		from: 'Enterprise'.
 
 	anOutstandingGame play.
 	anOutstandingGame play.
@@ -841,13 +853,14 @@ CardTest >> testRedoRepeatsARepeatCard [
 
 	| aBoard aCardDistribution box1 box2 box3 box4 box5 anOutstandingGame otherCardDistribution cardAwarderRepeatEffect |
 	aCardDistribution := OrderedCollection new.
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: RedoCard).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: RedoCard).
 	otherCardDistribution := OrderedCollection new.
-	otherCardDistribution add:
-		(Distribution withProbabilityOf: 1 for: (RepeatCard behavingAsA: InstantaneousCard)).
-	cardAwarderRepeatEffect := CardAwarderEffect with: otherCardDistribution.
+	otherCardDistribution add: (Distribution
+			 withProbabilityOf: 1
+			 for: (RepeatCard behavingAsA: InstantaneousCard)).
+	cardAwarderRepeatEffect := CardAwarderEffect with:
+		                           otherCardDistribution.
 
 	box1 := Box with: NoEffect new.
 	box2 := Box with: cardAwarderRepeatEffect.
@@ -869,8 +882,7 @@ CardTest >> testRedoRepeatsARepeatCard [
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedByMany: { 'Enterprise'. 'Delorean' }
 		                     on: aBoard
-		                     throwing:
-		                     (LoadedDie withSequence: { 2. 3 })
+		                     throwing: (LoadedDie withSequence: { 2. 3 })
 		                     using: aCardDistribution.
 	anOutstandingGame play.
 	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 2.
@@ -884,8 +896,7 @@ CardTest >> testRedoRepeatsARepeatCard [
 	anOutstandingGame
 		throws: (RedoCard thrownAt: 'Delorean')
 		from: 'Enterprise'.
-	self assert: (aBoard boxPositionOf: 'Delorean') equals: 15.
-	
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 15
 ]
 
 { #category : #tests }
@@ -921,8 +932,7 @@ CardTest >> testRedoRepeatsAcceleration [
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedByMany: { 'Enterprise'. 'Delorean' }
 		                     on: aBoard
-		                     throwing:
-		                     (LoadedDie withSequence: { 1. 2 })
+		                     throwing: (LoadedDie withSequence: { 1. 2 })
 		                     using: aCardDistribution.
 	anOutstandingGame play.
 	anOutstandingGame
@@ -930,10 +940,12 @@ CardTest >> testRedoRepeatsAcceleration [
 		from: 'Delorean'.
 	anOutstandingGame play.
 	self assert: (aBoard boxPositionOf: 'Delorean') equals: 3.
-	anOutstandingGame throws: (RedoCard thrownAt: EmptyCard new) from: 'Enterprise'.
+	anOutstandingGame
+		throws: (RedoCard thrownAt: EmptyCard new)
+		from: 'Enterprise'.
 	anOutstandingGame play.
 	anOutstandingGame play.
-	self assert: (aBoard boxPositionOf: 'Delorean') equals: 7.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 7
 ]
 
 { #category : #tests }
@@ -1056,9 +1068,8 @@ CardTest >> testRedoRepeatsCancellationOfAnAcceleration [
 	anOutstandingGame play.
 	self assert: (aBoard boxPositionOf: 'Delorean') equals: 4.
 	anOutstandingGame
-		throws: (CancellationCard
-				 thrownAt: AccelerationCard
-				 asA: InstantaneousCard)
+		throws:
+		(CancellationCard thrownAt: AccelerationCard asA: InstantaneousCard)
 		from: 'Enterprise'.
 	anOutstandingGame play.
 	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 5.
@@ -1173,8 +1184,7 @@ CardTest >> testRedoRepeatsOverload [
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedByMany: { 'Enterprise'. 'Delorean' }
 		                     on: aBoard
-		                     throwing:
-		                     (LoadedDie withSequence: { 1. 2 })
+		                     throwing: (LoadedDie withSequence: { 1. 2 })
 		                     using: aCardDistribution.
 	anOutstandingGame play.
 	anOutstandingGame
@@ -1182,10 +1192,12 @@ CardTest >> testRedoRepeatsOverload [
 		from: 'Delorean'.
 	anOutstandingGame play.
 	self assert: (aBoard boxPositionOf: 'Delorean') equals: 2.
-	anOutstandingGame throws: (RedoCard thrownAt: 'Delorean') from: 'Enterprise'.
+	anOutstandingGame
+		throws: (RedoCard thrownAt: 'Delorean')
+		from: 'Enterprise'.
 	anOutstandingGame play.
 	anOutstandingGame play.
-	self assert: (aBoard boxPositionOf: 'Delorean') equals: 2.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 2
 ]
 
 { #category : #tests }
@@ -1221,8 +1233,7 @@ CardTest >> testRedoRepeatsSpeed [
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedByMany: { 'Enterprise'. 'Delorean' }
 		                     on: aBoard
-		                     throwing:
-		                     (LoadedDie withSequence: { 1. 2 })
+		                     throwing: (LoadedDie withSequence: { 1. 2 })
 		                     using: aCardDistribution.
 	anOutstandingGame play.
 	anOutstandingGame
@@ -1230,10 +1241,12 @@ CardTest >> testRedoRepeatsSpeed [
 		from: 'Delorean'.
 	anOutstandingGame play.
 	self assert: (aBoard boxPositionOf: 'Delorean') equals: 2.
-	anOutstandingGame throws: (RedoCard thrownAt: 'Delorean') from: 'Enterprise'.
+	anOutstandingGame
+		throws: (RedoCard thrownAt: 'Delorean')
+		from: 'Enterprise'.
 	anOutstandingGame play.
 	anOutstandingGame play.
-	self assert: (aBoard boxPositionOf: 'Delorean') equals: 5.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 5
 ]
 
 { #category : #tests }
@@ -1332,10 +1345,10 @@ CardTest >> testRepeatReplaysCardAwarderEffect [
 
 	anOutstandingGame play.
 	self assert: (aBoard boxPositionOf: 'Delorean') equals: 4.
-	
+
 	anOutstandingGame play.
 	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 5.
-	
+
 
 	anOutstandingGame
 		throws: (RepeatCard thrownAt: 'Delorean')
@@ -1392,7 +1405,7 @@ CardTest >> testRepeatReplaysHyperJumpEffect [
 	anOutstandingGame
 		throws: (RepeatCard thrownAt: 'Delorean')
 		from: 'Enterprise'.
-	
+
 	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 1.
 	self assert: (aBoard boxPositionOf: 'Delorean') equals: 1
 ]
@@ -1448,7 +1461,7 @@ CardTest >> testRepeatReplaysMoonWalkEffect [
 	anOutstandingGame play.
 	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 4.
 	self assert: (aBoard boxPositionOf: 'Delorean') equals: 4.
-	
+
 	anOutstandingGame
 		throws: (RepeatCard thrownAt: 'Delorean')
 		from: 'Enterprise'.
@@ -1513,10 +1526,10 @@ CardTest >> testRepeatReplaysSpeedUpEffect [
 	aCardDistribution add: (Distribution
 			 withProbabilityOf: 1
 			 for: (RepeatCard behavingAsA: InstantaneousCard)).
-	
+
 	speedUpEffect := SpeedUpEffect create.
 
-	box1 := Box with: speedUpEffect .
+	box1 := Box with: speedUpEffect.
 	box2 := Box with: NoEffect new.
 	box3 := Box with: NoEffect new.
 	box4 := Box with: NoEffect new.
@@ -1538,13 +1551,13 @@ CardTest >> testRepeatReplaysSpeedUpEffect [
 		                     on: aBoard
 		                     throwing: (LoadedDie with: 1)
 		                     using: aCardDistribution.
-	
+
 	anOutstandingGame play.
 	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 5.
-	
+
 	anOutstandingGame play.
 	self assert: (aBoard boxPositionOf: 'Delorean') equals: 5.
-	
+
 	anOutstandingGame
 		throws: (RepeatCard thrownAt: 'Delorean')
 		from: 'Enterprise'.
@@ -1596,7 +1609,7 @@ CardTest >> testRepeatReplaysWormHoleEffect [
 	anOutstandingGame
 		throws: (RepeatCard thrownAt: 'Delorean')
 		from: 'Enterprise'.
-	
+
 	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 1.
 	self assert: (aBoard boxPositionOf: 'Delorean') equals: 1
 ]
@@ -1617,10 +1630,11 @@ CardTest >> testSpeedCardIncreasesInOneTheSpaceshipDiceThrow [
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedByMany: { 'Delorean'. 'Enterprise' }
 		                     on: aBoard
-		                     throwing:
-		                     (LoadedDie withSequence: { 3. 4 })
+		                     throwing: (LoadedDie withSequence: { 3. 4 })
 		                     using: aCardDistribution.
-	anOutstandingGame throws: (SpeedCard thrownAt: 'Enterprise' asA: PermanentCard) from: 'Delorean'.
+	anOutstandingGame
+		throws: (SpeedCard thrownAt: 'Enterprise' asA: PermanentCard)
+		from: 'Delorean'.
 	anOutstandingGame play.
 	anOutstandingGame play.
 	self assert: (aBoard boxPositionOf: 'Delorean') equals: 3.

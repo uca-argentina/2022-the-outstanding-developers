@@ -70,7 +70,6 @@ BoxTest >> testCardAwarderBoxEffectDoesNotModifyPosition [
 BoxTest >> testCardAwarderBoxEffectGivesACardToTheSpaceshipThatLandsOnIt [
 
 	| aBoard noEffect cardAwarderEffect boxSequence box1 box2 box3 box4 box5 aCardDistribution anOutstandingGame |
-	
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add: (Distribution
 			 withProbabilityOf: 1
@@ -97,14 +96,14 @@ BoxTest >> testCardAwarderBoxEffectGivesACardToTheSpaceshipThatLandsOnIt [
 		          with: boxSequence.
 
 	anOutstandingGame := OutstandingSpaceshipsGame
-		                     playedByMany: {'Enterprise'. 'Delorean'}
+		                     playedByMany: { 'Enterprise'. 'Delorean' }
 		                     on: aBoard
 		                     throwing: (LoadedDie with: 1)
 		                     using: aCardDistribution.
 	anOutstandingGame play.
-	
+
 	self assert: (anOutstandingGame deckOf: 'Enterprise') size equals: 3.
-	self assert: (anOutstandingGame deckOf: 'Delorean') size equals: 2.
+	self assert: (anOutstandingGame deckOf: 'Delorean') size equals: 2
 ]
 
 { #category : #tests }
@@ -116,7 +115,8 @@ BoxTest >> testHyperJumpBoxAutogeneratesASequence [
 	firstEffect := box effectOnPosition.
 	secondEffect := box effectOnPosition.
 	self assert: firstEffect valueOfMeasurement > 0.
-	self assert: secondEffect valueOfMeasurement <= firstEffect valueOfMeasurement
+	self assert:
+		secondEffect valueOfMeasurement <= firstEffect valueOfMeasurement
 ]
 
 { #category : #tests }
@@ -132,7 +132,11 @@ BoxTest >> testHyperJumpBoxCantBeCreatedWithAnEmptySequence [
 BoxTest >> testHyperJumpBoxEffectDisplacesAListOfParsecsValuesRepeatedly [
 
 	| box anEffect parsecsList |
-	parsecsList := { ParsecUnit of: 4. ParsecUnit of: 3. ParsecUnit of: 1. ParsecUnit of: 5 }.
+	parsecsList := { 
+		               (ParsecUnit of: 4).
+		               (ParsecUnit of: 3).
+		               (ParsecUnit of: 1).
+		               (ParsecUnit of: 5) }.
 	anEffect := HyperJumpEffect with: parsecsList.
 	box := Box with: anEffect.
 	self assert: box effectOnPosition valueOfMeasurement equals: 4.
@@ -146,7 +150,7 @@ BoxTest >> testHyperJumpBoxEffectDisplacesAListOfParsecsValuesRepeatedly [
 BoxTest >> testHyperJumpBoxEffectDisplacesFourParsecsForward [
 
 	| box anEffect parsecsList |
-	parsecsList := { ParsecUnit of: 4 }.
+	parsecsList := { (ParsecUnit of: 4) }.
 	anEffect := HyperJumpEffect with: parsecsList.
 	box := Box with: anEffect.
 	self assert: box effectOnPosition valueOfMeasurement equals: 4
@@ -156,7 +160,7 @@ BoxTest >> testHyperJumpBoxEffectDisplacesFourParsecsForward [
 BoxTest >> testHyperJumpBoxEffectDisplacesSixLightYearsForward [
 
 	| box anEffect lightYearList |
-	lightYearList := { LightYearUnit of: 6 }.
+	lightYearList := { (LightYearUnit of: 6) }.
 	anEffect := HyperJumpEffect with: lightYearList.
 	box := Box with: anEffect.
 	self assert: box effectOnPosition valueOfMeasurement equals: 6
