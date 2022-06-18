@@ -187,14 +187,16 @@ OutstandingSpaceshipsGame >> play [
 
 { #category : #playing }
 OutstandingSpaceshipsGame >> playTurn [
-
 	| resultOfTheRoll deckOfSpaceship effectOnDiceThrow |
 	resultOfTheRoll := dice roll.
 	deckOfSpaceship := self cardsAffectingOf: board spaceshipPlaying.
-	effectOnDiceThrow := deckOfSpaceship sum: [ :cardHolder | 
-		                     cardHolder effectOnThrow ].
+	deckOfSpaceship isEmpty
+		ifTrue: [ effectOnDiceThrow := 0 ]
+		ifFalse: [ effectOnDiceThrow := deckOfSpaceship
+				sum: [ :cardHolder | cardHolder effectOnThrow ] ].
 	board moveSpaceship: resultOfTheRoll + effectOnDiceThrow.
-	board thereIsAWinner ifTrue: [ stateOfGame := GameWonState new ]
+	board thereIsAWinner
+		ifTrue: [ stateOfGame := GameWonState new ]
 ]
 
 { #category : #playing }
