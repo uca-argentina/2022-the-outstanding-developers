@@ -6,13 +6,20 @@ Class {
 
 { #category : #'instance creation' }
 NoEffect class >> create [
-	^self new
+
+	^ self new
 ]
 
 { #category : #effects }
 NoEffect >> applyEffectOn: aBoard [
 
-	^ (self effectOnPosition)
+	^ self effectOnPosition
+]
+
+{ #category : #effects }
+NoEffect >> applyEffectTo: aSpaceship on: aBoard [
+
+	^ self applyEffectOn: aBoard
 ]
 
 { #category : #effect }
@@ -21,7 +28,16 @@ NoEffect >> effectOnPosition [
 	^ 0
 ]
 
+{ #category : #effects }
+NoEffect >> reApplyEffectTo: aSpaceship on: aBoard [
+
+	aBoard
+		movePlayingSpaceshipAt: (aBoard positionOf: aSpaceship)
+		by: (self applyEffectTo: aSpaceship on: aBoard)
+]
+
 { #category : #accessing }
 NoEffect >> typeOfEffect [
-	^'normal'
+
+	^ 'No Effect'
 ]

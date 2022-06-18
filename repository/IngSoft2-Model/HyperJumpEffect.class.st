@@ -5,25 +5,24 @@ Class {
 		'parsecsValuesHandler',
 		'sequenceUnits'
 	],
-	#classInstVars : [
-		'numberOfBoxes',
-		'limit'
-	],
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #asserting }
 HyperJumpEffect class >> assertMeasurementValuesAreNotEmpty: measurementValues [
-	measurementValues size > 0 ifFalse: [ Error signal: 'Sequence size must be greater than zero' ]
+
+	measurementValues isEmpty ifTrue: [ 
+		Error signal: 'Sequence size must be greater than zero' ]
 ]
 
 { #category : #'instance creation' }
 HyperJumpEffect class >> create [
+
 	| randomValue measurementUnit |
-	randomValue := 2 atRandom. 
+	randomValue := 2 atRandom.
 	measurementUnit := LightYearUnit.
 	randomValue = 1 ifTrue: [ measurementUnit := ParsecUnit ].
-	^self createFrom: measurementUnit
+	^ self createFrom: measurementUnit
 ]
 
 { #category : #'instance creation' }
@@ -37,17 +36,17 @@ HyperJumpEffect class >> createFrom: aMeasurementUnit [
 ]
 
 { #category : #'instance creation' }
-HyperJumpEffect class >> with: measurementValues [ 
+HyperJumpEffect class >> with: measurementValues [
+
 	self assertMeasurementValuesAreNotEmpty: measurementValues.
-	^self new with: measurementValues.
+	^ self new with: measurementValues
 ]
 
 { #category : #effects }
 HyperJumpEffect >> applyEffectOn: aBoard [
 
-	| aNumberOfBoxes |
-	aNumberOfBoxes := ((self effectOnPosition / aBoard boardUnitLength) * aBoard amountOfBoxes) floor.
-	^ aNumberOfBoxes
+	^ (self effectOnPosition / aBoard boardUnitLength
+	   * aBoard amountOfBoxes) floor
 ]
 
 { #category : #assertion }
@@ -57,7 +56,7 @@ HyperJumpEffect >> assertSequenceSizeIsValid: aParsecSequenceSize [
 		Error signal: 'Parsec sequence size must be greater than zero' ]
 ]
 
-{ #category : #effect }
+{ #category : #effects }
 HyperJumpEffect >> effectOnPosition [
 
 	^ sequenceUnits at: parsecsValuesHandler nextValue
@@ -79,7 +78,8 @@ HyperJumpEffect >> randomlyOf: aSequenceSize and: aMeasurementUnit [
 
 { #category : #accessing }
 HyperJumpEffect >> typeOfEffect [
-	^'hyperjump'
+
+	^ 'HyperJump'
 ]
 
 { #category : #initialization }

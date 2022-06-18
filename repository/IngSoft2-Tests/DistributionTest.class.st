@@ -16,8 +16,8 @@ DistributionTest >> should: block raise: expectedErrorClass withMessage: expecte
 
 { #category : #tests }
 DistributionTest >> testDistributionCannotBeCreatedIfTheProbabilityIsGreaterThanOne [
-	
-self
+
+	self
 		should: [ Distribution withProbabilityOf: 2 for: NoEffect ]
 		raise: Error
 		withMessage: 'Probabilities must be between zero and one'
@@ -25,8 +25,8 @@ self
 
 { #category : #tests }
 DistributionTest >> testDistributionCannotBeCreatedIfTheProbabilityIsNegative [
-	
-self
+
+	self
 		should: [ Distribution withProbabilityOf: -10 for: NoEffect ]
 		raise: Error
 		withMessage: 'Probabilities must be between zero and one'

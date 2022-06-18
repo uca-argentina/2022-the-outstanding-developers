@@ -25,13 +25,15 @@ MoonWalkEffect class >> create [
 
 { #category : #'instance creation' }
 MoonWalkEffect class >> displacing: aNumberOfBoxes [
+
 	self assertValidDisplacement: aNumberOfBoxes.
 	^ self new displacing: aNumberOfBoxes
 ]
 
 { #category : #'class initialization' }
-MoonWalkEffect class >> for: aNumberOfBoxes [ 
-	 numberOfBoxes := aNumberOfBoxes 
+MoonWalkEffect class >> for: aNumberOfBoxes [
+
+	numberOfBoxes := aNumberOfBoxes
 ]
 
 { #category : #effects }
@@ -44,7 +46,7 @@ MoonWalkEffect >> applyEffectOn: aBoard [
 { #category : #initialization }
 MoonWalkEffect >> displacing: aNumberOfBoxes [
 
-	displacement := (-1 * aNumberOfBoxes)
+	displacement := -1 * aNumberOfBoxes
 ]
 
 { #category : #effects }
@@ -53,7 +55,14 @@ MoonWalkEffect >> effectOnPosition [
 	^ displacement
 ]
 
+{ #category : #effects }
+MoonWalkEffect >> reApplyEffectTo: aSpaceship on: aBoard [
+
+	aBoard moveAllExcept: aSpaceship by: self effectOnPosition
+]
+
 { #category : #accessing }
 MoonWalkEffect >> typeOfEffect [
-	^'moonwalk'
+
+	^ 'MoonWalk'
 ]

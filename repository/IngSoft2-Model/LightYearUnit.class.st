@@ -22,13 +22,15 @@ LightYearUnit class >> of: aLightYearsAmount [
 ]
 
 { #category : #operations }
-LightYearUnit >> / aUnit [ 
-	^ lightYearsAmount / aUnit inLightYears 
+LightYearUnit >> / aUnit [
+
+	^ lightYearsAmount / aUnit inLightYears
 ]
 
 { #category : #comparing }
-LightYearUnit >> > aUnit [ 
-	^ lightYearsAmount > aUnit inLightYears 
+LightYearUnit >> > aUnit [
+
+	^ lightYearsAmount > aUnit inLightYears
 ]
 
 { #category : #accessing }

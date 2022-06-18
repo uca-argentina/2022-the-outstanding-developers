@@ -15,21 +15,105 @@ OutstandingSpaceshipsGameTest >> should: block raise: expectedErrorClass withMes
 ]
 
 { #category : #tests }
+OutstandingSpaceshipsGameTest >> testAGameCanBeSimulatedAndWon [
+
+	| aBoard aCardDistribution anOutstandingGame boxDistributions n |
+	n := 100.
+	aCardDistribution := OrderedCollection new.
+
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1 / 6
+			 for: (SpeedCard behavingAsA: PermanentCard)).
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1 / 6
+			 for: (AccelerationCard behavingAsA: PermanentCard)).
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1 / 6
+			 for: (OverloadCard behavingAsA: PermanentCard)).
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1 / 6
+			 for: (CancellationCard behavingAsA: InstantaneousCard)).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 / 6 for: RedoCard).
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1 / 6
+			 for: (RepeatCard behavingAsA: InstantaneousCard)).
+
+	boxDistributions := OrderedCollection new.
+	boxDistributions add:
+		(Distribution withProbabilityOf: 0.3 for: NoEffect).
+	boxDistributions add:
+		(Distribution withProbabilityOf: 0.2 for: SpeedUpEffect).
+	boxDistributions add:
+		(Distribution withProbabilityOf: 0.2 for: WormHoleEffect).
+	boxDistributions add:
+		(Distribution withProbabilityOf: 0.1 for: (MoonWalkEffect for: n)).
+	boxDistributions add:
+		(Distribution withProbabilityOf: 0.08 for: HyperJumpEffect).
+	boxDistributions add:
+		(Distribution withProbabilityOf: 0.02 for: AtomicBombEffect).
+	boxDistributions add: (Distribution
+			 withProbabilityOf: 0.1
+			 for: (CardAwarderEffect withA: aCardDistribution)).
+
+	aBoard := Board
+		          of: 43
+		          and: (ParsecUnit of: 15)
+		          playedFor: 6
+		          givenBy: boxDistributions.
+
+	aCardDistribution := OrderedCollection new.
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1
+			 for: (OverloadCard behavingAsA: PermanentCard)).
+
+	anOutstandingGame := OutstandingSpaceshipsGame
+		                     playedByMany:
+		                     { 'Zathura'. 'Delorean'. 'Enterprise'.
+		                     'Apollo11'. 'Apollo13' }
+		                     on: aBoard
+		                     throwing: (Die with: 7)
+		                     using: aCardDistribution.
+
+	anOutstandingGame startSimulation.
+
+	self assert: anOutstandingGame thereIsAWinner
+]
+
+{ #category : #tests }
 OutstandingSpaceshipsGameTest >> testANonSimulatedGameCannotBePlayedAfterItFinished [
 
-	| enterprise zathura board aDie game |
-	enterprise := Spaceship called: 'Enterprise'.
-	zathura := Spaceship called: 'Zathura'.
+	| board aDie game aCardDistribution |
 	board := Board
 		         of: 7
 		         and: (ParsecUnit of: 7)
 		         playedFor: 1
-		         byMany: { 
-				         enterprise.
-				         zathura }
 		         with: { (Box with: NoEffect new) }.
 	aDie := LoadedDie withSequence: { 4. 3 }.
-	game := OutstandingSpaceshipsGame playedOn: board throwing: aDie.
+	aCardDistribution := OrderedCollection new.
+
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1 / 6
+			 for: (SpeedCard behavingAsA: PermanentCard)).
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1 / 6
+			 for: (AccelerationCard behavingAsA: PermanentCard)).
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1 / 6
+			 for: (OverloadCard behavingAsA: PermanentCard)).
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1 / 6
+			 for: (CancellationCard behavingAsA: InstantaneousCard)).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 / 6 for: RedoCard).
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1 / 6
+			 for: (RepeatCard behavingAsA: InstantaneousCard)).
+	game := OutstandingSpaceshipsGame
+		        playedByMany: { 'Enterprise'. 'Zathura' }
+		        on: board
+		        throwing: aDie
+		        using: aCardDistribution.
 
 	game play.
 	game play.
@@ -44,178 +128,309 @@ OutstandingSpaceshipsGameTest >> testANonSimulatedGameCannotBePlayedAfterItFinis
 { #category : #tests }
 OutstandingSpaceshipsGameTest >> testARoundOfANonSimulatedGameChangesSpaceshipsPosition [
 
-	| enterprise zathura board aDie game |
-	enterprise := Spaceship called: 'Enterprise'.
-	zathura := Spaceship called: 'Zathura'.
+	| board aDie aCardDistribution anOutstandingGame |
 	board := Board
 		         of: 15
 		         and: (ParsecUnit of: 15)
 		         playedFor: 1
-		         byMany: { 
-				         enterprise.
-				         zathura }
 		         with: { (Box with: NoEffect new) }.
+	aCardDistribution := OrderedCollection new.
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1
+			 for: (OverloadCard behavingAsA: PermanentCard)).
 	aDie := LoadedDie withSequence: { 4. 3 }.
-	game := OutstandingSpaceshipsGame playedOn: board throwing: aDie.
 
-	game play.
-	game play.
+	anOutstandingGame := OutstandingSpaceshipsGame
+		                     playedByMany: { 'Enterprise'. 'Zathura' }
+		                     on: board
+		                     throwing: aDie
+		                     using: aCardDistribution.
 
-	self assert: (board positionOf: enterprise name) equals: 4.
-	self assert: (board positionOf: zathura name) equals: 3
+	anOutstandingGame play.
+	anOutstandingGame play.
+
+	self assert: (board boxPositionOf: 'Enterprise') equals: 4.
+	self assert: (board boxPositionOf: 'Zathura') equals: 3
 ]
 
 { #category : #tests }
 OutstandingSpaceshipsGameTest >> testGameCanBeWonAndRankingCanBeShown [
 
-	| zathura enterprise aBoard aDie game delorean |
-	zathura := Spaceship called: 'Zathura'.
-	enterprise := Spaceship called: 'Enterprise'.
-	delorean := Spaceship called: 'Delorean'.
+	| aBoard aDie anOutstandingGame aCardDistribution |
 	aBoard := Board
 		          of: 15
 		          and: (ParsecUnit of: 15)
 		          playedFor: 3
-		          byMany: { 
-				          zathura.
-				          enterprise.
-				          delorean }
 		          with: { (Box with: NoEffect new) }.
 	aDie := LoadedDie withSequence: { 5. 1. 2 }.
-	game := OutstandingSpaceshipsGame playedOn: aBoard throwing: aDie.
+	aCardDistribution := OrderedCollection new.
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1
+			 for: (OverloadCard behavingAsA: PermanentCard)).
 
-	game startSimulation.
+	anOutstandingGame := OutstandingSpaceshipsGame
+		                     playedByMany:
+		                     { 'Enterprise'. 'Zathura'. 'Delorean' }
+		                     on: aBoard
+		                     throwing: aDie
+		                     using: aCardDistribution.
 
-	self assert: (aBoard rankingPositionOf: 'Enterprise') equals: 3.
-	self assert: (aBoard rankingPositionOf: 'Zathura') equals: 1.
+	anOutstandingGame startSimulation.
+
+	self assert: (aBoard rankingPositionOf: 'Enterprise') equals: 1.
+	self assert: (aBoard rankingPositionOf: 'Zathura') equals: 3.
 	self assert: (aBoard rankingPositionOf: 'Delorean') equals: 2
+]
+
+{ #category : #tests }
+OutstandingSpaceshipsGameTest >> testGameCannotBeCreatedWithRepeatedSpaceships [
+
+	| distributions aBoard aDie aCardDistribution |
+	distributions := OrderedCollection new.
+	distributions add: (Distribution withProbabilityOf: 1 for: NoEffect).
+	aBoard := Board
+		          of: 15
+		          and: (ParsecUnit of: 10)
+		          playedFor: 1
+		          givenBy: distributions.
+	aDie := Die with: 6.
+	aCardDistribution := OrderedCollection new.
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1
+			 for: (OverloadCard behavingAsA: PermanentCard)).
+
+	self
+		should: [ 
+			OutstandingSpaceshipsGame
+				playedByMany: { 'Enterprise'. 'Enterprise' }
+				on: aBoard
+				throwing: aDie
+				using: aCardDistribution ]
+		raise: Error
+		withMessage: 'Spaceships must be assigned to different players'
+]
+
+{ #category : #tests }
+OutstandingSpaceshipsGameTest >> testGameCannotBeCreatedWithoutSpaceships [
+
+	| distributions aBoard aDie aCardDistribution |
+	distributions := OrderedCollection new.
+	distributions add: (Distribution withProbabilityOf: 1 for: NoEffect).
+	aBoard := Board
+		          of: 15
+		          and: (ParsecUnit of: 10)
+		          playedFor: 1
+		          givenBy: distributions.
+	aDie := Die with: 6.
+	aCardDistribution := OrderedCollection new.
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1
+			 for: (OverloadCard behavingAsA: PermanentCard)).
+
+	self
+		should: [ 
+			OutstandingSpaceshipsGame
+				playedByMany: {  }
+				on: aBoard
+				throwing: aDie
+				using: aCardDistribution ]
+		raise: Error
+		withMessage: 'Must use at least one spaceship'
+]
+
+{ #category : #tests }
+OutstandingSpaceshipsGameTest >> testGameGivesTwoRandomCardsToEachSpaceshipAtTheBegining [
+
+	| aBoard aLoadedDie anOustandingGame aCardDistribution |
+	aBoard := Board
+		          of: 15
+		          and: (ParsecUnit of: 15)
+		          playedFor: 2
+		          with: { (Box with: NoEffect new) }.
+	aLoadedDie := LoadedDie with: 4.
+
+	aCardDistribution := OrderedCollection new.
+
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1 / 6
+			 for: (SpeedCard behavingAsA: PermanentCard)).
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1 / 6
+			 for: (AccelerationCard behavingAsA: PermanentCard)).
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1 / 6
+			 for: (OverloadCard behavingAsA: PermanentCard)).
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1 / 6
+			 for: (CancellationCard behavingAsA: InstantaneousCard)).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 / 6 for: RedoCard).
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1 / 6
+			 for: (RepeatCard behavingAsA: InstantaneousCard)).
+
+	anOustandingGame := OutstandingSpaceshipsGame
+		                    playedByMany: { 'Delorean'. 'Enterprise' }
+		                    on: aBoard
+		                    throwing: aLoadedDie
+		                    using: aCardDistribution.
+
+
+	self assert: (anOustandingGame deckOf: 'Delorean') size equals: 2.
+	self assert: (anOustandingGame deckOf: 'Enterprise') size equals: 2
 ]
 
 { #category : #tests }
 OutstandingSpaceshipsGameTest >> testGameWithABoardOfFifteenBoxesALoadedDieAndASpaceshipEndsWithFinalPositionOfSixteen [
 
-	| enterprise aBoard aDie game |
-	enterprise := Spaceship called: 'Enterprise'.
+	| aBoard aDie anOutstandingGame aCardDistribution |
 	aBoard := Board
 		          of: 15
 		          and: (ParsecUnit of: 15)
 		          playedFor: 1
-		          by: enterprise
 		          with: { (Box with: NoEffect new) }.
 	aDie := LoadedDie with: 5.
-	game := OutstandingSpaceshipsGame playedOn: aBoard throwing: aDie.
 
-	game startSimulation.
+	aCardDistribution := OrderedCollection new.
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1
+			 for: (OverloadCard behavingAsA: PermanentCard)).
 
-	self assert: (aBoard positionOf: 'Enterprise') equals: 16
+	anOutstandingGame := OutstandingSpaceshipsGame
+		                     playedBy: 'Enterprise'
+		                     on: aBoard
+		                     throwing: aDie
+		                     using: aCardDistribution.
+
+	anOutstandingGame startSimulation.
+
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 16
 ]
 
 { #category : #tests }
 OutstandingSpaceshipsGameTest >> testGameWithAFiniteBoardASequenceLoadedDieAndThreeShipsIsWonAfterThreeLapsAndPlayersHaveSpecificPositions [
 
-	| zathura enterprise aBoard aDie game delorean |
-	zathura := Spaceship called: 'Zathura'.
-	enterprise := Spaceship called: 'Enterprise'.
-	delorean := Spaceship called: 'Delorean'.
+	| aBoard aDie aCardDistribution anOutstandingGame |
 	aBoard := Board
 		          of: 10
 		          and: (ParsecUnit of: 10)
 		          playedFor: 3
-		          byMany: { 
-				          zathura.
-				          enterprise.
-				          delorean }
 		          with: { (Box with: NoEffect new) }.
 	aDie := LoadedDie withSequence: { 1. 4. 3 }.
-	game := OutstandingSpaceshipsGame playedOn: aBoard throwing: aDie.
 
-	game startSimulation.
+	aCardDistribution := OrderedCollection new.
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1
+			 for: (OverloadCard behavingAsA: PermanentCard)).
 
-	self assert: (aBoard positionOf: 'Zathura') equals: 9.
-	self assert: (aBoard positionOf: 'Enterprise') equals: 11.
-	self assert: (aBoard positionOf: 'Delorean') equals: 1
+	anOutstandingGame := OutstandingSpaceshipsGame
+		                     playedByMany:
+		                     { 'Zathura'. 'Enterprise'. 'Delorean' }
+		                     on: aBoard
+		                     throwing: aDie
+		                     using: aCardDistribution.
+
+	anOutstandingGame startSimulation.
+
+	self assert: (aBoard boxPositionOf: 'Zathura') equals: 9.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 11.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 1
 ]
 
 { #category : #tests }
 OutstandingSpaceshipsGameTest >> testGameWithAFiniteBoardASequenceLoadedDieAndThreeShipsIsWonAndPlayersHaveSpecificPositions [
 
-	| enterprise delorean aBoard aDie game zathura |
-	enterprise := Spaceship called: 'Enterprise'.
-	delorean := Spaceship called: 'Delorean'.
-	zathura := Spaceship called: 'Zathura'.
+	| aBoard aDie aCardDistribution anOutstandingGame |
 	aBoard := Board
 		          of: 10
 		          and: (ParsecUnit of: 10)
 		          playedFor: 1
-		          byMany: { 
-				          enterprise.
-				          delorean.
-				          zathura }
 		          with: { (Box with: NoEffect new) }.
 	aDie := LoadedDie withSequence: { 1. 4. 3 }.
-	game := OutstandingSpaceshipsGame playedOn: aBoard throwing: aDie.
 
-	game startSimulation.
+	aCardDistribution := OrderedCollection new.
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1
+			 for: (OverloadCard behavingAsA: PermanentCard)).
 
-	self assert: (aBoard positionOf: 'Enterprise') equals: 3.
-	self assert: (aBoard positionOf: 'Delorean') equals: 11.
-	self assert: (aBoard positionOf: 'Zathura') equals: 6
+	anOutstandingGame := OutstandingSpaceshipsGame
+		                     playedByMany:
+		                     { 'Enterprise'. 'Delorean'. 'Zathura' }
+		                     on: aBoard
+		                     throwing: aDie
+		                     using: aCardDistribution.
+
+	anOutstandingGame startSimulation.
+
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 3.
+	self assert: (aBoard boxPositionOf: 'Delorean') equals: 11.
+	self assert: (aBoard boxPositionOf: 'Zathura') equals: 6
 ]
 
 { #category : #tests }
 OutstandingSpaceshipsGameTest >> testGameWithASpaceshipABoardWithFiveBoxesAndALoadedDieWithFourDoesNotEndAfterOneRoll [
 
-	| aBoard aDice enterprise game resultOfTheRoll |
-	enterprise := Spaceship called: 'Enterprise'.
+	| aBoard aDie aCardDistribution anOutstandingGame |
 	aBoard := Board
 		          of: 5
 		          and: (ParsecUnit of: 5)
 		          playedFor: 1
-		          by: enterprise
 		          with: { (Box with: NoEffect new) }.
-	aDice := LoadedDie with: 4.
+	aDie := LoadedDie with: 4.
 
-	game := OutstandingSpaceshipsGame playedOn: aBoard throwing: aDice.
-	resultOfTheRoll := aDice roll.
-	aBoard moveSpaceship: resultOfTheRoll.
+	aCardDistribution := OrderedCollection new.
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1
+			 for: (OverloadCard behavingAsA: PermanentCard)).
 
-	self deny: game thereIsAWinner
+	anOutstandingGame := OutstandingSpaceshipsGame
+		                     playedBy: 'Enterprise'
+		                     on: aBoard
+		                     throwing: aDie
+		                     using: aCardDistribution.
+	anOutstandingGame play.
+
+	self deny: anOutstandingGame thereIsAWinner
 ]
 
 { #category : #tests }
 OutstandingSpaceshipsGameTest >> testGameWithASpaceshipAndABoardEndsWhenItCompletesThreeLaps [
 
-	| enterprise aBoard aDie game |
-	enterprise := Spaceship called: 'Enterprise'.
+	| aBoard aDie aCardDistribution anOutstandingGame |
 	aBoard := Board
 		          of: 15
 		          and: (ParsecUnit of: 15)
 		          playedFor: 3
-		          by: enterprise
 		          with: { (Box with: NoEffect new) }.
 	aDie := LoadedDie with: 5.
-	game := OutstandingSpaceshipsGame playedOn: aBoard throwing: aDie.
 
-	game startSimulation.
+	aCardDistribution := OrderedCollection new.
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1
+			 for: (OverloadCard behavingAsA: PermanentCard)).
 
-	self assert: (aBoard positionOf: 'Enterprise') equals: 16.
+	anOutstandingGame := OutstandingSpaceshipsGame
+		                     playedBy: 'Enterprise'
+		                     on: aBoard
+		                     throwing: aDie
+		                     using: aCardDistribution.
+
+	anOutstandingGame startSimulation.
+
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 16.
 	self assert: (aBoard lapOf: 'Enterprise') equals: 3
 ]
 
 { #category : #tests }
 OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndADiceCupEnds [
 
-	| delorean enterprise aBoard aDie game anotherDie otherDie aDiceCup |
-	delorean := Spaceship called: 'Delorean'.
-	enterprise := Spaceship called: 'Enterprise'.
+	| aBoard aDie anotherDie otherDie aDiceCup aCardDistribution anOutstandingGame |
 	aBoard := Board
 		          of: 50
 		          and: (ParsecUnit of: 50)
 		          playedFor: 3
-		          byMany: { 
-				          delorean.
-				          enterprise }
 		          with: { (Box with: NoEffect new) }.
+
 	aDie := Die with: 4.
 	anotherDie := Die with: 5.
 	otherDie := Die with: 6.
@@ -223,102 +438,126 @@ OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndADiceCupEn
 			            aDie.
 			            anotherDie.
 			            otherDie }.
-	game := OutstandingSpaceshipsGame playedOn: aBoard throwing: aDiceCup.
 
-	game startSimulation.
+	aCardDistribution := OrderedCollection new.
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1
+			 for: (OverloadCard behavingAsA: PermanentCard)).
 
-	self assert: game thereIsAWinner
+	anOutstandingGame := OutstandingSpaceshipsGame
+		                     playedByMany: { 'Delorean'. 'Enterprise' }
+		                     on: aBoard
+		                     throwing: aDiceCup
+		                     using: aCardDistribution.
+
+	anOutstandingGame startSimulation.
+
+	self assert: anOutstandingGame thereIsAWinner
 ]
 
 { #category : #tests }
 OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndADieEnds [
 
-	| zathura delorean aBoard aDie game |
-	zathura := Spaceship called: 'Zathura'.
-	delorean := Spaceship called: 'Delorean'.
+	| aBoard aDie aCardDistribution anOutstandingGame |
 	aBoard := Board
 		          of: 15
 		          and: (ParsecUnit of: 15)
 		          playedFor: 2
-		          byMany: { 
-				          zathura.
-				          delorean }
 		          with: { (Box with: NoEffect new) }.
 	aDie := Die with: 4.
-	game := OutstandingSpaceshipsGame playedOn: aBoard throwing: aDie.
+	aCardDistribution := OrderedCollection new.
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1
+			 for: (OverloadCard behavingAsA: PermanentCard)).
 
-	game startSimulation.
+	anOutstandingGame := OutstandingSpaceshipsGame
+		                     playedByMany: { 'Zathura'. 'Delorean' }
+		                     on: aBoard
+		                     throwing: aDie
+		                     using: aCardDistribution.
 
-	self assert: game thereIsAWinner
+	anOutstandingGame startSimulation.
+
+	self assert: anOutstandingGame thereIsAWinner
 ]
 
 { #category : #tests }
 OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndALoadedDieEnds [
 
-	| enterprise zathura aBoard aLoadedDie game |
-	enterprise := Spaceship called: 'Enterprise'.
-	zathura := Spaceship called: 'Zathura'.
+	| aBoard aLoadedDie aCardDistribution anOutstandingGame |
 	aBoard := Board
 		          of: 5
 		          and: (ParsecUnit of: 5)
 		          playedFor: 1
-		          byMany: { 
-				          enterprise.
-				          zathura }
 		          with: { (Box with: NoEffect new) }.
 	aLoadedDie := LoadedDie with: 3.
-	game := OutstandingSpaceshipsGame
-		        playedOn: aBoard
-		        throwing: aLoadedDie.
+	aCardDistribution := OrderedCollection new.
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1
+			 for: (OverloadCard behavingAsA: PermanentCard)).
 
-	game play.
-	game play.
-	game play.
+	anOutstandingGame := OutstandingSpaceshipsGame
+		                     playedByMany: { 'Enterprise'. 'Zathura' }
+		                     on: aBoard
+		                     throwing: aLoadedDie
+		                     using: aCardDistribution.
 
-	self assert: game thereIsAWinner
+	anOutstandingGame play.
+	anOutstandingGame play.
+	anOutstandingGame play.
+
+	self assert: anOutstandingGame thereIsAWinner
 ]
 
 { #category : #tests }
 OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndASequencedLoadedDieHasTheSecondPlayerAsTheWinner [
 
-	| aSpaceship anotherSpaceship aBoard aDie game |
-	aSpaceship := Spaceship called: 'Enterprise'.
-	anotherSpaceship := Spaceship called: 'Zathura'.
+	| aBoard aLoadedDie aCardDistribution anOutstandingGame |
 	aBoard := Board
 		          of: 15
 		          and: (ParsecUnit of: 15)
 		          playedFor: 2
-		          byMany: { 
-				          aSpaceship.
-				          anotherSpaceship }
 		          with: { (Box with: NoEffect new) }.
-	aDie := LoadedDie withSequence: { 1. 3 }.
-	game := OutstandingSpaceshipsGame playedOn: aBoard throwing: aDie.
+	aLoadedDie := LoadedDie withSequence: { 1. 3 }.
+	aCardDistribution := OrderedCollection new.
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1
+			 for: (OverloadCard behavingAsA: PermanentCard)).
 
-	game startSimulation.
+	anOutstandingGame := OutstandingSpaceshipsGame
+		                     playedByMany: { 'Enterprise'. 'Zathura' }
+		                     on: aBoard
+		                     throwing: aLoadedDie
+		                     using: aCardDistribution.
 
-	self assert: game winner equals: 'Zathura'
+	anOutstandingGame startSimulation.
+
+	self assert: anOutstandingGame winner equals: 'Zathura'
 ]
 
 { #category : #tests }
 OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndLoadedDieHasBothSpaceshipsPositionChangeUntilItEnds [
 
-	| zathura enterprise aBoard aDie game |
-	zathura := Spaceship called: 'Zathura'.
-	enterprise := Spaceship called: 'Enterprise'.
+	| aBoard aLoadedDie aCardDistribution anOutstandingGame |
 	aBoard := Board
 		          of: 15
 		          and: (ParsecUnit of: 15)
 		          playedFor: 1
-		          byMany: { 
-				          zathura.
-				          enterprise }
 		          with: { (Box with: NoEffect new) }.
-	aDie := LoadedDie with: 4.
-	game := OutstandingSpaceshipsGame playedOn: aBoard throwing: aDie.
+	aLoadedDie := LoadedDie with: 4.
+	aCardDistribution := OrderedCollection new.
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1
+			 for: (OverloadCard behavingAsA: PermanentCard)).
 
-	game startSimulation.
+	anOutstandingGame := OutstandingSpaceshipsGame
+		                     playedByMany: { 'Zathura'. 'Enterprise' }
+		                     on: aBoard
+		                     throwing: aLoadedDie
+		                     using: aCardDistribution.
 
-	self assert: (aBoard positionOf: 'Zathura') equals: 16.
-	self assert: (aBoard positionOf: 'Enterprise') equals: 12
+	anOutstandingGame startSimulation.
+
+	self assert: (aBoard boxPositionOf: 'Zathura') equals: 16.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 12
 ]

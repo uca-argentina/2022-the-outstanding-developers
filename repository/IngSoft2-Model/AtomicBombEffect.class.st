@@ -6,17 +6,25 @@ Class {
 
 { #category : #'instance creation' }
 AtomicBombEffect class >> create [
-	^self new
+
+	^ self new
 ]
 
 { #category : #effects }
 AtomicBombEffect >> applyEffectOn: aBoard [
 
 	aBoard moveAllBackToBeginning.
-	^'Do not move'
+	^ 'Do not move'
+]
+
+{ #category : #effects }
+AtomicBombEffect >> reApplyEffectTo: aSpaceship on: aBoard [
+
+	aBoard moveAllBackToBeginning
 ]
 
 { #category : #accessing }
 AtomicBombEffect >> typeOfEffect [
-	^'atomicbomb'
+
+	^ 'Atomic Bomb'
 ]

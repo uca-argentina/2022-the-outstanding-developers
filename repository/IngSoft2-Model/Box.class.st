@@ -16,7 +16,13 @@ Box class >> with: anEffect [
 { #category : #effects }
 Box >> applyEffectOn: aBoard [
 
-	^ (effect applyEffectOn: aBoard)
+	^ effect applyEffectOn: aBoard
+]
+
+{ #category : #accessing }
+Box >> effect [
+
+	^ effect
 ]
 
 { #category : #effects }

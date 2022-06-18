@@ -15,16 +15,22 @@ SequenceHandler class >> for: aSequenceSize [
 	^ self new initializeFor: aSequenceSize
 ]
 
+{ #category : #asserting }
+SequenceHandler >> assertCurrentIndexIs: anIndex [
+
+	^ anIndex = currentSequenceIndex
+]
+
 { #category : #assertion }
 SequenceHandler >> assertSequenceIndexIs: anIndex [
 
-	^ anIndex = sequenceValueInUse
+	^ anIndex = sequenceValueInUse   
 ]
 
 { #category : #accessing }
 SequenceHandler >> currentIndex [
 
-	^ sequenceValueInUse
+	^ currentSequenceIndex
 ]
 
 { #category : #initialization }
@@ -35,10 +41,16 @@ SequenceHandler >> initializeFor: aSequenceSize [
 	sequenceValueInUse := 1
 ]
 
-{ #category : #turns }
+{ #category : #sequence }
 SequenceHandler >> nextValue [
 
 	sequenceValueInUse := currentSequenceIndex.
 	currentSequenceIndex := (currentSequenceIndex rem: sequenceSize) + 1.
+	^ sequenceValueInUse
+]
+
+{ #category : #accessing }
+SequenceHandler >> sequenceValueInUse [
+
 	^ sequenceValueInUse
 ]

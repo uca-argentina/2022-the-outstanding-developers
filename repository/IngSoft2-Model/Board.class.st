@@ -6,7 +6,9 @@ Class {
 		'turnHandler',
 		'positions',
 		'laps',
-		'boardUnitLength'
+		'boardUnitLength',
+		'game',
+		'lastBox'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -25,59 +27,11 @@ Board class >> assertValidNumberOfLaps: laps [
 		Error signal: 'Number of laps should be greater than zero' ]
 ]
 
-{ #category : #assertion }
-Board class >> assertValidNumberOfSpaceshipsIsGreaterThanZero: spaceships [
-
-	spaceships isEmpty ifTrue: [ 
-		Error signal: 'Must use at least one spaceship' ]
-]
-
-{ #category : #assertion }
-Board class >> assertValidSpaceships: spaceships [
-
-	self assertValidNumberOfSpaceshipsIsGreaterThanZero: spaceships.
-	self assertValidSpaceshipsAsigneesAreNotRepeated: spaceships
-]
-
-{ #category : #assertion }
-Board class >> assertValidSpaceshipsAsigneesAreNotRepeated: spaceships [
-
-	| uniqueSpaceships |
-	uniqueSpaceships := spaceships asOrderedCollection
-		                       removeDuplicates asArray.
-
-	(spaceships size = uniqueSpaceships size) ifFalse: [ 
-		Error signal: 'Spaceships must be assigned to different players' ]
-]
-
 { #category : #'instance creation' }
-Board class >> of: aNumberOfBoxes and: length playedFor: someLaps by: aSpaceship givenBy: aDistribution [
-
-	^ self
-		  of: aNumberOfBoxes
-		  and: length
-		  playedFor: someLaps
-		  byMany: { aSpaceship }
-		  givenBy: aDistribution
-]
-
-{ #category : #'instance creation' }
-Board class >> of: aNumberOfBoxes and: length playedFor: someLaps by: aSpaceship with: aBoxSequence [
-
-	^ self
-		  of: aNumberOfBoxes
-		  and: length
-		  playedFor: someLaps
-		  byMany: { aSpaceship }
-		  with: aBoxSequence
-]
-
-{ #category : #'instance creation' }
-Board class >> of: aNumberOfBoxes and: length playedFor: someLaps byMany: spaceships givenBy: aDistribution [
+Board class >> of: aNumberOfBoxes and: length playedFor: someLaps givenBy: aDistribution [
 
 	| randomBoxGenerator boxSequnce |
 	self assertValidNumberOfBoxes: aNumberOfBoxes.
-	self assertValidSpaceships: spaceships.
 	self assertValidNumberOfLaps: someLaps.
 	randomBoxGenerator := RandomEventGenerator
 		                      with: aNumberOfBoxes
@@ -88,27 +42,25 @@ Board class >> of: aNumberOfBoxes and: length playedFor: someLaps byMany: spaces
 		  of: aNumberOfBoxes
 		  and: length
 		  playedFor: someLaps
-		  byMany: spaceships
 		  with: boxSequnce
 ]
 
 { #category : #'instance creation' }
-Board class >> of: aNumberOfBoxes and: length playedFor: someLaps byMany: spaceships with: aBoxSequence [
+Board class >> of: aNumberOfBoxes and: aLength playedFor: someLaps with: aBoxSequence [
 
 	self assertValidNumberOfBoxes: aNumberOfBoxes.
-	self assertValidSpaceships: spaceships.
 	self assertValidNumberOfLaps: someLaps.
 	^ self new
 		  of: aNumberOfBoxes
-		  and: length
+		  and: aLength
 		  playedFor: someLaps
-		  byMany: spaceships
 		  with: aBoxSequence
 ]
 
 { #category : #properties }
 Board >> amountOfAtomicBombBoxes [
-	^ self amountOfBoxes: 'atomicbomb'
+
+	^ self amountOfBoxes: 'Atomic Bomb'
 ]
 
 { #category : #properties }
@@ -120,36 +72,44 @@ Board >> amountOfBoxes [
 { #category : #properties }
 Board >> amountOfBoxes: aType [
 
-	^(boxes select:[:box | box effectType = aType]) size.
+	^ (boxes select: [ :box | box effectType = aType ]) size
 ]
 
 { #category : #properties }
 Board >> amountOfHyperJumpBoxes [
-	^ self amountOfBoxes: 'hyperjump'
+
+	^ self amountOfBoxes: 'HyperJump'
 ]
 
 { #category : #properties }
 Board >> amountOfMoonWalkBoxes [
 
-	^ self amountOfBoxes: 'moonwalk'
+	^ self amountOfBoxes: 'MoonWalk'
 ]
 
 { #category : #properties }
 Board >> amountOfNoEffectBoxes [
 
-	^ self amountOfBoxes: 'normal'
+	^ self amountOfBoxes: 'No Effect'
 ]
 
 { #category : #properties }
 Board >> amountOfSpeedUpBoxes [
 
-	^ self amountOfBoxes: 'speedup'
+	^ self amountOfBoxes: 'Speedup'
 ]
 
 { #category : #properties }
 Board >> amountOfWormHoleBoxes [
 
-	^ self amountOfBoxes: 'wormhole'
+	^ self amountOfBoxes: 'WormHole'
+]
+
+{ #category : #asserting }
+Board >> assertACardCanBeThrown [
+
+	self thereIsAWinner ifTrue: [ 
+		Error signal: 'Cards can only be thrown if game has not finished' ]
 ]
 
 { #category : #asserting }
@@ -159,8 +119,24 @@ Board >> assertThisIsPlayersTurn: index [
 		Error signal: 'This is not the players turn' ]
 ]
 
+{ #category : #playing }
+Board >> assign: aCard to: aSpaceship [
+
+	game addHolding:
+		(SpaceshipCardHolder
+			 of: aSpaceship
+			 holding: aCard)
+]
+
+{ #category : #playing }
+Board >> assignToCurrentSpaceship: aCard [
+
+	self assign: aCard to: self lastSpacechipToHavePlayed
+]
+
 { #category : #accessing }
 Board >> boardUnitLength [
+
 	^ boardUnitLength
 ]
 
@@ -177,54 +153,96 @@ Board >> boxParsecLength [
 ]
 
 { #category : #accessing }
-Board >> lapOf: aSpaceship [
+Board >> boxPositionOf: aSpaceship [
 
-	| spaceshipLap |
-	spaceshipLap := (positions select: [ :position | 
-		                 position spaceship = aSpaceship ]) at: 1.
-	^ spaceshipLap lap
+	^ (self positionOf: aSpaceship) position
 ]
 
-{ #category : #playing }
+{ #category : #validation }
+Board >> isSpaceshipsTurn: aSpaceship [
+
+	^ turnHandler assertCurrentIndexIs:
+		  (self positionInPositionsOf: aSpaceship)
+]
+
+{ #category : #accessing }
+Board >> lapOf: aSpaceship [
+
+	^ (self positionOf: aSpaceship) lap
+]
+
+{ #category : #accessing }
+Board >> lastBox [
+
+	^ lastBox
+]
+
+{ #category : #accessing }
+Board >> lastSpacechipToHavePlayed [
+
+	^ (positions at: turnHandler sequenceValueInUse) spaceship
+]
+
+{ #category : #movement }
 Board >> move: aSpaceship by: aNumberOfBoxes [
 
-	| newPositionWithoutEffect positionAmongPositions currentBox movementAfterEffect currentBoardPosition currentLap newPositionAfterEffect|
+	| newPositionWithoutEffect positionAmongPositions currentBox movementAfterEffect currentBoardPosition currentLap newPositionAfterEffect |
 	positionAmongPositions := self positionInPositionsOf: aSpaceship.
 	self assertThisIsPlayersTurn: positionAmongPositions.
 	
-	currentBoardPosition := (positions at: positionAmongPositions) position.
+	currentBoardPosition := (positions at: positionAmongPositions)
+		                        position.
 	currentLap := (positions at: positionAmongPositions) lap.
-	
-	newPositionWithoutEffect := (self move: aSpaceship in: currentBoardPosition and: currentLap by: aNumberOfBoxes).
-	
-	newPositionWithoutEffect position > boxes size ifTrue: [ positions replaceFrom: positionAmongPositions to: positionAmongPositions with: { newPositionWithoutEffect }.
-		^self ].
+	newPositionWithoutEffect := self
+		                            move: aSpaceship
+		                            in: currentBoardPosition
+		                            and: currentLap
+		                            by: aNumberOfBoxes.
+
+	newPositionWithoutEffect position > boxes size ifTrue: [ 
+		positions
+			replaceFrom: positionAmongPositions
+			to: positionAmongPositions
+			with: { newPositionWithoutEffect }.
+		^ self ].
 	currentBox := boxes at: newPositionWithoutEffect position.
+	lastBox := currentBox.
 	movementAfterEffect := currentBox applyEffectOn: self.
-	movementAfterEffect = 'Do not move' 
-	ifFalse: [newPositionAfterEffect := (self move: aSpaceship in: (newPositionWithoutEffect position) and: (newPositionWithoutEffect lap) by: movementAfterEffect)]
-	ifTrue: [ ^self ].
-	positions replaceFrom: positionAmongPositions to: positionAmongPositions with: { newPositionAfterEffect }.
+	movementAfterEffect = 'Do not move'
+		ifFalse: [ 
+			newPositionAfterEffect := self
+				                          move: aSpaceship
+				                          in: newPositionWithoutEffect position
+				                          and: newPositionWithoutEffect lap
+				                          by: movementAfterEffect ]
+		ifTrue: [ ^ self ].
+	positions
+		replaceFrom: positionAmongPositions
+		to: positionAmongPositions
+		with: { newPositionAfterEffect }
 ]
 
-{ #category : #playing }
+{ #category : #movement }
 Board >> move: aSpaceship in: aPosition and: aLap by: aNumberOfBoxes [
 
 	| positionToMove newPosition |
 	positionToMove := self
-		                 nextPositionStartingAt: aPosition
-		                 in: aLap
-		                 afterMoving: aNumberOfBoxes.
+		                  nextPositionStartingAt: aPosition
+		                  in: aLap
+		                  afterMoving: aNumberOfBoxes.
 	newPosition := positionToMove = -1
 		               ifFalse: [ 
-			               SpacechipPosition
-				               following: aSpaceship
-				               at:
-				               (BoardPosition
-					                at: positionToMove
-					                in: aLap) ]
+			               positionToMove = 0
+				               ifFalse: [ 
+					               SpaceshipPosition
+						               following: aSpaceship
+						               at: (BoardPosition at: positionToMove in: aLap) ]
+				               ifTrue: [ 
+					               SpaceshipPosition
+						               following: aSpaceship
+						               at: (BoardPosition at: 1 in: aLap) ] ]
 		               ifTrue: [ 
-			               SpacechipPosition
+			               SpaceshipPosition
 				               following: aSpaceship
 				               at: (BoardPosition at: 1 in: aLap + 1) ].
 	^ newPosition
@@ -242,12 +260,17 @@ Board >> moveAllBackToBeginning [
 ]
 
 { #category : #movement }
+Board >> moveAllExcept: aSpaceship by: anAmount [
+
+	positions do: [ :position | 
+		position spaceship = aSpaceship ifFalse: [ 
+			self movePlayingSpaceshipAt: position by: anAmount ] ]
+]
+
+{ #category : #movement }
 Board >> moveAllExceptCurrentBy: anAmount [
 
-	positions size - 1 timesRepeat: [ 
-		| currentPosition |
-		currentPosition := positions at: turnHandler nextValue.
-		self movePlayingSpaceshipAt: currentPosition by: anAmount ]
+	self moveAllExcept: turnHandler sequenceValueInUse by: anAmount
 ]
 
 { #category : #movement }
@@ -275,7 +298,7 @@ Board >> moveSpaceship: aNumberOfBoxes [
 	self move: spaceshipPlaying by: aNumberOfBoxes
 ]
 
-{ #category : #assertions }
+{ #category : #asserting }
 Board >> nextPositionStartingAt: position in: lap afterMoving: aNumberOfBoxes [
 
 	| positionToMove winningPosition |
@@ -294,7 +317,7 @@ Board >> nextPositionStartingAt: position in: lap afterMoving: aNumberOfBoxes [
 ]
 
 { #category : #initialization }
-Board >> of: aNumberOfBoxes and: length playedFor: someLaps byMany: spaceships with: aBoxSequence [
+Board >> of: aNumberOfBoxes and: aLength playedFor: someLaps with: aBoxSequence [
 
 	| sequenceHandler |
 	boxes := OrderedCollection new.
@@ -302,25 +325,31 @@ Board >> of: aNumberOfBoxes and: length playedFor: someLaps byMany: spaceships w
 	aNumberOfBoxes timesRepeat: [ 
 		boxes add: (aBoxSequence at: sequenceHandler nextValue) ].
 	laps := someLaps.
+	boardUnitLength := aLength.
+	lastBox := NoEffect create
+]
+
+{ #category : #properties }
+Board >> playingWith: spaceships in: aGame [
+
+	game := aGame.
 	positions := spaceships collect: [ :spaceship | 
-		             SpacechipPosition following: spaceship name ].
-	turnHandler := SequenceHandler for: spaceships size.
-	boardUnitLength := length.
+		             SpaceshipPosition following: spaceship ].
+	turnHandler := SequenceHandler for: spaceships size
 ]
 
 { #category : #playing }
 Board >> positionInPositionsOf: aSpaceship [
 
 	| currentPosition |
-	currentPosition := (positions select: [ :position | 
-		                    position spaceship = aSpaceship ]) at: 1.
+	currentPosition := self positionOf: aSpaceship.
 	^ positions indexOf: currentPosition
 ]
 
 { #category : #accessing }
 Board >> positionOf: aSpaceship [
 
-   ^ (positions detect: [ :position | position spaceship = aSpaceship ]) position
+	^ positions detect: [ :position | position spaceship = aSpaceship ]
 ]
 
 { #category : #accessing }
@@ -339,12 +368,18 @@ Board >> rankingPositionOf: aSpaceshipName [
 	^ index
 ]
 
+{ #category : #accessing }
+Board >> spaceshipPlaying [
+
+	^ (positions at: turnHandler currentIndex) spaceship
+]
+
 { #category : #properties }
 Board >> thereIsAWinner [
 
 	^ positions anySatisfy: [ :boardPosition | 
-		  boardPosition position > self amountOfBoxes
-		  & (boardPosition lap = laps) ]
+		  (boardPosition position > self amountOfBoxes
+		  and: [boardPosition lap = laps]) or: [boardPosition lap > laps]]
 ]
 
 { #category : #properties }

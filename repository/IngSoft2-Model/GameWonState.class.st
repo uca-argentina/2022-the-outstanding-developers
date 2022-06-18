@@ -6,8 +6,8 @@ Class {
 
 { #category : #accessing }
 GameWonState >> isFinished [
-	
-	^true
+
+	^ true
 ]
 
 { #category : #playing }

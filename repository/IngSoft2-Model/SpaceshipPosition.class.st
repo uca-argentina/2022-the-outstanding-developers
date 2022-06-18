@@ -1,5 +1,5 @@
 Class {
-	#name : #SpacechipPosition,
+	#name : #SpaceshipPosition,
 	#superclass : #Object,
 	#instVars : [
 		'spaceship',
@@ -9,7 +9,7 @@ Class {
 }
 
 { #category : #'instance creation' }
-SpacechipPosition class >> following: aSpaceship [
+SpaceshipPosition class >> following: aSpaceship [
 
 	| boardPosition |
 	boardPosition := BoardPosition at: 0 in: 1.
@@ -17,43 +17,44 @@ SpacechipPosition class >> following: aSpaceship [
 ]
 
 { #category : #'instance creation' }
-SpacechipPosition class >> following: aSpaceship at: aBoardPosition [
+SpaceshipPosition class >> following: aSpaceship at: aBoardPosition [
 
 	^ self new initializeFollowing: aSpaceship at: aBoardPosition
 ]
 
 { #category : #comparing }
-SpacechipPosition >> > aSpaceshipPosition [
+SpaceshipPosition >> > aSpaceshipPosition [
 
 	^ boardPosition > aSpaceshipPosition boardPosition
 ]
 
 { #category : #accessing }
-SpacechipPosition >> boardPosition [
+SpaceshipPosition >> boardPosition [
+
 	^ boardPosition
 ]
 
 { #category : #initialization }
-SpacechipPosition >> initializeFollowing: aSpaceship at: aBoardPosition [
+SpaceshipPosition >> initializeFollowing: aSpaceship at: aBoardPosition [
 
 	spaceship := aSpaceship.
 	boardPosition := aBoardPosition
 ]
 
 { #category : #accessing }
-SpacechipPosition >> lap [
+SpaceshipPosition >> lap [
 
 	^ boardPosition lap
 ]
 
 { #category : #accessing }
-SpacechipPosition >> position [
+SpaceshipPosition >> position [
 
 	^ boardPosition position
 ]
 
 { #category : #accessing }
-SpacechipPosition >> spaceship [
+SpaceshipPosition >> spaceship [
 
 	^ spaceship
 ]

@@ -9,8 +9,8 @@ Class {
 
 { #category : #'instance creation' }
 DiceCup class >> withAll: dice [
- 
-	^self new initializeWithAll: dice
+
+	^ self new initializeWithAll: dice
 ]
 
 { #category : #initialization }
@@ -22,5 +22,5 @@ DiceCup >> initializeWithAll: aDice [
 { #category : #rolling }
 DiceCup >> roll [
 
-	^dice sum:[:die | die roll]
+	^ dice sum: [ :die | die roll ]
 ]
