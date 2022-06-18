@@ -378,8 +378,8 @@ Board >> spaceshipPlaying [
 Board >> thereIsAWinner [
 
 	^ positions anySatisfy: [ :boardPosition | 
-		  boardPosition position > self amountOfBoxes
-		  & (boardPosition lap = laps) ]
+		  (boardPosition position > self amountOfBoxes
+		  and: [boardPosition lap = laps]) or: [boardPosition lap > laps]]
 ]
 
 { #category : #properties }

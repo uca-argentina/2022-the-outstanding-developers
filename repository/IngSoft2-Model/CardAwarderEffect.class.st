@@ -4,23 +4,33 @@ Class {
 	#instVars : [
 		'cardGenerator'
 	],
+	#classInstVars : [
+		'randomCardGenerator'
+	],
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'instance creation' }
 CardAwarderEffect class >> create [
 
-	^ self new
+	^ self new initializeWith: randomCardGenerator
 ]
 
 { #category : #'instance creation' }
 CardAwarderEffect class >> with: aDistribution [
 
-	| randomBoxGenerator |
-	randomBoxGenerator := RandomEventGenerator
+	randomCardGenerator := RandomEventGenerator
 		                      with: 1
 		                      using: aDistribution.
-	^ self new initializeWith: randomBoxGenerator
+	^ self new initializeWith: randomCardGenerator
+]
+
+{ #category : #'instance creation' }
+CardAwarderEffect class >> withA: distribution [
+
+	randomCardGenerator := RandomEventGenerator
+		                      with: 1
+		                      using: distribution
 ]
 
 { #category : #effects }

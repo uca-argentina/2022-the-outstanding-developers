@@ -15,6 +15,71 @@ OutstandingSpaceshipsGameTest >> should: block raise: expectedErrorClass withMes
 ]
 
 { #category : #tests }
+OutstandingSpaceshipsGameTest >> testAGameCanBeSimulatedAndWon [
+
+	| aBoard aCardDistribution anOutstandingGame boxDistributions n |
+	
+	n := 100.
+	aCardDistribution := OrderedCollection new.
+
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1 / 6
+			 for: (SpeedCard behavingAsA: PermanentCard)).
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1 / 6
+			 for: (AccelerationCard behavingAsA: PermanentCard)).
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1 / 6
+			 for: (OverloadCard behavingAsA: PermanentCard)).
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1 / 6
+			 for: (CancellationCard behavingAsA: InstantaneousCard)).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 / 6 for: RedoCard).
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1 / 6
+			 for: (RepeatCard behavingAsA: InstantaneousCard)).
+	
+	boxDistributions := OrderedCollection new.
+	boxDistributions add:
+		(Distribution withProbabilityOf: 0.3 for: NoEffect).
+	boxDistributions add:
+		(Distribution withProbabilityOf: 0.2 for: SpeedUpEffect).
+	boxDistributions add:
+		(Distribution withProbabilityOf: 0.2 for: WormHoleEffect).
+	boxDistributions add:
+		(Distribution withProbabilityOf: 0.1 for: (MoonWalkEffect for: n)).
+	boxDistributions add:
+		(Distribution withProbabilityOf: 0.08 for: HyperJumpEffect).
+	boxDistributions add:
+		(Distribution withProbabilityOf: 0.02 for: AtomicBombEffect).
+	boxDistributions add:
+		(Distribution withProbabilityOf: 0.1 for: (CardAwarderEffect withA: aCardDistribution )).
+
+	aBoard := Board
+		          of: 43
+		          and: (ParsecUnit of: 15)
+		          playedFor: 6
+		          givenBy: boxDistributions.
+		
+	aCardDistribution := OrderedCollection new.
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1
+			 for: (OverloadCard behavingAsA: PermanentCard)).
+	
+	anOutstandingGame := OutstandingSpaceshipsGame
+		                     playedByMany:
+		                     { 'Zathura'. 'Delorean'. 'Enterprise'. 'Apollo11'. 'Apollo13'}
+		                     on: aBoard
+		                     throwing: (Die with: 7)
+		                     using: aCardDistribution.
+
+	anOutstandingGame startSimulation.
+
+	self assert: anOutstandingGame thereIsAWinner
+]
+
+{ #category : #tests }
 OutstandingSpaceshipsGameTest >> testANonSimulatedGameCannotBePlayedAfterItFinished [
 
 	| board aDie game aCardDistribution |
@@ -43,7 +108,11 @@ OutstandingSpaceshipsGameTest >> testANonSimulatedGameCannotBePlayedAfterItFinis
 	aCardDistribution add: (Distribution
 			 withProbabilityOf: 1 / 6
 			 for: (RepeatCard behavingAsA: InstantaneousCard)).
-	game := OutstandingSpaceshipsGame playedByMany: {'Enterprise'. 'Zathura'} on: board throwing: aDie using: aCardDistribution.
+	game := OutstandingSpaceshipsGame
+		        playedByMany: { 'Enterprise'. 'Zathura' }
+		        on: board
+		        throwing: aDie
+		        using: aCardDistribution.
 
 	game play.
 	game play.
