@@ -70,8 +70,10 @@ OverloadCard >> assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs: anAssert
 ]
 
 { #category : #assertion }
-OverloadCard >> assertItIsThrowableInTurn: anAssertion in: anOutstandingSpaceshipsGame [ 
-	self assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs: anAssertion.
+OverloadCard >> assertItIsThrowableInTurn: anAssertion in: anOutstandingSpaceshipsGame [
+
+	self assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs:
+		anAssertion
 ]
 
 { #category : #accessing }
