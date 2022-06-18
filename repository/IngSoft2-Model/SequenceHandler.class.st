@@ -41,7 +41,7 @@ SequenceHandler >> initializeFor: aSequenceSize [
 	sequenceValueInUse := 1
 ]
 
-{ #category : #turns }
+{ #category : #sequence }
 SequenceHandler >> nextValue [
 
 	sequenceValueInUse := currentSequenceIndex.

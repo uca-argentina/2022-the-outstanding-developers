@@ -88,9 +88,9 @@ CancellationCard >> cardBehaviour [
 ]
 
 { #category : #playing }
-CancellationCard >> incorporateTo: anOutstandingSpaceshipsGame the: element [
+CancellationCard >> incorporateTo: anOutstandingSpaceshipsGame the: cardElement [
 
-	element target cancelIn: anOutstandingSpaceshipsGame
+	cardElement target cancelIn: anOutstandingSpaceshipsGame
 ]
 
 { #category : #initialization }

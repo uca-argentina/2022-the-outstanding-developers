@@ -8,7 +8,7 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #accessing }
+{ #category : #'instance creation' }
 BoardPosition class >> at: aPosition in: aLap [
 
 	| validatedPosition validatedLap |

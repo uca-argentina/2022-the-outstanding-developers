@@ -49,7 +49,7 @@ RedoCard class >> incorporateTo: anOutstandingSpaceshipsGame [
 { #category : #playing }
 RedoCard class >> playOnceIn: anOutstandingSpaceshipsGame [
 
-	lastPlayedCard incorporateTo: anOutstandingSpaceshipsGame the: self
+	self addTo: anOutstandingSpaceshipsGame 
 ]
 
 { #category : #accessing }

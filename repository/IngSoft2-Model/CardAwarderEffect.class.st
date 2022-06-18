@@ -2,7 +2,6 @@ Class {
 	#name : #CardAwarderEffect,
 	#superclass : #Object,
 	#instVars : [
-		'deck',
 		'cardGenerator'
 	],
 	#category : #'IngSoft2-Model'
@@ -38,13 +37,13 @@ CardAwarderEffect >> applyEffectTo: aSpaceship on: aBoard [
 	^ self effectOnPosition
 ]
 
-{ #category : #effect }
+{ #category : #effects }
 CardAwarderEffect >> dealCard [
 
 	^ cardGenerator generate at: 1
 ]
 
-{ #category : #effect }
+{ #category : #effects }
 CardAwarderEffect >> dealCardIn: aBoard [
 
 	| card |
@@ -52,7 +51,7 @@ CardAwarderEffect >> dealCardIn: aBoard [
 	aBoard assignToCurrentSpaceship: card
 ]
 
-{ #category : #effect }
+{ #category : #effects }
 CardAwarderEffect >> dealCardTo: aSpaceship in: aBoard [
 
 	aBoard assign: self dealCard to: aSpaceship

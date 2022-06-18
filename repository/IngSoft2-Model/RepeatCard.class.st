@@ -17,7 +17,7 @@ RepeatCard class >> behavingAsA: typeOfCard [
 	cardType := typeOfCard 
 ]
 
-{ #category : #initialization }
+{ #category : #'instance creation' }
 RepeatCard class >> create [
 
 	^ self new initializeAs: cardType new
@@ -43,7 +43,7 @@ RepeatCard class >> thrownAt: aSpaceship [
 	spaceship := aSpaceship
 ]
 
-{ #category : #accessing }
+{ #category : #comparing }
 RepeatCard >> = aCard [
 
 	^ self class = aCard

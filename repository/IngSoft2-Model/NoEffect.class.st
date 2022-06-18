@@ -39,5 +39,5 @@ NoEffect >> reApplyEffectTo: aSpaceship on: aBoard [
 { #category : #accessing }
 NoEffect >> typeOfEffect [
 
-	^ 'Normal'
+	^ 'No Effect'
 ]

@@ -2,7 +2,7 @@ Class {
 	#name : #RandomEventGenerator,
 	#superclass : #Object,
 	#instVars : [
-		'randomBoxes'
+		'randomEvents'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -22,12 +22,12 @@ RandomEventGenerator class >> with: aNumberOfBoxes using: aDistribution [
 	^ self new initializeWith: aNumberOfBoxes using: aDistribution
 ]
 
-{ #category : #initialization }
-RandomEventGenerator >> createFor: aNumberOfBoxes using: orderedDistribution [
+{ #category : #generation }
+RandomEventGenerator >> createFor: aSequenceSize using: orderedDistribution [
 
 	| random |
 	random := Random new.
-	aNumberOfBoxes timesRepeat: [ 
+	aSequenceSize timesRepeat: [ 
 		| randomNumber index coveredProbabilities |
 		coveredProbabilities := 0.
 		index := 1.
@@ -42,19 +42,19 @@ RandomEventGenerator >> createFor: aNumberOfBoxes using: orderedDistribution [
 				                        (orderedDistribution at: index)
 					                        probability.
 				index := index + 1 ].
-		randomBoxes add:
+		randomEvents add:
 			(orderedDistribution at: index) classAssociated create ]
 ]
 
 { #category : #accessing }
 RandomEventGenerator >> generate [
 
-	^ randomBoxes
+	^ randomEvents
 ]
 
 { #category : #initialization }
 RandomEventGenerator >> initializeWith: aNumberOfBoxes using: aDistribution [
 
-	randomBoxes := OrderedCollection new.
+	randomEvents := OrderedCollection new.
 	self createFor: aNumberOfBoxes using: aDistribution
 ]

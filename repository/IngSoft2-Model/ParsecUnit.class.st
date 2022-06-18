@@ -8,9 +8,10 @@ Class {
 }
 
 { #category : #assertion }
-ParsecUnit class >> assertValid: anAmountOfParsecs [ 
-	
-	anAmountOfParsecs >= 0 ifFalse: [ Error signal: 'Units cannot be negative' ]
+ParsecUnit class >> assertValid: anAmountOfParsecs [
+
+	anAmountOfParsecs >= 0 ifFalse: [ 
+		Error signal: 'Units cannot be negative' ]
 ]
 
 { #category : #'instance creation' }

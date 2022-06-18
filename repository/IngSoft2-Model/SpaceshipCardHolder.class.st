@@ -3,7 +3,6 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'spaceship',
-		'cardDeck',
 		'card'
 	],
 	#category : #'IngSoft2-Model'

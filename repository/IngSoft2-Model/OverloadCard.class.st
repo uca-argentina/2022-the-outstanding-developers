@@ -18,7 +18,7 @@ OverloadCard class >> addTo: anOutstandingSpaceshipsGame [
 		(SpaceshipCardHolder of: spaceship holding: self create)
 ]
 
-{ #category : #'class ini' }
+{ #category : #'class initialization' }
 OverloadCard class >> behavingAsA: aTypeOfCard [
 
 	typeOfCard := aTypeOfCard
@@ -57,7 +57,7 @@ OverloadCard class >> thrownAt: aSpaceship asA: cardType [
 	typeOfCard := cardType
 ]
 
-{ #category : #initialization }
+{ #category : #comparing }
 OverloadCard >> = aCard [
 
 	^ self class = aCard
@@ -69,7 +69,7 @@ OverloadCard >> assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs: anAssert
 	typeOfCard canBeThrownWithCurrentTurn: anAssertion
 ]
 
-{ #category : #assertion }
+{ #category : #asserting }
 OverloadCard >> assertItIsThrowableInTurn: anAssertion in: anOutstandingSpaceshipsGame [
 
 	self assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs:
@@ -104,13 +104,13 @@ OverloadCard >> initializeAs: aTypeOfCard [
 	typeOfCard := aTypeOfCard
 ]
 
-{ #category : #initialization }
+{ #category : #accessing }
 OverloadCard >> name [
 
 	^ 'Overload'
 ]
 
-{ #category : #effect }
+{ #category : #accessing }
 OverloadCard >> typeOfCard [
 
 	^ typeOfCard name

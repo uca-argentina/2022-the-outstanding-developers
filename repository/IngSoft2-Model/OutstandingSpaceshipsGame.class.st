@@ -131,7 +131,7 @@ OutstandingSpaceshipsGame >> cardsAffectingOf: aSpaceship [
 		  spaceshipCardDeck spaceship = aSpaceship ]
 ]
 
-{ #category : #accessing }
+{ #category : #properties }
 OutstandingSpaceshipsGame >> countActivePermanentCards [
 
 	^ spaceshipsAffectingCardDeck count: [ :spaceshipAffectingCardDeck | 

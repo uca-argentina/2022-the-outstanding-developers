@@ -7,7 +7,6 @@ Class {
 		'positions',
 		'laps',
 		'boardUnitLength',
-		'spaceshipsCardDeck',
 		'game',
 		'lastBox'
 	],
@@ -91,7 +90,7 @@ Board >> amountOfMoonWalkBoxes [
 { #category : #properties }
 Board >> amountOfNoEffectBoxes [
 
-	^ self amountOfBoxes: 'Normal'
+	^ self amountOfBoxes: 'No Effect'
 ]
 
 { #category : #properties }
@@ -132,10 +131,7 @@ Board >> assign: aCard to: aSpaceship [
 { #category : #playing }
 Board >> assignToCurrentSpaceship: aCard [
 
-	game addHolding:
-		(SpaceshipCardHolder
-			 of: self lastSpacechipToHavePlayed
-			 holding: aCard)
+	self assign: aCard to: self lastSpacechipToHavePlayed
 ]
 
 { #category : #accessing }
@@ -187,7 +183,7 @@ Board >> lastSpacechipToHavePlayed [
 	^ (positions at: turnHandler sequenceValueInUse) spaceship
 ]
 
-{ #category : #playing }
+{ #category : #movement }
 Board >> move: aSpaceship by: aNumberOfBoxes [
 
 	| newPositionWithoutEffect positionAmongPositions currentBox movementAfterEffect currentBoardPosition currentLap newPositionAfterEffect |
@@ -226,7 +222,7 @@ Board >> move: aSpaceship by: aNumberOfBoxes [
 		with: { newPositionAfterEffect }
 ]
 
-{ #category : #playing }
+{ #category : #movement }
 Board >> move: aSpaceship in: aPosition and: aLap by: aNumberOfBoxes [
 
 	| positionToMove newPosition |
@@ -274,10 +270,7 @@ Board >> moveAllExcept: aSpaceship by: anAmount [
 { #category : #movement }
 Board >> moveAllExceptCurrentBy: anAmount [
 
-	positions size - 1 timesRepeat: [ 
-		| currentPosition |
-		currentPosition := positions at: turnHandler nextValue.
-		self movePlayingSpaceshipAt: currentPosition by: anAmount ]
+	self moveAllExcept: turnHandler sequenceValueInUse by: anAmount
 ]
 
 { #category : #movement }
@@ -305,7 +298,7 @@ Board >> moveSpaceship: aNumberOfBoxes [
 	self move: spaceshipPlaying by: aNumberOfBoxes
 ]
 
-{ #category : #assertions }
+{ #category : #asserting }
 Board >> nextPositionStartingAt: position in: lap afterMoving: aNumberOfBoxes [
 
 	| positionToMove winningPosition |

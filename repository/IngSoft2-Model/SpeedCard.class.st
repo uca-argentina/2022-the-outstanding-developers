@@ -30,7 +30,7 @@ SpeedCard class >> cancelIn: anOutstandingSpaceshipsGame [
 	anOutstandingSpaceshipsGame cancel: 'Speed' affecting: spaceship
 ]
 
-{ #category : #initialization }
+{ #category : #'instance creation' }
 SpeedCard class >> create [
 
 	^ self new initializeAs: cardType new
@@ -44,13 +44,13 @@ SpeedCard class >> incorporateTo: anOutstandingSpaceshipsGame [
 	aTypeOfCard incorporate: self To: anOutstandingSpaceshipsGame
 ]
 
-{ #category : #accessing }
+{ #category : #'card throwing' }
 SpeedCard class >> thrownAt: aSpaceship [
 
 	spaceship := aSpaceship
 ]
 
-{ #category : #accessing }
+{ #category : #'card throwing' }
 SpeedCard class >> thrownAt: aSpaceship asA: typeOfCard [
 
 	spaceship := aSpaceship.
@@ -69,14 +69,14 @@ SpeedCard >> assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs: anAssertion
 	typeOfCard canBeThrownWithCurrentTurn: anAssertion
 ]
 
-{ #category : #assertions }
+{ #category : #asserting }
 SpeedCard >> assertItIsThrowableInTurn: anAssertion in: anOutstandingSpaceshipsGame [
 
 	self assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs:
 		anAssertion
 ]
 
-{ #category : #accesing }
+{ #category : #accessing }
 SpeedCard >> cardBehaviour [
 
 	^ typeOfCard

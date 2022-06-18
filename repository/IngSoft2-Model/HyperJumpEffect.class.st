@@ -5,17 +5,13 @@ Class {
 		'parsecsValuesHandler',
 		'sequenceUnits'
 	],
-	#classInstVars : [
-		'numberOfBoxes',
-		'limit'
-	],
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #asserting }
 HyperJumpEffect class >> assertMeasurementValuesAreNotEmpty: measurementValues [
 
-	measurementValues size > 0 ifFalse: [ 
+	measurementValues isEmpty ifTrue: [ 
 		Error signal: 'Sequence size must be greater than zero' ]
 ]
 
@@ -49,10 +45,8 @@ HyperJumpEffect class >> with: measurementValues [
 { #category : #effects }
 HyperJumpEffect >> applyEffectOn: aBoard [
 
-	| aNumberOfBoxes |
-	aNumberOfBoxes := (self effectOnPosition / aBoard boardUnitLength
-	                   * aBoard amountOfBoxes) floor.
-	^ aNumberOfBoxes
+	^ (self effectOnPosition / aBoard boardUnitLength
+	   * aBoard amountOfBoxes) floor
 ]
 
 { #category : #assertion }
@@ -62,7 +56,7 @@ HyperJumpEffect >> assertSequenceSizeIsValid: aParsecSequenceSize [
 		Error signal: 'Parsec sequence size must be greater than zero' ]
 ]
 
-{ #category : #effect }
+{ #category : #effects }
 HyperJumpEffect >> effectOnPosition [
 
 	^ sequenceUnits at: parsecsValuesHandler nextValue

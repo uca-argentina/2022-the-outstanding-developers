@@ -40,7 +40,7 @@ AccelerationCard class >> incorporateTo: anOutstandingSpaceshipsGame [
 	aTypeOfCard incorporate: self To: anOutstandingSpaceshipsGame.
 ]
 
-{ #category : #initialization }
+{ #category : #comparing }
 AccelerationCard >> = aCard [
 
 	^ self class = aCard
@@ -52,7 +52,7 @@ AccelerationCard >> assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs: anAs
 	typeOfCard canBeThrownWithCurrentTurn: anAssertion
 ]
 
-{ #category : #assertions }
+{ #category : #asserting }
 AccelerationCard >> assertItIsThrowableInTurn: anAssertion in: anOutstandingSpaceshipsGame [
 
 	self assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs:
@@ -72,10 +72,10 @@ AccelerationCard >> effectOnThrow [
 ]
 
 { #category : #playing }
-AccelerationCard >> incorporateTo: anOutstandingSpaceshipsGame the: element [
+AccelerationCard >> incorporateTo: anOutstandingSpaceshipsGame the: cardElement [
 
 	anOutstandingSpaceshipsGame addAffectingAll:
-		element createWithCard card
+		cardElement createWithCard card
 ]
 
 { #category : #initialization }
@@ -84,13 +84,13 @@ AccelerationCard >> initializeAs: aTypeOfCard [
 	typeOfCard := aTypeOfCard
 ]
 
-{ #category : #accesleration }
+{ #category : #accessing }
 AccelerationCard >> name [
 
 	^ 'Acceleration'
 ]
 
-{ #category : #accesing }
+{ #category : #accessing }
 AccelerationCard >> typeOfCard [
 
 	^ typeOfCard name
