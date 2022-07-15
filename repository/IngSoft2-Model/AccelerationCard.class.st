@@ -17,7 +17,8 @@ AccelerationCard class >> addTo: anOutstandingSpaceshipsGame [
 ]
 
 { #category : #playing }
-AccelerationCard class >> cancelIn: anOutstandingSpaceshipsGame [ 
+AccelerationCard class >> cancelIn: anOutstandingSpaceshipsGame [
+
 	anOutstandingSpaceshipsGame cancelAll: self create
 ]
 

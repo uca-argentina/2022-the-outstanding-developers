@@ -112,7 +112,7 @@ OutstandingSpaceshipsGame >> cancel: aCard affecting: aSpaceship [
 			                   and: [ 
 			                   spaceshipAffectingCardDeck card name = aCard name ] ].
 	self assertCardCanBeRemoved: cardToBeRemoved.
-	lastPlayedCard := aCard.
+	lastPlayedCard := CancellationCard create.
 	spaceshipsAffectingCardDeck removeAt: cardToBeRemoved
 ]
 
@@ -202,7 +202,7 @@ OutstandingSpaceshipsGame >> playTurn [
 OutstandingSpaceshipsGame >> repeatEffectOn: aSpaceship [
 
 	board lastBox effect reApplyEffectTo: aSpaceship on: board.
-	lastPlayedCard := (RepeatCard) create
+	lastPlayedCard := RepeatCard create
 ]
 
 { #category : #playing }

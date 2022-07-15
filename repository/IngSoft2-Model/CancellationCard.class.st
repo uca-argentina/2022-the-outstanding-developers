@@ -15,7 +15,7 @@ Class {
 { #category : #'instance creation' }
 CancellationCard class >> create [
 
-	^ self new initializeAs: cardType new
+	^ self new initializeAs: InstantaneousCard new
 ]
 
 { #category : #playing }
