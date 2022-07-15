@@ -16,28 +16,22 @@ AccelerationCard class >> addTo: anOutstandingSpaceshipsGame [
 	anOutstandingSpaceshipsGame addAffectingAll: self create.
 ]
 
-{ #category : #'class initialization' }
-AccelerationCard class >> behavingAsA: typeOfCard [
-	
-	cardType := typeOfCard 
-]
-
 { #category : #playing }
-AccelerationCard class >> cancelIn: anOutstandingSpaceshipsGame [ 
-	anOutstandingSpaceshipsGame cancelAll: 'Acceleration'
+AccelerationCard class >> cancelIn: anOutstandingSpaceshipsGame [
+
+	anOutstandingSpaceshipsGame cancelAll: self create
 ]
 
 { #category : #initialization }
 AccelerationCard class >> create [
 
-	^ self new initializeAs: cardType new
+	^ self new initializeAs: PermanentCard new
 ]
 
 { #category : #playing }
-AccelerationCard class >> incorporateTo: anOutstandingSpaceshipsGame [ 
-	| aTypeOfCard |
-	aTypeOfCard := cardType new.
-	aTypeOfCard incorporate: self To: anOutstandingSpaceshipsGame.
+AccelerationCard class >> incorporateTo: anOutstandingSpaceshipsGame [
+
+	PermanentCard new incorporate: self to: anOutstandingSpaceshipsGame
 ]
 
 { #category : #comparing }
@@ -69,6 +63,12 @@ AccelerationCard >> cardBehaviour [
 AccelerationCard >> effectOnThrow [
 
 	^ 1
+]
+
+{ #category : #playing }
+AccelerationCard >> incorporate: aCard to: anOutstandingSpaceshipsGame [ 
+	
+	self cardBehaviour incorporate: aCard to: anOutstandingSpaceshipsGame 
 ]
 
 { #category : #playing }

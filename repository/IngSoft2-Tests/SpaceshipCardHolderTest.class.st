@@ -17,7 +17,7 @@ SpaceshipCardHolderTest >> testSpaceshipThatStartsWithTwoCardsAndPlaysOneHasOneC
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add: (Distribution
 			 withProbabilityOf: 1
-			 for: (OverloadCard behavingAsA: PermanentCard)).
+			 for: OverloadCard).
 
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedByMany: { 'Enterprise'. 'Delorean' }

@@ -18,43 +18,28 @@ SpeedCard class >> addTo: anOutstandingSpaceshipsGame [
 		(SpaceshipCardHolder of: spaceship holding: self create)
 ]
 
-{ #category : #'class initialization' }
-SpeedCard class >> behavingAsA: typeOfCard [
-
-	cardType := typeOfCard
-]
-
 { #category : #playing }
 SpeedCard class >> cancelIn: anOutstandingSpaceshipsGame [
 
-	anOutstandingSpaceshipsGame cancel: 'Speed' affecting: spaceship
+	anOutstandingSpaceshipsGame cancel: self create affecting: spaceship
 ]
 
 { #category : #'instance creation' }
 SpeedCard class >> create [
 
-	^ self new initializeAs: cardType new
+	^ self new initializeAs: PermanentCard new
 ]
 
 { #category : #playing }
 SpeedCard class >> incorporateTo: anOutstandingSpaceshipsGame [
 
-	| aTypeOfCard |
-	aTypeOfCard := cardType new.
-	aTypeOfCard incorporate: self To: anOutstandingSpaceshipsGame
+	PermanentCard new incorporate: self to: anOutstandingSpaceshipsGame
 ]
 
 { #category : #'card throwing' }
 SpeedCard class >> thrownAt: aSpaceship [
 
 	spaceship := aSpaceship
-]
-
-{ #category : #'card throwing' }
-SpeedCard class >> thrownAt: aSpaceship asA: typeOfCard [
-
-	spaceship := aSpaceship.
-	cardType := typeOfCard
 ]
 
 { #category : #comparing }
@@ -86,6 +71,12 @@ SpeedCard >> cardBehaviour [
 SpeedCard >> effectOnThrow [
 
 	^ 1
+]
+
+{ #category : #playing }
+SpeedCard >> incorporate: aCard to: anOutstandingSpaceshipsGame [ 
+	
+	self cardBehaviour incorporate: aCard to: anOutstandingSpaceshipsGame
 ]
 
 { #category : #playing }

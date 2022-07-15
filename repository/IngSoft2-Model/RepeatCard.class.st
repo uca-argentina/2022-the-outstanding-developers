@@ -11,24 +11,16 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'class initialization' }
-RepeatCard class >> behavingAsA: typeOfCard [
-	
-	cardType := typeOfCard 
-]
-
 { #category : #'instance creation' }
 RepeatCard class >> create [
 
-	^ self new initializeAs: cardType new
+	^ self new initializeAs: InstantaneousCard new
 ]
 
 { #category : #playing }
 RepeatCard class >> incorporateTo: anOutstandingSpaceshipsGame [
 
-	| aTypeOfCard |
-	aTypeOfCard := cardType new.
-	aTypeOfCard incorporate: self To: anOutstandingSpaceshipsGame
+	InstantaneousCard new incorporate: self to: anOutstandingSpaceshipsGame
 ]
 
 { #category : #playing }
@@ -40,7 +32,8 @@ RepeatCard class >> playOnceIn: anOutstandingSpaceshipsGame [
 { #category : #'class initialization' }
 RepeatCard class >> thrownAt: aSpaceship [
 
-	spaceship := aSpaceship
+	spaceship := aSpaceship.
+	cardType := InstantaneousCard 
 ]
 
 { #category : #comparing }
@@ -66,6 +59,12 @@ RepeatCard >> assertItIsThrowableInTurn: anAssertion in: aGame [
 RepeatCard >> cardBehaviour [
 
 	^ typeOfCard
+]
+
+{ #category : #playing }
+RepeatCard >> incorporate: aCard to: anOutstandingSpaceshipsGame [ 
+	
+	self cardBehaviour incorporate: aCard to: anOutstandingSpaceshipsGame 
 ]
 
 { #category : #playing }

@@ -23,21 +23,21 @@ OutstandingSpaceshipsGameTest >> testAGameCanBeSimulatedAndWon [
 
 	aCardDistribution add: (Distribution
 			 withProbabilityOf: 1 / 6
-			 for: (SpeedCard behavingAsA: PermanentCard)).
+			 for: SpeedCard).
 	aCardDistribution add: (Distribution
 			 withProbabilityOf: 1 / 6
-			 for: (AccelerationCard behavingAsA: PermanentCard)).
+			 for: AccelerationCard).
 	aCardDistribution add: (Distribution
 			 withProbabilityOf: 1 / 6
-			 for: (OverloadCard behavingAsA: PermanentCard)).
+			 for: OverloadCard).
 	aCardDistribution add: (Distribution
 			 withProbabilityOf: 1 / 6
-			 for: (CancellationCard behavingAsA: InstantaneousCard)).
+			 for: CancellationCard).
 	aCardDistribution add:
 		(Distribution withProbabilityOf: 1 / 6 for: RedoCard).
 	aCardDistribution add: (Distribution
 			 withProbabilityOf: 1 / 6
-			 for: (RepeatCard behavingAsA: InstantaneousCard)).
+			 for: RepeatCard).
 
 	boxDistributions := OrderedCollection new.
 	boxDistributions add:
@@ -65,7 +65,7 @@ OutstandingSpaceshipsGameTest >> testAGameCanBeSimulatedAndWon [
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add: (Distribution
 			 withProbabilityOf: 1
-			 for: (OverloadCard behavingAsA: PermanentCard)).
+			 for: OverloadCard).
 
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedByMany:
@@ -92,23 +92,18 @@ OutstandingSpaceshipsGameTest >> testANonSimulatedGameCannotBePlayedAfterItFinis
 	aDie := LoadedDie withSequence: { 4. 3 }.
 	aCardDistribution := OrderedCollection new.
 
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1 / 6
-			 for: (SpeedCard behavingAsA: PermanentCard)).
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1 / 6
-			 for: (AccelerationCard behavingAsA: PermanentCard)).
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1 / 6
-			 for: (OverloadCard behavingAsA: PermanentCard)).
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1 / 6
-			 for: (CancellationCard behavingAsA: InstantaneousCard)).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 / 6 for: SpeedCard).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 / 6 for: AccelerationCard).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 / 6 for: OverloadCard).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 / 6 for: CancellationCard).
 	aCardDistribution add:
 		(Distribution withProbabilityOf: 1 / 6 for: RedoCard).
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1 / 6
-			 for: (RepeatCard behavingAsA: InstantaneousCard)).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 / 6 for: RepeatCard).
 	game := OutstandingSpaceshipsGame
 		        playedByMany: { 'Enterprise'. 'Zathura' }
 		        on: board
@@ -137,7 +132,7 @@ OutstandingSpaceshipsGameTest >> testARoundOfANonSimulatedGameChangesSpaceshipsP
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add: (Distribution
 			 withProbabilityOf: 1
-			 for: (OverloadCard behavingAsA: PermanentCard)).
+			 for: OverloadCard).
 	aDie := LoadedDie withSequence: { 4. 3 }.
 
 	anOutstandingGame := OutstandingSpaceshipsGame
@@ -166,7 +161,7 @@ OutstandingSpaceshipsGameTest >> testGameCanBeWonAndRankingCanBeShown [
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add: (Distribution
 			 withProbabilityOf: 1
-			 for: (OverloadCard behavingAsA: PermanentCard)).
+			 for: OverloadCard).
 
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedByMany:
@@ -197,7 +192,7 @@ OutstandingSpaceshipsGameTest >> testGameCannotBeCreatedWithRepeatedSpaceships [
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add: (Distribution
 			 withProbabilityOf: 1
-			 for: (OverloadCard behavingAsA: PermanentCard)).
+			 for: OverloadCard).
 
 	self
 		should: [ 
@@ -225,7 +220,7 @@ OutstandingSpaceshipsGameTest >> testGameCannotBeCreatedWithoutSpaceships [
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add: (Distribution
 			 withProbabilityOf: 1
-			 for: (OverloadCard behavingAsA: PermanentCard)).
+			 for: OverloadCard).
 
 	self
 		should: [ 
@@ -253,21 +248,21 @@ OutstandingSpaceshipsGameTest >> testGameGivesTwoRandomCardsToEachSpaceshipAtThe
 
 	aCardDistribution add: (Distribution
 			 withProbabilityOf: 1 / 6
-			 for: (SpeedCard behavingAsA: PermanentCard)).
+			 for: SpeedCard).
 	aCardDistribution add: (Distribution
 			 withProbabilityOf: 1 / 6
-			 for: (AccelerationCard behavingAsA: PermanentCard)).
+			 for: AccelerationCard).
 	aCardDistribution add: (Distribution
 			 withProbabilityOf: 1 / 6
-			 for: (OverloadCard behavingAsA: PermanentCard)).
+			 for: OverloadCard).
 	aCardDistribution add: (Distribution
 			 withProbabilityOf: 1 / 6
-			 for: (CancellationCard behavingAsA: InstantaneousCard)).
+			 for: CancellationCard).
 	aCardDistribution add:
 		(Distribution withProbabilityOf: 1 / 6 for: RedoCard).
 	aCardDistribution add: (Distribution
 			 withProbabilityOf: 1 / 6
-			 for: (RepeatCard behavingAsA: InstantaneousCard)).
+			 for: RepeatCard).
 
 	anOustandingGame := OutstandingSpaceshipsGame
 		                    playedByMany: { 'Delorean'. 'Enterprise' }
@@ -294,7 +289,7 @@ OutstandingSpaceshipsGameTest >> testGameWithABoardOfFifteenBoxesALoadedDieAndAS
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add: (Distribution
 			 withProbabilityOf: 1
-			 for: (OverloadCard behavingAsA: PermanentCard)).
+			 for: (OverloadCard)).
 
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedBy: 'Enterprise'
@@ -321,7 +316,7 @@ OutstandingSpaceshipsGameTest >> testGameWithAFiniteBoardASequenceLoadedDieAndTh
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add: (Distribution
 			 withProbabilityOf: 1
-			 for: (OverloadCard behavingAsA: PermanentCard)).
+			 for: OverloadCard).
 
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedByMany:
@@ -351,7 +346,7 @@ OutstandingSpaceshipsGameTest >> testGameWithAFiniteBoardASequenceLoadedDieAndTh
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add: (Distribution
 			 withProbabilityOf: 1
-			 for: (OverloadCard behavingAsA: PermanentCard)).
+			 for: OverloadCard).
 
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedByMany:
@@ -381,7 +376,7 @@ OutstandingSpaceshipsGameTest >> testGameWithASpaceshipABoardWithFiveBoxesAndALo
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add: (Distribution
 			 withProbabilityOf: 1
-			 for: (OverloadCard behavingAsA: PermanentCard)).
+			 for: OverloadCard).
 
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedBy: 'Enterprise'
@@ -407,7 +402,7 @@ OutstandingSpaceshipsGameTest >> testGameWithASpaceshipAndABoardEndsWhenItComple
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add: (Distribution
 			 withProbabilityOf: 1
-			 for: (OverloadCard behavingAsA: PermanentCard)).
+			 for: OverloadCard).
 
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedBy: 'Enterprise'
@@ -442,7 +437,7 @@ OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndADiceCupEn
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add: (Distribution
 			 withProbabilityOf: 1
-			 for: (OverloadCard behavingAsA: PermanentCard)).
+			 for: OverloadCard).
 
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedByMany: { 'Delorean'. 'Enterprise' }
@@ -468,7 +463,7 @@ OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndADieEnds [
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add: (Distribution
 			 withProbabilityOf: 1
-			 for: (OverloadCard behavingAsA: PermanentCard)).
+			 for: OverloadCard).
 
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedByMany: { 'Zathura'. 'Delorean' }
@@ -494,7 +489,7 @@ OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndALoadedDie
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add: (Distribution
 			 withProbabilityOf: 1
-			 for: (OverloadCard behavingAsA: PermanentCard)).
+			 for: OverloadCard).
 
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedByMany: { 'Enterprise'. 'Zathura' }
@@ -522,7 +517,7 @@ OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndASequenced
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add: (Distribution
 			 withProbabilityOf: 1
-			 for: (OverloadCard behavingAsA: PermanentCard)).
+			 for: OverloadCard).
 
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedByMany: { 'Enterprise'. 'Zathura' }
@@ -548,7 +543,7 @@ OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndLoadedDieH
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add: (Distribution
 			 withProbabilityOf: 1
-			 for: (OverloadCard behavingAsA: PermanentCard)).
+			 for: OverloadCard).
 
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedByMany: { 'Zathura'. 'Enterprise' }

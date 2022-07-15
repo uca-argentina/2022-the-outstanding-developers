@@ -124,9 +124,8 @@ BoardTest >> testASpaceshipCannotPlayWhenItIsNotItsTurn [
 	aLoadedDie := LoadedDie with: 1.
 	aCardDistribution := OrderedCollection new.
 
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: (SpeedCard behavingAsA: PermanentCard)).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: SpeedCard).
 	aBoard := Board
 		          of: n
 		          and: parsecs
@@ -156,9 +155,8 @@ BoardTest >> testASpaceshipThatLandsOnABoxWithNoEffectDoesntMove [
 	aLoadedDie := LoadedDie with: 3.
 
 	aCardDistribution := OrderedCollection new.
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: (OverloadCard behavingAsA: PermanentCard)).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: OverloadCard).
 
 	aBoard := Board
 		          of: 10
@@ -184,9 +182,8 @@ BoardTest >> testASpaceshipThatLandsOnABoxWithSpeedUpEffectEndsUpFourBoxesAfter 
 	speedUpEffect := SpeedUpEffect new.
 
 	aCardDistribution := OrderedCollection new.
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: (OverloadCard behavingAsA: PermanentCard)).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: OverloadCard).
 
 	box1 := Box with: speedUpEffect.
 	box2 := Box with: noEffect.
@@ -221,9 +218,8 @@ BoardTest >> testASpaceshipsLapPositionVariesToTwoAfterCompletingFirstLap [
 
 	| aBoard aLoadedDie aCardDistribution anOtstandingGame |
 	aCardDistribution := OrderedCollection new.
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: (OverloadCard behavingAsA: PermanentCard)).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: OverloadCard).
 
 	aBoard := Board
 		          of: 10
@@ -248,9 +244,8 @@ BoardTest >> testASpaceshipsPositionVariesInFiveWithAFiniteBoardAfterOneRollOfAL
 
 	| board loadedDie aCardDistribution anOutstandingGame |
 	aCardDistribution := OrderedCollection new.
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: (OverloadCard behavingAsA: PermanentCard)).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: OverloadCard).
 
 	board := Board
 		         of: 10
@@ -390,9 +385,8 @@ BoardTest >> testPlayersInDifferentLapsReturnToTheFirstBoxOfItsLaps [
 		               box5 }.
 
 	aCardDistribution := OrderedCollection new.
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: (OverloadCard behavingAsA: PermanentCard)).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: OverloadCard).
 
 	aBoard := Board
 		          of: 5
@@ -467,9 +461,8 @@ BoardTest >> testSpaceshipLandsOnAtomicBombBoxSetsBackEveryoneToFirstBox [
 		         with: boxSequence.
 
 	aCardDistribution := OrderedCollection new.
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: (OverloadCard behavingAsA: PermanentCard)).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: OverloadCard).
 
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedByMany:
@@ -506,9 +499,8 @@ BoardTest >> testSpaceshipLandsOnMoonWalkBoxSetsBackOtherSpaceshipsExceptItself 
 	box5 := Box with: noEffect.
 
 	aCardDistribution := OrderedCollection new.
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: (OverloadCard behavingAsA: PermanentCard)).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: OverloadCard).
 
 	boxSequence := { 
 		               box1.
@@ -550,9 +542,8 @@ BoardTest >> testSpaceshipLandsOnWormHoleBoxSetsBackItselfFourBoxes [
 	box5 := Box with: anEffect.
 
 	aCardDistribution := OrderedCollection new.
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: (OverloadCard behavingAsA: PermanentCard)).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: OverloadCard).
 
 	boxSequence := { 
 		               box1.
@@ -592,9 +583,8 @@ BoardTest >> testSpaceshipRemainsInTheInitialPositionIfEffectIsApplied [
 	box5 := Box with: noEffect.
 
 	aCardDistribution := OrderedCollection new.
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: (OverloadCard behavingAsA: PermanentCard)).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: OverloadCard).
 
 	boxSequence := { 
 		               box1.
@@ -636,9 +626,8 @@ BoardTest >> testSpaceshipThatLandsOnMoonWalkBoxCantMakeOthersGoToNegativePositi
 	box5 := Box with: noEffect.
 
 	aCardDistribution := OrderedCollection new.
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: (OverloadCard behavingAsA: PermanentCard)).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: OverloadCard).
 
 	boxSequence := { 
 		               box1.
@@ -675,9 +664,8 @@ BoardTest >> testSpaceshipThatLandsOnWormHoleBoxCantGoToNegativePositions [
 	anEffect := WormHoleEffect new.
 
 	aCardDistribution := OrderedCollection new.
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: (OverloadCard behavingAsA: PermanentCard)).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: OverloadCard).
 
 	box1 := Box with: anEffect.
 	box2 := Box with: noEffect.
@@ -717,9 +705,8 @@ BoardTest >> testSpaceshipsOnABordInLightYearsThatLandsOnAHyperJumpBoxInParsecsE
 	aLigthYearUnit := LightYearUnit of: 60.
 
 	aCardDistribution := OrderedCollection new.
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: (OverloadCard behavingAsA: PermanentCard)).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: OverloadCard).
 
 	box1 := Box with: anEffect.
 	box2 := Box with: noEffect.
@@ -767,9 +754,8 @@ BoardTest >> testSpaceshipsOnABordInParsecsThatLandsOnAHyperJumpBoxInLightYearsE
 		         playedFor: 1
 		         with: boxSequence.
 	aCardDistribution := OrderedCollection new.
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: (OverloadCard behavingAsA: PermanentCard)).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: OverloadCard).
 
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedBy: 'Delorean'
@@ -793,9 +779,8 @@ BoardTest >> testSpaceshipsThatLandsOnAHyperJumpBoxEndUpFiveBoxesAfterThenFourBo
 	aParsecUnit := ParsecUnit of: 20.
 
 	aCardDistribution := OrderedCollection new.
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: (OverloadCard behavingAsA: PermanentCard)).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: OverloadCard).
 
 	box1 := Box with: anEffect.
 	box2 := Box with: noEffect.
@@ -850,9 +835,8 @@ BoardTest >> testSpaceshipsThatLandsOnAHyperJumpBoxEndUpFiveBoxesAfterThenFourBo
 	box5 := Box with: noEffect.
 
 	aCardDistribution := OrderedCollection new.
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: (OverloadCard behavingAsA: PermanentCard)).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: OverloadCard).
 
 	boxSequence := { 
 		               box1.
@@ -887,9 +871,8 @@ BoardTest >> testSpaceshipsThatLandsOnAHyperJumpBoxWithLightYearsEndsOnNextBox [
 	aLightYearUnit := LightYearUnit of: 40.
 
 	aCardDistribution := OrderedCollection new.
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: (OverloadCard behavingAsA: PermanentCard)).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: OverloadCard).
 
 	box1 := Box with: anEffect.
 	box2 := Box with: noEffect.
@@ -923,9 +906,8 @@ BoardTest >> testSpeedUpDoesntTriggerAnotherSpeedUp [
 	speedUpBox := SpeedUpEffect new.
 
 	aCardDistribution := OrderedCollection new.
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: (OverloadCard behavingAsA: PermanentCard)).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: OverloadCard).
 
 	box := Box with: speedUpBox.
 
