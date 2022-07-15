@@ -33,7 +33,7 @@ OverloadCard class >> create [
 { #category : #playing }
 OverloadCard class >> incorporateTo: anOutstandingSpaceshipsGame [
 
-	PermanentCard new incorporate: self To: anOutstandingSpaceshipsGame
+	PermanentCard new incorporate: self to: anOutstandingSpaceshipsGame
 ]
 
 { #category : #throwing }
@@ -72,6 +72,12 @@ OverloadCard >> cardBehaviour [
 OverloadCard >> effectOnThrow [
 
 	^ -2
+]
+
+{ #category : #playing }
+OverloadCard >> incorporate: aCard to: anOutstandingSpaceshipsGame [ 
+	
+	self cardBehaviour incorporate: aCard to: anOutstandingSpaceshipsGame
 ]
 
 { #category : #playing }

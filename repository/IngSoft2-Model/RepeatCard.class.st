@@ -20,7 +20,7 @@ RepeatCard class >> create [
 { #category : #playing }
 RepeatCard class >> incorporateTo: anOutstandingSpaceshipsGame [
 
-	InstantaneousCard new incorporate: self To: anOutstandingSpaceshipsGame
+	InstantaneousCard new incorporate: self to: anOutstandingSpaceshipsGame
 ]
 
 { #category : #playing }
@@ -59,6 +59,12 @@ RepeatCard >> assertItIsThrowableInTurn: anAssertion in: aGame [
 RepeatCard >> cardBehaviour [
 
 	^ typeOfCard
+]
+
+{ #category : #playing }
+RepeatCard >> incorporate: aCard to: anOutstandingSpaceshipsGame [ 
+	
+	self cardBehaviour incorporate: aCard to: anOutstandingSpaceshipsGame 
 ]
 
 { #category : #playing }

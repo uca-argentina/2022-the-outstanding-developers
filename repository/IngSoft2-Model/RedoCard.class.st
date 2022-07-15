@@ -41,9 +41,9 @@ RedoCard class >> incorporateTo: anOutstandingSpaceshipsGame [
 
 	lastPlayedCard := anOutstandingSpaceshipsGame lastPlayedCard.
 	self assertACardHasBeenPlayed.
-	lastPlayedCard cardBehaviour
+	lastPlayedCard
 		incorporate: self
-		To: anOutstandingSpaceshipsGame
+		to: anOutstandingSpaceshipsGame
 ]
 
 { #category : #playing }

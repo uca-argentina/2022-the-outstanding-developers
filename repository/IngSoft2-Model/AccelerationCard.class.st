@@ -31,7 +31,7 @@ AccelerationCard class >> create [
 { #category : #playing }
 AccelerationCard class >> incorporateTo: anOutstandingSpaceshipsGame [
 
-	PermanentCard new incorporate: self To: anOutstandingSpaceshipsGame
+	PermanentCard new incorporate: self to: anOutstandingSpaceshipsGame
 ]
 
 { #category : #comparing }
@@ -63,6 +63,12 @@ AccelerationCard >> cardBehaviour [
 AccelerationCard >> effectOnThrow [
 
 	^ 1
+]
+
+{ #category : #playing }
+AccelerationCard >> incorporate: aCard to: anOutstandingSpaceshipsGame [ 
+	
+	self cardBehaviour incorporate: aCard to: anOutstandingSpaceshipsGame 
 ]
 
 { #category : #playing }

@@ -21,7 +21,7 @@ CancellationCard class >> create [
 { #category : #playing }
 CancellationCard class >> incorporateTo: anOutstandingSpaceshipsGame [
 
-	InstantaneousCard new incorporate: self To: anOutstandingSpaceshipsGame
+	InstantaneousCard new incorporate: self to: anOutstandingSpaceshipsGame
 ]
 
 { #category : #playing }
@@ -69,6 +69,12 @@ CancellationCard >> assertThereArePermantCardsIn: aGame [
 CancellationCard >> cardBehaviour [
 
 	^ typeOfCard
+]
+
+{ #category : #playing }
+CancellationCard >> incorporate: aCard to: anOutstandingSpaceshipsGame [ 
+	
+	self cardBehaviour incorporate: aCard to: anOutstandingSpaceshipsGame 
 ]
 
 { #category : #playing }

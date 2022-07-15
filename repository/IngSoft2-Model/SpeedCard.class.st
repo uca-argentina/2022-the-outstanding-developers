@@ -33,7 +33,7 @@ SpeedCard class >> create [
 { #category : #playing }
 SpeedCard class >> incorporateTo: anOutstandingSpaceshipsGame [
 
-	PermanentCard new incorporate: self To: anOutstandingSpaceshipsGame
+	PermanentCard new incorporate: self to: anOutstandingSpaceshipsGame
 ]
 
 { #category : #'card throwing' }
@@ -71,6 +71,12 @@ SpeedCard >> cardBehaviour [
 SpeedCard >> effectOnThrow [
 
 	^ 1
+]
+
+{ #category : #playing }
+SpeedCard >> incorporate: aCard to: anOutstandingSpaceshipsGame [ 
+	
+	self cardBehaviour incorporate: aCard to: anOutstandingSpaceshipsGame
 ]
 
 { #category : #playing }
