@@ -28,9 +28,8 @@ BoxTest >> testCardAwarderBoxEffectDoesNotModifyPosition [
 
 	| aBoard noEffect cardAwarderEffect boxSequence box1 box2 box3 box4 box5 aCardDistribution anOutstandingGame |
 	aCardDistribution := OrderedCollection new.
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: (OverloadCard behavingAsA: PermanentCard)).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: OverloadCard).
 	noEffect := NoEffect new.
 	cardAwarderEffect := CardAwarderEffect with: aCardDistribution.
 
@@ -71,9 +70,8 @@ BoxTest >> testCardAwarderBoxEffectGivesACardToTheSpaceshipThatLandsOnIt [
 
 	| aBoard noEffect cardAwarderEffect boxSequence box1 box2 box3 box4 box5 aCardDistribution anOutstandingGame |
 	aCardDistribution := OrderedCollection new.
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: (OverloadCard behavingAsA: PermanentCard)).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: OverloadCard).
 	noEffect := NoEffect new.
 	cardAwarderEffect := CardAwarderEffect with: aCardDistribution.
 

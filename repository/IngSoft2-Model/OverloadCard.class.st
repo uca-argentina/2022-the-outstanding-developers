@@ -18,43 +18,29 @@ OverloadCard class >> addTo: anOutstandingSpaceshipsGame [
 		(SpaceshipCardHolder of: spaceship holding: self create)
 ]
 
-{ #category : #'class initialization' }
-OverloadCard class >> behavingAsA: aTypeOfCard [
-
-	typeOfCard := aTypeOfCard
-]
-
 { #category : #playing }
 OverloadCard class >> cancelIn: anOutstandingSpaceshipsGame [
 
-	anOutstandingSpaceshipsGame cancel: 'Overload' affecting: spaceship
+	anOutstandingSpaceshipsGame cancel: self create affecting: spaceship
 ]
 
 { #category : #'instance creation' }
 OverloadCard class >> create [
 
-	^ self new initializeAs: typeOfCard new
+	^ self new initializeAs: PermanentCard new
 ]
 
 { #category : #playing }
 OverloadCard class >> incorporateTo: anOutstandingSpaceshipsGame [
 
-	| aTypeOfCard |
-	aTypeOfCard := typeOfCard new.
-	aTypeOfCard incorporate: self To: anOutstandingSpaceshipsGame
+	PermanentCard new incorporate: self To: anOutstandingSpaceshipsGame
 ]
 
 { #category : #throwing }
-OverloadCard class >> thrownAt: aSpaceship [ 
-	
-	spaceship := aSpaceship.
-]
-
-{ #category : #'class initialization' }
-OverloadCard class >> thrownAt: aSpaceship asA: cardType [
+OverloadCard class >> thrownAt: aSpaceship [
 
 	spaceship := aSpaceship.
-	typeOfCard := cardType
+	typeOfCard := PermanentCard
 ]
 
 { #category : #comparing }

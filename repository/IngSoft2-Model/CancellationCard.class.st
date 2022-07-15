@@ -12,12 +12,6 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'class initialization' }
-CancellationCard class >> behavingAsA: typeOfCard [
-	
-	cardType := typeOfCard 
-]
-
 { #category : #'instance creation' }
 CancellationCard class >> create [
 
@@ -27,9 +21,7 @@ CancellationCard class >> create [
 { #category : #playing }
 CancellationCard class >> incorporateTo: anOutstandingSpaceshipsGame [
 
-	| aTypeOfCard |
-	aTypeOfCard := cardType new.
-	aTypeOfCard incorporate: self To: anOutstandingSpaceshipsGame
+	InstantaneousCard new incorporate: self To: anOutstandingSpaceshipsGame
 ]
 
 { #category : #playing }
@@ -39,18 +31,10 @@ CancellationCard class >> playOnceIn: anOutstandingSpaceshipsGame [
 ]
 
 { #category : #playing }
-CancellationCard class >> thrownAt: aCard affecting: aSpaceship asA: typeOfCard [
+CancellationCard class >> thrownAt: aCard [
 
-	spaceship := aSpaceship.
-	cardType := typeOfCard.
+	cardType := InstantaneousCard.
 	targetCard := aCard
-]
-
-{ #category : #playing }
-CancellationCard class >> thrownAt: aCard asA: typeOfCard [
-
-	targetCard := aCard.
-	cardType := typeOfCard
 ]
 
 { #category : #comparing }
