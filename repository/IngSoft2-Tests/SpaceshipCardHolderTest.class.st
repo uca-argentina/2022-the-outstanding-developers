@@ -7,7 +7,7 @@ Class {
 { #category : #tests }
 SpaceshipCardHolderTest >> testSpaceshipThatStartsWithTwoCardsAndPlaysOneHasOneCardLeftToPlay [
 
-	| aBoard aCardDistribution anOutstandingGame |
+	| aBoard aCardDistribution anOutstandingGame aFiniteDeck |
 	aBoard := Board
 		          of: 10
 		          and: (ParsecUnit of: 10)
@@ -18,12 +18,13 @@ SpaceshipCardHolderTest >> testSpaceshipThatStartsWithTwoCardsAndPlaysOneHasOneC
 	aCardDistribution add: (Distribution
 			 withProbabilityOf: 1
 			 for: OverloadCard).
+	aFiniteDeck := FiniteDeck of: 100 with: aCardDistribution.
 
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedByMany: { 'Enterprise'. 'Delorean' }
 		                     on: aBoard
 		                     throwing: (LoadedDie with: 1)
-		                     using: aCardDistribution.
+		                     using: aFiniteDeck.
 
 	self assert: (anOutstandingGame deckOf: 'Enterprise') size equals: 2.
 

@@ -2,10 +2,8 @@ Class {
 	#name : #CardAwarderEffect,
 	#superclass : #Object,
 	#instVars : [
-		'cardGenerator'
-	],
-	#classInstVars : [
-		'randomCardGenerator'
+		'cardGenerator',
+		'deck'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -13,70 +11,27 @@ Class {
 { #category : #'instance creation' }
 CardAwarderEffect class >> create [
 
-	^ self new initializeWith: randomCardGenerator
-]
-
-{ #category : #'instance creation' }
-CardAwarderEffect class >> with: aDistribution [
-
-	randomCardGenerator := RandomEventGenerator
-		                      with: 1
-		                      using: aDistribution.
-	^ self new initializeWith: randomCardGenerator
-]
-
-{ #category : #'instance creation' }
-CardAwarderEffect class >> withA: distribution [
-
-	randomCardGenerator := RandomEventGenerator
-		                      with: 1
-		                      using: distribution
+	^ self new
 ]
 
 { #category : #effects }
 CardAwarderEffect >> applyEffectOn: aBoard [
 
-	self dealCardIn: aBoard.
+	aBoard dealCard.
 	^ self effectOnPosition
 ]
 
 { #category : #effects }
 CardAwarderEffect >> applyEffectTo: aSpaceship on: aBoard [
 
-	self dealCardTo: aSpaceship in: aBoard.
+	aBoard dealCardTo: aSpaceship.
 	^ self effectOnPosition
-]
-
-{ #category : #effects }
-CardAwarderEffect >> dealCard [
-
-	^ cardGenerator generate at: 1
-]
-
-{ #category : #effects }
-CardAwarderEffect >> dealCardIn: aBoard [
-
-	| card |
-	card := self dealCard.
-	aBoard assignToCurrentSpaceship: card
-]
-
-{ #category : #effects }
-CardAwarderEffect >> dealCardTo: aSpaceship in: aBoard [
-
-	aBoard assign: self dealCard to: aSpaceship
 ]
 
 { #category : #effects }
 CardAwarderEffect >> effectOnPosition [
 
 	^ 0
-]
-
-{ #category : #initialization }
-CardAwarderEffect >> initializeWith: aRandomEventGenerator [
-
-	cardGenerator := aRandomEventGenerator
 ]
 
 { #category : #effects }
