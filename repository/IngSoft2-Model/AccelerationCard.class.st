@@ -11,6 +11,12 @@ Class {
 }
 
 { #category : #playing }
+AccelerationCard class >> addAffectingCard: aCard to: aGame [ 
+	
+	aGame addCardAffectingAll: aCard for: self
+]
+
+{ #category : #playing }
 AccelerationCard class >> addTo: anOutstandingSpaceshipsGame [
 
 	anOutstandingSpaceshipsGame addAffectingAll: self create.
@@ -32,6 +38,23 @@ AccelerationCard class >> create [
 AccelerationCard class >> incorporateTo: anOutstandingSpaceshipsGame [
 
 	PermanentCard new incorporate: self to: anOutstandingSpaceshipsGame
+]
+
+{ #category : #playing }
+AccelerationCard class >> isAppliedTo: aSpaceship [
+
+	^ true
+]
+
+{ #category : #properties }
+AccelerationCard class >> isPermanent [
+
+	^ true
+]
+
+{ #category : #accessing }
+AccelerationCard class >> spaceship [
+	^ ''
 ]
 
 { #category : #comparing }

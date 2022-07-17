@@ -12,6 +12,11 @@ Class {
 }
 
 { #category : #playing }
+SpeedCard class >> addAffectingCard: aCard to: aGame [ 
+	aGame addCardAffectingCard: aCard on: self
+]
+
+{ #category : #playing }
 SpeedCard class >> addTo: anOutstandingSpaceshipsGame [
 
 	anOutstandingSpaceshipsGame addAffecting:
@@ -34,6 +39,24 @@ SpeedCard class >> create [
 SpeedCard class >> incorporateTo: anOutstandingSpaceshipsGame [
 
 	PermanentCard new incorporate: self to: anOutstandingSpaceshipsGame
+]
+
+{ #category : #playing }
+SpeedCard class >> isAppliedTo: aSpaceship [
+
+	^ spaceship = aSpaceship
+]
+
+{ #category : #proper }
+SpeedCard class >> isPermanent [
+
+	^ true
+]
+
+{ #category : #accessing }
+SpeedCard class >> spaceship [
+
+	^ spaceship
 ]
 
 { #category : #'card throwing' }

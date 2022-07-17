@@ -23,6 +23,12 @@ RepeatCard class >> incorporateTo: anOutstandingSpaceshipsGame [
 	InstantaneousCard new incorporate: self to: anOutstandingSpaceshipsGame
 ]
 
+{ #category : #testing }
+RepeatCard class >> isPermanent [
+
+	^ false
+]
+
 { #category : #playing }
 RepeatCard class >> playOnceIn: anOutstandingSpaceshipsGame [
 
