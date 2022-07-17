@@ -133,12 +133,12 @@ OutstandingSpaceshipsGameTest >> testAPermanentCardDoesntGoToTheUsedCardsDeckIfN
 		                     throwing: (LoadedDie withSequence: { 2. 3 })
 		                     using: aFiniteDeck.
 
-	self assert: aFiniteDeck cardAmount equals: 26.
+	self assert: anOutstandingGame amountOfCards equals: 26.
 	self assert: anOutstandingGame amountOfUsedCards equals: 0.
 	anOutstandingGame
 		throws: (OverloadCard thrownAt: 'Delorean')
 		from: 'Enterprise'.
-	self assert: aFiniteDeck cardAmount equals: 26.
+	self assert: anOutstandingGame amountOfCards equals: 26.
 	self assert: anOutstandingGame amountOfUsedCards equals: 0
 ]
 
@@ -162,7 +162,7 @@ OutstandingSpaceshipsGameTest >> testAPermanentCardGoesToTheUsedCardsDeckIfRemov
 		                     throwing: (LoadedDie withSequence: { 2. 3 })
 		                     using: aFiniteDeck.
 
-	self assert: aFiniteDeck cardAmount equals: 26.
+	self assert: anOutstandingGame amountOfCards equals: 26.
 	self assert: anOutstandingGame amountOfUsedCards equals: 0.
 	anOutstandingGame
 		throws: (OverloadCard thrownAt: 'Delorean')
@@ -171,7 +171,7 @@ OutstandingSpaceshipsGameTest >> testAPermanentCardGoesToTheUsedCardsDeckIfRemov
 		throws:
 		(CancellationCard thrownAt: (OverloadCard thrownAt: 'Delorean'))
 		from: 'Enterprise'.
-	self assert: aFiniteDeck cardAmount equals: 26.
+	self assert: anOutstandingGame amountOfCards equals: 26.
 	self assert: anOutstandingGame amountOfUsedCards equals: 2
 ]
 
@@ -222,13 +222,47 @@ OutstandingSpaceshipsGameTest >> testAUsedInstantaneusCardGoesToTheUsedCardsDeck
 		                     throwing: (LoadedDie withSequence: { 2. 3 })
 		                     using: aFiniteDeck.
 
-	self assert: aFiniteDeck cardAmount equals: 26.
+	self assert: anOutstandingGame amountOfCards equals: 26.
 	self assert: anOutstandingGame amountOfUsedCards equals: 0.
 	anOutstandingGame
 		throws: (RepeatCard thrownAt: 'Delorean')
 		from: 'Enterprise'.
-	self assert: aFiniteDeck cardAmount equals: 26.
+	self assert: anOutstandingGame amountOfCards equals: 26.
 	self assert: anOutstandingGame amountOfUsedCards equals: 1
+]
+
+{ #category : #tests }
+OutstandingSpaceshipsGameTest >> testCardsAreNotDealtIfDecksAreEmpty [
+
+	| aBoard aFiniteDeck anOutstandingGame |
+	aFiniteDeck := FiniteDeck of: 5 setWith: { OverloadCard create }.
+
+	aBoard := Board
+		          of: 20
+		          and: (ParsecUnit of: 20)
+		          playedFor: 1
+		          with: { (Box with: CardAwarderEffect new) }.
+
+	anOutstandingGame := OutstandingSpaceshipsGame
+		                     playedByMany: { 'Enterprise'. 'Delorean' }
+		                     on: aBoard
+		                     throwing: (LoadedDie with: 1)
+		                     using: aFiniteDeck.
+
+	self assert: anOutstandingGame amountOfCards equals: 1.
+	self assert: anOutstandingGame amountOfUsedCards equals: 0.
+	self assert: (anOutstandingGame deckOf: 'Enterprise') size equals: 2.
+	self assert: (anOutstandingGame deckOf: 'Delorean') size equals: 2.
+	anOutstandingGame play.
+	self assert: anOutstandingGame amountOfCards equals: 0.
+	self assert: anOutstandingGame amountOfUsedCards equals: 0.
+	self assert: (anOutstandingGame deckOf: 'Enterprise') size equals: 3.
+	self assert: (anOutstandingGame deckOf: 'Delorean') size equals: 2.
+	anOutstandingGame play.
+	self assert: anOutstandingGame amountOfCards equals: 0.
+	self assert: anOutstandingGame amountOfUsedCards equals: 0.
+	self assert: (anOutstandingGame deckOf: 'Enterprise') size equals: 3.
+	self assert: (anOutstandingGame deckOf: 'Delorean') size equals: 2
 ]
 
 { #category : #tests }
@@ -250,15 +284,15 @@ OutstandingSpaceshipsGameTest >> testFiniteDeckIsRefilledWithTheUsedCardDeckIfEm
 		                     throwing: (LoadedDie withSequence: { 2. 3 })
 		                     using: aFiniteDeck.
 
-	self assert: aFiniteDeck cardAmount equals: 1.
+	self assert: anOutstandingGame amountOfCards equals: 1.
 	self assert: anOutstandingGame amountOfUsedCards equals: 0.
 	anOutstandingGame
 		throws: (RepeatCard thrownAt: 'Delorean')
 		from: 'Enterprise'.
-	self assert: aFiniteDeck cardAmount equals: 1.
+	self assert: anOutstandingGame amountOfCards equals: 1.
 	self assert: anOutstandingGame amountOfUsedCards equals: 1.
 	anOutstandingGame play.
-	self assert: aFiniteDeck cardAmount equals: 1.
+	self assert: anOutstandingGame amountOfCards equals: 1.
 	self assert: anOutstandingGame amountOfUsedCards equals: 0
 ]
 
@@ -387,6 +421,48 @@ OutstandingSpaceshipsGameTest >> testGameGivesTwoRandomCardsToEachSpaceshipAtThe
 
 	self assert: (anOustandingGame deckOf: 'Delorean') size equals: 2.
 	self assert: (anOustandingGame deckOf: 'Enterprise') size equals: 2
+]
+
+{ #category : #tests }
+OutstandingSpaceshipsGameTest >> testGameGivesTwoRandomCardsToOneParticipantAndOneToTheOtherIfCardAmountIsThree [
+
+	| aBoard aLoadedDie anOustandingGame aCardDistribution aFiniteDeck |
+	aBoard := Board
+		          of: 15
+		          and: (ParsecUnit of: 15)
+		          playedFor: 2
+		          with: { (Box with: NoEffect new) }.
+	aLoadedDie := LoadedDie with: 4.
+
+	aCardDistribution := OrderedCollection new.
+
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1 / 6
+			 for: SpeedCard).
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1 / 6
+			 for: AccelerationCard).
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1 / 6
+			 for: OverloadCard).
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1 / 6
+			 for: CancellationCard).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 / 6 for: RedoCard).
+	aCardDistribution add: (Distribution
+			 withProbabilityOf: 1 / 6
+			 for: RepeatCard).
+	aFiniteDeck := FiniteDeck of: 3 with: aCardDistribution.
+	anOustandingGame := OutstandingSpaceshipsGame
+		                    playedByMany: { 'Delorean'. 'Enterprise' }
+		                    on: aBoard
+		                    throwing: aLoadedDie
+		                    using: aFiniteDeck.
+
+
+	self assert: (anOustandingGame deckOf: 'Delorean') size equals: 2.
+	self assert: (anOustandingGame deckOf: 'Enterprise') size equals: 1
 ]
 
 { #category : #tests }

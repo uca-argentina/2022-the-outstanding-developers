@@ -161,9 +161,11 @@ Board >> boxPositionOf: aSpaceship [
 
 { #category : #playing }
 Board >> dealCard [
+
 	| card |
-	card := game dealCard.
-	self assignToCurrentSpaceship: card
+	game cardCanBeDealt ifTrue: [ 
+		card := game dealCard.
+		self assignToCurrentSpaceship: card ]
 ]
 
 { #category : #playing }

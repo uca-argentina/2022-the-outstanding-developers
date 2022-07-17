@@ -85,6 +85,11 @@ OutstandingSpaceshipsGame >> addUsedcard: aCard [
 	usedCardsDeck add: aCard 
 ]
 
+{ #category : #accessing }
+OutstandingSpaceshipsGame >> amountOfCards [
+	^ deck cardAmount  
+]
+
 { #category : #properties }
 OutstandingSpaceshipsGame >> amountOfUsedCards [
 
@@ -137,6 +142,12 @@ OutstandingSpaceshipsGame >> cancelAll: cardType [
 	lastPlayedCard := CancellationCard create.
 ]
 
+{ #category : #validation }
+OutstandingSpaceshipsGame >> cardCanBeDealt [
+
+	^ self amountOfUsedCards ~= 0 or: [ self amountOfCards ~= 0 ]
+]
+
 { #category : #accessing }
 OutstandingSpaceshipsGame >> cardsAffectingOf: aSpaceship [
 
@@ -157,8 +168,9 @@ OutstandingSpaceshipsGame >> deal [
 	spaceshipsCardDeck := OrderedCollection new.
 	spaceshipsPlaying do: [ :spaceship | 
 		2 timesRepeat: [ 
-			spaceshipsCardDeck add:
-				(SpaceshipCardHolder of: spaceship holding: deck dealCard) ] ]
+			self cardCanBeDealt ifTrue: [ 
+				spaceshipsCardDeck add:
+					(SpaceshipCardHolder of: spaceship holding: deck dealCard) ] ] ]
 ]
 
 { #category : #palying }
