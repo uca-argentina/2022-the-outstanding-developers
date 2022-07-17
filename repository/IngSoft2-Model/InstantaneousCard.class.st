@@ -11,7 +11,8 @@ InstantaneousCard >> canBeThrownWithCurrentTurn: isCurrentTurn [
 ]
 
 { #category : #playing }
-InstantaneousCard >> incorporate: aCard to: anOutstandingSpaceshipsGame [ 
-	
-	aCard playOnceIn: anOutstandingSpaceshipsGame 
+InstantaneousCard >> incorporate: aCard to: anOutstandingSpaceshipsGame [
+
+	aCard playOnceIn: anOutstandingSpaceshipsGame.
+	anOutstandingSpaceshipsGame addUsedcard: aCard create
 ]

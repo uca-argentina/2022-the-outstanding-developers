@@ -326,7 +326,7 @@ Board >> of: aNumberOfBoxes and: aLength playedFor: someLaps with: aBoxSequence 
 		boxes add: (aBoxSequence at: sequenceHandler nextValue) ].
 	laps := someLaps.
 	boardUnitLength := aLength.
-	lastBox := NoEffect create
+	lastBox := Box with: NoEffect new
 ]
 
 { #category : #properties }

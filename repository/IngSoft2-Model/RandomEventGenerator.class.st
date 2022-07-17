@@ -16,10 +16,10 @@ RandomEventGenerator class >> assertProbabilitiesAddUpToOne: aDistribution [
 ]
 
 { #category : #'instance creation' }
-RandomEventGenerator class >> with: aNumberOfBoxes using: aDistribution [
+RandomEventGenerator class >> with: anAmount using: aDistribution [
 
 	self assertProbabilitiesAddUpToOne: aDistribution.
-	^ self new initializeWith: aNumberOfBoxes using: aDistribution
+	^ self new initializeWith: anAmount using: aDistribution
 ]
 
 { #category : #generation }
@@ -53,8 +53,8 @@ RandomEventGenerator >> generate [
 ]
 
 { #category : #initialization }
-RandomEventGenerator >> initializeWith: aNumberOfBoxes using: aDistribution [
+RandomEventGenerator >> initializeWith: anAmount using: aDistribution [
 
 	randomEvents := OrderedCollection new.
-	self createFor: aNumberOfBoxes using: aDistribution
+	self createFor: anAmount using: aDistribution
 ]

@@ -17,10 +17,11 @@ CardTest >> should: block raise: expectedErrorClass withMessage: expectedErrorMe
 { #category : #tests }
 CardTest >> testACardIsNotTakenAwayFromASpaceshipWhenThrownButNotItsTurn [
 
-	| aBoard aCardDistribution anOutstandingGame |
+	| aBoard aCardDistribution anOutstandingGame aFiniteDeck |
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add:
 		(Distribution withProbabilityOf: 1 for: OverloadCard).
+	aFiniteDeck := FiniteDeck of: 100 with: aCardDistribution.
 	aBoard := Board
 		          of: 10
 		          and: (ParsecUnit of: 10)
@@ -32,7 +33,7 @@ CardTest >> testACardIsNotTakenAwayFromASpaceshipWhenThrownButNotItsTurn [
 		                     on: aBoard
 		                     throwing:
 		                     (LoadedDie withSequence: { 7. 6. 5. 6 })
-		                     using: aCardDistribution.
+		                     using: aFiniteDeck.
 	anOutstandingGame play.
 
 	self
@@ -49,7 +50,7 @@ CardTest >> testACardIsNotTakenAwayFromASpaceshipWhenThrownButNotItsTurn [
 { #category : #tests }
 CardTest >> testACardIsTakenAwayFromASpaceshipWhenThrown [
 
-	| aBoard aCardDistribution anOutstandingGame |
+	| aBoard aCardDistribution anOutstandingGame aFiniteDeck |
 	aBoard := Board
 		          of: 10
 		          and: (ParsecUnit of: 10)
@@ -58,11 +59,12 @@ CardTest >> testACardIsTakenAwayFromASpaceshipWhenThrown [
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add:
 		(Distribution withProbabilityOf: 1 for: OverloadCard).
+	aFiniteDeck := FiniteDeck of: 100 with: aCardDistribution.
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedByMany: { 'Enterprise'. 'Delorean' }
 		                     on: aBoard
 		                     throwing: (LoadedDie with: 1)
-		                     using: aCardDistribution.
+		                     using: aFiniteDeck.
 	self assert: (anOutstandingGame deckOf: 'Enterprise') size equals: 2.
 
 	anOutstandingGame
@@ -75,7 +77,7 @@ CardTest >> testACardIsTakenAwayFromASpaceshipWhenThrown [
 { #category : #tests }
 CardTest >> testASpaceshipCannotThrowACardItDoesntHave [
 
-	| aBoard aCardDistribution anOutstandingGame |
+	| aBoard aCardDistribution anOutstandingGame aFiniteDeck |
 	aBoard := Board
 		          of: 10
 		          and: (ParsecUnit of: 10)
@@ -84,11 +86,12 @@ CardTest >> testASpaceshipCannotThrowACardItDoesntHave [
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add:
 		(Distribution withProbabilityOf: 1 for: OverloadCard).
+	aFiniteDeck := FiniteDeck of: 100 with: aCardDistribution.
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedByMany: { 'Delorean'. 'Enterprise' }
 		                     on: aBoard
 		                     throwing: (LoadedDie with: 1)
-		                     using: aCardDistribution.
+		                     using: aFiniteDeck.
 
 	self
 		should: [ 
@@ -102,7 +105,7 @@ CardTest >> testASpaceshipCannotThrowACardItDoesntHave [
 { #category : #tests }
 CardTest >> testAccelerationCardIncreasesInOneAllTheSpaceshipsDiceThrows [
 
-	| aBoard aCardDistribution anOutstandingGame |
+	| aBoard aCardDistribution anOutstandingGame aFiniteDeck |
 	aBoard := Board
 		          of: 10
 		          and: (ParsecUnit of: 10)
@@ -112,13 +115,14 @@ CardTest >> testAccelerationCardIncreasesInOneAllTheSpaceshipsDiceThrows [
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add:
 		(Distribution withProbabilityOf: 1 for: AccelerationCard).
+	aFiniteDeck := FiniteDeck of: 100 with: aCardDistribution.
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedByMany:
 		                     { 'Enterprise'. 'Delorean'. 'Zathura' }
 		                     on: aBoard
 		                     throwing:
 		                     (LoadedDie withSequence: { 3. 4. 5. 2. 2. 2 })
-		                     using: aCardDistribution.
+		                     using: aFiniteDeck.
 
 	anOutstandingGame throws: AccelerationCard from: 'Enterprise'.
 
@@ -142,14 +146,15 @@ CardTest >> testAccelerationCardIncreasesInOneAllTheSpaceshipsDiceThrows [
 { #category : #tests }
 CardTest >> testAnInstantaneousCardCantBeUsedIfTheGameHasFinished [
 
-	| aBoard aCardDistribution anotherCardDistribution cardAwarderEffect box1 box2 box3 box4 box5 anOutstandingGame |
-	aCardDistribution := OrderedCollection new.
-	aCardDistribution add:
-		(Distribution withProbabilityOf: 1 for: OverloadCard).
-	anotherCardDistribution := OrderedCollection new.
-	anotherCardDistribution add:
-		(Distribution withProbabilityOf: 1 for: CancellationCard).
-	cardAwarderEffect := CardAwarderEffect with: anotherCardDistribution.
+	| aBoard cardAwarderEffect box1 box2 box3 box4 box5 anOutstandingGame aFiniteDeck |
+	aFiniteDeck := FiniteDeck of: 10 setWith: { 
+			               OverloadCard create.
+			               OverloadCard create.
+			               OverloadCard create.
+			               OverloadCard create.
+			               CancellationCard create.
+			               CancellationCard create }.
+	cardAwarderEffect := CardAwarderEffect associatedTo: aFiniteDeck.
 
 	box1 := Box with: cardAwarderEffect.
 	box2 := Box with: cardAwarderEffect.
@@ -174,7 +179,8 @@ CardTest >> testAnInstantaneousCardCantBeUsedIfTheGameHasFinished [
 		                     throwing:
 		                     (LoadedDie withSequence:
 			                      { 1. 1. 1. 1. 1. 1. 8 })
-		                     using: aCardDistribution.
+		                     using: aFiniteDeck.
+
 	anOutstandingGame play.
 	anOutstandingGame
 		throws: (OverloadCard thrownAt: 'Enterprise')
@@ -194,7 +200,7 @@ CardTest >> testAnInstantaneousCardCantBeUsedIfTheGameHasFinished [
 			anOutstandingGame
 				throws:
 				(CancellationCard thrownAt: (OverloadCard thrownAt: 'Enterprise'))
-				from: 'Enterprise' ]
+				from: 'Delorean' ]
 		raise: Error
 		withMessage: 'Cards can only be thrown if game has not finished'
 ]
@@ -202,14 +208,15 @@ CardTest >> testAnInstantaneousCardCantBeUsedIfTheGameHasFinished [
 { #category : #tests }
 CardTest >> testAnInstantaneousCardEffectAffectOnlyOnce [
 
-	| aBoard aCardDistribution anotherCardDistribution cardAwarderEffect box1 box2 box3 box4 box5 anOutstandingGame |
-	aCardDistribution := OrderedCollection new.
-	aCardDistribution add:
-		(Distribution withProbabilityOf: 1 for: OverloadCard).
-	anotherCardDistribution := OrderedCollection new.
-	anotherCardDistribution add:
-		(Distribution withProbabilityOf: 1 for: CancellationCard).
-	cardAwarderEffect := CardAwarderEffect with: anotherCardDistribution.
+	| aBoard cardAwarderEffect box1 box2 box3 box4 box5 anOutstandingGame aFiniteDeck |
+	aFiniteDeck := FiniteDeck of: 10 setWith: { 
+			               OverloadCard create.
+			               OverloadCard create.
+			               OverloadCard create.
+			               OverloadCard create.
+			               CancellationCard create.
+			               CancellationCard create }.
+	cardAwarderEffect := CardAwarderEffect associatedTo: aFiniteDeck.
 
 	box1 := Box with: cardAwarderEffect.
 	box2 := Box with: NoEffect new.
@@ -233,7 +240,7 @@ CardTest >> testAnInstantaneousCardEffectAffectOnlyOnce [
 		                     on: aBoard
 		                     throwing:
 		                     (LoadedDie withSequence: { 1. 2. 3. 3. 4 })
-		                     using: aCardDistribution.
+		                     using: aFiniteDeck.
 	anOutstandingGame play.
 	anOutstandingGame
 		throws: (OverloadCard thrownAt: 'Enterprise')
@@ -260,14 +267,15 @@ CardTest >> testAnInstantaneousCardEffectAffectOnlyOnce [
 { #category : #tests }
 CardTest >> testCancellationCardCantBePlayedIfTheChosenCardisNotInGame [
 
-	| aBoard aCardDistribution anotherCardDistribution cardAwarderEffect box1 box2 box3 box4 box5 anOutstandingGame |
-	aCardDistribution := OrderedCollection new.
-	aCardDistribution add:
-		(Distribution withProbabilityOf: 1 for: OverloadCard).
-	anotherCardDistribution := OrderedCollection new.
-	anotherCardDistribution add:
-		(Distribution withProbabilityOf: 1 for: CancellationCard).
-	cardAwarderEffect := CardAwarderEffect with: anotherCardDistribution.
+	| aBoard cardAwarderEffect box1 box2 box3 box4 box5 anOutstandingGame aFiniteDeck |
+	aFiniteDeck := FiniteDeck of: 10 setWith: { 
+			               OverloadCard create.
+			               OverloadCard create.
+			               OverloadCard create.
+			               OverloadCard create.
+			               CancellationCard create.
+			               CancellationCard create }.
+	cardAwarderEffect := CardAwarderEffect associatedTo: aFiniteDeck.
 
 	box1 := Box with: cardAwarderEffect.
 	box2 := Box with: NoEffect new.
@@ -291,7 +299,7 @@ CardTest >> testCancellationCardCantBePlayedIfTheChosenCardisNotInGame [
 		                     on: aBoard
 		                     throwing:
 		                     (LoadedDie withSequence: { 1. 2. 3. 3. 4 })
-		                     using: aCardDistribution.
+		                     using: aFiniteDeck.
 	anOutstandingGame play.
 	anOutstandingGame
 		throws: (OverloadCard thrownAt: 'Enterprise')
@@ -311,12 +319,11 @@ CardTest >> testCancellationCardCantBePlayedIfTheChosenCardisNotInGame [
 { #category : #tests }
 CardTest >> testCancellationCardCantBePlayedIfThereAreNoPermanentCardsInGame [
 
-	| aBoard aCardDistribution anOutstandingGame |
+	| aBoard aCardDistribution anOutstandingGame aFiniteDeck |
 	aCardDistribution := OrderedCollection new.
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: (CancellationCard)).
-
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: CancellationCard).
+	aFiniteDeck := FiniteDeck of: 100 with: aCardDistribution.
 	aBoard := Board
 		          of: 10
 		          and: (ParsecUnit of: 10)
@@ -327,13 +334,12 @@ CardTest >> testCancellationCardCantBePlayedIfThereAreNoPermanentCardsInGame [
 		                     playedByMany: { 'Enterprise'. 'Delorean' }
 		                     on: aBoard
 		                     throwing: (LoadedDie with: 1)
-		                     using: aCardDistribution.
+		                     using: aFiniteDeck.
 
 	self
 		should: [ 
 			anOutstandingGame
-				throws: (CancellationCard
-						 thrownAt: 'Overload')
+				throws: (CancellationCard thrownAt: 'Overload')
 				from: 'Enterprise' ]
 		raise: Error
 		withMessage:
@@ -343,14 +349,15 @@ CardTest >> testCancellationCardCantBePlayedIfThereAreNoPermanentCardsInGame [
 { #category : #tests }
 CardTest >> testCancellationCardRemovesASpeedPermanentCard [
 
-	| aBoard aCardDistribution anotherCardDistribution cardAwarderEffect box1 box2 box3 box4 box5 anOutstandingGame |
-	aCardDistribution := OrderedCollection new.
-	aCardDistribution add:
-		(Distribution withProbabilityOf: 1 for: SpeedCard).
-	anotherCardDistribution := OrderedCollection new.
-	anotherCardDistribution add:
-		(Distribution withProbabilityOf: 1 for: CancellationCard).
-	cardAwarderEffect := CardAwarderEffect with: anotherCardDistribution.
+	| aBoard cardAwarderEffect box1 box2 box3 box4 box5 anOutstandingGame aFiniteDeck |
+	aFiniteDeck := FiniteDeck of: 10 setWith: { 
+			               SpeedCard create.
+			               SpeedCard create.
+			               SpeedCard create.
+			               SpeedCard create.
+			               CancellationCard create.
+			               CancellationCard create }.
+	cardAwarderEffect := CardAwarderEffect associatedTo: aFiniteDeck.
 
 	box1 := Box with: cardAwarderEffect.
 	box2 := Box with: NoEffect new.
@@ -374,7 +381,7 @@ CardTest >> testCancellationCardRemovesASpeedPermanentCard [
 		                     on: aBoard
 		                     throwing:
 		                     (LoadedDie withSequence: { 1. 2. 3. 3. 4 })
-		                     using: aCardDistribution.
+		                     using: aFiniteDeck.
 	anOutstandingGame play.
 
 	anOutstandingGame
@@ -412,16 +419,15 @@ CardTest >> testCancellationCardRemovesASpeedPermanentCard [
 { #category : #tests }
 CardTest >> testCancellationCardRemovesAnAccelerationPermanentCard [
 
-	| aBoard aCardDistribution anotherCardDistribution cardAwarderEffect box1 box2 box3 box4 box5 anOutstandingGame |
-	aCardDistribution := OrderedCollection new.
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: (AccelerationCard)).
-	anotherCardDistribution := OrderedCollection new.
-	anotherCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: (CancellationCard)).
-	cardAwarderEffect := CardAwarderEffect with: anotherCardDistribution.
+	| aBoard cardAwarderEffect box1 box2 box3 box4 box5 anOutstandingGame aFiniteDeck |
+	aFiniteDeck := FiniteDeck of: 10 setWith: { 
+			               AccelerationCard create.
+			               AccelerationCard create.
+			               AccelerationCard create.
+			               AccelerationCard create.
+			               CancellationCard create.
+			               CancellationCard create }.
+	cardAwarderEffect := CardAwarderEffect associatedTo: aFiniteDeck.
 
 	box1 := Box with: cardAwarderEffect.
 	box2 := Box with: NoEffect new.
@@ -445,11 +451,9 @@ CardTest >> testCancellationCardRemovesAnAccelerationPermanentCard [
 		                     on: aBoard
 		                     throwing:
 		                     (LoadedDie withSequence: { 1. 2. 3. 3. 4 })
-		                     using: aCardDistribution.
+		                     using: aFiniteDeck.
 	anOutstandingGame play.
-	anOutstandingGame
-		throws: (AccelerationCard)
-		from: 'Delorean'.
+	anOutstandingGame throws: AccelerationCard from: 'Delorean'.
 	anOutstandingGame play.
 
 	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 1.
@@ -466,8 +470,7 @@ CardTest >> testCancellationCardRemovesAnAccelerationPermanentCard [
 	self assert: (aBoard lapOf: 'Delorean') equals: 1.
 
 	anOutstandingGame
-		throws:
-		(CancellationCard thrownAt: AccelerationCard)
+		throws: (CancellationCard thrownAt: AccelerationCard)
 		from: 'Enterprise'.
 	anOutstandingGame play.
 	anOutstandingGame play.
@@ -481,14 +484,15 @@ CardTest >> testCancellationCardRemovesAnAccelerationPermanentCard [
 { #category : #tests }
 CardTest >> testCancellationCardRemovesAnOverloadPermanentCard [
 
-	| aBoard aCardDistribution anotherCardDistribution cardAwarderEffect box1 box2 box3 box4 box5 anOutstandingGame |
-	aCardDistribution := OrderedCollection new.
-	aCardDistribution add:
-		(Distribution withProbabilityOf: 1 for: OverloadCard).
-	anotherCardDistribution := OrderedCollection new.
-	anotherCardDistribution add:
-		(Distribution withProbabilityOf: 1 for: CancellationCard).
-	cardAwarderEffect := CardAwarderEffect with: anotherCardDistribution.
+	| aBoard cardAwarderEffect box1 box2 box3 box4 box5 anOutstandingGame aFiniteDeck |
+	aFiniteDeck := FiniteDeck of: 10 setWith: { 
+			               OverloadCard create.
+			               OverloadCard create.
+			               OverloadCard create.
+			               OverloadCard create.
+			               CancellationCard create.
+			               CancellationCard create }.
+	cardAwarderEffect := CardAwarderEffect associatedTo: aFiniteDeck.
 
 	box1 := Box with: cardAwarderEffect.
 	box2 := Box with: NoEffect new.
@@ -512,7 +516,7 @@ CardTest >> testCancellationCardRemovesAnOverloadPermanentCard [
 		                     on: aBoard
 		                     throwing:
 		                     (LoadedDie withSequence: { 1. 2. 3. 3. 4 })
-		                     using: aCardDistribution.
+		                     using: aFiniteDeck .
 	anOutstandingGame play.
 	anOutstandingGame
 		throws: (OverloadCard thrownAt: 'Enterprise')
@@ -549,16 +553,15 @@ CardTest >> testCancellationCardRemovesAnOverloadPermanentCard [
 { #category : #tests }
 CardTest >> testCancellationCardRemovesOnlyOneAccelerationPermanentCard [
 
-	| aBoard aCardDistribution anotherCardDistribution cardAwarderEffect box1 box2 box3 box4 box5 anOutstandingGame |
-	aCardDistribution := OrderedCollection new.
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: (AccelerationCard)).
-	anotherCardDistribution := OrderedCollection new.
-	anotherCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: (CancellationCard )).
-	cardAwarderEffect := CardAwarderEffect with: anotherCardDistribution.
+	| aBoard cardAwarderEffect box1 box2 box3 box4 box5 anOutstandingGame aFiniteDeck |
+	aFiniteDeck := FiniteDeck of: 10 setWith: { 
+			               AccelerationCard create.
+			               AccelerationCard create.
+			               AccelerationCard create.
+			               AccelerationCard create.
+			               CancellationCard create.
+			               CancellationCard create }.
+	cardAwarderEffect := CardAwarderEffect associatedTo: aFiniteDeck.
 
 	box1 := Box with: cardAwarderEffect.
 	box2 := Box with: NoEffect new.
@@ -582,14 +585,10 @@ CardTest >> testCancellationCardRemovesOnlyOneAccelerationPermanentCard [
 		                     on: aBoard
 		                     throwing:
 		                     (LoadedDie withSequence: { 1. 2. 3. 3. 4 })
-		                     using: aCardDistribution.
+		                     using: aFiniteDeck.
 	anOutstandingGame play.
-	anOutstandingGame
-		throws: (AccelerationCard)
-		from: 'Delorean'.
-	anOutstandingGame
-		throws: (AccelerationCard)
-		from: 'Delorean'.
+	anOutstandingGame throws: AccelerationCard from: 'Delorean'.
+	anOutstandingGame throws: AccelerationCard from: 'Delorean'.
 	anOutstandingGame play.
 
 	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 1.
@@ -606,8 +605,7 @@ CardTest >> testCancellationCardRemovesOnlyOneAccelerationPermanentCard [
 	self assert: (aBoard lapOf: 'Delorean') equals: 1.
 
 	anOutstandingGame
-		throws:
-		(CancellationCard thrownAt: AccelerationCard)
+		throws: (CancellationCard thrownAt: AccelerationCard)
 		from: 'Enterprise'.
 	anOutstandingGame play.
 	anOutstandingGame play.
@@ -621,7 +619,7 @@ CardTest >> testCancellationCardRemovesOnlyOneAccelerationPermanentCard [
 { #category : #tests }
 CardTest >> testEffectOfMultipleSpeedCardsIsAddedUpIntoTheSpaceshipDiceThrow [
 
-	| aBoard aCardDistribution anOutstandingGame |
+	| aBoard aCardDistribution anOutstandingGame aFiniteDeck |
 	aBoard := Board
 		          of: 10
 		          and: (ParsecUnit of: 10)
@@ -629,14 +627,14 @@ CardTest >> testEffectOfMultipleSpeedCardsIsAddedUpIntoTheSpaceshipDiceThrow [
 		          with: { (Box with: NoEffect new) }.
 
 	aCardDistribution := OrderedCollection new.
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: (SpeedCard)).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: SpeedCard).
+	aFiniteDeck := FiniteDeck of: 100 with: aCardDistribution.
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedByMany: { 'Enterprise'. 'Delorean' }
 		                     on: aBoard
 		                     throwing: (LoadedDie with: 1)
-		                     using: aCardDistribution.
+		                     using: aFiniteDeck.
 
 	anOutstandingGame
 		throws: (SpeedCard thrownAt: 'Delorean')
@@ -654,7 +652,7 @@ CardTest >> testEffectOfMultipleSpeedCardsIsAddedUpIntoTheSpaceshipDiceThrow [
 { #category : #tests }
 CardTest >> testOverloadCardProducesSpaceshipToGoBackwards [
 
-	| aBoard aCardDistribution anOutstandingGame |
+	| aBoard aCardDistribution anOutstandingGame aFiniteDeck |
 	aBoard := Board
 		          of: 10
 		          and: (ParsecUnit of: 10)
@@ -664,12 +662,13 @@ CardTest >> testOverloadCardProducesSpaceshipToGoBackwards [
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add:
 		(Distribution withProbabilityOf: 1 for: OverloadCard).
+	aFiniteDeck := FiniteDeck of: 100 with: aCardDistribution.
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedByMany: { 'Enterprise'. 'Delorean' }
 		                     on: aBoard
 		                     throwing:
 		                     (LoadedDie withSequence: { 3. 4. 2. 1 })
-		                     using: aCardDistribution.
+		                     using: aFiniteDeck.
 	anOutstandingGame play.
 	anOutstandingGame play.
 
@@ -689,7 +688,7 @@ CardTest >> testOverloadCardProducesSpaceshipToGoBackwards [
 { #category : #tests }
 CardTest >> testOverloadCardReducesInTwoTheSpaceshipDiceThrow [
 
-	| aBoard aCardDistribution anOutstandingGame |
+	| aBoard aCardDistribution anOutstandingGame aFiniteDeck |
 	aBoard := Board
 		          of: 10
 		          and: (ParsecUnit of: 10)
@@ -698,11 +697,12 @@ CardTest >> testOverloadCardReducesInTwoTheSpaceshipDiceThrow [
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add:
 		(Distribution withProbabilityOf: 1 for: OverloadCard).
+	aFiniteDeck := FiniteDeck of: 100 with: aCardDistribution.
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedByMany: { 'Enterprise'. 'Delorean' }
 		                     on: aBoard
 		                     throwing: (LoadedDie withSequence: { 3. 4 })
-		                     using: aCardDistribution.
+		                     using: aFiniteDeck.
 
 	anOutstandingGame
 		throws: (OverloadCard thrownAt: 'Delorean')
@@ -717,11 +717,12 @@ CardTest >> testOverloadCardReducesInTwoTheSpaceshipDiceThrow [
 { #category : #tests }
 CardTest >> testRedoCantBePlayedIfNoCardHasBeenPlayedBefore [
 
-	| aCardDistribution cardAwarderEffect box1 box2 box3 box4 box5 aBoard anOutstandingGame |
+	| aCardDistribution cardAwarderEffect box1 box2 box3 box4 box5 aBoard anOutstandingGame aFiniteDeck |
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add:
 		(Distribution withProbabilityOf: 1 for: RedoCard).
-	cardAwarderEffect := CardAwarderEffect with: aCardDistribution.
+	aFiniteDeck := FiniteDeck of: 100 with: aCardDistribution.
+	cardAwarderEffect := CardAwarderEffect associatedTo: aFiniteDeck.
 
 	box1 := Box with: cardAwarderEffect.
 	box2 := Box with: cardAwarderEffect.
@@ -744,7 +745,7 @@ CardTest >> testRedoCantBePlayedIfNoCardHasBeenPlayedBefore [
 		                     playedBy: 'Enterprise'
 		                     on: aBoard
 		                     throwing: (LoadedDie with: 1)
-		                     using: aCardDistribution.
+		                     using: aFiniteDeck.
 
 	self
 		should: [ 
@@ -758,14 +759,15 @@ CardTest >> testRedoCantBePlayedIfNoCardHasBeenPlayedBefore [
 { #category : #tests }
 CardTest >> testRedoRepeatsAPreviousRedoCard [
 
-	| aBoard aCardDistribution anotherCardDistribution cardAwarderEffect box1 box2 box3 box4 box5 anOutstandingGame |
-	aCardDistribution := OrderedCollection new.
-	aCardDistribution add:
-		(Distribution withProbabilityOf: 1 for: SpeedCard).
-	anotherCardDistribution := OrderedCollection new.
-	anotherCardDistribution add:
-		(Distribution withProbabilityOf: 1 for: RedoCard).
-	cardAwarderEffect := CardAwarderEffect with: anotherCardDistribution.
+	| aBoard aFiniteDeck cardAwarderEffect box1 box2 box3 box4 box5 anOutstandingGame |
+	aFiniteDeck := FiniteDeck of: 30 setWith: { 
+			               SpeedCard create.
+			               SpeedCard create.
+			               SpeedCard create.
+			               SpeedCard create.
+			               RedoCard create.
+			               RedoCard create }.
+	cardAwarderEffect := CardAwarderEffect associatedTo: aFiniteDeck.
 	box1 := Box with: cardAwarderEffect.
 	box2 := Box with: cardAwarderEffect.
 	box3 := Box with: cardAwarderEffect.
@@ -787,7 +789,7 @@ CardTest >> testRedoRepeatsAPreviousRedoCard [
 		                     playedByMany: { 'Enterprise'. 'Delorean' }
 		                     on: aBoard
 		                     throwing: (LoadedDie withSequence: { 1. 2 })
-		                     using: aCardDistribution.
+		                     using: aFiniteDeck.
 	anOutstandingGame play.
 	anOutstandingGame
 		throws: (SpeedCard thrownAt: 'Enterprise')
@@ -825,16 +827,16 @@ CardTest >> testRedoRepeatsAPreviousRedoCard [
 { #category : #tests }
 CardTest >> testRedoRepeatsARepeatCard [
 
-	| aBoard aCardDistribution box1 box2 box3 box4 box5 anOutstandingGame otherCardDistribution cardAwarderRepeatEffect |
-	aCardDistribution := OrderedCollection new.
-	aCardDistribution add:
-		(Distribution withProbabilityOf: 1 for: RedoCard).
-	otherCardDistribution := OrderedCollection new.
-	otherCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: (RepeatCard)).
-	cardAwarderRepeatEffect := CardAwarderEffect with:
-		                           otherCardDistribution.
+	| aBoard aFiniteDeck box1 box2 box3 box4 box5 anOutstandingGame cardAwarderRepeatEffect |
+	aFiniteDeck := FiniteDeck of: 30 setWith: { 
+			               RedoCard create.
+			               RedoCard create.
+			               RedoCard create.
+			               RedoCard create.
+			               RepeatCard create.
+			               RepeatCard create }.
+	cardAwarderRepeatEffect := CardAwarderEffect associatedTo:
+		                           aFiniteDeck.
 
 	box1 := Box with: NoEffect new.
 	box2 := Box with: cardAwarderRepeatEffect.
@@ -857,7 +859,7 @@ CardTest >> testRedoRepeatsARepeatCard [
 		                     playedByMany: { 'Enterprise'. 'Delorean' }
 		                     on: aBoard
 		                     throwing: (LoadedDie withSequence: { 2. 3 })
-		                     using: aCardDistribution.
+		                     using: aFiniteDeck.
 	anOutstandingGame play.
 	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 2.
 	anOutstandingGame play.
@@ -876,15 +878,15 @@ CardTest >> testRedoRepeatsARepeatCard [
 { #category : #tests }
 CardTest >> testRedoRepeatsAcceleration [
 
-	| aBoard aCardDistribution anotherCardDistribution cardAwarderEffect box1 box2 box3 box4 box5 anOutstandingGame |
-	aCardDistribution := OrderedCollection new.
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: (AccelerationCard)).
-	anotherCardDistribution := OrderedCollection new.
-	anotherCardDistribution add:
-		(Distribution withProbabilityOf: 1 for: RedoCard).
-	cardAwarderEffect := CardAwarderEffect with: anotherCardDistribution.
+	| aBoard aFiniteDeck cardAwarderEffect box1 box2 box3 box4 box5 anOutstandingGame |
+	aFiniteDeck := FiniteDeck of: 30 setWith: { 
+			               AccelerationCard create.
+			               AccelerationCard create.
+			               AccelerationCard create.
+			               AccelerationCard create.
+			               RedoCard create.
+			               RedoCard create }.
+	cardAwarderEffect := CardAwarderEffect associatedTo: aFiniteDeck.
 
 	box1 := Box with: cardAwarderEffect.
 	box2 := Box with: NoEffect new.
@@ -907,11 +909,9 @@ CardTest >> testRedoRepeatsAcceleration [
 		                     playedByMany: { 'Enterprise'. 'Delorean' }
 		                     on: aBoard
 		                     throwing: (LoadedDie withSequence: { 1. 2 })
-		                     using: aCardDistribution.
+		                     using: aFiniteDeck.
 	anOutstandingGame play.
-	anOutstandingGame
-		throws: (AccelerationCard)
-		from: 'Delorean'.
+	anOutstandingGame throws: AccelerationCard from: 'Delorean'.
 	anOutstandingGame play.
 	self assert: (aBoard boxPositionOf: 'Delorean') equals: 3.
 	anOutstandingGame
@@ -925,43 +925,28 @@ CardTest >> testRedoRepeatsAcceleration [
 { #category : #tests }
 CardTest >> testRedoRepeatsCancellationOfASpeed [
 
-	| aBoard aCardDistribution anotherCardDistribution box1 box2 box3 box4 box5 anOutstandingGame cancellationCardAwarderEffect otherCardDistribution redoCardAwarderEffect |
-	aCardDistribution := OrderedCollection new.
-	aCardDistribution add:
-		(Distribution withProbabilityOf: 1 for: SpeedCard).
-	anotherCardDistribution := OrderedCollection new.
-	anotherCardDistribution add:
-		(Distribution withProbabilityOf: 1 for: CancellationCard).
-	otherCardDistribution := OrderedCollection new.
-	otherCardDistribution add:
-		(Distribution withProbabilityOf: 1 for: RedoCard).
-	cancellationCardAwarderEffect := CardAwarderEffect with:
-		                                 anotherCardDistribution.
-	redoCardAwarderEffect := CardAwarderEffect with:
-		                         otherCardDistribution.
-
-	box1 := Box with: cancellationCardAwarderEffect.
-	box2 := Box with: redoCardAwarderEffect.
-	box3 := Box with: redoCardAwarderEffect.
-	box4 := Box with: redoCardAwarderEffect.
-	box5 := Box with: redoCardAwarderEffect.
+	| aBoard aFiniteDeck cardAwarderEffect anOutstandingGame |
+	aFiniteDeck := FiniteDeck of: 30 setWith: { 
+			               SpeedCard create.
+			               SpeedCard create.
+			               SpeedCard create.
+			               SpeedCard create.
+			               CancellationCard create.
+			               RedoCard create.
+			               RedoCard create }.
+	cardAwarderEffect := CardAwarderEffect associatedTo: aFiniteDeck.
 
 	aBoard := Board
 		          of: 10
 		          and: (ParsecUnit of: 10)
 		          playedFor: 1
-		          with: { 
-				          box1.
-				          box2.
-				          box3.
-				          box4.
-				          box5 }.
+		          with: { Box with: cardAwarderEffect }.
 
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedByMany: { 'Enterprise'. 'Delorean' }
 		                     on: aBoard
 		                     throwing: (LoadedDie withSequence: { 1. 2. 3 })
-		                     using: aCardDistribution.
+		                     using: aFiniteDeck.
 	anOutstandingGame play.
 	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 1.
 	anOutstandingGame
@@ -991,43 +976,28 @@ CardTest >> testRedoRepeatsCancellationOfASpeed [
 { #category : #tests }
 CardTest >> testRedoRepeatsCancellationOfAnAcceleration [
 
-	| aBoard aCardDistribution anotherCardDistribution box1 box2 box3 box4 box5 anOutstandingGame cancellationCardAwarderEffect otherCardDistribution redoCardAwarderEffect |
-	aCardDistribution := OrderedCollection new.
-	aCardDistribution add:
-		(Distribution withProbabilityOf: 1 for: AccelerationCard).
-	anotherCardDistribution := OrderedCollection new.
-	anotherCardDistribution add:
-		(Distribution withProbabilityOf: 1 for: CancellationCard).
-	otherCardDistribution := OrderedCollection new.
-	otherCardDistribution add:
-		(Distribution withProbabilityOf: 1 for: RedoCard).
-	cancellationCardAwarderEffect := CardAwarderEffect with:
-		                                 anotherCardDistribution.
-	redoCardAwarderEffect := CardAwarderEffect with:
-		                         otherCardDistribution.
-
-	box1 := Box with: cancellationCardAwarderEffect.
-	box2 := Box with: redoCardAwarderEffect.
-	box3 := Box with: redoCardAwarderEffect.
-	box4 := Box with: redoCardAwarderEffect.
-	box5 := Box with: redoCardAwarderEffect.
+	| aBoard anOutstandingGame aFiniteDeck cardAwarderEffect |
+	aFiniteDeck := FiniteDeck of: 30 setWith: { 
+			               AccelerationCard create.
+			               AccelerationCard create.
+			               AccelerationCard create.
+			               AccelerationCard create.
+			               CancellationCard create.
+			               RedoCard create.
+			               RedoCard create }.
+	cardAwarderEffect := CardAwarderEffect associatedTo: aFiniteDeck.
 
 	aBoard := Board
 		          of: 10
 		          and: (ParsecUnit of: 10)
 		          playedFor: 1
-		          with: { 
-				          box1.
-				          box2.
-				          box3.
-				          box4.
-				          box5 }.
+		          with: { Box with: cardAwarderEffect }.
 
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedByMany: { 'Enterprise'. 'Delorean' }
 		                     on: aBoard
 		                     throwing: (LoadedDie withSequence: { 1. 2. 3 })
-		                     using: aCardDistribution.
+		                     using: aFiniteDeck.
 	anOutstandingGame play.
 	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 1.
 	anOutstandingGame throws: AccelerationCard from: 'Delorean'.
@@ -1035,15 +1005,14 @@ CardTest >> testRedoRepeatsCancellationOfAnAcceleration [
 	anOutstandingGame play.
 	self assert: (aBoard boxPositionOf: 'Delorean') equals: 4.
 	anOutstandingGame
-		throws:
-		(CancellationCard thrownAt: AccelerationCard)
+		throws: (CancellationCard thrownAt: AccelerationCard)
 		from: 'Enterprise'.
 	anOutstandingGame play.
 	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 5.
 	anOutstandingGame play.
 	self assert: (aBoard boxPositionOf: 'Delorean') equals: 6.
 	anOutstandingGame
-		throws: (RedoCard thrownAt: AccelerationCard )
+		throws: (RedoCard thrownAt: AccelerationCard)
 		from: 'Enterprise'.
 	anOutstandingGame play.
 	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 7
@@ -1052,43 +1021,28 @@ CardTest >> testRedoRepeatsCancellationOfAnAcceleration [
 { #category : #tests }
 CardTest >> testRedoRepeatsCancellationOfAnOverload [
 
-	| aBoard aCardDistribution anotherCardDistribution box1 box2 box3 box4 box5 anOutstandingGame cancellationCardAwarderEffect otherCardDistribution redoCardAwarderEffect |
-	aCardDistribution := OrderedCollection new.
-	aCardDistribution add:
-		(Distribution withProbabilityOf: 1 for: OverloadCard).
-	anotherCardDistribution := OrderedCollection new.
-	anotherCardDistribution add:
-		(Distribution withProbabilityOf: 1 for: CancellationCard).
-	otherCardDistribution := OrderedCollection new.
-	otherCardDistribution add:
-		(Distribution withProbabilityOf: 1 for: RedoCard).
-	cancellationCardAwarderEffect := CardAwarderEffect with:
-		                                 anotherCardDistribution.
-	redoCardAwarderEffect := CardAwarderEffect with:
-		                         otherCardDistribution.
-
-	box1 := Box with: cancellationCardAwarderEffect.
-	box2 := Box with: redoCardAwarderEffect.
-	box3 := Box with: redoCardAwarderEffect.
-	box4 := Box with: redoCardAwarderEffect.
-	box5 := Box with: redoCardAwarderEffect.
+	| aBoard anOutstandingGame aFiniteDeck cardAwarderEffect |
+	aFiniteDeck := FiniteDeck of: 30 setWith: { 
+			               OverloadCard create.
+			               OverloadCard create.
+			               OverloadCard create.
+			               OverloadCard create.
+			               CancellationCard create.
+			               RedoCard create.
+			               RedoCard create }.
+	cardAwarderEffect := CardAwarderEffect associatedTo: aFiniteDeck.
 
 	aBoard := Board
 		          of: 10
 		          and: (ParsecUnit of: 10)
 		          playedFor: 1
-		          with: { 
-				          box1.
-				          box2.
-				          box3.
-				          box4.
-				          box5 }.
+		          with: { (Box with: cardAwarderEffect) }.
 
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedByMany: { 'Enterprise'. 'Delorean' }
 		                     on: aBoard
 		                     throwing: (LoadedDie withSequence: { 1. 2. 3 })
-		                     using: aCardDistribution.
+		                     using: aFiniteDeck.
 	anOutstandingGame play.
 	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 1.
 	anOutstandingGame
@@ -1117,16 +1071,17 @@ CardTest >> testRedoRepeatsCancellationOfAnOverload [
 { #category : #tests }
 CardTest >> testRedoRepeatsOverload [
 
-	| aBoard aCardDistribution anotherCardDistribution cardAwarderEffect box1 box2 box3 box4 box5 anOutstandingGame |
-	aCardDistribution := OrderedCollection new.
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: OverloadCard).
-	anotherCardDistribution := OrderedCollection new.
-	anotherCardDistribution add:
-		(Distribution withProbabilityOf: 1 for: RedoCard).
-	cardAwarderEffect := CardAwarderEffect with: anotherCardDistribution.
-
+	| aBoard cardAwarderEffect box1 box2 box3 box4 box5 anOutstandingGame aFiniteDeck |
+	aFiniteDeck := FiniteDeck of: 30 setWith: { 
+			               OverloadCard create.
+			               OverloadCard create.
+			               OverloadCard create.
+			               OverloadCard create.
+			               RedoCard create.
+			               RedoCard create }.
+		
+	cardAwarderEffect := CardAwarderEffect associatedTo: aFiniteDeck.
+	
 	box1 := Box with: cardAwarderEffect.
 	box2 := Box with: NoEffect new.
 	box3 := Box with: NoEffect new.
@@ -1148,7 +1103,7 @@ CardTest >> testRedoRepeatsOverload [
 		                     playedByMany: { 'Enterprise'. 'Delorean' }
 		                     on: aBoard
 		                     throwing: (LoadedDie withSequence: { 1. 2 })
-		                     using: aCardDistribution.
+		                     using: aFiniteDeck.
 	anOutstandingGame play.
 	anOutstandingGame
 		throws: (OverloadCard thrownAt: 'Enterprise')
@@ -1166,15 +1121,15 @@ CardTest >> testRedoRepeatsOverload [
 { #category : #tests }
 CardTest >> testRedoRepeatsSpeed [
 
-	| aBoard aCardDistribution anotherCardDistribution cardAwarderEffect box1 box2 box3 box4 box5 anOutstandingGame |
-	aCardDistribution := OrderedCollection new.
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: SpeedCard).
-	anotherCardDistribution := OrderedCollection new.
-	anotherCardDistribution add:
-		(Distribution withProbabilityOf: 1 for: RedoCard).
-	cardAwarderEffect := CardAwarderEffect with: anotherCardDistribution.
+	| aBoard cardAwarderEffect box1 box2 box3 box4 box5 anOutstandingGame aFiniteDeck |
+	aFiniteDeck := FiniteDeck of: 30 setWith: { 
+			               SpeedCard create.
+			               SpeedCard create.
+			               SpeedCard create.
+			               SpeedCard create.
+			               RedoCard create.
+			               RedoCard create }.
+	cardAwarderEffect := CardAwarderEffect associatedTo: aFiniteDeck.
 
 	box1 := Box with: cardAwarderEffect.
 	box2 := Box with: NoEffect new.
@@ -1197,7 +1152,7 @@ CardTest >> testRedoRepeatsSpeed [
 		                     playedByMany: { 'Enterprise'. 'Delorean' }
 		                     on: aBoard
 		                     throwing: (LoadedDie withSequence: { 1. 2 })
-		                     using: aCardDistribution.
+		                     using: aFiniteDeck.
 	anOutstandingGame play.
 	anOutstandingGame
 		throws: (SpeedCard thrownAt: 'Enterprise')
@@ -1215,12 +1170,12 @@ CardTest >> testRedoRepeatsSpeed [
 { #category : #tests }
 CardTest >> testRepeatReplaysAtomicBombEffect [
 
-	| aBoard aCardDistribution box1 box2 box3 box4 box5 anOutstandingGame atomicBombEffect |
+	| aBoard aCardDistribution box1 box2 box3 box4 box5 anOutstandingGame atomicBombEffect aFiniteDeck |
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add: (Distribution
 			 withProbabilityOf: 1
 			 for: RepeatCard).
-
+	aFiniteDeck := FiniteDeck of: 100 with: aCardDistribution.
 	atomicBombEffect := AtomicBombEffect create.
 
 	box1 := Box with: NoEffect new.
@@ -1245,7 +1200,7 @@ CardTest >> testRepeatReplaysAtomicBombEffect [
 		                     on: aBoard
 		                     throwing:
 		                     (LoadedDie withSequence: { 1. 4. 4. 6. 6 })
-		                     using: aCardDistribution.
+		                     using: aFiniteDeck.
 
 	anOutstandingGame play.
 	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 1.
@@ -1269,13 +1224,13 @@ CardTest >> testRepeatReplaysAtomicBombEffect [
 { #category : #tests }
 CardTest >> testRepeatReplaysCardAwarderEffect [
 
-	| aBoard aCardDistribution box1 box2 box3 box4 box5 anOutstandingGame cardAwarderEffect |
+	| aBoard aCardDistribution box1 box2 box3 box4 box5 anOutstandingGame cardAwarderEffect aFiniteDeck |
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add: (Distribution
 			 withProbabilityOf: 1
 			 for: RepeatCard).
-
-	cardAwarderEffect := CardAwarderEffect with: aCardDistribution.
+	aFiniteDeck := FiniteDeck of: 100 with: aCardDistribution.
+	cardAwarderEffect := CardAwarderEffect associatedTo: aFiniteDeck.
 
 	box1 := Box with: NoEffect new.
 	box2 := Box with: NoEffect new.
@@ -1298,7 +1253,7 @@ CardTest >> testRepeatReplaysCardAwarderEffect [
 		                     playedByMany: { 'Enterprise'. 'Delorean' }
 		                     on: aBoard
 		                     throwing: (LoadedDie withSequence: { 1. 4. 4 })
-		                     using: aCardDistribution.
+		                     using: aFiniteDeck.
 
 	self assert: (anOutstandingGame deckOf: 'Enterprise') size equals: 2.
 	self assert: (anOutstandingGame deckOf: 'Delorean') size equals: 2.
@@ -1326,12 +1281,12 @@ CardTest >> testRepeatReplaysCardAwarderEffect [
 { #category : #tests }
 CardTest >> testRepeatReplaysHyperJumpEffect [
 
-	| aBoard aCardDistribution box1 box2 box3 box4 box5 anOutstandingGame wormHoleEffect |
+	| aBoard aCardDistribution box1 box2 box3 box4 box5 anOutstandingGame wormHoleEffect aFiniteDeck |
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add: (Distribution
 			 withProbabilityOf: 1
 			 for: RepeatCard).
-
+	aFiniteDeck := FiniteDeck of: 100 with: aCardDistribution.
 	wormHoleEffect := WormHoleEffect create.
 
 	box1 := Box with: NoEffect new.
@@ -1355,7 +1310,7 @@ CardTest >> testRepeatReplaysHyperJumpEffect [
 		                     playedByMany: { 'Enterprise'. 'Delorean' }
 		                     on: aBoard
 		                     throwing: (LoadedDie withSequence: { 1. 3. 4 })
-		                     using: aCardDistribution.
+		                     using: aFiniteDeck.
 
 	anOutstandingGame play.
 	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 1.
@@ -1376,12 +1331,12 @@ CardTest >> testRepeatReplaysHyperJumpEffect [
 { #category : #tests }
 CardTest >> testRepeatReplaysMoonWalkEffect [
 
-	| aBoard aCardDistribution box1 box2 box3 box4 box5 anOutstandingGame moonWalkEffect |
+	| aBoard aCardDistribution box1 box2 box3 box4 box5 anOutstandingGame moonWalkEffect aFiniteDeck |
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add: (Distribution
 			 withProbabilityOf: 1
 			 for: RepeatCard).
-
+	aFiniteDeck := FiniteDeck of: 100 with: aCardDistribution.
 	moonWalkEffect := MoonWalkEffect displacing: 2.
 
 	box1 := Box with: NoEffect new.
@@ -1406,7 +1361,7 @@ CardTest >> testRepeatReplaysMoonWalkEffect [
 		                     on: aBoard
 		                     throwing:
 		                     (LoadedDie withSequence: { 5. 3. 1. 1 })
-		                     using: aCardDistribution.
+		                     using: aFiniteDeck.
 
 	anOutstandingGame play.
 	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 5.
@@ -1436,12 +1391,12 @@ CardTest >> testRepeatReplaysMoonWalkEffect [
 { #category : #tests }
 CardTest >> testRepeatReplaysNoEffectOnPosition [
 
-	| aBoard aCardDistribution box1 box2 box3 box4 box5 anOutstandingGame |
+	| aBoard aCardDistribution box1 box2 box3 box4 box5 anOutstandingGame aFiniteDeck |
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add: (Distribution
 			 withProbabilityOf: 1
 			 for: RepeatCard).
-
+	aFiniteDeck := FiniteDeck of: 100 with: aCardDistribution.
 	box1 := Box with: NoEffect new.
 	box2 := Box with: NoEffect new.
 	box3 := Box with: NoEffect new.
@@ -1463,7 +1418,7 @@ CardTest >> testRepeatReplaysNoEffectOnPosition [
 		                     playedByMany: { 'Enterprise'. 'Delorean' }
 		                     on: aBoard
 		                     throwing: (LoadedDie withSequence: { 1. 3. 4 })
-		                     using: aCardDistribution.
+		                     using: aFiniteDeck.
 
 	anOutstandingGame play.
 	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 1.
@@ -1484,12 +1439,12 @@ CardTest >> testRepeatReplaysNoEffectOnPosition [
 { #category : #tests }
 CardTest >> testRepeatReplaysSpeedUpEffect [
 
-	| aBoard aCardDistribution box1 box2 box3 box4 box5 anOutstandingGame speedUpEffect |
+	| aBoard aCardDistribution box1 box2 box3 box4 box5 anOutstandingGame speedUpEffect aFiniteDeck |
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add: (Distribution
 			 withProbabilityOf: 1
 			 for: RepeatCard).
-
+	aFiniteDeck := FiniteDeck of: 100 with: aCardDistribution.
 	speedUpEffect := SpeedUpEffect create.
 
 	box1 := Box with: speedUpEffect.
@@ -1513,7 +1468,7 @@ CardTest >> testRepeatReplaysSpeedUpEffect [
 		                     playedByMany: { 'Enterprise'. 'Delorean' }
 		                     on: aBoard
 		                     throwing: (LoadedDie with: 1)
-		                     using: aCardDistribution.
+		                     using: aFiniteDeck.
 
 	anOutstandingGame play.
 	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 5.
@@ -1530,12 +1485,12 @@ CardTest >> testRepeatReplaysSpeedUpEffect [
 { #category : #tests }
 CardTest >> testRepeatReplaysWormHoleEffect [
 
-	| aBoard aCardDistribution box1 box2 box3 box4 box5 anOutstandingGame wormHoleEffect |
+	| aBoard aCardDistribution box1 box2 box3 box4 box5 anOutstandingGame wormHoleEffect aFiniteDeck |
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add: (Distribution
 			 withProbabilityOf: 1
 			 for: RepeatCard).
-
+	aFiniteDeck := FiniteDeck of: 100 with: aCardDistribution.
 	wormHoleEffect := WormHoleEffect create.
 
 	box1 := Box with: NoEffect new.
@@ -1559,7 +1514,7 @@ CardTest >> testRepeatReplaysWormHoleEffect [
 		                     playedByMany: { 'Enterprise'. 'Delorean' }
 		                     on: aBoard
 		                     throwing: (LoadedDie withSequence: { 1. 3. 4 })
-		                     using: aCardDistribution.
+		                     using: aFiniteDeck.
 
 	anOutstandingGame play.
 	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 1.
@@ -1580,21 +1535,21 @@ CardTest >> testRepeatReplaysWormHoleEffect [
 { #category : #tests }
 CardTest >> testSpeedCardIncreasesInOneTheSpaceshipDiceThrow [
 
-	| aBoard aCardDistribution anOutstandingGame |
+	| aBoard aCardDistribution anOutstandingGame aFiniteDeck |
 	aBoard := Board
 		          of: 10
 		          and: (ParsecUnit of: 10)
 		          playedFor: 1
 		          with: { (Box with: NoEffect new) }.
 	aCardDistribution := OrderedCollection new.
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: SpeedCard).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: SpeedCard).
+	aFiniteDeck := FiniteDeck of: 100 with: aCardDistribution.
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedByMany: { 'Delorean'. 'Enterprise' }
 		                     on: aBoard
 		                     throwing: (LoadedDie withSequence: { 3. 4 })
-		                     using: aCardDistribution.
+		                     using: aFiniteDeck.
 	anOutstandingGame
 		throws: (SpeedCard thrownAt: 'Enterprise')
 		from: 'Delorean'.

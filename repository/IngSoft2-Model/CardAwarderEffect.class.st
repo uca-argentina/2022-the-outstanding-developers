@@ -2,35 +2,32 @@ Class {
 	#name : #CardAwarderEffect,
 	#superclass : #Object,
 	#instVars : [
-		'cardGenerator'
+		'cardGenerator',
+		'deck'
 	],
 	#classInstVars : [
-		'randomCardGenerator'
+		'randomCardGenerator',
+		'deck'
 	],
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'instance creation' }
+CardAwarderEffect class >> associatedTo: aFiniteDeck [ 
+	
+	^self new initializeAsociatedTo: aFiniteDeck
+]
+
+{ #category : #'instance creation' }
 CardAwarderEffect class >> create [
 
-	^ self new initializeWith: randomCardGenerator
+	^ self new initializeAsociatedTo: deck
 ]
 
 { #category : #'instance creation' }
-CardAwarderEffect class >> with: aDistribution [
+CardAwarderEffect class >> withA: finiteDeck [
 
-	randomCardGenerator := RandomEventGenerator
-		                      with: 1
-		                      using: aDistribution.
-	^ self new initializeWith: randomCardGenerator
-]
-
-{ #category : #'instance creation' }
-CardAwarderEffect class >> withA: distribution [
-
-	randomCardGenerator := RandomEventGenerator
-		                      with: 1
-		                      using: distribution
+	deck := finiteDeck 
 ]
 
 { #category : #effects }
@@ -50,7 +47,7 @@ CardAwarderEffect >> applyEffectTo: aSpaceship on: aBoard [
 { #category : #effects }
 CardAwarderEffect >> dealCard [
 
-	^ cardGenerator generate at: 1
+	^ deck dealCard 
 ]
 
 { #category : #effects }
@@ -71,6 +68,12 @@ CardAwarderEffect >> dealCardTo: aSpaceship in: aBoard [
 CardAwarderEffect >> effectOnPosition [
 
 	^ 0
+]
+
+{ #category : #initialization }
+CardAwarderEffect >> initializeAsociatedTo: aFiniteDeck [ 
+	
+	deck := aFiniteDeck 
 ]
 
 { #category : #initialization }
