@@ -8,7 +8,8 @@ Class {
 		'laps',
 		'boardUnitLength',
 		'game',
-		'lastBox'
+		'lastBox',
+		'deck'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -156,6 +157,20 @@ Board >> boxParsecLength [
 Board >> boxPositionOf: aSpaceship [
 
 	^ (self positionOf: aSpaceship) position
+]
+
+{ #category : #playing }
+Board >> dealCard [
+	| card |
+	card := game dealCard.
+	self assignToCurrentSpaceship: card
+]
+
+{ #category : #playing }
+Board >> dealCardTo: aSpacechip [ 
+	| card |
+	card := game dealCard.
+	self assign: card to: aSpacechip
 ]
 
 { #category : #validation }

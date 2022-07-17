@@ -49,7 +49,7 @@ OutstandingSpaceshipsGameTest >> testAGameCanBeSimulatedAndWon [
 		(Distribution withProbabilityOf: 0.02 for: AtomicBombEffect).
 	boxDistributions add: (Distribution
 			 withProbabilityOf: 0.1
-			 for: (CardAwarderEffect withA: aFiniteDeck)).
+			 for: (CardAwarderEffect)).
 
 	aBoard := Board
 		          of: 20
@@ -242,7 +242,7 @@ OutstandingSpaceshipsGameTest >> testFiniteDeckIsRefilledWithTheUsedCardDeckIfEm
 		          and: (ParsecUnit of: 20)
 		          playedFor: 1
 		          with:
-		          { (Box with: (CardAwarderEffect associatedTo: aFiniteDeck)) }.
+		          { (Box with: (CardAwarderEffect create)) }.
 
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedByMany: { 'Enterprise'. 'Delorean' }

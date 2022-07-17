@@ -154,7 +154,7 @@ CardTest >> testAnInstantaneousCardCantBeUsedIfTheGameHasFinished [
 			               OverloadCard create.
 			               CancellationCard create.
 			               CancellationCard create }.
-	cardAwarderEffect := CardAwarderEffect associatedTo: aFiniteDeck.
+	cardAwarderEffect := CardAwarderEffect new.
 
 	box1 := Box with: cardAwarderEffect.
 	box2 := Box with: cardAwarderEffect.
@@ -216,7 +216,7 @@ CardTest >> testAnInstantaneousCardEffectAffectOnlyOnce [
 			               OverloadCard create.
 			               CancellationCard create.
 			               CancellationCard create }.
-	cardAwarderEffect := CardAwarderEffect associatedTo: aFiniteDeck.
+	cardAwarderEffect := CardAwarderEffect new.
 
 	box1 := Box with: cardAwarderEffect.
 	box2 := Box with: NoEffect new.
@@ -275,7 +275,7 @@ CardTest >> testCancellationCardCantBePlayedIfTheChosenCardisNotInGame [
 			               OverloadCard create.
 			               CancellationCard create.
 			               CancellationCard create }.
-	cardAwarderEffect := CardAwarderEffect associatedTo: aFiniteDeck.
+	cardAwarderEffect := CardAwarderEffect new.
 
 	box1 := Box with: cardAwarderEffect.
 	box2 := Box with: NoEffect new.
@@ -357,7 +357,7 @@ CardTest >> testCancellationCardRemovesASpeedPermanentCard [
 			               SpeedCard create.
 			               CancellationCard create.
 			               CancellationCard create }.
-	cardAwarderEffect := CardAwarderEffect associatedTo: aFiniteDeck.
+	cardAwarderEffect := CardAwarderEffect new.
 
 	box1 := Box with: cardAwarderEffect.
 	box2 := Box with: NoEffect new.
@@ -427,7 +427,7 @@ CardTest >> testCancellationCardRemovesAnAccelerationPermanentCard [
 			               AccelerationCard create.
 			               CancellationCard create.
 			               CancellationCard create }.
-	cardAwarderEffect := CardAwarderEffect associatedTo: aFiniteDeck.
+	cardAwarderEffect := CardAwarderEffect new.
 
 	box1 := Box with: cardAwarderEffect.
 	box2 := Box with: NoEffect new.
@@ -492,7 +492,7 @@ CardTest >> testCancellationCardRemovesAnOverloadPermanentCard [
 			               OverloadCard create.
 			               CancellationCard create.
 			               CancellationCard create }.
-	cardAwarderEffect := CardAwarderEffect associatedTo: aFiniteDeck.
+	cardAwarderEffect := CardAwarderEffect new.
 
 	box1 := Box with: cardAwarderEffect.
 	box2 := Box with: NoEffect new.
@@ -561,7 +561,7 @@ CardTest >> testCancellationCardRemovesOnlyOneAccelerationPermanentCard [
 			               AccelerationCard create.
 			               CancellationCard create.
 			               CancellationCard create }.
-	cardAwarderEffect := CardAwarderEffect associatedTo: aFiniteDeck.
+	cardAwarderEffect := CardAwarderEffect new.
 
 	box1 := Box with: cardAwarderEffect.
 	box2 := Box with: NoEffect new.
@@ -722,7 +722,7 @@ CardTest >> testRedoCantBePlayedIfNoCardHasBeenPlayedBefore [
 	aCardDistribution add:
 		(Distribution withProbabilityOf: 1 for: RedoCard).
 	aFiniteDeck := FiniteDeck of: 100 with: aCardDistribution.
-	cardAwarderEffect := CardAwarderEffect associatedTo: aFiniteDeck.
+	cardAwarderEffect := CardAwarderEffect new.
 
 	box1 := Box with: cardAwarderEffect.
 	box2 := Box with: cardAwarderEffect.
@@ -767,7 +767,7 @@ CardTest >> testRedoRepeatsAPreviousRedoCard [
 			               SpeedCard create.
 			               RedoCard create.
 			               RedoCard create }.
-	cardAwarderEffect := CardAwarderEffect associatedTo: aFiniteDeck.
+	cardAwarderEffect := CardAwarderEffect new.
 	box1 := Box with: cardAwarderEffect.
 	box2 := Box with: cardAwarderEffect.
 	box3 := Box with: cardAwarderEffect.
@@ -835,8 +835,7 @@ CardTest >> testRedoRepeatsARepeatCard [
 			               RedoCard create.
 			               RepeatCard create.
 			               RepeatCard create }.
-	cardAwarderRepeatEffect := CardAwarderEffect associatedTo:
-		                           aFiniteDeck.
+	cardAwarderRepeatEffect := CardAwarderEffect new.
 
 	box1 := Box with: NoEffect new.
 	box2 := Box with: cardAwarderRepeatEffect.
@@ -886,7 +885,7 @@ CardTest >> testRedoRepeatsAcceleration [
 			               AccelerationCard create.
 			               RedoCard create.
 			               RedoCard create }.
-	cardAwarderEffect := CardAwarderEffect associatedTo: aFiniteDeck.
+	cardAwarderEffect := CardAwarderEffect new.
 
 	box1 := Box with: cardAwarderEffect.
 	box2 := Box with: NoEffect new.
@@ -934,7 +933,7 @@ CardTest >> testRedoRepeatsCancellationOfASpeed [
 			               CancellationCard create.
 			               RedoCard create.
 			               RedoCard create }.
-	cardAwarderEffect := CardAwarderEffect associatedTo: aFiniteDeck.
+	cardAwarderEffect := CardAwarderEffect new.
 
 	aBoard := Board
 		          of: 10
@@ -985,7 +984,7 @@ CardTest >> testRedoRepeatsCancellationOfAnAcceleration [
 			               CancellationCard create.
 			               RedoCard create.
 			               RedoCard create }.
-	cardAwarderEffect := CardAwarderEffect associatedTo: aFiniteDeck.
+	cardAwarderEffect := CardAwarderEffect new.
 
 	aBoard := Board
 		          of: 10
@@ -1030,7 +1029,7 @@ CardTest >> testRedoRepeatsCancellationOfAnOverload [
 			               CancellationCard create.
 			               RedoCard create.
 			               RedoCard create }.
-	cardAwarderEffect := CardAwarderEffect associatedTo: aFiniteDeck.
+	cardAwarderEffect := CardAwarderEffect new.
 
 	aBoard := Board
 		          of: 10
@@ -1080,7 +1079,7 @@ CardTest >> testRedoRepeatsOverload [
 			               RedoCard create.
 			               RedoCard create }.
 		
-	cardAwarderEffect := CardAwarderEffect associatedTo: aFiniteDeck.
+	cardAwarderEffect := CardAwarderEffect new.
 	
 	box1 := Box with: cardAwarderEffect.
 	box2 := Box with: NoEffect new.
@@ -1129,7 +1128,7 @@ CardTest >> testRedoRepeatsSpeed [
 			               SpeedCard create.
 			               RedoCard create.
 			               RedoCard create }.
-	cardAwarderEffect := CardAwarderEffect associatedTo: aFiniteDeck.
+	cardAwarderEffect := CardAwarderEffect new.
 
 	box1 := Box with: cardAwarderEffect.
 	box2 := Box with: NoEffect new.
@@ -1230,7 +1229,7 @@ CardTest >> testRepeatReplaysCardAwarderEffect [
 			 withProbabilityOf: 1
 			 for: RepeatCard).
 	aFiniteDeck := FiniteDeck of: 100 with: aCardDistribution.
-	cardAwarderEffect := CardAwarderEffect associatedTo: aFiniteDeck.
+	cardAwarderEffect := CardAwarderEffect new.
 
 	box1 := Box with: NoEffect new.
 	box2 := Box with: NoEffect new.

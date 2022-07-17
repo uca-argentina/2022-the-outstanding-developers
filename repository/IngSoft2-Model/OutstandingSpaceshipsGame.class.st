@@ -161,6 +161,11 @@ OutstandingSpaceshipsGame >> deal [
 				(SpaceshipCardHolder of: spaceship holding: deck dealCard) ] ]
 ]
 
+{ #category : #palying }
+OutstandingSpaceshipsGame >> dealCard [
+	^ deck dealCard
+]
+
 { #category : #accessing }
 OutstandingSpaceshipsGame >> deckOf: aSpaceship [
 

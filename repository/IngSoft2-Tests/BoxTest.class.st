@@ -32,7 +32,7 @@ BoxTest >> testCardAwarderBoxEffectDoesNotModifyPosition [
 		(Distribution withProbabilityOf: 1 for: OverloadCard).
 	noEffect := NoEffect new.
 	aFiniteDeck := FiniteDeck of: 100 with: aCardDistribution.
-	cardAwarderEffect := CardAwarderEffect associatedTo: aFiniteDeck.
+	cardAwarderEffect := CardAwarderEffect new.
 
 	box1 := Box with: cardAwarderEffect.
 	box2 := Box with: noEffect.
@@ -75,7 +75,7 @@ BoxTest >> testCardAwarderBoxEffectGivesACardToTheSpaceshipThatLandsOnIt [
 		(Distribution withProbabilityOf: 1 for: OverloadCard).
 	noEffect := NoEffect new.
 	aFiniteDeck := FiniteDeck of: 100 with: aCardDistribution.
-	cardAwarderEffect := CardAwarderEffect associatedTo: aFiniteDeck.
+	cardAwarderEffect := CardAwarderEffect new.
 
 	box1 := Box with: cardAwarderEffect.
 	box2 := Box with: noEffect.
@@ -94,7 +94,6 @@ BoxTest >> testCardAwarderBoxEffectGivesACardToTheSpaceshipThatLandsOnIt [
 		          and: (ParsecUnit of: 10)
 		          playedFor: 1
 		          with: boxSequence.
-
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedByMany: { 'Enterprise'. 'Delorean' }
 		                     on: aBoard
