@@ -184,9 +184,8 @@ OutstandingSpaceshipsGameTest >> testARoundOfANonSimulatedGameChangesSpaceshipsP
 		         playedFor: 1
 		         with: { (Box with: NoEffect new) }.
 	aCardDistribution := OrderedCollection new.
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: OverloadCard).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: OverloadCard).
 	aFiniteDeck := FiniteDeck of: 100 with: aCardDistribution.
 	aDie := LoadedDie withSequence: { 4. 3 }.
 
@@ -274,8 +273,7 @@ OutstandingSpaceshipsGameTest >> testFiniteDeckIsRefilledWithTheUsedCardDeckIfEm
 		          of: 20
 		          and: (ParsecUnit of: 20)
 		          playedFor: 1
-		          with:
-		          { (Box with: (CardGiverEffect create)) }.
+		          with: { (Box with: CardGiverEffect create) }.
 
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedByMany: { 'Enterprise'. 'Delorean' }
@@ -306,9 +304,8 @@ OutstandingSpaceshipsGameTest >> testGameCanBeWonAndRankingCanBeShown [
 		          with: { (Box with: NoEffect new) }.
 	aDie := LoadedDie withSequence: { 5. 1. 2 }.
 	aCardDistribution := OrderedCollection new.
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: OverloadCard).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: OverloadCard).
 	aFiniteDeck := FiniteDeck of: 100 with: aCardDistribution.
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedByMany:
@@ -337,9 +334,8 @@ OutstandingSpaceshipsGameTest >> testGameCannotBeCreatedWithRepeatedSpaceships [
 		          givenBy: distributions.
 	aDie := Die with: 6.
 	aCardDistribution := OrderedCollection new.
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: OverloadCard).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: OverloadCard).
 
 	self
 		should: [ 
@@ -365,9 +361,8 @@ OutstandingSpaceshipsGameTest >> testGameCannotBeCreatedWithoutSpaceships [
 		          givenBy: distributions.
 	aDie := Die with: 6.
 	aCardDistribution := OrderedCollection new.
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: OverloadCard).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: OverloadCard).
 
 	self
 		should: [ 
@@ -393,23 +388,18 @@ OutstandingSpaceshipsGameTest >> testGameGivesTwoRandomCardsToEachSpaceshipAtThe
 
 	aCardDistribution := OrderedCollection new.
 
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1 / 6
-			 for: SpeedCard).
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1 / 6
-			 for: AccelerationCard).
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1 / 6
-			 for: OverloadCard).
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1 / 6
-			 for: CancellationCard).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 / 6 for: SpeedCard).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 / 6 for: AccelerationCard).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 / 6 for: OverloadCard).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 / 6 for: CancellationCard).
 	aCardDistribution add:
 		(Distribution withProbabilityOf: 1 / 6 for: RedoCard).
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1 / 6
-			 for: RepeatCard).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 / 6 for: RepeatCard).
 	aFiniteDeck := FiniteDeck of: 100 with: aCardDistribution.
 	anOustandingGame := OutstandingSpaceshipsGame
 		                    playedByMany: { 'Delorean'. 'Enterprise' }
@@ -435,23 +425,18 @@ OutstandingSpaceshipsGameTest >> testGameGivesTwoRandomCardsToOneParticipantAndO
 
 	aCardDistribution := OrderedCollection new.
 
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1 / 6
-			 for: SpeedCard).
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1 / 6
-			 for: AccelerationCard).
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1 / 6
-			 for: OverloadCard).
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1 / 6
-			 for: CancellationCard).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 / 6 for: SpeedCard).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 / 6 for: AccelerationCard).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 / 6 for: OverloadCard).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 / 6 for: CancellationCard).
 	aCardDistribution add:
 		(Distribution withProbabilityOf: 1 / 6 for: RedoCard).
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1 / 6
-			 for: RepeatCard).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 / 6 for: RepeatCard).
 	aFiniteDeck := FiniteDeck of: 3 with: aCardDistribution.
 	anOustandingGame := OutstandingSpaceshipsGame
 		                    playedByMany: { 'Delorean'. 'Enterprise' }
@@ -476,9 +461,8 @@ OutstandingSpaceshipsGameTest >> testGameWithABoardOfFifteenBoxesALoadedDieAndAS
 	aDie := LoadedDie with: 5.
 
 	aCardDistribution := OrderedCollection new.
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: (OverloadCard)).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: OverloadCard).
 	aFiniteDeck := FiniteDeck of: 100 with: aCardDistribution.
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedBy: 'Enterprise'
@@ -503,9 +487,8 @@ OutstandingSpaceshipsGameTest >> testGameWithAFiniteBoardASequenceLoadedDieAndTh
 	aDie := LoadedDie withSequence: { 1. 4. 3 }.
 
 	aCardDistribution := OrderedCollection new.
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: OverloadCard).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: OverloadCard).
 	aFiniteDeck := FiniteDeck of: 100 with: aCardDistribution.
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedByMany:
@@ -533,9 +516,8 @@ OutstandingSpaceshipsGameTest >> testGameWithAFiniteBoardASequenceLoadedDieAndTh
 	aDie := LoadedDie withSequence: { 1. 4. 3 }.
 
 	aCardDistribution := OrderedCollection new.
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: OverloadCard).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: OverloadCard).
 	aFiniteDeck := FiniteDeck of: 100 with: aCardDistribution.
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedByMany:
@@ -563,9 +545,8 @@ OutstandingSpaceshipsGameTest >> testGameWithASpaceshipABoardWithFiveBoxesAndALo
 	aDie := LoadedDie with: 4.
 
 	aCardDistribution := OrderedCollection new.
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: OverloadCard).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: OverloadCard).
 	aFiniteDeck := FiniteDeck of: 100 with: aCardDistribution.
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedBy: 'Enterprise'
@@ -589,9 +570,8 @@ OutstandingSpaceshipsGameTest >> testGameWithASpaceshipAndABoardEndsWhenItComple
 	aDie := LoadedDie with: 5.
 
 	aCardDistribution := OrderedCollection new.
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: OverloadCard).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: OverloadCard).
 	aFiniteDeck := FiniteDeck of: 100 with: aCardDistribution.
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedBy: 'Enterprise'
@@ -624,9 +604,8 @@ OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndADiceCupEn
 			            otherDie }.
 
 	aCardDistribution := OrderedCollection new.
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: OverloadCard).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: OverloadCard).
 	aFiniteDeck := FiniteDeck of: 100 with: aCardDistribution.
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedByMany: { 'Delorean'. 'Enterprise' }
@@ -650,9 +629,8 @@ OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndADieEnds [
 		          with: { (Box with: NoEffect new) }.
 	aDie := Die with: 4.
 	aCardDistribution := OrderedCollection new.
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: OverloadCard).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: OverloadCard).
 	aFiniteDeck := FiniteDeck of: 100 with: aCardDistribution.
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedByMany: { 'Zathura'. 'Delorean' }
@@ -676,9 +654,8 @@ OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndALoadedDie
 		          with: { (Box with: NoEffect new) }.
 	aLoadedDie := LoadedDie with: 3.
 	aCardDistribution := OrderedCollection new.
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: OverloadCard).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: OverloadCard).
 	aFiniteDeck := FiniteDeck of: 100 with: aCardDistribution.
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedByMany: { 'Enterprise'. 'Zathura' }
@@ -704,9 +681,8 @@ OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndASequenced
 		          with: { (Box with: NoEffect new) }.
 	aLoadedDie := LoadedDie withSequence: { 1. 3 }.
 	aCardDistribution := OrderedCollection new.
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: OverloadCard).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: OverloadCard).
 	aFiniteDeck := FiniteDeck of: 100 with: aCardDistribution.
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedByMany: { 'Enterprise'. 'Zathura' }
@@ -730,9 +706,8 @@ OutstandingSpaceshipsGameTest >> testGameWithSpaceshipsAFiniteBoardAndLoadedDieH
 		          with: { (Box with: NoEffect new) }.
 	aLoadedDie := LoadedDie with: 4.
 	aCardDistribution := OrderedCollection new.
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: OverloadCard).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: OverloadCard).
 	aFiniteDeck := FiniteDeck of: 100 with: aCardDistribution.
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedByMany: { 'Zathura'. 'Enterprise' }

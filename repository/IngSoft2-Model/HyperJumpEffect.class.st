@@ -51,13 +51,6 @@ HyperJumpEffect >> applyEffectOn: aBoard [
 	   * aBoard amountOfBoxes) floor
 ]
 
-{ #category : #assertion }
-HyperJumpEffect >> assertSequenceSizeIsValid: aParsecSequenceSize [
-
-	aParsecSequenceSize > 0 ifFalse: [ 
-		Error signal: 'Parsec sequence size must be greater than zero' ]
-]
-
 { #category : #effects }
 HyperJumpEffect >> effectOnPosition [
 
