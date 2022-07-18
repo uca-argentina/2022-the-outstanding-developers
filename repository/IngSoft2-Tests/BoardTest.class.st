@@ -67,7 +67,7 @@ BoardTest >> testABoardOfOneHundredRandomGeneratedBoxesHasOneHundredBoxes [
 	distributions add:
 		(Distribution withProbabilityOf: 0.02 for: AtomicBombEffect).
 	distributions add:
-		(Distribution withProbabilityOf: 0.1 for: CardAwarderEffect).
+		(Distribution withProbabilityOf: 0.1 for: CardGiverEffect).
 
 	board := Board
 		         of: n

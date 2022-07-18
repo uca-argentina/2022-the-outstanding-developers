@@ -7,7 +7,7 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'instance creation' }
+{ #category : #asserting }
 Die class >> assertValid: numberOfSides [
 
 	numberOfSides < 3 ifTrue: [ 

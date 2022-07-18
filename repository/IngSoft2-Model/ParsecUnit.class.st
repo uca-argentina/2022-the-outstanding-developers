@@ -21,13 +21,6 @@ ParsecUnit class >> of: anAmountOfParsecs [
 	^ self new of: anAmountOfParsecs
 ]
 
-{ #category : #assertion }
-ParsecUnit class >> sassertValid: anAmountOfParsecs [
-
-	anAmountOfParsecs >= 0 ifFalse: [ 
-		Error signal: 'Units cannot be negative' ]
-]
-
 { #category : #operations }
 ParsecUnit >> / aUnit [
 

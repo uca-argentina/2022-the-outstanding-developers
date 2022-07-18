@@ -13,9 +13,9 @@ PermanentCard >> canBeThrownWithCurrentTurn: isCurrentTurn [
 ]
 
 { #category : #playing }
-PermanentCard >> incorporate: aCard to: anOutstandingSpaceshipsGame [
+PermanentCard >> incorporate: aCard to: aGame [
 
-	aCard addTo: anOutstandingSpaceshipsGame
+	aCard addTo: aGame
 ]
 
 { #category : #accessing }

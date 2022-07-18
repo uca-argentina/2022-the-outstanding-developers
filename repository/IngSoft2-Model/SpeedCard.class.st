@@ -5,28 +5,28 @@ Class {
 		'typeOfCard'
 	],
 	#classInstVars : [
-		'cardType',
 		'spaceship'
 	],
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #playing }
-SpeedCard class >> addAffectingCard: aCard to: aGame [ 
+SpeedCard class >> addAffectingCard: aCard to: aGame [
+
 	aGame addCardAffectingCard: aCard on: self
 ]
 
 { #category : #playing }
-SpeedCard class >> addTo: anOutstandingSpaceshipsGame [
+SpeedCard class >> addTo: aGame [
 
-	anOutstandingSpaceshipsGame addAffecting:
-		(SpaceshipCardHolder of: spaceship holding: self create)
+	aGame addAffecting:
+		(SpaceshipHoldingACard of: spaceship holding: self create)
 ]
 
 { #category : #playing }
-SpeedCard class >> cancelIn: anOutstandingSpaceshipsGame [
+SpeedCard class >> cancelIn: aGame [
 
-	anOutstandingSpaceshipsGame cancel: self create affecting: spaceship
+	aGame cancel: self create affecting: spaceship
 ]
 
 { #category : #'instance creation' }
@@ -36,18 +36,18 @@ SpeedCard class >> create [
 ]
 
 { #category : #playing }
-SpeedCard class >> incorporateTo: anOutstandingSpaceshipsGame [
+SpeedCard class >> incorporateTo: aGame [
 
-	PermanentCard new incorporate: self to: anOutstandingSpaceshipsGame
+	PermanentCard new incorporate: self to: aGame
 ]
 
-{ #category : #playing }
+{ #category : #asserting }
 SpeedCard class >> isAppliedTo: aSpaceship [
 
 	^ spaceship = aSpaceship
 ]
 
-{ #category : #proper }
+{ #category : #asserting }
 SpeedCard class >> isPermanent [
 
 	^ true
@@ -106,7 +106,7 @@ SpeedCard >> incorporate: aCard to: anOutstandingSpaceshipsGame [
 SpeedCard >> incorporateTo: anOutstandingSpaceshipsGame the: element [
 
 	| cardHolder |
-	cardHolder := SpaceshipCardHolder
+	cardHolder := SpaceshipHoldingACard
 		              of: element target
 		              holding: element createWithCard card.
 	anOutstandingSpaceshipsGame addAffecting: cardHolder

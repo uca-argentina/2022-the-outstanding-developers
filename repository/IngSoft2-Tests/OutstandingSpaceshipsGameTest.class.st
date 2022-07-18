@@ -47,9 +47,8 @@ OutstandingSpaceshipsGameTest >> testAGameCanBeSimulatedAndWon [
 		(Distribution withProbabilityOf: 0.08 for: HyperJumpEffect).
 	boxDistributions add:
 		(Distribution withProbabilityOf: 0.02 for: AtomicBombEffect).
-	boxDistributions add: (Distribution
-			 withProbabilityOf: 0.1
-			 for: (CardAwarderEffect)).
+	boxDistributions add:
+		(Distribution withProbabilityOf: 0.1 for: CardGiverEffect).
 
 	aBoard := Board
 		          of: 20
@@ -241,7 +240,7 @@ OutstandingSpaceshipsGameTest >> testCardsAreNotDealtIfDecksAreEmpty [
 		          of: 20
 		          and: (ParsecUnit of: 20)
 		          playedFor: 1
-		          with: { (Box with: CardAwarderEffect new) }.
+		          with: { (Box with: CardGiverEffect new) }.
 
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedByMany: { 'Enterprise'. 'Delorean' }
@@ -276,7 +275,7 @@ OutstandingSpaceshipsGameTest >> testFiniteDeckIsRefilledWithTheUsedCardDeckIfEm
 		          and: (ParsecUnit of: 20)
 		          playedFor: 1
 		          with:
-		          { (Box with: (CardAwarderEffect create)) }.
+		          { (Box with: (CardGiverEffect create)) }.
 
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedByMany: { 'Enterprise'. 'Delorean' }

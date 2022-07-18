@@ -23,7 +23,7 @@ RandomEventGenerator class >> with: anAmount using: aDistribution [
 ]
 
 { #category : #generation }
-RandomEventGenerator >> createFor: aSequenceSize using: orderedDistribution [
+RandomEventGenerator >> createFor: aSequenceSize using: aDistribution [
 
 	| random |
 	random := Random new.
@@ -35,18 +35,18 @@ RandomEventGenerator >> createFor: aSequenceSize using: orderedDistribution [
 		[ 
 		randomNumber
 		<
-		((orderedDistribution at: index) probability + coveredProbabilities) ] 
+		((aDistribution at: index) probability + coveredProbabilities) ] 
 			whileFalse: [ 
 				coveredProbabilities := coveredProbabilities
 				                        +
-				                        (orderedDistribution at: index)
+				                        (aDistribution at: index)
 					                        probability.
 				index := index + 1 ].
 		randomEvents add:
-			(orderedDistribution at: index) classAssociated create ]
+			(aDistribution at: index) eventAssociated create ]
 ]
 
-{ #category : #accessing }
+{ #category : #generation }
 RandomEventGenerator >> generate [
 
 	^ randomEvents

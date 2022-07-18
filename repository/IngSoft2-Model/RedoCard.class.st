@@ -2,7 +2,8 @@ Class {
 	#name : #RedoCard,
 	#superclass : #Object,
 	#instVars : [
-		'card'
+		'card',
+		'typeOfCard'
 	],
 	#classInstVars : [
 		'target',
@@ -12,41 +13,39 @@ Class {
 }
 
 { #category : #playing }
-RedoCard class >> addTo: anOutstandingSpaceshipsGame [ 
+RedoCard class >> addTo: aGame [ 
 	
-	lastPlayedCard incorporateTo: anOutstandingSpaceshipsGame the: self.
+	lastPlayedCard incorporateTo: aGame the: self.
 ]
 
 { #category : #assertion }
 RedoCard class >> assertACardHasBeenPlayed [
 
-	lastPlayedCard = '' ifTrue: [ 
+	lastPlayedCard = NullCard ifTrue: [ 
 		Error signal: 'No card has been played yet' ]
 ]
 
-{ #category : #initialization }
+{ #category : #'instance creation' }
 RedoCard class >> create [
 
-	^ self new initializeWithCard: EmptyCard new
+	^ self new initializeWithCard: NullCard new as: InstantaneousCard new
 ]
 
 { #category : #'instance creation' }
 RedoCard class >> createWithCard [
 
-	^ self new initializeWithCard: lastPlayedCard
+	^ self new initializeWithCard: lastPlayedCard as: InstantaneousCard new
 ]
 
 { #category : #playing }
-RedoCard class >> incorporateTo: anOutstandingSpaceshipsGame [
+RedoCard class >> incorporateTo: aGame [
 
-	lastPlayedCard := anOutstandingSpaceshipsGame lastPlayedCard.
+	lastPlayedCard := aGame lastPlayedCard.
 	self assertACardHasBeenPlayed.
-	lastPlayedCard
-		incorporate: self
-		to: anOutstandingSpaceshipsGame
+	lastPlayedCard incorporate: self to: aGame
 ]
 
-{ #category : #testing }
+{ #category : #assertion }
 RedoCard class >> isPermanent [
 
 	^ false
@@ -77,9 +76,9 @@ RedoCard >> = aCard [
 ]
 
 { #category : #assertions }
-RedoCard >> assertItIsThrowableInTurn: anAssertion in: anOutstandingSpaceshipsGame [
+RedoCard >> assertItIsThrowableInTurn: anAssertion in: aGame [
 
-	^ true
+	typeOfCard canBeThrownWithCurrentTurn: anAssertion
 ]
 
 { #category : #accessing }
@@ -89,7 +88,8 @@ RedoCard >> card [
 ]
 
 { #category : #initialization }
-RedoCard >> initializeWithCard: aCard [
+RedoCard >> initializeWithCard: aCard as: aTypeOfCard [
 
+	typeOfCard := aTypeOfCard.
 	card := aCard
 ]

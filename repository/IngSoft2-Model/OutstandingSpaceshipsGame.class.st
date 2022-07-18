@@ -17,16 +17,16 @@ Class {
 }
 
 { #category : #assertion }
-OutstandingSpaceshipsGame class >> assertValidNumberOfSpaceshipsIsGreaterThanZero: spaceships [
+OutstandingSpaceshipsGame class >> assertNumberOfSpaceshipsIsGreaterThanZero: spaceships [
 
 	spaceships isEmpty ifTrue: [ 
 		Error signal: 'Must use at least one spaceship' ]
 ]
 
 { #category : #assertion }
-OutstandingSpaceshipsGame class >> assertValidSpaceships: spaceships [
+OutstandingSpaceshipsGame class >> assertSpaceshipsAreValid: spaceships [
 
-	self assertValidNumberOfSpaceshipsIsGreaterThanZero: spaceships.
+	self assertNumberOfSpaceshipsIsGreaterThanZero: spaceships.
 	self assertValidSpaceshipsAsigneesAreNotRepeated: spaceships
 ]
 
@@ -53,7 +53,7 @@ OutstandingSpaceshipsGame class >> playedBy: spaceship on: aBoard throwing: dice
 { #category : #'instance creation' }
 OutstandingSpaceshipsGame class >> playedByMany: spaceships on: aBoard throwing: dice using: aFiniteDeck [
 
-	self assertValidSpaceships: spaceships.
+	self assertSpaceshipsAreValid: spaceships.
 	^ self new
 		  initializeWith: aBoard
 		  many: spaceships
@@ -72,7 +72,7 @@ OutstandingSpaceshipsGame >> addAffecting: aSpaceshipCardHolder [
 OutstandingSpaceshipsGame >> addAffectingAll: aCard [ 
 	
 	lastPlayedCard := aCard.
-	spaceshipsPlaying do: [ :spaceship | self addAffecting: (SpaceshipCardHolder of: spaceship holding: aCard) ]
+	spaceshipsPlaying do: [ :spaceship | self addAffecting: (SpaceshipHoldingACard of: spaceship holding: aCard) ]
 ]
 
 { #category : #playing }
@@ -80,7 +80,7 @@ OutstandingSpaceshipsGame >> addCardAffectingAll: aCard for: aTargetCard [
 
 	spaceshipsPlaying do: [ :spaceship | 
 		cardsAffectingCards add:
-			(CardAffencting from: aCard to: (SpaceshipCardHolder
+			(CardAffectation from: aCard to: (SpaceshipHoldingACard
 				  of: spaceship
 				  holding: aTargetCard create)) ].
 	lastPlayedCard := aCard.
@@ -90,7 +90,7 @@ OutstandingSpaceshipsGame >> addCardAffectingAll: aCard for: aTargetCard [
 OutstandingSpaceshipsGame >> addCardAffectingCard: aCard on: aTargetCard [
 
 	cardsAffectingCards add:
-		(CardAffencting from: aCard to: (SpaceshipCardHolder
+		(CardAffectation from: aCard to: (SpaceshipHoldingACard
 				  of: aTargetCard spaceship
 				  holding: aTargetCard create)).
 	lastPlayedCard := aCard.
@@ -109,42 +109,18 @@ OutstandingSpaceshipsGame >> addUsedcard: aCard [
 
 { #category : #accessing }
 OutstandingSpaceshipsGame >> amountOfCards [
-	^ deck cardAmount  
+
+	^ deck cardAmount
 ]
 
-{ #category : #properties }
+{ #category : #accessing }
 OutstandingSpaceshipsGame >> amountOfUsedCards [
 
 	^ usedCardsDeck size
 ]
 
-{ #category : #assertion }
-OutstandingSpaceshipsGame >> assertCardBelongsToSpaceship: cardPosition [
-
-	cardPosition = 0 ifTrue: [ 
-		Error signal: 'The spaceship doesnt have cards to throw' ]
-]
-
 { #category : #asserting }
-OutstandingSpaceshipsGame >> assertCardCanAffect: aTargetCard [
-
-	| cardToAffect |
-	cardToAffect := spaceshipsAffectingCardDeck findFirst: [ :spaceshipAffectingCardDeck | 
-		spaceshipAffectingCardDeck card = aTargetCard and: [ 
-			aTargetCard isAppliedTo: spaceshipAffectingCardDeck spaceship ] ].
-	cardToAffect = 0 ifTrue: [ Error signal: 'SpeedBoost card cant be used if the chosen card is not in game' ]
-]
-
-{ #category : #assertion }
-OutstandingSpaceshipsGame >> assertCardCanBeRemoved: aCardPosition [
-
-	aCardPosition = 0 ifTrue: [ 
-		Error signal:
-			'Cancellation card cant be used if the chosen card is not in game' ]
-]
-
-{ #category : #assertion }
-OutstandingSpaceshipsGame >> assertCardCanBeThrown: aCard from: aSpaceship [
+OutstandingSpaceshipsGame >> assert: aCard canBeThrownBy: aSpaceship [
 
 	board assertACardCanBeThrown.
 	aCard
@@ -152,22 +128,46 @@ OutstandingSpaceshipsGame >> assertCardCanBeThrown: aCard from: aSpaceship [
 		in: self
 ]
 
-{ #category : #calculations }
-OutstandingSpaceshipsGame >> calculateEffectOnDiceThrow [
-	self shouldBeImplemented.
+{ #category : #asserting }
+OutstandingSpaceshipsGame >> assertCardBelongsToSpaceshipIn: aCardPosition [
+
+	aCardPosition = 0 ifTrue: [ 
+		Error signal: 'The spaceship doesnt have cards to throw' ]
+]
+
+{ #category : #asserting }
+OutstandingSpaceshipsGame >> assertCardCanAffect: aTargetCard [
+
+	| cardToAffect |
+	cardToAffect := spaceshipsAffectingCardDeck findFirst: [ 
+		                :spaceshipAffectingCardDeck | 
+		                spaceshipAffectingCardDeck card = aTargetCard and: [ 
+			                aTargetCard isAppliedTo:
+				                spaceshipAffectingCardDeck spaceship ] ].
+	cardToAffect = 0 ifTrue: [ 
+		Error signal:
+			'SpeedBoost card cant be used if the chosen card is not in game' ]
+]
+
+{ #category : #asserting }
+OutstandingSpaceshipsGame >> assertCardCanBeRemovedAt: aCardPosition [
+
+	aCardPosition = 0 ifTrue: [ 
+		Error signal:
+			'Cancellation card cant be used if the chosen card is not in game' ]
 ]
 
 { #category : #calculations }
-OutstandingSpaceshipsGame >> calculateEffectOnDiceThrowFor: aDeck [
+OutstandingSpaceshipsGame >> calculateEffectOnDiceThrowFor: aDeckOfAppliedCards [
 
 	| effectOnDiceThrow usedEffectsOnCards |
 	effectOnDiceThrow := 0.
 	usedEffectsOnCards := OrderedCollection new.
-	aDeck isEmpty ifTrue: [ ^ 0 ].
-	aDeck do: [ :cardHolder | 
+	aDeckOfAppliedCards isEmpty ifTrue: [ ^ 0 ].
+	aDeckOfAppliedCards do: [ :cardHolder | 
 		effectOnDiceThrow := effectOnDiceThrow + (cardHolder
-			                     effectOnThrowWith: cardsAffectingCards
-			                     and: usedEffectsOnCards) ].
+			                      effectOnThrowWith: cardsAffectingCards
+			                      and: usedEffectsOnCards) ].
 	^ effectOnDiceThrow
 ]
 
@@ -179,35 +179,30 @@ OutstandingSpaceshipsGame >> cancel: aCard affecting: aSpaceship [
 		                   :spaceshipAffectingCardDeck | 
 		                   spaceshipAffectingCardDeck spaceship = aSpaceship 
 			                   and: [ 
-			                   spaceshipAffectingCardDeck card name = aCard name ] ].
-	self assertCardCanBeRemoved: cardToBeRemoved.
+			                   spaceshipAffectingCardDeck card name
+			                   = aCard name ] ].
+	self assertCardCanBeRemovedAt: cardToBeRemoved.
 	self removeFromCardAfecting: aCard and: aSpaceship.
 	lastPlayedCard := CancellationCard create.
 	spaceshipsAffectingCardDeck removeAt: cardToBeRemoved.
-	usedCardsDeck add: aCard.
+	usedCardsDeck add: aCard
 ]
 
 { #category : #playing }
-OutstandingSpaceshipsGame >> cancelAll: cardType [
+OutstandingSpaceshipsGame >> cancelAllFrom: aCardType [
+
 	spaceshipsPlaying do: [ :spaceship | 
-		self cancel: cardType affecting: spaceship ].
-	lastPlayedCard := CancellationCard create.
+		self cancel: aCardType affecting: spaceship ].
+	lastPlayedCard := CancellationCard create
 ]
 
-{ #category : #validation }
+{ #category : #asserting }
 OutstandingSpaceshipsGame >> cardCanBeDealt [
 
 	^ self amountOfUsedCards ~= 0 or: [ self amountOfCards ~= 0 ]
 ]
 
-{ #category : #accessing }
-OutstandingSpaceshipsGame >> cardsAffectingOf: aSpaceship [
-
-	^ spaceshipsAffectingCardDeck select: [ :spaceshipCardDeck | 
-		  spaceshipCardDeck spaceship = aSpaceship ]
-]
-
-{ #category : #properties }
+{ #category : #calculations }
 OutstandingSpaceshipsGame >> countActivePermanentCards [
 
 	^ spaceshipsAffectingCardDeck count: [ :spaceshipAffectingCardDeck | 
@@ -222,11 +217,12 @@ OutstandingSpaceshipsGame >> deal [
 		2 timesRepeat: [ 
 			self cardCanBeDealt ifTrue: [ 
 				spaceshipsCardDeck add:
-					(SpaceshipCardHolder of: spaceship holding: deck dealCard) ] ] ]
+					(SpaceshipHoldingACard of: spaceship holding: deck dealCard) ] ] ]
 ]
 
-{ #category : #palying }
+{ #category : #playing }
 OutstandingSpaceshipsGame >> dealCard [
+
 	^ deck dealCard
 ]
 
@@ -237,10 +233,17 @@ OutstandingSpaceshipsGame >> deckOf: aSpaceship [
 		  spaceshipCardDeck spaceship = aSpaceship ]
 ]
 
+{ #category : #accessing }
+OutstandingSpaceshipsGame >> deckOfCardAffecting: aSpaceship [
+
+	^ spaceshipsAffectingCardDeck select: [ :spaceshipCardDeck | 
+		  spaceshipCardDeck spaceship = aSpaceship ]
+]
+
 { #category : #initialization }
 OutstandingSpaceshipsGame >> initializeWith: aBoard many: spaceships throwing: someDice using: aFiniteDeck [
 
-	lastPlayedCard := ''.
+	lastPlayedCard := NullCard.
 	board := aBoard.
 	aBoard playingWith: spaceships in: self.
 	spaceshipsPlaying := spaceships.
@@ -267,14 +270,15 @@ OutstandingSpaceshipsGame >> play [
 
 { #category : #playing }
 OutstandingSpaceshipsGame >> playTurn [
+
 	| resultOfTheRoll deckOfSpaceship effectOnDiceThrow |
 	resultOfTheRoll := dice roll.
-	deckOfSpaceship := self cardsAffectingOf: board spaceshipPlaying.
-	effectOnDiceThrow := self calculateEffectOnDiceThrowFor: deckOfSpaceship .
+	deckOfSpaceship := self deckOfCardAffecting: board spaceshipPlaying.
+	effectOnDiceThrow := self calculateEffectOnDiceThrowFor:
+		                     deckOfSpaceship.
 	board moveSpaceship: resultOfTheRoll + effectOnDiceThrow.
 	self refillDeckIfEmpty.
-	board thereIsAWinner
-		ifTrue: [ stateOfGame := GameWonState new ]
+	board thereIsAWinner ifTrue: [ stateOfGame := GameWonState new ]
 ]
 
 { #category : #playing }
@@ -285,7 +289,7 @@ OutstandingSpaceshipsGame >> refillDeckIfEmpty [
 		usedCardsDeck := OrderedCollection new ]
 ]
 
-{ #category : #properties }
+{ #category : #playing }
 OutstandingSpaceshipsGame >> removeFromCardAfecting: aCard and: aSpaceship [
 
 	cardsAffectingCards removeAllSuchThat: [ :cardAffecting | 
@@ -319,10 +323,10 @@ OutstandingSpaceshipsGame >> throws: aCard from: aSpaceship [
 	cardToBeRemoved := spaceshipsCardDeck findFirst: [ :spaceshipCardDeck | 
 		                   spaceshipCardDeck spaceship = aSpaceship and: [ 
 			                   spaceshipCardDeck card = aCard ] ].
-	self assertCardBelongsToSpaceship: cardToBeRemoved.
+	self assertCardBelongsToSpaceshipIn: cardToBeRemoved.
 	self
-		assertCardCanBeThrown: (spaceshipsCardDeck at: cardToBeRemoved) card
-		from: aSpaceship.
+		assert: (spaceshipsCardDeck at: cardToBeRemoved) card
+		canBeThrownBy: aSpaceship.
 	spaceshipsCardDeck removeAt: cardToBeRemoved.
 	aCard incorporateTo: self
 ]

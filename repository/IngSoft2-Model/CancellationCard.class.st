@@ -6,11 +6,18 @@ Class {
 	],
 	#classInstVars : [
 		'cardType',
-		'spaceship',
 		'targetCard'
 	],
 	#category : #'IngSoft2-Model'
 }
+
+{ #category : #asserting }
+CancellationCard class >> assertTargetIsAPermanentCard [
+
+	targetCard isPermanent ifFalse: [ 
+		Error signal:
+			'Cancellation card can only be played with Permanent Cards' ]
+]
 
 { #category : #'instance creation' }
 CancellationCard class >> create [
@@ -20,11 +27,12 @@ CancellationCard class >> create [
 
 { #category : #playing }
 CancellationCard class >> incorporateTo: anOutstandingSpaceshipsGame [
-
+	
+	self assertTargetIsAPermanentCard.
 	InstantaneousCard new incorporate: self to: anOutstandingSpaceshipsGame
 ]
 
-{ #category : #testing }
+{ #category : #properties }
 CancellationCard class >> isPermanent [
 
 	^ false

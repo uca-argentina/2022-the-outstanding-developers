@@ -12,12 +12,17 @@ Class {
 BoardPosition class >> at: aPosition in: aLap [
 
 	| validatedPosition validatedLap |
-	validatedPosition := ((aPosition = 0 and: [ aLap > 1 ]) or:
-		                      aPosition < 0)
-		                     ifTrue: [ 1 ]
-		                     ifFalse: [ aPosition ].
+	validatedPosition := self sanatize: aPosition on: aLap.
 	validatedLap := aLap max: 1.
 	^ self new initializeAt: validatedPosition in: validatedLap
+]
+
+{ #category : #'instance creation' }
+BoardPosition class >> sanatize: aPosition on: aLap [
+
+	^ ((aPosition = 0 and: [ aLap > 1 ]) or: aPosition < 0)
+		  ifTrue: [ 1 ]
+		  ifFalse: [ aPosition ]
 ]
 
 { #category : #comparing }

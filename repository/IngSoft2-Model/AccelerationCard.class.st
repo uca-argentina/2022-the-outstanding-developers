@@ -4,9 +4,6 @@ Class {
 	#instVars : [
 		'typeOfCard'
 	],
-	#classInstVars : [
-		'cardType'
-	],
 	#category : #'IngSoft2-Model'
 }
 
@@ -17,15 +14,15 @@ AccelerationCard class >> addAffectingCard: aCard to: aGame [
 ]
 
 { #category : #playing }
-AccelerationCard class >> addTo: anOutstandingSpaceshipsGame [
+AccelerationCard class >> addTo: aGame [
 
-	anOutstandingSpaceshipsGame addAffectingAll: self create.
+	aGame addAffectingAll: self create.
 ]
 
 { #category : #playing }
-AccelerationCard class >> cancelIn: anOutstandingSpaceshipsGame [
+AccelerationCard class >> cancelIn: aGame [
 
-	anOutstandingSpaceshipsGame cancelAll: self create
+	aGame cancelAllFrom: self create
 ]
 
 { #category : #initialization }
@@ -35,9 +32,9 @@ AccelerationCard class >> create [
 ]
 
 { #category : #playing }
-AccelerationCard class >> incorporateTo: anOutstandingSpaceshipsGame [
+AccelerationCard class >> incorporateTo: aGame [
 
-	PermanentCard new incorporate: self to: anOutstandingSpaceshipsGame
+	PermanentCard new incorporate: self to: aGame
 ]
 
 { #category : #playing }
@@ -52,11 +49,6 @@ AccelerationCard class >> isPermanent [
 	^ true
 ]
 
-{ #category : #accessing }
-AccelerationCard class >> spaceship [
-	^ ''
-]
-
 { #category : #comparing }
 AccelerationCard >> = aCard [
 
@@ -64,16 +56,9 @@ AccelerationCard >> = aCard [
 ]
 
 { #category : #asserting }
-AccelerationCard >> assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs: anAssertion [
+AccelerationCard >> assertItIsThrowableInTurn: anAssertion in: aGame [
 
 	typeOfCard canBeThrownWithCurrentTurn: anAssertion
-]
-
-{ #category : #asserting }
-AccelerationCard >> assertItIsThrowableInTurn: anAssertion in: anOutstandingSpaceshipsGame [
-
-	self assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs:
-		anAssertion
 ]
 
 { #category : #accessing }
@@ -89,16 +74,15 @@ AccelerationCard >> effectOnThrow [
 ]
 
 { #category : #playing }
-AccelerationCard >> incorporate: aCard to: anOutstandingSpaceshipsGame [ 
+AccelerationCard >> incorporate: aCard to: aGame [ 
 	
-	self cardBehaviour incorporate: aCard to: anOutstandingSpaceshipsGame 
+	self cardBehaviour incorporate: aCard to: aGame 
 ]
 
 { #category : #playing }
-AccelerationCard >> incorporateTo: anOutstandingSpaceshipsGame the: cardElement [
+AccelerationCard >> incorporateTo: aGame the: cardElement [
 
-	anOutstandingSpaceshipsGame addAffectingAll:
-		cardElement createWithCard card
+	aGame addAffectingAll: cardElement createWithCard card
 ]
 
 { #category : #initialization }

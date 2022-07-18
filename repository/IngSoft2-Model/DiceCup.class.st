@@ -14,9 +14,9 @@ DiceCup class >> withAll: dice [
 ]
 
 { #category : #initialization }
-DiceCup >> initializeWithAll: aDice [
+DiceCup >> initializeWithAll: theDice [
  
-	dice := aDice
+	dice := theDice
 ]
 
 { #category : #rolling }

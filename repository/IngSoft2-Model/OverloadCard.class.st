@@ -18,16 +18,16 @@ OverloadCard class >> addAffectingCard: aCard to: aGame [
 ]
 
 { #category : #playing }
-OverloadCard class >> addTo: anOutstandingSpaceshipsGame [
+OverloadCard class >> addTo: aGame [
 
-	anOutstandingSpaceshipsGame addAffecting:
-		(SpaceshipCardHolder of: spaceship holding: self create)
+	aGame addAffecting:
+		(SpaceshipHoldingACard of: spaceship holding: self create)
 ]
 
 { #category : #playing }
-OverloadCard class >> cancelIn: anOutstandingSpaceshipsGame [
+OverloadCard class >> cancelIn: aGame [
 
-	anOutstandingSpaceshipsGame cancel: self create affecting: spaceship
+	aGame cancel: self create affecting: spaceship
 ]
 
 { #category : #'instance creation' }
@@ -74,16 +74,9 @@ OverloadCard >> = aCard [
 ]
 
 { #category : #asserting }
-OverloadCard >> assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs: anAssertion [
+OverloadCard >> assertItIsThrowableInTurn: anAssertion in: aGame [
 
 	typeOfCard canBeThrownWithCurrentTurn: anAssertion
-]
-
-{ #category : #asserting }
-OverloadCard >> assertItIsThrowableInTurn: anAssertion in: anOutstandingSpaceshipsGame [
-
-	self assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs:
-		anAssertion
 ]
 
 { #category : #accessing }
@@ -99,19 +92,19 @@ OverloadCard >> effectOnThrow [
 ]
 
 { #category : #playing }
-OverloadCard >> incorporate: aCard to: anOutstandingSpaceshipsGame [ 
+OverloadCard >> incorporate: aCard to: aGame [ 
 	
-	self cardBehaviour incorporate: aCard to: anOutstandingSpaceshipsGame
+	self cardBehaviour incorporate: aCard to: aGame
 ]
 
 { #category : #playing }
-OverloadCard >> incorporateTo: anOutstandingSpaceshipsGame the: element [
+OverloadCard >> incorporateTo: aGame the: element [
 
 	| cardHolder |
-	cardHolder := SpaceshipCardHolder
+	cardHolder := SpaceshipHoldingACard
 		              of: element target
 		              holding: element createWithCard card.
-	anOutstandingSpaceshipsGame addAffecting: cardHolder
+	aGame addAffecting: cardHolder
 ]
 
 { #category : #initialization }

@@ -2,7 +2,6 @@ Class {
 	#name : #FiniteDeck,
 	#superclass : #Object,
 	#instVars : [
-		'cardAmount',
 		'cards'
 	],
 	#category : #'IngSoft2-Model'
@@ -19,6 +18,7 @@ FiniteDeck class >> assertCardAmountIsNotNegative: aCardAmount [
 FiniteDeck class >> of: aCardAmount setWith: aCardCollection [
 
 	| cards sequenceHandler |
+	self assertCardAmountIsNotNegative: aCardAmount.
 	cards := OrderedCollection new.
 	sequenceHandler := SequenceHandler for: aCardCollection size.
 	aCardAmount timesRepeat: [ 
