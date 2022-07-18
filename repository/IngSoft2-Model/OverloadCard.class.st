@@ -12,6 +12,12 @@ Class {
 }
 
 { #category : #playing }
+OverloadCard class >> addAffectingCard: aCard to: aGame [
+
+	aGame addCardAffectingCard: aCard on: self
+]
+
+{ #category : #playing }
 OverloadCard class >> addTo: anOutstandingSpaceshipsGame [
 
 	anOutstandingSpaceshipsGame addAffecting:
@@ -34,6 +40,24 @@ OverloadCard class >> create [
 OverloadCard class >> incorporateTo: anOutstandingSpaceshipsGame [
 
 	PermanentCard new incorporate: self to: anOutstandingSpaceshipsGame
+]
+
+{ #category : #playing }
+OverloadCard class >> isAppliedTo: aSpaceship [
+
+	^ spaceship = aSpaceship
+]
+
+{ #category : #properties }
+OverloadCard class >> isPermanent [
+
+	^ true
+]
+
+{ #category : #accessing }
+OverloadCard class >> spaceship [
+
+	^ spaceship
 ]
 
 { #category : #throwing }

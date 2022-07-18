@@ -24,6 +24,12 @@ CancellationCard class >> incorporateTo: anOutstandingSpaceshipsGame [
 	InstantaneousCard new incorporate: self to: anOutstandingSpaceshipsGame
 ]
 
+{ #category : #testing }
+CancellationCard class >> isPermanent [
+
+	^ false
+]
+
 { #category : #playing }
 CancellationCard class >> playOnceIn: anOutstandingSpaceshipsGame [ 
 	

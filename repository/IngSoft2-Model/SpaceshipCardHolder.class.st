@@ -20,10 +20,18 @@ SpaceshipCardHolder >> card [
 	^ card
 ]
 
-{ #category : #accessing }
-SpaceshipCardHolder >> effectOnThrow [
+{ #category : #'as yet unclassified' }
+SpaceshipCardHolder >> effectOnThrowWith: cardsAffecting and: usedCardsAffecting [
 
-	^ card effectOnThrow
+	| cardAffectingCurrent cardAffectingFound effect |
+	effect := card effectOnThrow.
+	cardsAffecting do: [ :cardAffecting | 
+		(cardAffecting targetCard name = card name and: [ 
+			 cardAffecting targetSpaceship = spaceship and: [ 
+				 (usedCardsAffecting indexOf: cardAffecting) = 0 ] ]) ifTrue: [ 
+			effect := cardAffecting effectOnThrow: effect.
+			usedCardsAffecting add: cardAffecting ] ].
+	^ effect
 ]
 
 { #category : #initialization }

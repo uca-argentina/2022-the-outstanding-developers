@@ -46,6 +46,12 @@ RedoCard class >> incorporateTo: anOutstandingSpaceshipsGame [
 		to: anOutstandingSpaceshipsGame
 ]
 
+{ #category : #testing }
+RedoCard class >> isPermanent [
+
+	^ false
+]
+
 { #category : #playing }
 RedoCard class >> playOnceIn: anOutstandingSpaceshipsGame [
 
