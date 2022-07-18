@@ -1223,53 +1223,40 @@ CardTest >> testRedoRepeatsSpeed [
 
 { #category : #tests }
 CardTest >> testRedoRepeatsSpeedBoost [
-	
-	| aBoard cardAwarderEffect box1 box2 box3 box4 box5 anOutstandingGame aFiniteDeck |
-	self halt.
+
+	| aBoard anOutstandingGame aFiniteDeck |
 	aFiniteDeck := FiniteDeck of: 30 setWith: { 
-			               OverloadCard create.
-			               OverloadCard create.
-			               OverloadCard create.
-			               OverloadCard create.
+			               SpeedCard create.
+			               SpeedBoostCard create.
 			               RedoCard create.
 			               RedoCard create }.
-		
-	cardAwarderEffect := CardAwarderEffect new.
-	
-	box1 := Box with: cardAwarderEffect.
-	box2 := Box with: NoEffect new.
-	box3 := Box with: NoEffect new.
-	box4 := Box with: NoEffect new.
-	box5 := Box with: NoEffect new.
 
 	aBoard := Board
-		          of: 10
+		          of: 30
 		          and: (ParsecUnit of: 10)
 		          playedFor: 1
-		          with: { 
-				          box1.
-				          box2.
-				          box3.
-				          box4.
-				          box5 }.
+		          with: { Box with: NoEffect new. }.
 
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedByMany: { 'Enterprise'. 'Delorean' }
 		                     on: aBoard
-		                     throwing: (LoadedDie withSequence: { 1. 2 })
+		                     throwing: (LoadedDie with: 1)
 		                     using: aFiniteDeck.
-	anOutstandingGame play.
+
 	anOutstandingGame
-		throws: (OverloadCard thrownAt: 'Enterprise')
-		from: 'Delorean'.
-	anOutstandingGame play.
-	self assert: (aBoard boxPositionOf: 'Delorean') equals: 2.
+		throws: (SpeedCard thrownAt: 'Enterprise')
+		from: 'Enterprise'.
 	anOutstandingGame
-		throws: (RedoCard thrownAt: 'Delorean')
+		throws: (SpeedBoostCard thrownAt: (SpeedCard thrownAt: 'Enterprise'))
 		from: 'Enterprise'.
 	anOutstandingGame play.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 3.
+	anOutstandingGame
+		throws: (RedoCard thrownAt: 'Enterprise')
+		from: 'Delorean'.
 	anOutstandingGame play.
-	self assert: (aBoard boxPositionOf: 'Delorean') equals: 2
+	anOutstandingGame play.
+	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 8
 ]
 
 { #category : #tests }

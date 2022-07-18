@@ -2,7 +2,8 @@ Class {
 	#name : #SpeedBoostCard,
 	#superclass : #Object,
 	#instVars : [
-		'typeOfCard'
+		'typeOfCard',
+		'targetCard'
 	],
 	#classInstVars : [
 		'targetCard'
@@ -18,7 +19,7 @@ SpeedBoostCard class >> assertTargetIsAPermanentCard [
 { #category : #'instance creation' }
 SpeedBoostCard class >> create [
 
-	^ self new initializeAs: InstantaneousCard new
+	^ self new initializeAs: InstantaneousCard new towards: targetCard 
 ]
 
 { #category : #playing }
@@ -64,8 +65,27 @@ SpeedBoostCard >> assertItIsThrowableInTurn: anAssertion in: aGame [
 		anAssertion
 ]
 
-{ #category : #initialization }
-SpeedBoostCard >> initializeAs: aTypeOfCard [
+{ #category : #accessing }
+SpeedBoostCard >> cardBehaviour [
+	
+	^typeOfCard 
+]
 
+{ #category : #playing }
+SpeedBoostCard >> incorporate: aCard to: aGame [
+
+	self cardBehaviour incorporate: aCard to: aGame
+]
+
+{ #category : #playing }
+SpeedBoostCard >> incorporateTo: aGame the: cardElement [ 
+	aGame assertCardCanAffect: targetCard.
+	targetCard addAffectingCard: self to: aGame
+]
+
+{ #category : #initialization }
+SpeedBoostCard >> initializeAs: aTypeOfCard towards: aTargetCard [ 
+	
+	targetCard := aTargetCard.
 	typeOfCard := aTypeOfCard
 ]

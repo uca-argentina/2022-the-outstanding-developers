@@ -82,7 +82,8 @@ OutstandingSpaceshipsGame >> addCardAffectingAll: aCard for: aTargetCard [
 		cardsAffectingCards add:
 			(CardAffencting from: aCard to: (SpaceshipCardHolder
 				  of: spaceship
-				  holding: aTargetCard create)) ]
+				  holding: aTargetCard create)) ].
+	lastPlayedCard := aCard.
 ]
 
 { #category : #playing }
@@ -91,7 +92,8 @@ OutstandingSpaceshipsGame >> addCardAffectingCard: aCard on: aTargetCard [
 	cardsAffectingCards add:
 		(CardAffencting from: aCard to: (SpaceshipCardHolder
 				  of: aTargetCard spaceship
-				  holding: aTargetCard create))
+				  holding: aTargetCard create)).
+	lastPlayedCard := aCard.
 ]
 
 { #category : #playing }
@@ -159,13 +161,13 @@ OutstandingSpaceshipsGame >> calculateEffectOnDiceThrow [
 OutstandingSpaceshipsGame >> calculateEffectOnDiceThrowFor: aDeck [
 
 	| effectOnDiceThrow usedEffectsOnCards |
+	effectOnDiceThrow := 0.
 	usedEffectsOnCards := OrderedCollection new.
 	aDeck isEmpty ifTrue: [ ^ 0 ].
-	self halt.
-	effectOnDiceThrow := aDeck sum: [ :cardHolder | 
-		                     cardHolder
+	aDeck do: [ :cardHolder | 
+		effectOnDiceThrow := effectOnDiceThrow + (cardHolder
 			                     effectOnThrowWith: cardsAffectingCards
-			                     and: usedEffectsOnCards ].
+			                     and: usedEffectsOnCards) ].
 	^ effectOnDiceThrow
 ]
 
