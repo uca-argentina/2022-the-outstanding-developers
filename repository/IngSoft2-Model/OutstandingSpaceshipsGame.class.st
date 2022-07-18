@@ -181,6 +181,7 @@ OutstandingSpaceshipsGame >> cancel: aCard affecting: aSpaceship [
 			                   and: [ 
 			                   spaceshipAffectingCardDeck card name = aCard name ] ].
 	self assertCardCanBeRemoved: cardToBeRemoved.
+	self removeFromCardAfecting: aCard and: aSpaceship.
 	lastPlayedCard := CancellationCard create.
 	spaceshipsAffectingCardDeck removeAt: cardToBeRemoved.
 	usedCardsDeck add: aCard.
@@ -282,6 +283,14 @@ OutstandingSpaceshipsGame >> refillDeckIfEmpty [
 	deck cardAmount = 0 ifTrue: [ 
 		deck reSetWith: usedCardsDeck shuffle.
 		usedCardsDeck := OrderedCollection new ]
+]
+
+{ #category : #properties }
+OutstandingSpaceshipsGame >> removeFromCardAfecting: aCard and: aSpaceship [
+
+	cardsAffectingCards removeAllSuchThat: [ :cardAffecting | 
+		cardAffecting targetCard name = aCard name and: [ 
+			cardAffecting targetSpaceship = aSpaceship ] ]
 ]
 
 { #category : #playing }
