@@ -7,7 +7,7 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #'instance creation' }
+{ #category : #asserting }
 Die class >> assertValid: numberOfSides [
 
 	numberOfSides < 3 ifTrue: [ 
@@ -15,10 +15,10 @@ Die class >> assertValid: numberOfSides [
 ]
 
 { #category : #'instance creation' }
-Die class >> with: numberOfSides [
+Die class >> with: aNumberOfSides [
 
-	self assertValid: numberOfSides.
-	^ self new initializeWith: numberOfSides
+	self assertValid: aNumberOfSides.
+	^ self new initializeWith: aNumberOfSides
 ]
 
 { #category : #initialization }

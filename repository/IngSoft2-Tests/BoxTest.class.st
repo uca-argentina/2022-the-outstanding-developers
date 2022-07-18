@@ -32,7 +32,7 @@ BoxTest >> testCardAwarderBoxEffectDoesNotModifyPosition [
 		(Distribution withProbabilityOf: 1 for: OverloadCard).
 	noEffect := NoEffect new.
 	aFiniteDeck := FiniteDeck of: 100 with: aCardDistribution.
-	cardAwarderEffect := CardAwarderEffect new.
+	cardAwarderEffect := CardGiverEffect new.
 
 	box1 := Box with: cardAwarderEffect.
 	box2 := Box with: noEffect.
@@ -75,7 +75,7 @@ BoxTest >> testCardAwarderBoxEffectGivesACardToTheSpaceshipThatLandsOnIt [
 		(Distribution withProbabilityOf: 1 for: OverloadCard).
 	noEffect := NoEffect new.
 	aFiniteDeck := FiniteDeck of: 100 with: aCardDistribution.
-	cardAwarderEffect := CardAwarderEffect new.
+	cardAwarderEffect := CardGiverEffect new.
 
 	box1 := Box with: cardAwarderEffect.
 	box2 := Box with: noEffect.
@@ -128,21 +128,21 @@ BoxTest >> testHyperJumpBoxCantBeCreatedWithAnEmptySequence [
 ]
 
 { #category : #tests }
-BoxTest >> testHyperJumpBoxEffectDisplacesAListOfParsecsValuesRepeatedly [
+BoxTest >> testHyperJumpBoxEffectDisplacesAListOfValuesRepeatedlyAnInOrder [
 
 	| box anEffect parsecsList |
 	parsecsList := { 
 		               (ParsecUnit of: 4).
 		               (ParsecUnit of: 3).
-		               (ParsecUnit of: 1).
+		               (LightYearUnit of: 3).
 		               (ParsecUnit of: 5) }.
 	anEffect := HyperJumpEffect with: parsecsList.
 	box := Box with: anEffect.
-	self assert: box effectOnPosition valueOfMeasurement equals: 4.
-	self assert: box effectOnPosition valueOfMeasurement equals: 3.
-	self assert: box effectOnPosition valueOfMeasurement equals: 1.
-	self assert: box effectOnPosition valueOfMeasurement equals: 5.
-	self assert: box effectOnPosition valueOfMeasurement equals: 4
+	self assert: box effectOnPosition inParsecs equals: 5.
+	self assert: box effectOnPosition inParsecs equals: 4.
+	self assert: box effectOnPosition inParsecs equals: 3.
+	self assert: box effectOnPosition inParsecs equals: 1.
+	self assert: box effectOnPosition inParsecs equals: 5
 ]
 
 { #category : #tests }

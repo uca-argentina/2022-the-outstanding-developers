@@ -1,5 +1,5 @@
 Class {
-	#name : #SpaceshipCardHolder,
+	#name : #SpaceshipHoldingACard,
 	#superclass : #Object,
 	#instVars : [
 		'spaceship',
@@ -9,40 +9,40 @@ Class {
 }
 
 { #category : #'instance creation' }
-SpaceshipCardHolder class >> of: aSpaceship holding: aCard [
+SpaceshipHoldingACard class >> of: aSpaceship holding: aCard [
 
 	^ self new of: aSpaceship holding: aCard
 ]
 
 { #category : #accessing }
-SpaceshipCardHolder >> card [
+SpaceshipHoldingACard >> card [
 
 	^ card
 ]
 
-{ #category : #'as yet unclassified' }
-SpaceshipCardHolder >> effectOnThrowWith: cardsAffecting and: usedCardsAffecting [
+{ #category : #effect }
+SpaceshipHoldingACard >> effectOnThrowWith: cardsAffecting and: usedCardsAffecting [
 
-	| cardAffectingCurrent cardAffectingFound effect |
+	| effect |
 	effect := card effectOnThrow.
 	cardsAffecting do: [ :cardAffecting | 
 		(cardAffecting targetCard name = card name and: [ 
 			 cardAffecting targetSpaceship = spaceship and: [ 
 				 (usedCardsAffecting indexOf: cardAffecting) = 0 ] ]) ifTrue: [ 
-			effect := cardAffecting effectOnThrow: effect.
+			effect := cardAffecting effectOn: effect.
 			usedCardsAffecting add: cardAffecting ] ].
 	^ effect
 ]
 
 { #category : #initialization }
-SpaceshipCardHolder >> of: aSpaceship holding: aCard [
+SpaceshipHoldingACard >> of: aSpaceship holding: aCard [
 
 	spaceship := aSpaceship.
 	card := aCard
 ]
 
 { #category : #accessing }
-SpaceshipCardHolder >> spaceship [
+SpaceshipHoldingACard >> spaceship [
 
 	^ spaceship
 ]

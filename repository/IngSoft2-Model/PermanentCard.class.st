@@ -5,17 +5,17 @@ Class {
 }
 
 { #category : #validation }
-PermanentCard >> canBeThrownWithCurrentTurn: isCurrentTurn [
+PermanentCard >> canBeThrownWithCurrentTurnBeing: anAssertion [
 
-	isCurrentTurn ifFalse: [ 
+	anAssertion ifFalse: [ 
 		Error signal:
 			'Permanent cards can only be thrown in spaceships turn' ]
 ]
 
 { #category : #playing }
-PermanentCard >> incorporate: aCard to: anOutstandingSpaceshipsGame [
+PermanentCard >> incorporate: aCard to: aGame [
 
-	aCard addTo: anOutstandingSpaceshipsGame
+	aCard addTo: aGame
 ]
 
 { #category : #accessing }

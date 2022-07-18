@@ -8,16 +8,16 @@ Class {
 }
 
 { #category : #assertion }
-LightYearUnit class >> assertValid: aLightYearsAmount [
+LightYearUnit class >> assertValidAmountOf: lightYears [
 
-	aLightYearsAmount >= 0 ifFalse: [ 
+	lightYears >= 0 ifFalse: [ 
 		Error signal: 'Units cannot be negative' ]
 ]
 
 { #category : #'instance creation' }
 LightYearUnit class >> of: aLightYearsAmount [
 
-	self assertValid: aLightYearsAmount.
+	self assertValidAmountOf: aLightYearsAmount.
 	^ self new of: aLightYearsAmount
 ]
 

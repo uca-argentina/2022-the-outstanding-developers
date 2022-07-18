@@ -1,11 +1,11 @@
 Class {
-	#name : #SpaceshipCardHolderTest,
+	#name : #SpaceshipHoldingCardTest,
 	#superclass : #TestCase,
 	#category : #'IngSoft2-Tests'
 }
 
 { #category : #tests }
-SpaceshipCardHolderTest >> testSpaceshipThatStartsWithTwoCardsAndPlaysOneHasOneCardLeftToPlay [
+SpaceshipHoldingCardTest >> testSpaceshipThatStartsWithTwoCardsAndPlaysOneHasOneCardLeftToPlay [
 
 	| aBoard aCardDistribution anOutstandingGame aFiniteDeck |
 	aBoard := Board
@@ -15,9 +15,8 @@ SpaceshipCardHolderTest >> testSpaceshipThatStartsWithTwoCardsAndPlaysOneHasOneC
 		          with: { (Box with: NoEffect new) }.
 
 	aCardDistribution := OrderedCollection new.
-	aCardDistribution add: (Distribution
-			 withProbabilityOf: 1
-			 for: OverloadCard).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 for: OverloadCard).
 	aFiniteDeck := FiniteDeck of: 100 with: aCardDistribution.
 
 	anOutstandingGame := OutstandingSpaceshipsGame

@@ -8,21 +8,24 @@ Class {
 	#category : #'IngSoft2-Tests'
 }
 
-{ #category : #'instance creation' }
+{ #category : #asserting }
 LoadedDie class >> assertValid: aSequence [
-	
-	(aSequence allSatisfy: [ :number | number > 0 ]) ifFalse: [ Error signal: 'Die should be loaded with numbers greater than zero' ]
+
+	(aSequence allSatisfy: [ :number | number > 0 ]) ifFalse: [ 
+		Error signal: 'Die should be loaded with numbers greater than zero' ]
 ]
 
 { #category : #'instance creation' }
 LoadedDie class >> with: result [
-	^self withSequence: {result}.
+
+	^ self withSequence: { result }
 ]
 
 { #category : #'instance creation' }
 LoadedDie class >> withSequence: aSequence [
+
 	self assertValid: aSequence.
-	^self new initializeWithASequence: aSequence.
+	^ self new initializeWithASequence: aSequence
 ]
 
 { #category : #initialization }

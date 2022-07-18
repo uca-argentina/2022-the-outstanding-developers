@@ -21,7 +21,7 @@ SequenceHandler >> assertCurrentIndexIs: anIndex [
 	^ anIndex = currentSequenceIndex
 ]
 
-{ #category : #assertion }
+{ #category : #asserting }
 SequenceHandler >> assertSequenceIndexIs: anIndex [
 
 	^ anIndex = sequenceValueInUse   

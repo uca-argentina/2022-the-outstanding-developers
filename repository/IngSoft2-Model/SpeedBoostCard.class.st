@@ -13,25 +13,30 @@ Class {
 
 { #category : #assertion }
 SpeedBoostCard class >> assertTargetIsAPermanentCard [
-	targetCard isPermanent ifFalse: [ Error signal: 'SpeedBoost card can only be played with Permanent Cards' ]
+
+	targetCard isPermanent ifFalse: [ 
+		Error signal:
+			'SpeedBoost card can only be played with Permanent Cards' ]
 ]
 
 { #category : #'instance creation' }
 SpeedBoostCard class >> create [
 
-	^ self new initializeAs: InstantaneousCard new towards: targetCard 
+	^ self new initializeAs: InstantaneousCard new towards: targetCard
 ]
 
 { #category : #playing }
-SpeedBoostCard class >> incorporateTo: anOutstandingSpaceshipsGame [
+SpeedBoostCard class >> incorporateTo: aGame [
+
 	self assertTargetIsAPermanentCard.
-	InstantaneousCard new incorporate: self to: anOutstandingSpaceshipsGame
+	InstantaneousCard new incorporate: self to: aGame
 ]
 
 { #category : #playing }
 SpeedBoostCard class >> playOnceIn: aGame [
+
 	aGame assertCardCanAffect: targetCard.
-	targetCard addAffectingCard: self create to: aGame
+	targetCard addAffecting: self create to: aGame
 ]
 
 { #category : #playing }
@@ -55,7 +60,7 @@ SpeedBoostCard >> affecting: anEffectOnThrow [
 { #category : #assertion }
 SpeedBoostCard >> assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs: anAssertion [
 
-	typeOfCard canBeThrownWithCurrentTurn: anAssertion
+	typeOfCard canBeThrownWithCurrentTurnBeing: anAssertion
 ]
 
 { #category : #assertion }
@@ -67,8 +72,8 @@ SpeedBoostCard >> assertItIsThrowableInTurn: anAssertion in: aGame [
 
 { #category : #accessing }
 SpeedBoostCard >> cardBehaviour [
-	
-	^typeOfCard 
+
+	^ typeOfCard
 ]
 
 { #category : #playing }
@@ -78,9 +83,10 @@ SpeedBoostCard >> incorporate: aCard to: aGame [
 ]
 
 { #category : #playing }
-SpeedBoostCard >> incorporateTo: aGame the: cardElement [ 
+SpeedBoostCard >> incorporateTo: aGame the: cardElement [
+
 	aGame assertCardCanAffect: targetCard.
-	targetCard addAffectingCard: self to: aGame
+	targetCard addAffecting: self to: aGame
 ]
 
 { #category : #initialization }

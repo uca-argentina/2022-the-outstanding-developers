@@ -6,11 +6,18 @@ Class {
 	],
 	#classInstVars : [
 		'cardType',
-		'spaceship',
 		'targetCard'
 	],
 	#category : #'IngSoft2-Model'
 }
+
+{ #category : #asserting }
+CancellationCard class >> assertTargetIsAPermanentCard [
+
+	targetCard isPermanent ifFalse: [ 
+		Error signal:
+			'Cancellation card can only be played with Permanent Cards' ]
+]
 
 { #category : #'instance creation' }
 CancellationCard class >> create [
@@ -19,21 +26,22 @@ CancellationCard class >> create [
 ]
 
 { #category : #playing }
-CancellationCard class >> incorporateTo: anOutstandingSpaceshipsGame [
-
-	InstantaneousCard new incorporate: self to: anOutstandingSpaceshipsGame
+CancellationCard class >> incorporateTo: aGame [
+	
+	self assertTargetIsAPermanentCard.
+	InstantaneousCard new incorporate: self to: aGame
 ]
 
-{ #category : #testing }
+{ #category : #properties }
 CancellationCard class >> isPermanent [
 
 	^ false
 ]
 
 { #category : #playing }
-CancellationCard class >> playOnceIn: anOutstandingSpaceshipsGame [ 
+CancellationCard class >> playOnceIn: aGame [ 
 	
-	targetCard cancelIn: anOutstandingSpaceshipsGame
+	targetCard cancelIn: aGame
 ]
 
 { #category : #playing }
@@ -52,7 +60,7 @@ CancellationCard >> = aCard [
 { #category : #asserting }
 CancellationCard >> assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs: anAssertion [
 
-	typeOfCard canBeThrownWithCurrentTurn: anAssertion
+	typeOfCard canBeThrownWithCurrentTurnBeing: anAssertion
 ]
 
 { #category : #asserting }
@@ -78,15 +86,15 @@ CancellationCard >> cardBehaviour [
 ]
 
 { #category : #playing }
-CancellationCard >> incorporate: aCard to: anOutstandingSpaceshipsGame [ 
+CancellationCard >> incorporate: aCard to: aGame [ 
 	
-	self cardBehaviour incorporate: aCard to: anOutstandingSpaceshipsGame 
+	self cardBehaviour incorporate: aCard to: aGame 
 ]
 
 { #category : #playing }
-CancellationCard >> incorporateTo: anOutstandingSpaceshipsGame the: cardElement [
+CancellationCard >> incorporateTo: aGame the: selectedCard [
 
-	cardElement target cancelIn: anOutstandingSpaceshipsGame
+	selectedCard target cancelIn: aGame
 ]
 
 { #category : #initialization }

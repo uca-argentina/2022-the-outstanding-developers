@@ -2,16 +2,15 @@ Class {
 	#name : #FiniteDeck,
 	#superclass : #Object,
 	#instVars : [
-		'cardAmount',
 		'cards'
 	],
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #asserting }
-FiniteDeck class >> assertCardAmountIsNotNegative: aCardAmount [
+FiniteDeck class >> assertCardAmountIsNotNegative: aCardSequence [
 
-	aCardAmount < 0 ifTrue: [ 
+	aCardSequence < 0 ifTrue: [ 
 		Error signal: 'The card amount cant be a negative number' ]
 ]
 
@@ -19,6 +18,7 @@ FiniteDeck class >> assertCardAmountIsNotNegative: aCardAmount [
 FiniteDeck class >> of: aCardAmount setWith: aCardCollection [
 
 	| cards sequenceHandler |
+	self assertCardAmountIsNotNegative: aCardAmount.
 	cards := OrderedCollection new.
 	sequenceHandler := SequenceHandler for: aCardCollection size.
 	aCardAmount timesRepeat: [ 
@@ -62,7 +62,7 @@ FiniteDeck >> initializeWith: aSetOfCards [
 ]
 
 { #category : #actions }
-FiniteDeck >> reSetWith: aCardCollection [ 
+FiniteDeck >> reSetWith: aSetOfCards [ 
 	
-	cards := aCardCollection 
+	cards := aSetOfCards 
 ]
