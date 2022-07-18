@@ -8,7 +8,7 @@ Class {
 }
 
 { #category : #asserting }
-RandomEventGenerator class >> assertProbabilitiesAddUpToOne: aDistribution [
+RandomEventGenerator class >> assertProbabilitiesAddUpToOneFor: aDistribution [
 
 	((aDistribution sum: [ :probabilityDistribution | 
 		  probabilityDistribution probability ]) round: 2) = 1 ifFalse: [ 
@@ -18,32 +18,28 @@ RandomEventGenerator class >> assertProbabilitiesAddUpToOne: aDistribution [
 { #category : #'instance creation' }
 RandomEventGenerator class >> with: anAmount using: aDistribution [
 
-	self assertProbabilitiesAddUpToOne: aDistribution.
+	self assertProbabilitiesAddUpToOneFor: aDistribution.
 	^ self new initializeWith: anAmount using: aDistribution
 ]
 
 { #category : #generation }
-RandomEventGenerator >> createFor: aSequenceSize using: aDistribution [
+RandomEventGenerator >> createSequenceFor: aSize using: aDistribution [
 
 	| random |
 	random := Random new.
-	aSequenceSize timesRepeat: [ 
+	aSize timesRepeat: [ 
 		| randomNumber index coveredProbabilities |
 		coveredProbabilities := 0.
 		index := 1.
 		randomNumber := random next.
 		[ 
 		randomNumber
-		<
-		((aDistribution at: index) probability + coveredProbabilities) ] 
+		< ((aDistribution at: index) probability + coveredProbabilities) ] 
 			whileFalse: [ 
 				coveredProbabilities := coveredProbabilities
-				                        +
-				                        (aDistribution at: index)
-					                        probability.
+				                        + (aDistribution at: index) probability.
 				index := index + 1 ].
-		randomEvents add:
-			(aDistribution at: index) eventAssociated create ]
+		randomEvents add: (aDistribution at: index) eventAssociated create ]
 ]
 
 { #category : #generation }
@@ -53,8 +49,8 @@ RandomEventGenerator >> generate [
 ]
 
 { #category : #initialization }
-RandomEventGenerator >> initializeWith: anAmount using: aDistribution [
+RandomEventGenerator >> initializeWith: aSize using: aDistribution [
 
 	randomEvents := OrderedCollection new.
-	self createFor: anAmount using: aDistribution
+	self createSequenceFor: aSize using: aDistribution
 ]

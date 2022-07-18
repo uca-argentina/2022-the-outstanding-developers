@@ -29,7 +29,7 @@ SpaceshipHoldingACard >> effectOnThrowWith: cardsAffecting and: usedCardsAffecti
 		(cardAffecting targetCard name = card name and: [ 
 			 cardAffecting targetSpaceship = spaceship and: [ 
 				 (usedCardsAffecting indexOf: cardAffecting) = 0 ] ]) ifTrue: [ 
-			effect := cardAffecting effectOnThrow: effect.
+			effect := cardAffecting effectOn: effect.
 			usedCardsAffecting add: cardAffecting ] ].
 	^ effect
 ]

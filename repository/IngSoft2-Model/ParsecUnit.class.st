@@ -8,16 +8,16 @@ Class {
 }
 
 { #category : #assertion }
-ParsecUnit class >> assertValid: anAmountOfParsecs [
+ParsecUnit class >> assertValidAmountOf: parsecs [
 
-	anAmountOfParsecs >= 0 ifFalse: [ 
+	parsecs >= 0 ifFalse: [ 
 		Error signal: 'Units cannot be negative' ]
 ]
 
 { #category : #'instance creation' }
 ParsecUnit class >> of: anAmountOfParsecs [
 
-	self assertValid: anAmountOfParsecs.
+	self assertValidAmountOf: anAmountOfParsecs.
 	^ self new of: anAmountOfParsecs
 ]
 

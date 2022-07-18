@@ -15,10 +15,10 @@ Die class >> assertValid: numberOfSides [
 ]
 
 { #category : #'instance creation' }
-Die class >> with: numberOfSides [
+Die class >> with: aNumberOfSides [
 
-	self assertValid: numberOfSides.
-	^ self new initializeWith: numberOfSides
+	self assertValid: aNumberOfSides.
+	^ self new initializeWith: aNumberOfSides
 ]
 
 { #category : #initialization }

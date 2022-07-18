@@ -8,9 +8,9 @@ Class {
 }
 
 { #category : #asserting }
-FiniteDeck class >> assertCardAmountIsNotNegative: aCardAmount [
+FiniteDeck class >> assertCardAmountIsNotNegative: aCardSequence [
 
-	aCardAmount < 0 ifTrue: [ 
+	aCardSequence < 0 ifTrue: [ 
 		Error signal: 'The card amount cant be a negative number' ]
 ]
 
@@ -62,7 +62,7 @@ FiniteDeck >> initializeWith: aSetOfCards [
 ]
 
 { #category : #actions }
-FiniteDeck >> reSetWith: aCardCollection [ 
+FiniteDeck >> reSetWith: aSetOfCards [ 
 	
-	cards := aCardCollection 
+	cards := aSetOfCards 
 ]

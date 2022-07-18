@@ -26,19 +26,17 @@ SpeedBoostCard class >> create [
 ]
 
 { #category : #playing }
-SpeedBoostCard class >> incorporateTo: anOutstandingSpaceshipsGame [
+SpeedBoostCard class >> incorporateTo: aGame [
 
 	self assertTargetIsAPermanentCard.
-	InstantaneousCard new
-		incorporate: self
-		to: anOutstandingSpaceshipsGame
+	InstantaneousCard new incorporate: self to: aGame
 ]
 
 { #category : #playing }
 SpeedBoostCard class >> playOnceIn: aGame [
 
 	aGame assertCardCanAffect: targetCard.
-	targetCard addAffectingCard: self create to: aGame
+	targetCard addAffecting: self create to: aGame
 ]
 
 { #category : #playing }
@@ -62,7 +60,7 @@ SpeedBoostCard >> affecting: anEffectOnThrow [
 { #category : #assertion }
 SpeedBoostCard >> assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs: anAssertion [
 
-	typeOfCard canBeThrownWithCurrentTurn: anAssertion
+	typeOfCard canBeThrownWithCurrentTurnBeing: anAssertion
 ]
 
 { #category : #assertion }
@@ -88,7 +86,7 @@ SpeedBoostCard >> incorporate: aCard to: aGame [
 SpeedBoostCard >> incorporateTo: aGame the: cardElement [
 
 	aGame assertCardCanAffect: targetCard.
-	targetCard addAffectingCard: self to: aGame
+	targetCard addAffecting: self to: aGame
 ]
 
 { #category : #initialization }

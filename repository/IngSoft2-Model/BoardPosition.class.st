@@ -17,7 +17,7 @@ BoardPosition class >> at: aPosition in: aLap [
 	^ self new initializeAt: validatedPosition in: validatedLap
 ]
 
-{ #category : #'instance creation' }
+{ #category : #sanatazing }
 BoardPosition class >> sanatize: aPosition on: aLap [
 
 	^ ((aPosition = 0 and: [ aLap > 1 ]) or: aPosition < 0)

@@ -14,14 +14,14 @@ Class {
 }
 
 { #category : #assertion }
-Board class >> assertValidNumberOfBoxes: boxes [
+Board class >> assertValidNumberOfBoxesFor: boxes [
 
 	boxes > 0 ifFalse: [ 
 		Error signal: 'Number of boxes should be greater than zero' ]
 ]
 
 { #category : #assertion }
-Board class >> assertValidNumberOfLaps: laps [
+Board class >> assertValidNumberOfLapsFor: laps [
 
 	laps > 0 ifFalse: [ 
 		Error signal: 'Number of laps should be greater than zero' ]
@@ -31,8 +31,8 @@ Board class >> assertValidNumberOfLaps: laps [
 Board class >> of: aNumberOfBoxes and: length playedFor: someLaps givenBy: aDistribution [
 
 	| randomBoxGenerator boxSequnce |
-	self assertValidNumberOfBoxes: aNumberOfBoxes.
-	self assertValidNumberOfLaps: someLaps.
+	self assertValidNumberOfBoxesFor: aNumberOfBoxes.
+	self assertValidNumberOfLapsFor: someLaps.
 	randomBoxGenerator := RandomEventGenerator
 		                      with: aNumberOfBoxes
 		                      using: aDistribution.
@@ -48,8 +48,8 @@ Board class >> of: aNumberOfBoxes and: length playedFor: someLaps givenBy: aDist
 { #category : #'instance creation' }
 Board class >> of: aNumberOfBoxes and: aLength playedFor: someLaps with: aBoxSequence [
 
-	self assertValidNumberOfBoxes: aNumberOfBoxes.
-	self assertValidNumberOfLaps: someLaps.
+	self assertValidNumberOfBoxesFor: aNumberOfBoxes.
+	self assertValidNumberOfLapsFor: someLaps.
 	^ self new
 		  of: aNumberOfBoxes
 		  and: aLength
@@ -60,7 +60,7 @@ Board class >> of: aNumberOfBoxes and: aLength playedFor: someLaps with: aBoxSeq
 { #category : #properties }
 Board >> amountOfAtomicBombBoxes [
 
-	^ self amountOfBoxes: 'Atomic Bomb'
+	^ self amountOfBoxesOf: 'Atomic Bomb'
 ]
 
 { #category : #properties }
@@ -70,7 +70,7 @@ Board >> amountOfBoxes [
 ]
 
 { #category : #properties }
-Board >> amountOfBoxes: aType [
+Board >> amountOfBoxesOf: aType [
 
 	^ (boxes select: [ :box | box effectType = aType ]) size
 ]
@@ -78,31 +78,31 @@ Board >> amountOfBoxes: aType [
 { #category : #properties }
 Board >> amountOfHyperJumpBoxes [
 
-	^ self amountOfBoxes: 'HyperJump'
+	^ self amountOfBoxesOf: 'HyperJump'
 ]
 
 { #category : #properties }
 Board >> amountOfMoonWalkBoxes [
 
-	^ self amountOfBoxes: 'MoonWalk'
+	^ self amountOfBoxesOf: 'MoonWalk'
 ]
 
 { #category : #properties }
 Board >> amountOfNoEffectBoxes [
 
-	^ self amountOfBoxes: 'No Effect'
+	^ self amountOfBoxesOf: 'No Effect'
 ]
 
 { #category : #properties }
 Board >> amountOfSpeedUpBoxes [
 
-	^ self amountOfBoxes: 'Speedup'
+	^ self amountOfBoxesOf: 'Speedup'
 ]
 
 { #category : #properties }
 Board >> amountOfWormHoleBoxes [
 
-	^ self amountOfBoxes: 'WormHole'
+	^ self amountOfBoxesOf: 'WormHole'
 ]
 
 { #category : #asserting }
@@ -113,7 +113,7 @@ Board >> assertACardCanBeThrown [
 ]
 
 { #category : #asserting }
-Board >> assertThisIsPlayersTurn: index [
+Board >> assertThisIsPlayersTurnFrom: index [
 
 	(turnHandler assertSequenceIndexIs: index) ifFalse: [ 
 		Error signal: 'This is not the players turn' ]
@@ -122,7 +122,7 @@ Board >> assertThisIsPlayersTurn: index [
 { #category : #playing }
 Board >> assign: aCard to: aSpaceship [
 
-	game addHolding:
+	game addToHolders:
 		(SpaceshipHoldingACard
 			 of: aSpaceship
 			 holding: aCard)
@@ -175,11 +175,19 @@ Board >> dealCardTo: aSpacechip [
 	self assign: card to: aSpacechip
 ]
 
+{ #category : #playing }
+Board >> indexInPositionsOf: aSpaceship [
+
+	| currentPosition |
+	currentPosition := self positionOf: aSpaceship.
+	^ positions indexOf: currentPosition
+]
+
 { #category : #asserting }
-Board >> isSpaceshipsTurn: aSpaceship [
+Board >> isTheTurnOf: aSpaceship [
 
 	^ turnHandler assertCurrentIndexIs:
-		  (self positionInPositionsOf: aSpaceship)
+		  (self indexInPositionsOf: aSpaceship)
 ]
 
 { #category : #accessing }
@@ -212,8 +220,8 @@ Board >> move: aSpaceship atItsCurrentPositionBy: aNumberOfBoxes [
 Board >> move: aSpaceship by: aNumberOfBoxes [
 
 	| newPositionWithoutEffect positionAmongPositions currentBox movementAfterEffect currentBoardPosition currentLap newPositionAfterEffect |
-	positionAmongPositions := self positionInPositionsOf: aSpaceship.
-	self assertThisIsPlayersTurn: positionAmongPositions.
+	positionAmongPositions := self indexInPositionsOf: aSpaceship.
+	self assertThisIsPlayersTurnFrom: positionAmongPositions.
 
 	currentBoardPosition := (positions at: positionAmongPositions)
 		                        position.
@@ -303,7 +311,7 @@ Board >> movePlayingSpaceshipAt: aPosition by: anAmount [
 			               in: aPosition position
 			               and: aPosition lap
 			               by: anAmount.
-		spaceshipIndex := self positionInPositionsOf: aPosition spaceship.
+		spaceshipIndex := self indexInPositionsOf: aPosition spaceship.
 		positions
 			replaceFrom: spaceshipIndex
 			to: spaceshipIndex
@@ -319,13 +327,13 @@ Board >> moveSpaceship: aNumberOfBoxes [
 ]
 
 { #category : #playing }
-Board >> nextPositionStartingAt: position in: lap afterMoving: aNumberOfBoxes [
+Board >> nextPositionStartingAt: aPosition in: aLap afterMoving: aNumberOfBoxes [
 
 	| positionToMove winningPosition |
-	positionToMove := position + aNumberOfBoxes.
+	positionToMove := aPosition + aNumberOfBoxes.
 	winningPosition := self amountOfBoxes + 1.
 
-	(lap < laps and: [ positionToMove >= winningPosition ]) ifTrue: [ 
+	(aLap < laps and: [ positionToMove >= winningPosition ]) ifTrue: [ 
 		^ -1 ].
 	positionToMove <= winningPosition ifFalse: [ ^ winningPosition ].
 	^ positionToMove
@@ -353,14 +361,6 @@ Board >> playingWith: spaceships in: aGame [
 	turnHandler := SequenceHandler for: spaceships size
 ]
 
-{ #category : #playing }
-Board >> positionInPositionsOf: aSpaceship [
-
-	| currentPosition |
-	currentPosition := self positionOf: aSpaceship.
-	^ positions indexOf: currentPosition
-]
-
 { #category : #accessing }
 Board >> positionOf: aSpaceship [
 
@@ -368,7 +368,7 @@ Board >> positionOf: aSpaceship [
 ]
 
 { #category : #accessing }
-Board >> rankingPositionOf: aSpaceshipName [
+Board >> rankingPositionOf: aSpaceship [
 
 	| index notFound sortedPositionsForRanking |
 	sortedPositionsForRanking := positions sort: [ :positionA :positionB | 
@@ -377,7 +377,7 @@ Board >> rankingPositionOf: aSpaceshipName [
 	notFound := true.
 	[ index <= sortedPositionsForRanking size and: [ notFound ] ] 
 		whileTrue: [ 
-			(sortedPositionsForRanking at: index) spaceship = aSpaceshipName
+			(sortedPositionsForRanking at: index) spaceship = aSpaceship
 				ifTrue: [ notFound := false ]
 				ifFalse: [ index := index + 1 ] ].
 	^ index

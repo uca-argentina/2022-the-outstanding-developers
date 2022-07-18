@@ -52,9 +52,9 @@ RedoCard class >> isPermanent [
 ]
 
 { #category : #playing }
-RedoCard class >> playOnceIn: anOutstandingSpaceshipsGame [
+RedoCard class >> playOnceIn: aGame [
 
-	self addTo: anOutstandingSpaceshipsGame 
+	self addTo: aGame 
 ]
 
 { #category : #accessing }
@@ -78,7 +78,7 @@ RedoCard >> = aCard [
 { #category : #assertions }
 RedoCard >> assertItIsThrowableInTurn: anAssertion in: aGame [
 
-	typeOfCard canBeThrownWithCurrentTurn: anAssertion
+	typeOfCard canBeThrownWithCurrentTurnBeing: anAssertion
 ]
 
 { #category : #accessing }

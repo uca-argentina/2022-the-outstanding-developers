@@ -11,9 +11,9 @@ Class {
 }
 
 { #category : #playing }
-SpeedCard class >> addAffectingCard: aCard to: aGame [
+SpeedCard class >> addAffecting: aCard to: aGame [
 
-	aGame addCardAffectingCard: aCard on: self
+	aGame add: aCard affecting: self
 ]
 
 { #category : #playing }
@@ -74,7 +74,7 @@ SpeedCard >> = aCard [
 { #category : #asserting }
 SpeedCard >> assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs: anAssertion [
 
-	typeOfCard canBeThrownWithCurrentTurn: anAssertion
+	typeOfCard canBeThrownWithCurrentTurnBeing: anAssertion
 ]
 
 { #category : #asserting }
@@ -97,19 +97,19 @@ SpeedCard >> effectOnThrow [
 ]
 
 { #category : #playing }
-SpeedCard >> incorporate: aCard to: anOutstandingSpaceshipsGame [ 
+SpeedCard >> incorporate: aCard to: aGame [ 
 	
-	self cardBehaviour incorporate: aCard to: anOutstandingSpaceshipsGame
+	self cardBehaviour incorporate: aCard to: aGame
 ]
 
 { #category : #playing }
-SpeedCard >> incorporateTo: anOutstandingSpaceshipsGame the: element [
+SpeedCard >> incorporateTo: aGame the: element [
 
 	| cardHolder |
 	cardHolder := SpaceshipHoldingACard
 		              of: element target
 		              holding: element createWithCard card.
-	anOutstandingSpaceshipsGame addAffecting: cardHolder
+	aGame addAffecting: cardHolder
 ]
 
 { #category : #initialization }

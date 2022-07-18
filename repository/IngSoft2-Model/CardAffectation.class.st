@@ -3,38 +3,38 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'card',
-		'spaceShipCardHolder'
+		'spaceshipHoldingACard'
 	],
 	#category : #'IngSoft2-Model'
 }
 
 { #category : #'instance creation' }
-CardAffectation class >> from: aCard to: aSpaceshipCardHolder [
+CardAffectation class >> from: aCard to: aSpaceshipHoldingACard [
 
-	^ self new initializeFrom: aCard to: aSpaceshipCardHolder
+	^ self new initializeFrom: aCard to: aSpaceshipHoldingACard
 ]
 
 { #category : #playing }
-CardAffectation >> effectOnThrow: anEffectOnAThrow [
+CardAffectation >> effectOn: aThrow [
 
-	^ card affecting: anEffectOnAThrow 
+	^ card affecting: aThrow
 ]
 
 { #category : #initialzation }
-CardAffectation >> initializeFrom: aCard to: aSpaceshipCardHolder [
+CardAffectation >> initializeFrom: aCard to: aSpaceshipHoldingACard [
 
 	card := aCard.
-	spaceShipCardHolder := aSpaceshipCardHolder
+	spaceshipHoldingACard := aSpaceshipHoldingACard
 ]
 
 { #category : #accessing }
 CardAffectation >> targetCard [
 
-	^ spaceShipCardHolder card
+	^ spaceshipHoldingACard card
 ]
 
 { #category : #accessing }
 CardAffectation >> targetSpaceship [
 
-	^ spaceShipCardHolder spaceship
+	^ spaceshipHoldingACard spaceship
 ]

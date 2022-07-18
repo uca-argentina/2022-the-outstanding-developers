@@ -22,17 +22,19 @@ OutstandingSpaceshipsGameTest >> testAGameCanBeSimulatedAndWon [
 	aCardDistribution := OrderedCollection new.
 
 	aCardDistribution add:
-		(Distribution withProbabilityOf: 1 / 6 for: SpeedCard).
+		(Distribution withProbabilityOf: 1 / 7 for: SpeedCard).
 	aCardDistribution add:
-		(Distribution withProbabilityOf: 1 / 6 for: AccelerationCard).
+		(Distribution withProbabilityOf: 1 / 7 for: AccelerationCard).
 	aCardDistribution add:
-		(Distribution withProbabilityOf: 1 / 6 for: OverloadCard).
+		(Distribution withProbabilityOf: 1 / 7 for: OverloadCard).
 	aCardDistribution add:
-		(Distribution withProbabilityOf: 1 / 6 for: CancellationCard).
+		(Distribution withProbabilityOf: 1 / 7 for: CancellationCard).
 	aCardDistribution add:
-		(Distribution withProbabilityOf: 1 / 6 for: RedoCard).
+		(Distribution withProbabilityOf: 1 / 7 for: RedoCard).
 	aCardDistribution add:
-		(Distribution withProbabilityOf: 1 / 6 for: RepeatCard).
+		(Distribution withProbabilityOf: 1 / 7 for: RepeatCard).
+	aCardDistribution add:
+		(Distribution withProbabilityOf: 1 / 7 for: SpeedBoostCard).
 	aFiniteDeck := FiniteDeck of: 1000 with: aCardDistribution.
 	boxDistributions := OrderedCollection new.
 	boxDistributions add:

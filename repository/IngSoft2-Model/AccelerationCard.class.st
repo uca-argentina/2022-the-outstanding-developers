@@ -8,9 +8,9 @@ Class {
 }
 
 { #category : #playing }
-AccelerationCard class >> addAffectingCard: aCard to: aGame [ 
+AccelerationCard class >> addAffecting: aCard to: aGame [ 
 	
-	aGame addCardAffectingAll: aCard for: self
+	aGame add: aCard affectingAll: self
 ]
 
 { #category : #playing }
@@ -58,7 +58,7 @@ AccelerationCard >> = aCard [
 { #category : #asserting }
 AccelerationCard >> assertItIsThrowableInTurn: anAssertion in: aGame [
 
-	typeOfCard canBeThrownWithCurrentTurn: anAssertion
+	typeOfCard canBeThrownWithCurrentTurnBeing: anAssertion
 ]
 
 { #category : #accessing }

@@ -18,9 +18,9 @@ RepeatCard class >> create [
 ]
 
 { #category : #playing }
-RepeatCard class >> incorporateTo: anOutstandingSpaceshipsGame [
+RepeatCard class >> incorporateTo: aGame [
 
-	InstantaneousCard new incorporate: self to: anOutstandingSpaceshipsGame
+	InstantaneousCard new incorporate: self to: aGame
 ]
 
 { #category : #asserting }
@@ -30,9 +30,9 @@ RepeatCard class >> isPermanent [
 ]
 
 { #category : #playing }
-RepeatCard class >> playOnceIn: anOutstandingSpaceshipsGame [
+RepeatCard class >> playOnceIn: aGame [
 
-	anOutstandingSpaceshipsGame repeatEffectOn: spaceship
+	aGame repeatEffectOn: spaceship
 ]
 
 { #category : #'class initialization' }
@@ -51,7 +51,7 @@ RepeatCard >> = aCard [
 { #category : #asserting }
 RepeatCard >> assertItIsThrowableInTurn: anAssertion in: aGame [
 
-	typeOfCard canBeThrownWithCurrentTurn: anAssertion
+	typeOfCard canBeThrownWithCurrentTurnBeing: anAssertion
 ]
 
 { #category : #accessing }
@@ -67,9 +67,9 @@ RepeatCard >> incorporate: aCard to: aGame [
 ]
 
 { #category : #playing }
-RepeatCard >> incorporateTo: aGame the: element [ 
+RepeatCard >> incorporateTo: aGame the: selectedCard [ 
 	
-	aGame repeatEffectOn: element target
+	aGame repeatEffectOn: selectedCard target
 ]
 
 { #category : #initialization }

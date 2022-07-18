@@ -11,7 +11,7 @@ Class {
 }
 
 { #category : #assertion }
-MoonWalkEffect class >> assertValidDisplacement: anAmount [
+MoonWalkEffect class >> assertValidDisplacementOf: anAmount [
 
 	anAmount > 0 ifFalse: [ 
 		Error signal: 'MoonWalkBox displacement should be greater than zero' ]
@@ -26,7 +26,7 @@ MoonWalkEffect class >> create [
 { #category : #'instance creation' }
 MoonWalkEffect class >> displacing: aNumberOfBoxes [
 
-	self assertValidDisplacement: aNumberOfBoxes.
+	self assertValidDisplacementOf: aNumberOfBoxes.
 	^ self new displacing: aNumberOfBoxes
 ]
 
