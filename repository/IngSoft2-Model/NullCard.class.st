@@ -1,5 +1,5 @@
 Class {
-	#name : #EmptyCard,
+	#name : #NullCard,
 	#superclass : #Object,
 	#category : #'IngSoft2-Model'
 }

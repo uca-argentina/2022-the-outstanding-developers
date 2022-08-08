@@ -2,7 +2,9 @@ Class {
 	#name : #RepeatCard,
 	#superclass : #Object,
 	#instVars : [
-		'typeOfCard'
+		'typeOfCard',
+		'name',
+		'target'
 	],
 	#classInstVars : [
 		'cardType',
@@ -17,42 +19,31 @@ RepeatCard class >> create [
 	^ self new initializeAs: InstantaneousCard new
 ]
 
-{ #category : #playing }
-RepeatCard class >> incorporateTo: anOutstandingSpaceshipsGame [
+{ #category : #'instance creation' }
+RepeatCard class >> identifiedAs: aName thrownAt: aSpaceship [
 
-	InstantaneousCard new incorporate: self to: anOutstandingSpaceshipsGame
+	^ self new
+		  initializeNamed: aName
+		  aimedAt: aSpaceship
+		  asA: InstantaneousCard new
 ]
 
-{ #category : #playing }
-RepeatCard class >> playOnceIn: anOutstandingSpaceshipsGame [
+{ #category : #asserting }
+RepeatCard class >> isPermanent [
 
-	anOutstandingSpaceshipsGame repeatEffectOn: spaceship
-]
-
-{ #category : #'class initialization' }
-RepeatCard class >> thrownAt: aSpaceship [
-
-	spaceship := aSpaceship.
-	cardType := InstantaneousCard 
+	^ false
 ]
 
 { #category : #comparing }
 RepeatCard >> = aCard [
 
-	^ self class = aCard
-]
-
-{ #category : #asserting }
-RepeatCard >> assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs: anAssertion [
-
-	typeOfCard canBeThrownWithCurrentTurn: anAssertion
+	^ self class = aCard class and: [ name = aCard identification ]
 ]
 
 { #category : #asserting }
 RepeatCard >> assertItIsThrowableInTurn: anAssertion in: aGame [
 
-	self assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs:
-		anAssertion
+	typeOfCard canBeThrownWithCurrentTurnBeing: anAssertion
 ]
 
 { #category : #accessing }
@@ -61,20 +52,46 @@ RepeatCard >> cardBehaviour [
 	^ typeOfCard
 ]
 
-{ #category : #playing }
-RepeatCard >> incorporate: aCard to: anOutstandingSpaceshipsGame [ 
-	
-	self cardBehaviour incorporate: aCard to: anOutstandingSpaceshipsGame 
+{ #category : #accessing }
+RepeatCard >> identification [
+
+	^ name
 ]
 
 { #category : #playing }
-RepeatCard >> incorporateTo: anOutstandingSpaceshipsGame the: element [ 
+RepeatCard >> incorporate: aCard to: aGame [ 
 	
-	anOutstandingSpaceshipsGame repeatEffectOn: element target
+	self cardBehaviour incorporate: aCard to: aGame 
+]
+
+{ #category : #playing }
+RepeatCard >> incorporateTo: aGame [
+
+	typeOfCard incorporate: self to: aGame
 ]
 
 { #category : #initialization }
 RepeatCard >> initializeAs: aTypeOfCard [
 
 	typeOfCard := aTypeOfCard
+]
+
+{ #category : #initialization }
+RepeatCard >> initializeNamed: aName aimedAt: aSpaceship asA: aTypeOfCard [
+
+	name := aName.
+	target := aSpaceship.
+	typeOfCard := aTypeOfCard
+]
+
+{ #category : #playing }
+RepeatCard >> playOnceIn: aGame [
+
+	aGame repeatEffectOn: target
+]
+
+{ #category : #playing }
+RepeatCard >> reIncorporateTo: aGame the: selectedCard [ 
+	
+	aGame repeatEffectOn: selectedCard target
 ]

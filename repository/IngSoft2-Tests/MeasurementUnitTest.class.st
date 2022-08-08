@@ -30,7 +30,6 @@ MeasurementUnitTest >> testLightYearUnitConvertsSixLightYearsToTwoParsecs [
 
 	| aLightYearUnit |
 	aLightYearUnit := LightYearUnit of: 6.
-
 	self assert: aLightYearUnit inParsecs equals: 2
 ]
 
@@ -39,7 +38,6 @@ MeasurementUnitTest >> testLightYearUnitHasAValueInLightYears [
 
 	| aLightYearUnit |
 	aLightYearUnit := LightYearUnit of: 6.
-
 	self assert: aLightYearUnit inLightYears equals: 6
 ]
 
@@ -57,7 +55,6 @@ MeasurementUnitTest >> testParsecUnitConvertsOneParsecToThreeLightYears [
 
 	| aParsecUnit |
 	aParsecUnit := ParsecUnit of: 1.
-
 	self assert: aParsecUnit inLightYears equals: 3
 ]
 
@@ -66,6 +63,5 @@ MeasurementUnitTest >> testParsecUnitHasAValueInParsecs [
 
 	| aParsecUnit |
 	aParsecUnit := ParsecUnit of: 1.
-
 	self assert: aParsecUnit inParsecs equals: 1
 ]

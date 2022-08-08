@@ -2,27 +2,15 @@ Class {
 	#name : #SpeedCard,
 	#superclass : #Object,
 	#instVars : [
-		'typeOfCard'
+		'typeOfCard',
+		'name',
+		'target'
 	],
 	#classInstVars : [
-		'cardType',
 		'spaceship'
 	],
 	#category : #'IngSoft2-Model'
 }
-
-{ #category : #playing }
-SpeedCard class >> addTo: anOutstandingSpaceshipsGame [
-
-	anOutstandingSpaceshipsGame addAffecting:
-		(SpaceshipCardHolder of: spaceship holding: self create)
-]
-
-{ #category : #playing }
-SpeedCard class >> cancelIn: anOutstandingSpaceshipsGame [
-
-	anOutstandingSpaceshipsGame cancel: self create affecting: spaceship
-]
 
 { #category : #'instance creation' }
 SpeedCard class >> create [
@@ -30,28 +18,44 @@ SpeedCard class >> create [
 	^ self new initializeAs: PermanentCard new
 ]
 
-{ #category : #playing }
-SpeedCard class >> incorporateTo: anOutstandingSpaceshipsGame [
+{ #category : #'instance creation' }
+SpeedCard class >> identifiedAs: aName thrownAt: aSpaceship [
 
-	PermanentCard new incorporate: self to: anOutstandingSpaceshipsGame
+	^ self new
+		  initializeNamed: aName
+		  aimedAt: aSpaceship
+		  asA: PermanentCard new
 ]
 
-{ #category : #'card throwing' }
-SpeedCard class >> thrownAt: aSpaceship [
+{ #category : #asserting }
+SpeedCard class >> isPermanent [
 
-	spaceship := aSpaceship
+	^ true
 ]
 
 { #category : #comparing }
 SpeedCard >> = aCard [
 
-	^ self class = aCard
+	^ self class = aCard class and: [ name = aCard identification ]
+]
+
+{ #category : #playing }
+SpeedCard >> addAffecting: aCard to: aGame [
+
+	aGame add: aCard affecting: self
+]
+
+{ #category : #playing }
+SpeedCard >> addTo: aGame [
+
+	aGame addAffecting:
+		(SpaceshipHoldingACard of: target holding: self)
 ]
 
 { #category : #asserting }
 SpeedCard >> assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs: anAssertion [
 
-	typeOfCard canBeThrownWithCurrentTurn: anAssertion
+	typeOfCard canBeThrownWithCurrentTurnBeing: anAssertion
 ]
 
 { #category : #asserting }
@@ -59,6 +63,12 @@ SpeedCard >> assertItIsThrowableInTurn: anAssertion in: anOutstandingSpaceshipsG
 
 	self assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs:
 		anAssertion
+]
+
+{ #category : #playing }
+SpeedCard >> cancelIn: aGame [
+
+	aGame cancel: self
 ]
 
 { #category : #accessing }
@@ -73,20 +83,22 @@ SpeedCard >> effectOnThrow [
 	^ 1
 ]
 
-{ #category : #playing }
-SpeedCard >> incorporate: aCard to: anOutstandingSpaceshipsGame [ 
-	
-	self cardBehaviour incorporate: aCard to: anOutstandingSpaceshipsGame
+{ #category : #accessing }
+SpeedCard >> identification [
+
+	^ name
 ]
 
 { #category : #playing }
-SpeedCard >> incorporateTo: anOutstandingSpaceshipsGame the: element [
+SpeedCard >> incorporate: aCard to: aGame [ 
+	
+	self cardBehaviour incorporate: aCard to: aGame
+]
 
-	| cardHolder |
-	cardHolder := SpaceshipCardHolder
-		              of: element target
-		              holding: element createWithCard card.
-	anOutstandingSpaceshipsGame addAffecting: cardHolder
+{ #category : #playing }
+SpeedCard >> incorporateTo: aGame [
+
+	typeOfCard incorporate: self to: aGame
 ]
 
 { #category : #initialization }
@@ -95,10 +107,45 @@ SpeedCard >> initializeAs: aTypeOfCard [
 	typeOfCard := aTypeOfCard
 ]
 
+{ #category : #initialization }
+SpeedCard >> initializeNamed: aName aimedAt: aSpaceship asA: aTypeOfCard [
+
+	name := aName.
+	target := aSpaceship.
+	typeOfCard := aTypeOfCard
+]
+
+{ #category : #playing }
+SpeedCard >> isAppliedTo: aString [ 
+	self shouldBeImplemented.
+]
+
+{ #category : #playing }
+SpeedCard >> isPermanent [
+
+	^ true
+]
+
 { #category : #accessing }
 SpeedCard >> name [
 
 	^ 'Speed'
+]
+
+{ #category : #playing }
+SpeedCard >> reIncorporateTo: aGame the: element [
+
+	| cardHolder |
+	cardHolder := SpaceshipHoldingACard
+		              of: element target
+		              holding: (SpeedCard identifiedAs: 'r',name thrownAt: target).
+	aGame addAffecting: cardHolder
+]
+
+{ #category : #accessing }
+SpeedCard >> target [
+
+	^ target
 ]
 
 { #category : #accessing }

@@ -8,9 +8,9 @@ Class {
 }
 
 { #category : #'instance creation' }
-Box class >> with: anEffect [ 
-	
-	^self new with: anEffect
+Box class >> with: anEffect [
+
+	^ self new with: anEffect
 ]
 
 { #category : #effects }

@@ -67,7 +67,7 @@ BoardTest >> testABoardOfOneHundredRandomGeneratedBoxesHasOneHundredBoxes [
 	distributions add:
 		(Distribution withProbabilityOf: 0.02 for: AtomicBombEffect).
 	distributions add:
-		(Distribution withProbabilityOf: 0.1 for: CardAwarderEffect).
+		(Distribution withProbabilityOf: 0.1 for: CardGiverEffect).
 
 	board := Board
 		         of: n
@@ -115,7 +115,7 @@ BoardTest >> testABoardOfTenBoxesCreatedWithASequenceHasTheHardcodedAmountOfBoxe
 { #category : #tests }
 BoardTest >> testASpaceshipCannotPlayWhenItIsNotItsTurn [
 
-	| aBoxDistribution aBoard n parsecs aLoadedDie anOustandingGame aCardDistribution |
+	| aBoxDistribution aBoard n parsecs aLoadedDie anOustandingGame aCardDistribution aFiniteDeck |
 	n := 100.
 	parsecs := ParsecUnit of: 100.
 	aBoxDistribution := OrderedCollection new.
@@ -126,6 +126,7 @@ BoardTest >> testASpaceshipCannotPlayWhenItIsNotItsTurn [
 
 	aCardDistribution add:
 		(Distribution withProbabilityOf: 1 for: SpeedCard).
+
 	aBoard := Board
 		          of: n
 		          and: parsecs
@@ -136,7 +137,8 @@ BoardTest >> testASpaceshipCannotPlayWhenItIsNotItsTurn [
 		                    { 'Enterprise'. 'Zathura'. 'Delorean' }
 		                    on: aBoard
 		                    throwing: aLoadedDie
-		                    using: aCardDistribution.
+		                    using: aCardDistribution
+		                    for: 100.
 	anOustandingGame play.
 	anOustandingGame play.
 	self
@@ -148,7 +150,7 @@ BoardTest >> testASpaceshipCannotPlayWhenItIsNotItsTurn [
 { #category : #tests }
 BoardTest >> testASpaceshipThatLandsOnABoxWithNoEffectDoesntMove [
 
-	| aBoard aBoxDistribution aLoadedDie aCardDistribution anOutstandingGame |
+	| aBoard aBoxDistribution aLoadedDie aCardDistribution anOutstandingGame aFiniteDeck |
 	aBoxDistribution := OrderedCollection new.
 	aBoxDistribution add:
 		(Distribution withProbabilityOf: 1 for: NoEffect).
@@ -157,7 +159,6 @@ BoardTest >> testASpaceshipThatLandsOnABoxWithNoEffectDoesntMove [
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add:
 		(Distribution withProbabilityOf: 1 for: OverloadCard).
-
 	aBoard := Board
 		          of: 10
 		          and: (ParsecUnit of: 10)
@@ -168,7 +169,8 @@ BoardTest >> testASpaceshipThatLandsOnABoxWithNoEffectDoesntMove [
 		                     playedBy: 'Enterprise'
 		                     on: aBoard
 		                     throwing: aLoadedDie
-		                     using: aCardDistribution.
+		                     using: aCardDistribution
+		                     for: 100.
 	anOutstandingGame play.
 
 	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 3
@@ -177,14 +179,14 @@ BoardTest >> testASpaceshipThatLandsOnABoxWithNoEffectDoesntMove [
 { #category : #tests }
 BoardTest >> testASpaceshipThatLandsOnABoxWithSpeedUpEffectEndsUpFourBoxesAfter [
 
-	| aBoard noEffect speedUpEffect boxSequence box1 box2 box3 box4 box5 aCardDistribution anOutstandingGame |
+	| aBoard noEffect speedUpEffect boxSequence box1 box2 box3 box4 box5 aCardDistribution anOutstandingGame aFiniteDeck |
 	noEffect := NoEffect new.
 	speedUpEffect := SpeedUpEffect new.
 
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add:
 		(Distribution withProbabilityOf: 1 for: OverloadCard).
-
+	
 	box1 := Box with: speedUpEffect.
 	box2 := Box with: noEffect.
 	box3 := Box with: noEffect.
@@ -207,7 +209,8 @@ BoardTest >> testASpaceshipThatLandsOnABoxWithSpeedUpEffectEndsUpFourBoxesAfter 
 		                     playedBy: 'Enterprise'
 		                     on: aBoard
 		                     throwing: (LoadedDie with: 1)
-		                     using: aCardDistribution.
+		                    using: aCardDistribution
+		                    for: 100.
 	anOutstandingGame play.
 
 	self assert: (aBoard boxPositionOf: 'Enterprise') equals: 5
@@ -216,7 +219,7 @@ BoardTest >> testASpaceshipThatLandsOnABoxWithSpeedUpEffectEndsUpFourBoxesAfter 
 { #category : #tests }
 BoardTest >> testASpaceshipsLapPositionVariesToTwoAfterCompletingFirstLap [
 
-	| aBoard aLoadedDie aCardDistribution anOtstandingGame |
+	| aBoard aLoadedDie aCardDistribution anOtstandingGame aFiniteDeck |
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add:
 		(Distribution withProbabilityOf: 1 for: OverloadCard).
@@ -231,7 +234,8 @@ BoardTest >> testASpaceshipsLapPositionVariesToTwoAfterCompletingFirstLap [
 		                    playedBy: 'Enterprise'
 		                    on: aBoard
 		                    throwing: aLoadedDie
-		                    using: aCardDistribution.
+		                    using: aCardDistribution
+		                    for: 100.
 	anOtstandingGame play.
 	anOtstandingGame play.
 	anOtstandingGame play.
@@ -242,7 +246,7 @@ BoardTest >> testASpaceshipsLapPositionVariesToTwoAfterCompletingFirstLap [
 { #category : #tests }
 BoardTest >> testASpaceshipsPositionVariesInFiveWithAFiniteBoardAfterOneRollOfALoadedDieWithFive [
 
-	| board loadedDie aCardDistribution anOutstandingGame |
+	| board loadedDie aCardDistribution anOutstandingGame aFiniteDeck |
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add:
 		(Distribution withProbabilityOf: 1 for: OverloadCard).
@@ -257,7 +261,8 @@ BoardTest >> testASpaceshipsPositionVariesInFiveWithAFiniteBoardAfterOneRollOfAL
 		                     playedBy: 'Enterprise'
 		                     on: board
 		                     throwing: loadedDie
-		                     using: aCardDistribution.
+		                     using: aCardDistribution
+		                     for: 100.
 	anOutstandingGame play.
 
 	self assert: (board boxPositionOf: 'Enterprise') equals: 5
@@ -367,7 +372,7 @@ BoardTest >> testBoxesLengthIsAHalfWhenTheAmountOfParsecsIsHalfTheAmountOfBoxes 
 { #category : #tests }
 BoardTest >> testPlayersInDifferentLapsReturnToTheFirstBoxOfItsLaps [
 
-	| aBoard noEffect boxSequence box1 box2 box3 box4 box5 atomicBombEffect aCardDistribution anOutstandingGame |
+	| aBoard noEffect boxSequence box1 box2 box3 box4 box5 atomicBombEffect aCardDistribution anOutstandingGame aFiniteDeck |
 	noEffect := NoEffect new.
 	atomicBombEffect := AtomicBombEffect new.
 
@@ -401,7 +406,8 @@ BoardTest >> testPlayersInDifferentLapsReturnToTheFirstBoxOfItsLaps [
 		                     throwing:
 		                     (LoadedDie withSequence:
 			                      { 6. 6. 1. 6. 1. 1. 2. 1. 3 })
-		                     using: aCardDistribution.
+		                     using: aCardDistribution
+		                     for: 100.
 
 	anOutstandingGame play.
 	anOutstandingGame play.
@@ -438,7 +444,7 @@ BoardTest >> testPlayersInDifferentLapsReturnToTheFirstBoxOfItsLaps [
 { #category : #tests }
 BoardTest >> testSpaceshipLandsOnAtomicBombBoxSetsBackEveryoneToFirstBox [
 
-	| board noEffect boxSequence box1 box2 box3 box4 box5 anEffect aCardDistribution anOutstandingGame |
+	| board noEffect boxSequence box1 box2 box3 box4 box5 anEffect aCardDistribution anOutstandingGame aFiniteDeck |
 	noEffect := NoEffect new.
 	anEffect := AtomicBombEffect new.
 
@@ -470,7 +476,8 @@ BoardTest >> testSpaceshipLandsOnAtomicBombBoxSetsBackEveryoneToFirstBox [
 		                     on: board
 		                     throwing:
 		                     (LoadedDie withSequence: { 3. 2. 1. 2 })
-		                     using: aCardDistribution.
+		                     using: aCardDistribution
+		                     for: 100.
 	anOutstandingGame play.
 	anOutstandingGame play.
 	anOutstandingGame play.
@@ -488,7 +495,7 @@ BoardTest >> testSpaceshipLandsOnAtomicBombBoxSetsBackEveryoneToFirstBox [
 { #category : #tests }
 BoardTest >> testSpaceshipLandsOnMoonWalkBoxSetsBackOtherSpaceshipsExceptItself [
 
-	| board noEffect anEffect boxSequence box1 box2 box3 box4 box5 aCardDistribution anOutstandingGame |
+	| board noEffect anEffect boxSequence box1 box2 box3 box4 box5 aCardDistribution anOutstandingGame aFiniteDeck |
 	noEffect := NoEffect new.
 	anEffect := MoonWalkEffect displacing: 1.
 
@@ -501,7 +508,7 @@ BoardTest >> testSpaceshipLandsOnMoonWalkBoxSetsBackOtherSpaceshipsExceptItself 
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add:
 		(Distribution withProbabilityOf: 1 for: OverloadCard).
-
+	
 	boxSequence := { 
 		               box1.
 		               box2.
@@ -518,7 +525,8 @@ BoardTest >> testSpaceshipLandsOnMoonWalkBoxSetsBackOtherSpaceshipsExceptItself 
 		                     playedByMany: { 'Enterprise'. 'Zathura' }
 		                     on: board
 		                     throwing: (LoadedDie withSequence: { 3. 2 })
-		                     using: aCardDistribution.
+		                     using: aCardDistribution
+		                    for: 100.
 	anOutstandingGame play.
 	anOutstandingGame play.
 
@@ -561,7 +569,8 @@ BoardTest >> testSpaceshipLandsOnWormHoleBoxSetsBackItselfFourBoxes [
 		                     playedBy: 'Enterprise'
 		                     on: board
 		                     throwing: (LoadedDie withSequence: { 3. 2 })
-		                     using: aCardDistribution.
+		                     using: aCardDistribution
+		                     for: 100.
 	anOutstandingGame play.
 	anOutstandingGame play.
 
@@ -572,7 +581,7 @@ BoardTest >> testSpaceshipLandsOnWormHoleBoxSetsBackItselfFourBoxes [
 { #category : #tests }
 BoardTest >> testSpaceshipRemainsInTheInitialPositionIfEffectIsApplied [
 
-	| board noEffect anEffect boxSequence box1 box2 box3 box4 box5 aCardDistribution anOutstandingGame |
+	| board noEffect anEffect boxSequence box1 box2 box3 box4 box5 aCardDistribution anOutstandingGame aFiniteDeck |
 	noEffect := NoEffect new.
 	anEffect := MoonWalkEffect displacing: 1.
 
@@ -585,7 +594,7 @@ BoardTest >> testSpaceshipRemainsInTheInitialPositionIfEffectIsApplied [
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add:
 		(Distribution withProbabilityOf: 1 for: OverloadCard).
-
+	
 	boxSequence := { 
 		               box1.
 		               box2.
@@ -601,7 +610,8 @@ BoardTest >> testSpaceshipRemainsInTheInitialPositionIfEffectIsApplied [
 		                     playedByMany: { 'Enterprise'. 'Zathura' }
 		                     on: board
 		                     throwing: (LoadedDie with: 2)
-		                     using: aCardDistribution.
+		                     using: aCardDistribution
+		                    for: 100.
 
 	anOutstandingGame play.
 
@@ -628,7 +638,6 @@ BoardTest >> testSpaceshipThatLandsOnMoonWalkBoxCantMakeOthersGoToNegativePositi
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add:
 		(Distribution withProbabilityOf: 1 for: OverloadCard).
-
 	boxSequence := { 
 		               box1.
 		               box2.
@@ -645,7 +654,8 @@ BoardTest >> testSpaceshipThatLandsOnMoonWalkBoxCantMakeOthersGoToNegativePositi
 		                     playedByMany: { 'Enterprise'. 'Delorean' }
 		                     on: board
 		                     throwing: (LoadedDie withSequence: { 5. 1 })
-		                     using: aCardDistribution.
+		                     using: aCardDistribution
+		                    for: 100.
 	anOutstandingGame play.
 	anOutstandingGame play.
 
@@ -666,7 +676,6 @@ BoardTest >> testSpaceshipThatLandsOnWormHoleBoxCantGoToNegativePositions [
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add:
 		(Distribution withProbabilityOf: 1 for: OverloadCard).
-
 	box1 := Box with: anEffect.
 	box2 := Box with: noEffect.
 	box3 := Box with: noEffect.
@@ -690,7 +699,8 @@ BoardTest >> testSpaceshipThatLandsOnWormHoleBoxCantGoToNegativePositions [
 		                     on: board
 		                     throwing:
 		                     (LoadedDie withSequence: { 1. 2. 3. 2 })
-		                     using: aCardDistribution.
+		                     using: aCardDistribution
+		                    for: 100.
 	anOutstandingGame play.
 
 	self assert: (board boxPositionOf: 'Delorean') equals: 1
@@ -707,7 +717,6 @@ BoardTest >> testSpaceshipsOnABordInLightYearsThatLandsOnAHyperJumpBoxInParsecsE
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add:
 		(Distribution withProbabilityOf: 1 for: OverloadCard).
-
 	box1 := Box with: anEffect.
 	box2 := Box with: noEffect.
 	box3 := Box with: noEffect.
@@ -726,7 +735,8 @@ BoardTest >> testSpaceshipsOnABordInLightYearsThatLandsOnAHyperJumpBoxInParsecsE
 		                     playedBy: 'Delorean'
 		                     on: board
 		                     throwing: (LoadedDie with: 1)
-		                     using: aCardDistribution.
+		                     using: aCardDistribution
+		                     for: 100.
 	anOutstandingGame play.
 
 	self assert: (board boxPositionOf: 'Delorean') equals: 2
@@ -756,12 +766,12 @@ BoardTest >> testSpaceshipsOnABordInParsecsThatLandsOnAHyperJumpBoxInLightYearsE
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add:
 		(Distribution withProbabilityOf: 1 for: OverloadCard).
-
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedBy: 'Delorean'
 		                     on: board
 		                     throwing: (LoadedDie with: 1)
-		                     using: aCardDistribution.
+		                     using: aCardDistribution
+		                     for: 100.
 
 	anOutstandingGame play.
 
@@ -781,7 +791,6 @@ BoardTest >> testSpaceshipsThatLandsOnAHyperJumpBoxEndUpFiveBoxesAfterThenFourBo
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add:
 		(Distribution withProbabilityOf: 1 for: OverloadCard).
-
 	box1 := Box with: anEffect.
 	box2 := Box with: noEffect.
 	box3 := Box with: noEffect.
@@ -804,7 +813,8 @@ BoardTest >> testSpaceshipsThatLandsOnAHyperJumpBoxEndUpFiveBoxesAfterThenFourBo
 		                     playedByMany: { 'Delorean'. 'Enterprise' }
 		                     on: board
 		                     throwing: (LoadedDie with: 1)
-		                     using: aCardDistribution.
+		                     using: aCardDistribution
+		                    for: 100.
 	anOutstandingGame play.
 	anOutstandingGame play.
 
@@ -837,7 +847,6 @@ BoardTest >> testSpaceshipsThatLandsOnAHyperJumpBoxEndUpFiveBoxesAfterThenFourBo
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add:
 		(Distribution withProbabilityOf: 1 for: OverloadCard).
-
 	boxSequence := { 
 		               box1.
 		               box2.
@@ -854,7 +863,8 @@ BoardTest >> testSpaceshipsThatLandsOnAHyperJumpBoxEndUpFiveBoxesAfterThenFourBo
 		                     playedByMany: { 'Enterprise'. 'Zathura' }
 		                     on: board
 		                     throwing: (LoadedDie with: 1)
-		                     using: aCardDistribution.
+		                     using: aCardDistribution
+		                    for: 100.
 	anOutstandingGame play.
 	anOutstandingGame play.
 
@@ -873,7 +883,6 @@ BoardTest >> testSpaceshipsThatLandsOnAHyperJumpBoxWithLightYearsEndsOnNextBox [
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add:
 		(Distribution withProbabilityOf: 1 for: OverloadCard).
-
 	box1 := Box with: anEffect.
 	box2 := Box with: noEffect.
 	box3 := Box with: noEffect.
@@ -892,7 +901,8 @@ BoardTest >> testSpaceshipsThatLandsOnAHyperJumpBoxWithLightYearsEndsOnNextBox [
 		                     playedBy: 'Delorean'
 		                     on: board
 		                     throwing: (LoadedDie with: 1)
-		                     using: aCardDistribution.
+		                     using: aCardDistribution
+		                     for: 100.
 	anOutstandingGame play.
 
 	self assert: (board boxPositionOf: 'Delorean') equals: 2
@@ -908,7 +918,6 @@ BoardTest >> testSpeedUpDoesntTriggerAnotherSpeedUp [
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add:
 		(Distribution withProbabilityOf: 1 for: OverloadCard).
-
 	box := Box with: speedUpBox.
 
 	board := Board
@@ -920,7 +929,8 @@ BoardTest >> testSpeedUpDoesntTriggerAnotherSpeedUp [
 		                     playedBy: 'Zathura'
 		                     on: board
 		                     throwing: (LoadedDie with: 1)
-		                     using: aCardDistribution.
+		                     using: aCardDistribution
+		                     for: 100.
 	anOutstandingGame play.
 
 	self assert: (board boxPositionOf: 'Zathura') equals: 5

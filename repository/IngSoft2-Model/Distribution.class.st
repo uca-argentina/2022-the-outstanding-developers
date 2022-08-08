@@ -3,7 +3,7 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'probability',
-		'class'
+		'event'
 	],
 	#category : #'IngSoft2-Model'
 }
@@ -16,23 +16,23 @@ Distribution class >> assertProbabilityIsBetweenZeroAndOne: aProbability [
 ]
 
 { #category : #'instance creation' }
-Distribution class >> withProbabilityOf: aValue for: aClass [
+Distribution class >> withProbabilityOf: aValue for: anEvent [
 
 	self assertProbabilityIsBetweenZeroAndOne: aValue.
-	^ self new initializeWithProbabilityOf: aValue for: aClass
+	^ self new initializeWithProbabilityOf: aValue for: anEvent
 ]
 
 { #category : #accessing }
-Distribution >> classAssociated [
+Distribution >> eventAssociated [
 
-	^ class
+	^ event
 ]
 
 { #category : #initialization }
-Distribution >> initializeWithProbabilityOf: aValue for: aClass [
+Distribution >> initializeWithProbabilityOf: aValue for: anEvent [
 
 	probability := aValue.
-	class := aClass
+	event := anEvent
 ]
 
 { #category : #accessing }

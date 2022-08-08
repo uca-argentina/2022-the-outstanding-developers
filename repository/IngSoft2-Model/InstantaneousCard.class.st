@@ -5,13 +5,14 @@ Class {
 }
 
 { #category : #asserting }
-InstantaneousCard >> canBeThrownWithCurrentTurn: isCurrentTurn [
+InstantaneousCard >> canBeThrownWithCurrentTurnBeing: anAssertion [
 
 	^ true
 ]
 
 { #category : #playing }
-InstantaneousCard >> incorporate: aCard to: anOutstandingSpaceshipsGame [ 
-	
-	aCard playOnceIn: anOutstandingSpaceshipsGame 
+InstantaneousCard >> incorporate: aCard to: aGame [
+
+	aCard playOnceIn: aGame.
+	aGame addToUsedCards: aCard
 ]

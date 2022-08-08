@@ -2,25 +2,11 @@ Class {
 	#name : #AccelerationCard,
 	#superclass : #Object,
 	#instVars : [
-		'typeOfCard'
-	],
-	#classInstVars : [
-		'cardType'
+		'typeOfCard',
+		'name'
 	],
 	#category : #'IngSoft2-Model'
 }
-
-{ #category : #playing }
-AccelerationCard class >> addTo: anOutstandingSpaceshipsGame [
-
-	anOutstandingSpaceshipsGame addAffectingAll: self create.
-]
-
-{ #category : #playing }
-AccelerationCard class >> cancelIn: anOutstandingSpaceshipsGame [
-
-	anOutstandingSpaceshipsGame cancelAll: self create
-]
 
 { #category : #initialization }
 AccelerationCard class >> create [
@@ -28,29 +14,40 @@ AccelerationCard class >> create [
 	^ self new initializeAs: PermanentCard new
 ]
 
-{ #category : #playing }
-AccelerationCard class >> incorporateTo: anOutstandingSpaceshipsGame [
+{ #category : #'instance creation' }
+AccelerationCard class >> identifiedAs: aName [
 
-	PermanentCard new incorporate: self to: anOutstandingSpaceshipsGame
+	^ self new initializeAs: PermanentCard new named: aName
 ]
 
 { #category : #comparing }
 AccelerationCard >> = aCard [
 
-	^ self class = aCard
+	^ self class = aCard class and: [ name = aCard identification ]
+]
+
+{ #category : #playing }
+AccelerationCard >> addAffecting: aCard to: aGame [ 
+	
+	aGame add: aCard affectingAll: self
+]
+
+{ #category : #playing }
+AccelerationCard >> addTo: aGame [
+
+	aGame addAffectingAll: self.
 ]
 
 { #category : #asserting }
-AccelerationCard >> assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs: anAssertion [
+AccelerationCard >> assertItIsThrowableInTurn: anAssertion in: aGame [
 
-	typeOfCard canBeThrownWithCurrentTurn: anAssertion
+	typeOfCard canBeThrownWithCurrentTurnBeing: anAssertion
 ]
 
-{ #category : #asserting }
-AccelerationCard >> assertItIsThrowableInTurn: anAssertion in: anOutstandingSpaceshipsGame [
+{ #category : #playing }
+AccelerationCard >> cancelIn: aGame [
 
-	self assertItIsThrowableIfCurrentTurnBelongingToSpaceshipIs:
-		anAssertion
+	aGame cancelAllFrom: self
 ]
 
 { #category : #accessing }
@@ -65,17 +62,22 @@ AccelerationCard >> effectOnThrow [
 	^ 1
 ]
 
-{ #category : #playing }
-AccelerationCard >> incorporate: aCard to: anOutstandingSpaceshipsGame [ 
-	
-	self cardBehaviour incorporate: aCard to: anOutstandingSpaceshipsGame 
+{ #category : #accessing }
+AccelerationCard >> identification [
+
+	^ name
 ]
 
 { #category : #playing }
-AccelerationCard >> incorporateTo: anOutstandingSpaceshipsGame the: cardElement [
+AccelerationCard >> incorporate: aCard to: aGame [ 
+	
+	self cardBehaviour incorporate: aCard to: aGame 
+]
 
-	anOutstandingSpaceshipsGame addAffectingAll:
-		cardElement createWithCard card
+{ #category : #playing }
+AccelerationCard >> incorporateTo: aGame [
+
+	typeOfCard incorporate: self to: aGame
 ]
 
 { #category : #initialization }
@@ -84,10 +86,35 @@ AccelerationCard >> initializeAs: aTypeOfCard [
 	typeOfCard := aTypeOfCard
 ]
 
+{ #category : #initialization }
+AccelerationCard >> initializeAs: aTypeOfCard named: aName [
+
+	typeOfCard := aTypeOfCard.
+	name := aName
+]
+
+{ #category : #playing }
+AccelerationCard >> isAppliedTo: aSpaceship [
+
+	^ true
+]
+
+{ #category : #playing }
+AccelerationCard >> isPermanent [
+
+	^ true
+]
+
 { #category : #accessing }
 AccelerationCard >> name [
 
 	^ 'Acceleration'
+]
+
+{ #category : #playing }
+AccelerationCard >> reIncorporateTo: aGame the: cardElement [
+
+	aGame addAffectingAll: (AccelerationCard identifiedAs: 'r' , name)
 ]
 
 { #category : #accessing }

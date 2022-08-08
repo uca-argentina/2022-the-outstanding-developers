@@ -31,7 +31,7 @@ BoxTest >> testCardAwarderBoxEffectDoesNotModifyPosition [
 	aCardDistribution add:
 		(Distribution withProbabilityOf: 1 for: OverloadCard).
 	noEffect := NoEffect new.
-	cardAwarderEffect := CardAwarderEffect with: aCardDistribution.
+	cardAwarderEffect := CardGiverEffect new.
 
 	box1 := Box with: cardAwarderEffect.
 	box2 := Box with: noEffect.
@@ -55,7 +55,8 @@ BoxTest >> testCardAwarderBoxEffectDoesNotModifyPosition [
 		                     playedByMany: { 'Enterprise'. 'Delorean' }
 		                     on: aBoard
 		                     throwing: (LoadedDie withSequence: { 4. 1 })
-		                     using: aCardDistribution.
+		                     using: aCardDistribution
+		                     for: 100.
 	anOutstandingGame play.
 	anOutstandingGame play.
 
@@ -73,7 +74,8 @@ BoxTest >> testCardAwarderBoxEffectGivesACardToTheSpaceshipThatLandsOnIt [
 	aCardDistribution add:
 		(Distribution withProbabilityOf: 1 for: OverloadCard).
 	noEffect := NoEffect new.
-	cardAwarderEffect := CardAwarderEffect with: aCardDistribution.
+
+	cardAwarderEffect := CardGiverEffect new.
 
 	box1 := Box with: cardAwarderEffect.
 	box2 := Box with: noEffect.
@@ -92,12 +94,12 @@ BoxTest >> testCardAwarderBoxEffectGivesACardToTheSpaceshipThatLandsOnIt [
 		          and: (ParsecUnit of: 10)
 		          playedFor: 1
 		          with: boxSequence.
-
 	anOutstandingGame := OutstandingSpaceshipsGame
 		                     playedByMany: { 'Enterprise'. 'Delorean' }
 		                     on: aBoard
 		                     throwing: (LoadedDie with: 1)
-		                     using: aCardDistribution.
+		                     using: aCardDistribution
+		                     for: 100.
 	anOutstandingGame play.
 
 	self assert: (anOutstandingGame deckOf: 'Enterprise') size equals: 3.
@@ -127,21 +129,21 @@ BoxTest >> testHyperJumpBoxCantBeCreatedWithAnEmptySequence [
 ]
 
 { #category : #tests }
-BoxTest >> testHyperJumpBoxEffectDisplacesAListOfParsecsValuesRepeatedly [
+BoxTest >> testHyperJumpBoxEffectDisplacesAListOfValuesRepeatedlyAnInOrder [
 
 	| box anEffect parsecsList |
 	parsecsList := { 
 		               (ParsecUnit of: 4).
 		               (ParsecUnit of: 3).
-		               (ParsecUnit of: 1).
+		               (LightYearUnit of: 3).
 		               (ParsecUnit of: 5) }.
 	anEffect := HyperJumpEffect with: parsecsList.
 	box := Box with: anEffect.
-	self assert: box effectOnPosition valueOfMeasurement equals: 4.
-	self assert: box effectOnPosition valueOfMeasurement equals: 3.
-	self assert: box effectOnPosition valueOfMeasurement equals: 1.
-	self assert: box effectOnPosition valueOfMeasurement equals: 5.
-	self assert: box effectOnPosition valueOfMeasurement equals: 4
+	self assert: box effectOnPosition inParsecs equals: 5.
+	self assert: box effectOnPosition inParsecs equals: 4.
+	self assert: box effectOnPosition inParsecs equals: 3.
+	self assert: box effectOnPosition inParsecs equals: 1.
+	self assert: box effectOnPosition inParsecs equals: 5
 ]
 
 { #category : #tests }
