@@ -2,28 +2,11 @@ Class {
 	#name : #AccelerationCard,
 	#superclass : #Object,
 	#instVars : [
-		'typeOfCard'
+		'typeOfCard',
+		'name'
 	],
 	#category : #'IngSoft2-Model'
 }
-
-{ #category : #playing }
-AccelerationCard class >> addAffecting: aCard to: aGame [ 
-	
-	aGame add: aCard affectingAll: self
-]
-
-{ #category : #playing }
-AccelerationCard class >> addTo: aGame [
-
-	aGame addAffectingAll: self create.
-]
-
-{ #category : #playing }
-AccelerationCard class >> cancelIn: aGame [
-
-	aGame cancelAllFrom: self create
-]
 
 { #category : #initialization }
 AccelerationCard class >> create [
@@ -31,34 +14,40 @@ AccelerationCard class >> create [
 	^ self new initializeAs: PermanentCard new
 ]
 
-{ #category : #playing }
-AccelerationCard class >> incorporateTo: aGame [
+{ #category : #'instance creation' }
+AccelerationCard class >> identifiedAs: aName [
 
-	PermanentCard new incorporate: self to: aGame
-]
-
-{ #category : #playing }
-AccelerationCard class >> isAppliedTo: aSpaceship [
-
-	^ true
-]
-
-{ #category : #properties }
-AccelerationCard class >> isPermanent [
-
-	^ true
+	^ self new initializeAs: PermanentCard new named: aName
 ]
 
 { #category : #comparing }
 AccelerationCard >> = aCard [
 
-	^ self class = aCard
+	^ self class = aCard class and: [ name = aCard identification ]
+]
+
+{ #category : #playing }
+AccelerationCard >> addAffecting: aCard to: aGame [ 
+	
+	aGame add: aCard affectingAll: self
+]
+
+{ #category : #playing }
+AccelerationCard >> addTo: aGame [
+
+	aGame addAffectingAll: self.
 ]
 
 { #category : #asserting }
 AccelerationCard >> assertItIsThrowableInTurn: anAssertion in: aGame [
 
 	typeOfCard canBeThrownWithCurrentTurnBeing: anAssertion
+]
+
+{ #category : #playing }
+AccelerationCard >> cancelIn: aGame [
+
+	aGame cancelAllFrom: self
 ]
 
 { #category : #accessing }
@@ -73,6 +62,12 @@ AccelerationCard >> effectOnThrow [
 	^ 1
 ]
 
+{ #category : #accessing }
+AccelerationCard >> identification [
+
+	^ name
+]
+
 { #category : #playing }
 AccelerationCard >> incorporate: aCard to: aGame [ 
 	
@@ -80,9 +75,9 @@ AccelerationCard >> incorporate: aCard to: aGame [
 ]
 
 { #category : #playing }
-AccelerationCard >> incorporateTo: aGame the: cardElement [
+AccelerationCard >> incorporateTo: aGame [
 
-	aGame addAffectingAll: cardElement createWithCard card
+	typeOfCard incorporate: self to: aGame
 ]
 
 { #category : #initialization }
@@ -91,10 +86,35 @@ AccelerationCard >> initializeAs: aTypeOfCard [
 	typeOfCard := aTypeOfCard
 ]
 
+{ #category : #initialization }
+AccelerationCard >> initializeAs: aTypeOfCard named: aName [
+
+	typeOfCard := aTypeOfCard.
+	name := aName
+]
+
+{ #category : #playing }
+AccelerationCard >> isAppliedTo: aSpaceship [
+
+	^ true
+]
+
+{ #category : #playing }
+AccelerationCard >> isPermanent [
+
+	^ true
+]
+
 { #category : #accessing }
 AccelerationCard >> name [
 
 	^ 'Acceleration'
+]
+
+{ #category : #playing }
+AccelerationCard >> reIncorporateTo: aGame the: cardElement [
+
+	aGame addAffectingAll: (AccelerationCard identifiedAs: 'r' , name)
 ]
 
 { #category : #accessing }

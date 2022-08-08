@@ -14,5 +14,5 @@ InstantaneousCard >> canBeThrownWithCurrentTurnBeing: anAssertion [
 InstantaneousCard >> incorporate: aCard to: aGame [
 
 	aCard playOnceIn: aGame.
-	aGame addToUsedCards: aCard create
+	aGame addToUsedCards: aCard
 ]

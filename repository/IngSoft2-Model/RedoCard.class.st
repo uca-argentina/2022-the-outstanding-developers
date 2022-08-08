@@ -3,7 +3,10 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'card',
-		'typeOfCard'
+		'typeOfCard',
+		'name',
+		'target',
+		'lastPlayedCard'
 	],
 	#classInstVars : [
 		'target',
@@ -11,19 +14,6 @@ Class {
 	],
 	#category : #'IngSoft2-Model'
 }
-
-{ #category : #playing }
-RedoCard class >> addTo: aGame [ 
-	
-	lastPlayedCard incorporateTo: aGame the: self.
-]
-
-{ #category : #assertion }
-RedoCard class >> assertACardHasBeenPlayed [
-
-	lastPlayedCard = NullCard ifTrue: [ 
-		Error signal: 'No card has been played yet' ]
-]
 
 { #category : #'instance creation' }
 RedoCard class >> create [
@@ -37,12 +27,13 @@ RedoCard class >> createWithCard [
 	^ self new initializeWithCard: lastPlayedCard as: InstantaneousCard new
 ]
 
-{ #category : #playing }
-RedoCard class >> incorporateTo: aGame [
+{ #category : #'instance creation' }
+RedoCard class >> identifiedAs: aName thrownAt: aSpaceship [
 
-	lastPlayedCard := aGame lastPlayedCard.
-	self assertACardHasBeenPlayed.
-	lastPlayedCard incorporate: self to: aGame
+	^ self new
+		  initializeNamed: aName
+		  aimedAt: aSpaceship
+		  asA: InstantaneousCard new
 ]
 
 { #category : #assertion }
@@ -51,28 +42,23 @@ RedoCard class >> isPermanent [
 	^ false
 ]
 
-{ #category : #playing }
-RedoCard class >> playOnceIn: aGame [
-
-	self addTo: aGame 
-]
-
-{ #category : #accessing }
-RedoCard class >> target [
-
-	^ target
-]
-
-{ #category : #playing }
-RedoCard class >> thrownAt: aTarget [
-
-	target := aTarget
-]
-
 { #category : #comparing }
 RedoCard >> = aCard [
 
-	^ self class = aCard
+	^ self class = aCard class and: [ name = aCard identification ]
+]
+
+{ #category : #playing }
+RedoCard >> addTo: aGame [ 
+	
+	lastPlayedCard reIncorporateTo: aGame the: self.
+]
+
+{ #category : #asserting }
+RedoCard >> assertACardHasBeenPlayed [
+
+	lastPlayedCard = NullCard ifTrue: [ 
+		Error signal: 'No card has been played yet' ]
 ]
 
 { #category : #assertions }
@@ -87,9 +73,49 @@ RedoCard >> card [
 	^ card
 ]
 
+{ #category : #palying }
+RedoCard >> createWithCard [
+
+	^ RedoCard new initializeWithCard: lastPlayedCard as: InstantaneousCard new
+]
+
+{ #category : #accessing }
+RedoCard >> identification [
+
+	^ name
+]
+
+{ #category : #playing }
+RedoCard >> incorporateTo: aGame [
+
+	lastPlayedCard := aGame lastPlayedCard.
+	self assertACardHasBeenPlayed.
+	lastPlayedCard incorporate: self to: aGame
+]
+
+{ #category : #initialization }
+RedoCard >> initializeNamed: aName aimedAt: aSpaceship asA: aTypeOfCard [
+
+	name := aName.
+	target := aSpaceship.
+	typeOfCard := aTypeOfCard
+]
+
 { #category : #initialization }
 RedoCard >> initializeWithCard: aCard as: aTypeOfCard [
 
 	typeOfCard := aTypeOfCard.
 	card := aCard
+]
+
+{ #category : #playing }
+RedoCard >> playOnceIn: aGame [
+
+	self addTo: aGame 
+]
+
+{ #category : #playing }
+RedoCard >> target [
+
+	^ target
 ]

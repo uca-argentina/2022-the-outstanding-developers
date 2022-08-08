@@ -21,7 +21,7 @@ FiniteDeckTest >> testACardDealtFromAFiniteDeckOfCardsCreatedOfOverloadsIsAnOver
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add:
 		(Distribution withProbabilityOf: 1 for: OverloadCard).
-	finiteDeck := FiniteDeck of: 5 with: aCardDistribution.
+	finiteDeck := Deck of: 5 with: aCardDistribution.
 	dealtCard := finiteDeck dealCard.
 	self assert: dealtCard name equals: 'Overload'
 ]
@@ -34,7 +34,7 @@ FiniteDeckTest >> testAFiniteDeckOfCardsCantBeCreatedWithANegativeNumberOfCards 
 	aCardDistribution add:
 		(Distribution withProbabilityOf: 1 for: OverloadCard).
 	self
-		should: [ FiniteDeck of: -3 with: aCardDistribution ]
+		should: [ Deck of: -3 with: aCardDistribution ]
 		raise: Error
 		withMessage: 'The card amount cant be a negative number'
 ]
@@ -49,7 +49,7 @@ FiniteDeckTest >> testAFiniteDeckOfCardsCreatedWithAsequenceOfFiveCardsHasInitia
 	aCardSequence add: OverloadCard create.
 	aCardSequence add: OverloadCard create.
 	aCardSequence add: OverloadCard create.
-	finiteDeck := FiniteDeck setWith: aCardSequence.
+	finiteDeck := Deck setWith: aCardSequence.
 	self assert: finiteDeck cardAmount equals: 5
 ]
 
@@ -60,7 +60,7 @@ FiniteDeckTest >> testAFiniteDeckOfCardsCreatedWithAsequenceOfTwoCardsForATotalO
 	aCardSequence := OrderedCollection new.
 	aCardSequence add: OverloadCard create.
 	aCardSequence add: SpeedCard create.
-	finiteDeck := FiniteDeck of: 5 setWith: aCardSequence.
+	finiteDeck := Deck of: 5 setWith: aCardSequence.
 	self assert: finiteDeck cardAmount equals: 5.
 	self assert: finiteDeck dealCard name equals: 'Overload'.
 	self assert: finiteDeck dealCard name equals: 'Speed'.
@@ -76,7 +76,7 @@ FiniteDeckTest >> testAFiniteDeckOfCardsCreatedWithFiveRandomCardsHasInitiallyFi
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add:
 		(Distribution withProbabilityOf: 1 for: OverloadCard).
-	finiteDeck := FiniteDeck of: 5 with: aCardDistribution.
+	finiteDeck := Deck of: 5 with: aCardDistribution.
 	self assert: finiteDeck cardAmount equals: 5
 ]
 
@@ -87,7 +87,7 @@ FiniteDeckTest >> testAFiniteDeckOfCardsHasOneCardLessAfterItIsDealt [
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add:
 		(Distribution withProbabilityOf: 1 for: OverloadCard).
-	finiteDeck := FiniteDeck of: 5 with: aCardDistribution.
+	finiteDeck := Deck of: 5 with: aCardDistribution.
 	self assert: finiteDeck cardAmount equals: 5.
 
 	dealtCard := finiteDeck dealCard.

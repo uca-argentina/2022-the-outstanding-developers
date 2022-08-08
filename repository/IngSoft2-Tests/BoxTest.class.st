@@ -26,12 +26,11 @@ BoxTest >> testBoxWithNoEffectDoesNotModifyPosition [
 { #category : #tests }
 BoxTest >> testCardAwarderBoxEffectDoesNotModifyPosition [
 
-	| aBoard noEffect cardAwarderEffect boxSequence box1 box2 box3 box4 box5 aCardDistribution anOutstandingGame aFiniteDeck |
+	| aBoard noEffect cardAwarderEffect boxSequence box1 box2 box3 box4 box5 aCardDistribution anOutstandingGame |
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add:
 		(Distribution withProbabilityOf: 1 for: OverloadCard).
 	noEffect := NoEffect new.
-	aFiniteDeck := FiniteDeck of: 100 with: aCardDistribution.
 	cardAwarderEffect := CardGiverEffect new.
 
 	box1 := Box with: cardAwarderEffect.
@@ -56,7 +55,8 @@ BoxTest >> testCardAwarderBoxEffectDoesNotModifyPosition [
 		                     playedByMany: { 'Enterprise'. 'Delorean' }
 		                     on: aBoard
 		                     throwing: (LoadedDie withSequence: { 4. 1 })
-		                     using: aFiniteDeck.
+		                     using: aCardDistribution
+		                     for: 100.
 	anOutstandingGame play.
 	anOutstandingGame play.
 
@@ -69,12 +69,12 @@ BoxTest >> testCardAwarderBoxEffectDoesNotModifyPosition [
 { #category : #tests }
 BoxTest >> testCardAwarderBoxEffectGivesACardToTheSpaceshipThatLandsOnIt [
 
-	| aBoard noEffect cardAwarderEffect boxSequence box1 box2 box3 box4 box5 aCardDistribution anOutstandingGame aFiniteDeck |
+	| aBoard noEffect cardAwarderEffect boxSequence box1 box2 box3 box4 box5 aCardDistribution anOutstandingGame |
 	aCardDistribution := OrderedCollection new.
 	aCardDistribution add:
 		(Distribution withProbabilityOf: 1 for: OverloadCard).
 	noEffect := NoEffect new.
-	aFiniteDeck := FiniteDeck of: 100 with: aCardDistribution.
+
 	cardAwarderEffect := CardGiverEffect new.
 
 	box1 := Box with: cardAwarderEffect.
@@ -98,7 +98,8 @@ BoxTest >> testCardAwarderBoxEffectGivesACardToTheSpaceshipThatLandsOnIt [
 		                     playedByMany: { 'Enterprise'. 'Delorean' }
 		                     on: aBoard
 		                     throwing: (LoadedDie with: 1)
-		                     using: aFiniteDeck.
+		                     using: aCardDistribution
+		                     for: 100.
 	anOutstandingGame play.
 
 	self assert: (anOutstandingGame deckOf: 'Enterprise') size equals: 3.

@@ -2,7 +2,9 @@ Class {
 	#name : #OverloadCard,
 	#superclass : #Object,
 	#instVars : [
-		'typeOfCard'
+		'typeOfCard',
+		'name',
+		'target'
 	],
 	#classInstVars : [
 		'typeOfCard',
@@ -11,35 +13,19 @@ Class {
 	#category : #'IngSoft2-Model'
 }
 
-{ #category : #playing }
-OverloadCard class >> addAffecting: aCard to: aGame [
-
-	aGame add: aCard affecting: self
-]
-
-{ #category : #playing }
-OverloadCard class >> addTo: aGame [
-
-	aGame addAffecting:
-		(SpaceshipHoldingACard of: spaceship holding: self create)
-]
-
-{ #category : #playing }
-OverloadCard class >> cancelIn: aGame [
-
-	aGame cancel: self create affecting: spaceship
-]
-
 { #category : #'instance creation' }
 OverloadCard class >> create [
 
 	^ self new initializeAs: PermanentCard new
 ]
 
-{ #category : #playing }
-OverloadCard class >> incorporateTo: aGame [
+{ #category : #'instance creation' }
+OverloadCard class >> identifiedAs: aName thrownAt: aSpaceship [
 
-	PermanentCard new incorporate: self to: aGame
+	^ self new
+		  initializeNamed: aName
+		  aimedAt: aSpaceship
+		  asA: PermanentCard new
 ]
 
 { #category : #playing }
@@ -48,35 +34,40 @@ OverloadCard class >> isAppliedTo: aSpaceship [
 	^ spaceship = aSpaceship
 ]
 
-{ #category : #properties }
-OverloadCard class >> isPermanent [
-
-	^ true
-]
-
 { #category : #accessing }
 OverloadCard class >> spaceship [
 
 	^ spaceship
 ]
 
-{ #category : #throwing }
-OverloadCard class >> thrownAt: aSpaceship [
-
-	spaceship := aSpaceship.
-	typeOfCard := PermanentCard
-]
-
 { #category : #comparing }
 OverloadCard >> = aCard [
 
-	^ self class = aCard
+	^ self class = aCard class and: [ name = aCard identification ]
+]
+
+{ #category : #playing }
+OverloadCard >> addAffecting: aCard to: aGame [
+
+	aGame add: aCard affecting: self
+]
+
+{ #category : #playing }
+OverloadCard >> addTo: aGame [
+
+	aGame addAffecting: (SpaceshipHoldingACard of: target holding: self)
 ]
 
 { #category : #asserting }
 OverloadCard >> assertItIsThrowableInTurn: anAssertion in: aGame [
 
 	typeOfCard canBeThrownWithCurrentTurnBeing: anAssertion
+]
+
+{ #category : #playing }
+OverloadCard >> cancelIn: aGame [
+
+	aGame cancel: self
 ]
 
 { #category : #accessing }
@@ -91,6 +82,12 @@ OverloadCard >> effectOnThrow [
 	^ -2
 ]
 
+{ #category : #acessing }
+OverloadCard >> identification [
+
+	^ name
+]
+
 { #category : #playing }
 OverloadCard >> incorporate: aCard to: aGame [ 
 	
@@ -98,13 +95,9 @@ OverloadCard >> incorporate: aCard to: aGame [
 ]
 
 { #category : #playing }
-OverloadCard >> incorporateTo: aGame the: selectedCard [
+OverloadCard >> incorporateTo: aGame [
 
-	| cardHolder |
-	cardHolder := SpaceshipHoldingACard
-		              of: selectedCard target
-		              holding: selectedCard createWithCard card.
-	aGame addAffecting: cardHolder
+	typeOfCard incorporate: self to: aGame
 ]
 
 { #category : #initialization }
@@ -113,10 +106,43 @@ OverloadCard >> initializeAs: aTypeOfCard [
 	typeOfCard := aTypeOfCard
 ]
 
+{ #category : #initialization }
+OverloadCard >> initializeNamed: aName aimedAt: aSpaceship asA: aTypeOfCard [
+
+	name := aName.
+	target := aSpaceship.
+	typeOfCard := aTypeOfCard
+]
+
+{ #category : #acessing }
+OverloadCard >> isPermanent [
+
+	^ true
+]
+
 { #category : #accessing }
 OverloadCard >> name [
 
 	^ 'Overload'
+]
+
+{ #category : #playing }
+OverloadCard >> reIncorporateTo: aGame the: selectedCard [
+
+	| cardHolder |
+	cardHolder := SpaceshipHoldingACard
+		              of: selectedCard target
+		              holding:
+		              (OverloadCard
+			               identifiedAs: 'r' , name
+			               thrownAt: target).
+	aGame addAffecting: cardHolder
+]
+
+{ #category : #accessing }
+OverloadCard >> target [
+
+	^ target
 ]
 
 { #category : #accessing }
